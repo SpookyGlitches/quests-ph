@@ -77,6 +77,17 @@ export default () => `
         font-size: 1.5rem;
       }
 
+      h4 {
+        margin: 1 10 1rem 0;
+        font-size: 0.5rem;
+        font-family: Roboto;
+      }
+      
+      .signintext {
+        font-size: 3rem;
+
+      }
+
       p {
         margin: 0;
         font-size: 1.25rem;

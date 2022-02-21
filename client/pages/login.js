@@ -14,16 +14,27 @@
 //   )
 // }
 
-import { Card, Grid, Typography, Paper } from "@mui/material"
+import { Card, Grid, Typography, TextField, Button } from "@mui/material"
 import Head from "next/head"
 import Image from "next/image"
-import styled from "styled-components"
+
+import { makeStyles } from "@mui/styles"
 
 import Carousel from "react-material-ui-carousel"
 
 import styles from "../styles/login.css"
-
+const useStyles = makeStyles({
+  root: {
+    "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#fafafa",
+    },
+  },
+  typo: {
+    justifyContent: "center",
+  },
+})
 export default function Home() {
+  const classes = useStyles()
   return (
     // <HomeWrapper>
     <>
@@ -45,8 +56,10 @@ export default function Home() {
             <Card
               sx={{
                 margin: "2rem",
-                ml: "5rem",
-                maxWidth: "500px",
+                ml: "10rem",
+                mr: "0.7rem",
+                maxWidth: "600px",
+                borderRadius: "2px",
               }}
             >
               <Carousel
@@ -54,26 +67,26 @@ export default function Home() {
                 infiniteLoop
                 showThumbs={false}
                 sx={{
-                  maxWidth: "500px",
-                  maxHeight: "500px",
+                  width: "700px",
+                  height: "500px",
                 }}
               >
                 <div>
                   <img
                     alt="Quests"
-                    src="https://i.pinimg.com/originals/e5/8f/52/e58f521070bf76ac69d583923b499012.gif"
+                    src="https://techcrunch.com/wp-content/uploads/2015/06/gifgif.gif"
                   />
                 </div>
                 <div>
                   <img
                     alt="Quests"
-                    src="https://i.pinimg.com/originals/e5/8f/52/e58f521070bf76ac69d583923b499012.gif"
+                    src="https://media1.giphy.com/media/S3KhNnHajzZ4voJKYP/giphy.gif"
                   />
                 </div>
                 <div>
                   <img
                     alt="Quests"
-                    src="https://i.pinimg.com/originals/e5/8f/52/e58f521070bf76ac69d583923b499012.gif"
+                    src="https://www.teahub.io/photos/full/145-1450080_sorry-text-gif.gif"
                   />
                 </div>
               </Carousel>
@@ -81,42 +94,80 @@ export default function Home() {
           </Grid>
           <Grid item xs={6}>
             <Card
+              style={{
+                backgroundColor: "#f5f5f5",
+                alignItems: "center",
+                textAlign: "center",
+              }}
               sx={{
-                ml: "-6.5rem",
-                mr: "5rem",
-                padding: "0.8rem",
-                pt: "-10rem",
-                border: "1px solid #eaeaea",
-                maxWidth: "1000px",
-                borderRadius: "10px",
+                borderRadius: "2px",
+                display: "block",
+                width: "500px",
+                height: "500px",
+                ml: "-0.6rem",
               }}
             >
-              <Typography variant="h2">signin bruh</Typography>
-              <Typography paragraph>
-                login form here ajajaja login form here ajajaja login form here
-                ajajaja login form here ajajaja login form here ajajaja login
-                form here ajajaja login form here ajajaja login form here
-                ajajaja login form here ajajaja login form here ajajaja login
-                form here ajajaja login form here ajajaja login form here
-                ajajaja login form here ajajaja login form here ajajaja login
-                form here ajajaja login form here ajajaja login form here
-                ajajaja login form here ajajaja login form here ajajaja login
-                form here ajajaja login form here ajajaja login form here
-                ajajaja login form here ajajaja login form here ajajaja login
-                form here ajajaja login form here ajajaja login form here
-                ajajajalogin form here ajajaja login form here ajajaja login
-                form here ajajaja login form here ajajaja login form here
-                ajajaja login form here ajajaja login form here ajajajalogin
-                form here ajajaja login form here ajajaja login form here
-                ajajaja login form here ajajaja login form here ajajaja login
-                form here ajajaja login form here asdasdaaasa
-                yaweyusdghjsafaujiksdfghvjksdhfksdahfjksdafhfghvjksdhfksdahfjksdafhfgh
-                vjksdhfksdahfjksdafhfghvjksdhfksdahfjksdafhfghvjksdhfksdahfjksdafh
-                fghvjksdhfksdahfjksdafh fghvjksdhfksdahfjksdafh
-                fghvjksdhfksdahfjksdafh
-                fghvjksdhfksdahfjksdafhfghvjksdhfksdahfjksdafh
-                fghvjksdhfksdahfjksdafhfghvjksdhfksdahfjksd afhfg
+              <Typography
+                variant="h4"
+                sx={{
+                  textAlign: "left",
+                  mt: "5rem",
+                  fontWeight: "bold",
+                  ml: "3.5rem",
+                  color: "#755CDE",
+                }}
+              >
+                Quests
               </Typography>
+              <Typography
+                variant="h5"
+                sx={{
+                  textAlign: "left",
+                  fontWeight: "bold",
+                  ml: "3.5rem",
+                  color: "black",
+                }}
+              >
+                Sign in to your account.
+              </Typography>
+              <div>
+                <TextField
+                  required
+                  className={classes.root}
+                  style={{ width: "80%", backgroundColor: "white" }}
+                  id="filled-required"
+                  label="Email Address"
+                  sx={{
+                    mt: "1rem",
+                    ml: "1rem",
+                    borderRadius: "0.5rem",
+                  }}
+                />
+                <TextField
+                  className={classes.root}
+                  style={{ width: "80%", backgroundColor: "white" }}
+                  id="filled-password-input"
+                  label="Password"
+                  type="password"
+                  autoComplete="current-password"
+                  sx={{
+                    mt: "1rem",
+                    ml: "1rem",
+                    borderRadius: "0.5rem",
+                  }}
+                />
+                <Button
+                  variant="contained"
+                  style={{
+                    borderRadius: 10,
+                  }}
+                  sx={{
+                    mt: "2rem",
+                  }}
+                >
+                  Sign In
+                </Button>
+              </div>
             </Card>
           </Grid>
         </Grid>
