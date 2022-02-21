@@ -54,6 +54,7 @@ const Sidebar = (props) => {
 					<Link
 						href={`/${text.replace(/ /g, "").toLowerCase()}`}
 						passHref
+						key={text}
 					>
 						<ListItem button key={text} component="a">
 							<ListItemIcon>{renderIcon(text)}</ListItemIcon>
