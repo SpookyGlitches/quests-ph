@@ -1,6 +1,5 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-
 export default function Home() {
 	return (
 		<div className={styles.container}>
@@ -12,7 +11,7 @@ export default function Home() {
 				/>
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<div>Hello World! test2</div>
+			<div>testtt</div>
 		</div>
 	);
 }
