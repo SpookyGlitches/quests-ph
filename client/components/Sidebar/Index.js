@@ -3,7 +3,6 @@ import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import MapRoundedIcon from "@mui/icons-material/MapRounded";
 import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
-import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
 import {
 	List,
@@ -50,7 +49,7 @@ const Sidebar = (props) => {
 					"Articles",
 					"Friends",
 					"Chats",
-				].map((text, index) => (
+				].map((text) => (
 					<Link
 						href={`/${text.replace(/ /g, "").toLowerCase()}`}
 						passHref
