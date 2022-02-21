@@ -20,7 +20,7 @@ import {
 
 const drawerWidth = 240;
 
-function Sidebar(props) {
+const Sidebar = (props) => {
 	const { window } = props;
 	const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -143,6 +143,6 @@ function Sidebar(props) {
 			</Box>
 		</Box>
 	);
-}
+};
 
 export default Sidebar;
