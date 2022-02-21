@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Link from "next/link";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import MapRoundedIcon from "@mui/icons-material/MapRounded";
@@ -18,15 +17,8 @@ import {
 	Toolbar,
 } from "@mui/material";
 
-const drawerWidth = 240;
-
 const Sidebar = (props) => {
-	const { window } = props;
-	const [mobileOpen, setMobileOpen] = useState(false);
-
-	const handleDrawerToggle = () => {
-		setMobileOpen(!mobileOpen);
-	};
+	const { window, drawerWidth, handleDrawerToggle, mobileOpen } = props;
 
 	const renderIcon = (text) => {
 		switch (text) {
@@ -40,8 +32,6 @@ const Sidebar = (props) => {
 				return <PeopleRoundedIcon />;
 			case "Chats":
 				return <ChatRoundedIcon />;
-			case "Log Out":
-				return <LogoutRoundedIcon />;
 			default:
 				return <></>;
 		}
@@ -60,7 +50,6 @@ const Sidebar = (props) => {
 					"Articles",
 					"Friends",
 					"Chats",
-					"Log Out",
 				].map((text, index) => (
 					<Link
 						href={`/${text.replace(/ /g, "").toLowerCase()}`}
@@ -82,29 +71,7 @@ const Sidebar = (props) => {
 	return (
 		<Box sx={{ display: "flex" }}>
 			<CssBaseline />
-			{/* i think ang below should be a different component */}
-			{/* <AppBar
-				position="fixed"
-				sx={{
-					width: { sm: `calc(100% - ${drawerWidth}px)` },
-					ml: { sm: `${drawerWidth}px` },
-				}}
-			>
-				<Toolbar>
-					<IconButton
-						color="inherit"
-						aria-label="open drawer"
-						edge="start"
-						onClick={handleDrawerToggle}
-						sx={{ mr: 2, display: { sm: "none" } }}
-					>
-						<MenuIcon />
-					</IconButton>
-					<Typography variant="h6" noWrap component="div">
-						Responsive drawer
-					</Typography>
-				</Toolbar>
-			</AppBar> */}
+
 			<Box
 				component="nav"
 				sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
