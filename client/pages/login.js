@@ -153,8 +153,8 @@ export default function Home() {
                 id="filled-required"
                 label="Email Address"
                 sx={{
-                  mt: "1rem",
-                  ml: "0rem",
+                  mt: "2rem",
+                  ml: "-1em",
                   borderRadius: "0.5rem",
                 }}
               />
@@ -166,8 +166,8 @@ export default function Home() {
                 type="password"
                 autoComplete="current-password"
                 sx={{
-                  mt: "1rem",
-                  ml: "0rem",
+                  mt: "2rem",
+                  ml: "-1rem",
                   borderRadius: "0.5rem",
                 }}
               />
@@ -179,6 +179,19 @@ export default function Home() {
               >
                 Sign In
               </Button> */}
+            </div>
+            <div>
+              <Button
+                variant="contained"
+                style={{
+                  borderRadius: 10,
+                }}
+                sx={{
+                  mt: "2rem",
+                }}
+              >
+                Sign In
+              </Button>
             </div>
           </Item>
         </Box>
