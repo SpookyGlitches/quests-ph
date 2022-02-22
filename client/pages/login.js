@@ -17,6 +17,7 @@
 import { Card, Grid, Typography, TextField, Button, Box } from "@mui/material"
 import Head from "next/head"
 import Image from "next/image"
+import Link from "next/link"
 import PropTypes from "prop-types"
 import { makeStyles } from "@mui/styles"
 import Carousel from "react-material-ui-carousel"
@@ -122,7 +123,7 @@ export default function Home() {
               variant="h4"
               sx={{
                 textAlign: "left",
-                mt: "5rem",
+                mt: "7rem",
                 fontWeight: "bold",
                 ml: "1rem",
                 color: "#755CDE",
@@ -170,16 +171,43 @@ export default function Home() {
             </div>
             <div>
               <Button
-                variant="contained"
                 style={{
                   borderRadius: 10,
+                  minheight: "56px",
+                  width: "80%",
                 }}
+                variant="contained"
                 sx={{
+                  mr: "1rem",
                   mt: "2rem",
                 }}
               >
                 Sign In
               </Button>
+            </div>
+            <div>
+              <Typography
+                sx={{
+                  mt: "2rem",
+                }}
+              >
+                Not yet registered?{" "}
+                <Link href="/">
+                  <a style={{ color: "#18beff" }}>Create An Account</a>
+                </Link>
+              </Typography>
+            </div>
+            <div>
+              <Typography
+                sx={{
+                  mt: "1rem",
+                }}
+              >
+                Forgot Password?{" "}
+                <Link href="/">
+                  <a style={{ color: "#18beff" }}>Click Here</a>
+                </Link>
+              </Typography>
             </div>
           </Item>
         </Box>
