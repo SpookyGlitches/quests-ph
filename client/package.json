@@ -12,6 +12,7 @@
     "@emotion/styled": "^11.6.0",
     "@fontsource/roboto": "^4.5.3",
     "@mui/icons-material": "^5.4.2",
+    "@mui/lab": "*",
     "@mui/material": "^5.4.2",
     "@mui/styles": "^5.4.2",
     "axios": "^0.26.0",
