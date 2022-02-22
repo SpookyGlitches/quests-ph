@@ -19,10 +19,7 @@ import Head from "next/head"
 import Image from "next/image"
 import PropTypes from "prop-types"
 import { makeStyles } from "@mui/styles"
-
 import Carousel from "react-material-ui-carousel"
-
-import styles from "../styles/login.css"
 const useStyles = makeStyles({
   root: {
     "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
@@ -45,7 +42,6 @@ function Item(props) {
           theme.palette.mode === "dark" ? "#101010" : "grey.100",
         color: (theme) =>
           theme.palette.mode === "dark" ? "grey.300" : "grey.800",
-        //border: "1px solid",
         borderColor: (theme) =>
           theme.palette.mode === "dark" ? "grey.800" : "grey.300",
         borderRadius: 1,
@@ -171,14 +167,6 @@ export default function Home() {
                   borderRadius: "0.5rem",
                 }}
               />
-              {/* <Button
-                variant="contained"
-                style={{
-                  borderRadius: 10,
-                }}
-              >
-                Sign In
-              </Button> */}
             </div>
             <div>
               <Button
@@ -195,138 +183,6 @@ export default function Home() {
             </div>
           </Item>
         </Box>
-        {/* <Grid
-          container
-          spacing={0}
-          direction="row"
-          alignItems="center"
-          justify="center"
-        >
-          <Grid item xs={6}>
-            <Card
-              style={{
-                backgroundColor: "orange",
-                alignItems: "center",
-                textAlign: "center",
-              }}
-              sx={{
-                margin: "2rem",
-                ml: "10rem",
-                mr: "0.7rem",
-                maxWidth: "2000px",
-                maxHeight: "2000px",
-                borderRadius: "2px",
-              }}
-            >
-              <Carousel
-                autoPlay
-                infiniteLoop
-                showThumbs={false}
-                sx={{
-                  width: "700px",
-                  height: "500px",
-                }}
-              >
-                <div>
-                  <img
-                    alt="Quests"
-                    src="https://techcrunch.com/wp-content/uploads/2015/06/gifgif.gif"
-                  />
-                </div>
-                <div>
-                  <img
-                    alt="Quests"
-                    src="https://media1.giphy.com/media/S3KhNnHajzZ4voJKYP/giphy.gif"
-                  />
-                </div>
-                <div>
-                  <img
-                    alt="Quests"
-                    src="https://www.teahub.io/photos/full/145-1450080_sorry-text-gif.gif"
-                  />
-                </div>
-              </Carousel>
-            </Card>
-          </Grid>
-          <Grid item xs={6}>
-            <Card
-              style={{
-                backgroundColor: "#f5f5f5",
-                alignItems: "center",
-                textAlign: "center",
-              }}
-              sx={{
-                borderRadius: "2px",
-                display: "block",
-                width: "500px",
-                height: "500px",
-                ml: "-0.6rem",
-              }}
-            >
-              <Typography
-                variant="h4"
-                sx={{
-                  textAlign: "left",
-                  mt: "5rem",
-                  fontWeight: "bold",
-                  ml: "3.5rem",
-                  color: "#755CDE",
-                }}
-              >
-                Quests
-              </Typography>
-              <Typography
-                variant="h5"
-                sx={{
-                  textAlign: "left",
-                  fontWeight: "bold",
-                  ml: "3.5rem",
-                  color: "black",
-                }}
-              >
-                Sign in to your account.
-              </Typography>
-              <div>
-                <TextField
-                  required
-                  className={classes.root}
-                  style={{ width: "80%", backgroundColor: "white" }}
-                  id="filled-required"
-                  label="Email Address"
-                  sx={{
-                    mt: "1rem",
-                    ml: "1rem",
-                    borderRadius: "0.5rem",
-                  }}
-                />
-                <TextField
-                  className={classes.root}
-                  style={{ width: "80%", backgroundColor: "white" }}
-                  id="filled-password-input"
-                  label="Password"
-                  type="password"
-                  autoComplete="current-password"
-                  sx={{
-                    mt: "1rem",
-                    ml: "1rem",
-                    borderRadius: "0.5rem",
-                  }}
-                />
-                <Button
-                  variant="contained"
-                  style={{
-                    borderRadius: 10,
-                  }}
-                  sx={{
-                    mt: "2rem",
-                  }}
-                >
-                  Sign In
-                </Button>
-              </div>
-            </Card>
-          </Grid>
-        </Grid> */}
       </main>
     </>
   )
