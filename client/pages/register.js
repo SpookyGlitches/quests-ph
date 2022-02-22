@@ -155,8 +155,8 @@ export default function Home() {
                       mt: "1rem",
                     }}
                   >
-                    <img src="/assets/google.png" width="15" height="15" />
-                    Sign Up with Google
+                    <img src="/assets/google.png" width="15" height="15" />{" "}
+                    &nbsp; Sign Up with Google
                   </Button>
                 </div>
                 <div>
@@ -234,7 +234,7 @@ export default function Home() {
                       mb: "3.2rem",
                     }}
                   >
-                    <Link href="/">
+                    <Link href="/login">
                       <a style={{ color: "#18beff" }}>
                         Already have an account?
                       </a>
