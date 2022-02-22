@@ -71,6 +71,7 @@ export default function Home() {
               m: 1,
               bgcolor: "background.paper",
               borderRadius: 1,
+              minHeight: "100vh",
             }}
           >
             <Item>
