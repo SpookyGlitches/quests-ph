@@ -14,10 +14,10 @@
 //   )
 // }
 
-import { Card, Grid, Typography, TextField, Button } from "@mui/material"
+import { Card, Grid, Typography, TextField, Button, Box } from "@mui/material"
 import Head from "next/head"
 import Image from "next/image"
-
+import PropTypes from "prop-types"
 import { makeStyles } from "@mui/styles"
 
 import Carousel from "react-material-ui-carousel"
@@ -33,6 +33,41 @@ const useStyles = makeStyles({
     justifyContent: "center",
   },
 })
+
+function Item(props) {
+  const { sx, ...other } = props
+  return (
+    <Box
+      sx={{
+        p: 1,
+        m: 0,
+        bgcolor: (theme) =>
+          theme.palette.mode === "dark" ? "#101010" : "grey.100",
+        color: (theme) =>
+          theme.palette.mode === "dark" ? "grey.300" : "grey.800",
+        //border: "1px solid",
+        borderColor: (theme) =>
+          theme.palette.mode === "dark" ? "grey.800" : "grey.300",
+        borderRadius: 1,
+        fontSize: "0.875rem",
+        fontWeight: "700",
+        ...sx,
+      }}
+      {...other}
+    />
+  )
+}
+
+Item.propTypes = {
+  sx: PropTypes.oneOfType([
+    PropTypes.arrayOf(
+      PropTypes.oneOfType([PropTypes.func, PropTypes.object, PropTypes.bool])
+    ),
+    PropTypes.func,
+    PropTypes.object,
+  ]),
+}
+
 export default function Home() {
   const classes = useStyles()
   return (
@@ -45,7 +80,109 @@ export default function Home() {
       </Head>
 
       <main className="main">
-        <Grid
+        <Box
+          textAlign="center"
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            p: 1,
+            m: 1,
+            bgcolor: "background.paper",
+            borderRadius: 1,
+          }}
+        >
+          <Item>
+            <Carousel
+              autoPlay
+              infiniteLoop
+              showThumbs={false}
+              sx={{
+                width: "500px",
+                height: "700px",
+              }}
+            >
+              <div>
+                <img
+                  alt="Quests"
+                  src="https://media2.giphy.com/media/mUIk7V2304jxS/giphy.gif?cid=ecf05e47w9x5m0v4xbkl3eo1j3g8rchdjujh0x728xvo3flc&rid=giphy.gif&ct=g"
+                />
+              </div>
+              <div>
+                <img
+                  alt="Quests"
+                  src="https://media3.giphy.com/media/7bsHJWS0V1F9C/giphy.gif"
+                />
+              </div>
+              <div>
+                <img
+                  alt="Quests"
+                  src="https://www.eminentseo.com/wp-content/uploads/2016/12/Chicago-Traffic-Cinemagraph.gif"
+                />
+              </div>
+            </Carousel>
+          </Item>
+          <Item>
+            <Typography
+              variant="h4"
+              sx={{
+                textAlign: "left",
+                mt: "5rem",
+                fontWeight: "bold",
+                ml: "1rem",
+                color: "#755CDE",
+              }}
+            >
+              Quests
+            </Typography>
+            <Typography
+              variant="h5"
+              sx={{
+                textAlign: "left",
+                fontWeight: "bold",
+                ml: "1rem",
+                color: "black",
+              }}
+            >
+              Sign in to your account.
+            </Typography>
+            <div>
+              <TextField
+                required
+                className={classes.root}
+                style={{ width: "80%", backgroundColor: "white" }}
+                id="filled-required"
+                label="Email Address"
+                sx={{
+                  mt: "1rem",
+                  ml: "0rem",
+                  borderRadius: "0.5rem",
+                }}
+              />
+              <TextField
+                className={classes.root}
+                style={{ width: "80%", backgroundColor: "white" }}
+                id="filled-password-input"
+                label="Password"
+                type="password"
+                autoComplete="current-password"
+                sx={{
+                  mt: "1rem",
+                  ml: "0rem",
+                  borderRadius: "0.5rem",
+                }}
+              />
+              {/* <Button
+                variant="contained"
+                style={{
+                  borderRadius: 10,
+                }}
+              >
+                Sign In
+              </Button> */}
+            </div>
+          </Item>
+        </Box>
+        {/* <Grid
           container
           spacing={0}
           direction="row"
@@ -54,11 +191,17 @@ export default function Home() {
         >
           <Grid item xs={6}>
             <Card
+              style={{
+                backgroundColor: "orange",
+                alignItems: "center",
+                textAlign: "center",
+              }}
               sx={{
                 margin: "2rem",
                 ml: "10rem",
                 mr: "0.7rem",
-                maxWidth: "600px",
+                maxWidth: "2000px",
+                maxHeight: "2000px",
                 borderRadius: "2px",
               }}
             >
@@ -170,7 +313,7 @@ export default function Home() {
               </div>
             </Card>
           </Grid>
-        </Grid>
+        </Grid> */}
       </main>
     </>
   )
