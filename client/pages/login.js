@@ -65,6 +65,7 @@ export default function Home() {
             textAlign="center"
             sx={{
               display: "flex",
+              flexWrap: "wrap",
               justifyContent: "center",
               p: 1,
               m: 1,
