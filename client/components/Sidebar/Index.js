@@ -9,7 +9,6 @@ import {
 	ListItem,
 	Divider,
 	Drawer,
-	CssBaseline,
 	Box,
 	ListItemIcon,
 	ListItemText,
