@@ -1,5 +1,13 @@
 import * as React from "react"
-import { Container, Typography, TextField, Button, Box } from "@mui/material"
+import {
+  Grid,
+  Paper,
+  Container,
+  Typography,
+  TextField,
+  Button,
+  Box,
+} from "@mui/material"
 import Head from "next/head"
 import Link from "next/link"
 import PropTypes from "prop-types"
@@ -69,27 +77,29 @@ export default function Home() {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <main className="main">
-          <Container fluid>
-            <Box
-              textAlign="center"
-              sx={{
-                display: "flex",
-                flexWrap: "wrap",
-                justifyContent: "center",
-                p: 1,
-                m: 1,
-                bgcolor: "background.paper",
-                borderRadius: 1,
-              }}
-            >
+          <Grid
+            container
+            spacing={0}
+            justify="flex-start"
+            textAlign="center"
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              m: 1,
+              bgcolor: "background.paper",
+              borderRadius: 1,
+              minHeight: "100vh",
+            }}
+          >
+            <Grid item xs={12} sm={6} md={4} lg={4} order={{ xs: 3, sm: 2 }}>
               <Item>
                 <Carousel
                   autoPlay
                   infiniteLoop
                   showThumbs={false}
                   sx={{
-                    width: "400px",
-                    height: "600px",
+                    mb: "-1.9rem",
                   }}
                 >
                   <div>
@@ -112,6 +122,8 @@ export default function Home() {
                   </div>
                 </Carousel>
               </Item>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={4} order={{ xs: 2, sm: 3 }}>
               <Item>
                 <Typography
                   variant="h4"
@@ -227,6 +239,7 @@ export default function Home() {
                   <Typography
                     sx={{
                       mt: "2rem",
+                      mb: "3.2rem",
                     }}
                   >
                     <Link href="/">
@@ -237,8 +250,8 @@ export default function Home() {
                   </Typography>
                 </div>
               </Item>
-            </Box>
-          </Container>
+            </Grid>
+          </Grid>
         </main>
       </LocalizationProvider>
     </>
