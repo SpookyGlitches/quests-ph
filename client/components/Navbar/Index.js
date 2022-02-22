@@ -144,7 +144,7 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
 	);
 
 	return (
-		<Box>
+		<>
 			<AppBar
 				position="fixed"
 				sx={{
@@ -215,7 +215,78 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
 			</AppBar>
 			{renderMobileMenu}
 			{renderMenu}
-		</Box>
+		</>
+		// <Box>
+		// 	<AppBar
+		// 		position="sticky"
+		// 		sx={{
+		// 			ml: { sm: `${drawerWidth}px` },
+		// 		}}
+		// 	>
+		// 		<Toolbar>
+		// 			<IconButton
+		// 				color="inherit"
+		// 				aria-label="open drawer"
+		// 				edge="start"
+		// 				onClick={handleDrawerToggle}
+		// 				sx={{ mr: 2, display: { sm: "none" } }}
+		// 			>
+		// 				<MenuRoundedIcon />
+		// 			</IconButton>
+
+		// 			<Typography
+		// 				variant="h6"
+		// 				noWrap
+		// 				component="div"
+		// 				sx={{ display: { xs: "none", sm: "block" } }}
+		// 			>
+		// 				MUI
+		// 			</Typography>
+		// 			<Search>
+		// 				<SearchIconWrapper>
+		// 					<SearchRoundedIcon />
+		// 				</SearchIconWrapper>
+		// 				<StyledInputBase
+		// 					placeholder="Search…"
+		// 					inputProps={{ "aria-label": "search" }}
+		// 				/>
+		// 			</Search>
+		// 			<Box sx={{ flexGrow: 1 }} />
+		// 			<Box sx={{ display: { xs: "none", md: "flex" } }}>
+		// 				<IconButton size="large" aria-label="" color="inherit">
+		// 					<Badge badgeContent={17} color="error">
+		// 						<NotificationsRoundedIcon />
+		// 					</Badge>
+		// 				</IconButton>
+		// 				<IconButton
+		// 					size="large"
+		// 					edge="end"
+		// 					aria-label=""
+		// 					aria-controls={menuId}
+		// 					aria-haspopup="true"
+		// 					onClick={handleProfileMenuOpen}
+		// 					color="inherit"
+		// 				>
+		// 					<AccountCircleRoundedIcon />
+		// 				</IconButton>
+		// 			</Box>
+		// 			<Box sx={{ display: { xs: "flex", md: "none" } }}>
+		// 				<IconButton
+		// 					size="large"
+		// 					aria-label="show more"
+		// 					aria-controls={mobileMenuId}
+		// 					aria-haspopup="true"
+		// 					onClick={handleMobileMenuOpen}
+		// 					color="inherit"
+		// 				>
+		// 					<MoreVertRoundedIcon />
+		// 				</IconButton>
+		// 			</Box>
+		// 		</Toolbar>
+		// 	</AppBar>
+		// 	{renderMobileMenu}
+		// 	{renderMenu}
+		// </Box>
 	);
 };
 export default Navbar;

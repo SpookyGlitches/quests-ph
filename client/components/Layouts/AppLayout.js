@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CssBaseline, Box } from "@mui/material";
+import { CssBaseline, Box, Toolbar } from "@mui/material";
 import Navbar from "../Navbar/Index";
 import Sidebar from "../Sidebar/Index";
 const drawerWidth = 240;
@@ -23,7 +23,10 @@ const AppLayout = ({ children }) => {
 				mobileOpen={mobileOpen}
 				handleDrawerToggle={handleDrawerToggle}
 			/>
-			<Box>{children}</Box>
+			<Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+				<Toolbar />
+				{children}
+			</Box>
 		</Box>
 	);
 };
