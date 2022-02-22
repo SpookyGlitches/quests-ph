@@ -144,7 +144,7 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
 	);
 
 	return (
-		<Box>
+		<>
 			<AppBar
 				position="fixed"
 				sx={{
@@ -215,7 +215,7 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
 			</AppBar>
 			{renderMobileMenu}
 			{renderMenu}
-		</Box>
+		</>
 	);
 };
 export default Navbar;

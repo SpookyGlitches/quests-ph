@@ -9,7 +9,6 @@ import {
 	ListItem,
 	Divider,
 	Drawer,
-	CssBaseline,
 	Box,
 	ListItemIcon,
 	ListItemText,
@@ -69,45 +68,41 @@ const Sidebar = (props) => {
 		window !== undefined ? () => window().document.body : undefined;
 
 	return (
-		<Box sx={{ display: "flex" }}>
-			<CssBaseline />
-
-			<Box
-				component="nav"
-				sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+		<Box
+			component="nav"
+			sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+		>
+			<Drawer
+				container={container}
+				variant="temporary"
+				open={mobileOpen}
+				onClose={handleDrawerToggle}
+				ModalProps={{
+					keepMounted: true, // Better open performance on mobile.
+				}}
+				sx={{
+					display: { xs: "block", sm: "none" },
+					"& .MuiDrawer-paper": {
+						boxSizing: "border-box",
+						width: drawerWidth,
+					},
+				}}
 			>
-				<Drawer
-					container={container}
-					variant="temporary"
-					open={mobileOpen}
-					onClose={handleDrawerToggle}
-					ModalProps={{
-						keepMounted: true, // Better open performance on mobile.
-					}}
-					sx={{
-						display: { xs: "block", sm: "none" },
-						"& .MuiDrawer-paper": {
-							boxSizing: "border-box",
-							width: drawerWidth,
-						},
-					}}
-				>
-					{drawer}
-				</Drawer>
-				<Drawer
-					variant="permanent"
-					sx={{
-						display: { xs: "none", sm: "block" },
-						"& .MuiDrawer-paper": {
-							boxSizing: "border-box",
-							width: drawerWidth,
-						},
-					}}
-					open
-				>
-					{drawer}
-				</Drawer>
-			</Box>
+				{drawer}
+			</Drawer>
+			<Drawer
+				variant="permanent"
+				sx={{
+					display: { xs: "none", sm: "block" },
+					"& .MuiDrawer-paper": {
+						boxSizing: "border-box",
+						width: drawerWidth,
+					},
+				}}
+				open
+			>
+				{drawer}
+			</Drawer>
 		</Box>
 	);
 };
