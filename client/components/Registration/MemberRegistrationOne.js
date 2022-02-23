@@ -22,6 +22,20 @@ const MemberRegistrationOne = () => {
     <>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <Stack direction="column" spacing={2}>
+          <Button
+            style={{
+              borderRadius: 10,
+              minheight: "56px",
+              width: "100%",
+              backgroundColor: "white",
+              color: "black",
+            }}
+            variant="contained"
+          >
+            <img src="/assets/google.png" width="15" height="15" /> &nbsp; Sign
+            Up with Google
+          </Button>
+          <Typography align="center">or</Typography>
           <TextField
             fullWidth
             required
