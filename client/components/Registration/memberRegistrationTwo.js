@@ -1,61 +1,75 @@
-import React from "react"
-import { TextField } from "@mui/material"
-import { Controller, useFormContext } from "react-hook-form"
+import * as React from "react"
+import {
+  Typography,
+  TextField,
+  Button,
+  Box,
+  Stack,
+  Link as MuiLink,
+} from "@mui/material"
+import Link from "next/link"
 
-function memberRegistrationTwo() {
-  const { control } = useFormContext()
-
+const MemberRegistrationTwo = () => {
   return (
     <>
-      <Controller
-        control={control}
-        name="firstName"
-        render={({ field }) => (
-          <TextField
-            id="first-name"
-            label="First Name"
-            variant="outlined"
-            placeholder="Enter Your First Name"
-            fullWidth
-            margin="normal"
-            {...field}
-          />
-        )}
-      />
+      <Stack direction="column" spacing={2}>
+        <Typography align="center">or</Typography>
+        <TextField
+          fullWidth
+          required
+          style={{}}
+          id="filled-required"
+          label="Email Address"
+          sx={{}}
+        />
+        <TextField
+          fullWidth
+          id="filled-password-input"
+          label="Password"
+          type="password"
+          autoComplete="current-password"
+          sx={{}}
+        />
+        <TextField
+          fullWidth
+          id="filled-password-input"
+          label="Confirm Password"
+          type="password"
+          autoComplete="current-password"
+          sx={{}}
+        />
+      </Stack>
+      <Button variant="contained" sx={{ mt: "1rem", mb: "1rem" }}>
+        Sign Up
+      </Button>
 
-      <Controller
-        control={control}
-        name="lastName"
-        render={({ field }) => (
-          <TextField
-            id="last-name"
-            label="Last Name"
-            variant="outlined"
-            placeholder="Enter Your Last Name"
-            fullWidth
-            margin="normal"
-            {...field}
-          />
-        )}
-      />
-
-      <Controller
-        control={control}
-        name="nickName"
-        render={({ field }) => (
-          <TextField
-            id="nick-name"
-            label="Nick Name"
-            variant="outlined"
-            placeholder="Enter Your Nick Name"
-            fullWidth
-            margin="normal"
-            {...field}
-          />
-        )}
-      />
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="string">
+          By signing up, I accept the{" "}
+          <MuiLink
+            sx={{ cursor: "pointer" }}
+            style={{ textDecoration: "none" }}
+          >
+            <a href="/quests-terms">Quests Terms of Service</a>
+          </MuiLink>{" "}
+          and acknowledge the{" "}
+          <MuiLink
+            sx={{ cursor: "pointer" }}
+            style={{ textDecoration: "none" }}
+          >
+            <a href="/privacy-policy">Privacy Policy</a>
+          </MuiLink>
+          .
+        </Typography>
+      </Box>
     </>
   )
 }
 
-export default memberRegistrationTwo
+export default MemberRegistrationTwo

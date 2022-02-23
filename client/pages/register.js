@@ -1,8 +1,9 @@
 import * as React from "react"
 import { Grid, Box, Link as MuiLink } from "@mui/material"
 import Carousel from "react-material-ui-carousel"
-import MemberRegistrationOne from "../components/Registration/MemberRegistrationOne"
 import Header from "../components/Registration/Header"
+import MemberRegistrationOne from "../components/Registration/MemberRegistrationOne"
+import MemberRegistrationTwo from "../components/Registration/MemberRegistrationTwo"
 
 export default function Register() {
   const [value, setValue] = React.useState(null)

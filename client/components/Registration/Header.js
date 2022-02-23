@@ -10,7 +10,6 @@ const Header = () => {
             textAlign: "left",
             fontWeight: "bold",
             color: "#755CDE",
-            // mt: "-1rem",
           }}
         >
           Quests
@@ -21,7 +20,6 @@ const Header = () => {
             textAlign: "left",
             fontWeight: "bold",
             color: "black",
-            // mb: "-2.5rem",
           }}
         >
           Create an account.
