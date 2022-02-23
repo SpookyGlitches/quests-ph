@@ -17,6 +17,7 @@ import {
 import AppLayout from "../../components/Layouts/AppLayout";
 import DatePicker from "@mui/lab/DatePicker";
 import { useState } from "react";
+
 const steps = ["Set the WOOP", "Configure Settings"];
 
 const Create = () => {
@@ -43,10 +44,6 @@ const Create = () => {
 					borderRadius: 2,
 				}}
 			>
-				{/* {steps.length === activeStep && (
-					<Confetti numberOfPieces={400} />
-				)} */}
-
 				<Box
 					sx={{
 						width: {
