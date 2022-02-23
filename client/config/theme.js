@@ -13,6 +13,14 @@ const theme = createTheme({
 			default: "#f5f5f5",
 		},
 	},
+	components: {
+		MuiLink: {
+			defaultProps: {
+				underline: "hover",
+				cursor: "pointer",
+			},
+		},
+	},
 });
 
 export default theme;
