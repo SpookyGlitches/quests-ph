@@ -16,6 +16,21 @@ const theme = createTheme({
 	shape: {
 		borderRadius: 10,
 	},
+	components: {
+		MuiTextField: {
+			defaultProps: {
+				variant: "filled",
+			},
+		},
+	},
+	typography: {
+		h4: {
+			fontWeight: 700,
+		},
+		button: {
+			textTransform: "none",
+		},
+	},
 });
 
 export default theme;
