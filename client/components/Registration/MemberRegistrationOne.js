@@ -79,7 +79,6 @@ const MemberRegistrationOne = () => {
             </Link>
           </Typography>
         </Box>
-        {/* </Box> */}
       </LocalizationProvider>
     </>
   )
