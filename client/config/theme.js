@@ -13,9 +13,7 @@ const theme = createTheme({
 			default: "#f5f5f5",
 		},
 	},
-	shape: {
-		borderRadius: 10,
-	},
+
 	components: {
 		MuiTextField: {
 			defaultProps: {
