@@ -84,7 +84,7 @@ export default function Home() {
               minHeight: "100vh",
             }}
           >
-            <Grid item xs={12} sm={6} md={4} lg={6} order={{ xs: 3, sm: 2 }}>
+            <Grid item xs={12} sm={6} order={{ xs: 3, sm: 2 }}>
               <Item>
                 <Carousel
                   autoPlay
@@ -115,7 +115,7 @@ export default function Home() {
                 </Carousel>
               </Item>
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={6} order={{ xs: 2, sm: 3 }}>
+            <Grid item xs={12} sm={6} order={{ xs: 2, sm: 3 }}>
               <Item>
                 <Typography
                   variant="h4"
