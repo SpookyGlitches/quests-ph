@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from 'react';
 import {
   Typography,
   TextField,
@@ -6,14 +6,13 @@ import {
   Box,
   Stack,
   Link as MuiLink,
-} from "@mui/material"
-import Link from "next/link"
+} from '@mui/material';
+import Link from 'next/link';
 
 const MemberRegistrationTwo = () => {
   return (
     <>
       <Stack direction="column" spacing={2}>
-        <Typography align="center">or</Typography>
         <TextField
           fullWidth
           required
@@ -39,29 +38,29 @@ const MemberRegistrationTwo = () => {
           sx={{}}
         />
       </Stack>
-      <Button variant="contained" sx={{ mt: "1rem", mb: "1rem" }}>
+      {/* <Button variant="contained" sx={{ mt: "1rem", mb: "1rem" }}>
         Sign Up
-      </Button>
+      </Button> */}
 
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
         }}
       >
-        <Typography variant="string">
-          By signing up, I accept the{" "}
+        <Typography variant="string" sx={{ mt: '1rem', mb: '1rem' }}>
+          By signing up, I accept the{' '}
           <MuiLink
-            sx={{ cursor: "pointer" }}
-            style={{ textDecoration: "none" }}
+            sx={{ cursor: 'pointer' }}
+            style={{ textDecoration: 'none' }}
           >
             <a href="/quests-terms">Quests Terms of Service</a>
-          </MuiLink>{" "}
-          and acknowledge the{" "}
+          </MuiLink>{' '}
+          and acknowledge the{' '}
           <MuiLink
-            sx={{ cursor: "pointer" }}
-            style={{ textDecoration: "none" }}
+            sx={{ cursor: 'pointer' }}
+            style={{ textDecoration: 'none' }}
           >
             <a href="/privacy-policy">Privacy Policy</a>
           </MuiLink>
@@ -69,7 +68,7 @@ const MemberRegistrationTwo = () => {
         </Typography>
       </Box>
     </>
-  )
-}
+  );
+};
 
-export default MemberRegistrationTwo
+export default MemberRegistrationTwo;

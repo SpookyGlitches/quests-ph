@@ -75,9 +75,9 @@ const MemberRegistrationOne = () => {
             )}
           />
         </Stack>
-        <Button variant="contained" sx={{ mt: '1rem', mb: '1rem' }}>
+        {/* <Button variant="contained" sx={{ mt: '1rem', mb: '1rem' }}>
           Next
-        </Button>
+        </Button> */}
 
         <Box
           sx={{
@@ -86,9 +86,12 @@ const MemberRegistrationOne = () => {
             alignItems: 'center',
           }}
         >
-          <Typography variant="string">
+          <Typography variant="string" sx={{ mt: '1rem', mb: '1rem' }}>
             <Link href="/login">
-              <MuiLink sx={{ cursor: 'pointer' }}>
+              <MuiLink
+                sx={{ cursor: 'pointer' }}
+                style={{ textDecoration: 'none' }}
+              >
                 Already have an account?
               </MuiLink>
             </Link>
