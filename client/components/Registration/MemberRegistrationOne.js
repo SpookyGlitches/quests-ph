@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from 'react';
 import {
   Typography,
   TextField,
@@ -6,18 +6,18 @@ import {
   Box,
   Stack,
   Link as MuiLink,
-} from "@mui/material"
-import Link from "next/link"
-import DatePicker from "@mui/lab/DatePicker"
-import LocalizationProvider from "@mui/lab/LocalizationProvider"
-import AdapterDateFns from "@mui/lab/AdapterDateFns"
+} from '@mui/material';
+import Link from 'next/link';
+import DatePicker from '@mui/lab/DatePicker';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
 const MemberRegistrationOne = () => {
-  const [value, setValue] = React.useState(null)
+  const [value, setValue] = React.useState(null);
   const handleChange = (newValue) => {
-    setValue(newValue)
-  }
-  const color = "#858393"
+    setValue(newValue);
+  };
+  const color = '#858393';
   return (
     <>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -25,10 +25,10 @@ const MemberRegistrationOne = () => {
           <Button
             style={{
               borderRadius: 10,
-              minheight: "56px",
-              width: "100%",
-              backgroundColor: "white",
-              color: "black",
+              minheight: '56px',
+              width: '100%',
+              backgroundColor: 'white',
+              color: 'black',
             }}
             variant="contained"
           >
@@ -52,11 +52,12 @@ const MemberRegistrationOne = () => {
             label="Full Name"
             sx={{}}
           />
+
           <DatePicker
             label="Birthday"
             value={value}
             onChange={(newValue) => {
-              setValue(newValue)
+              setValue(newValue);
             }}
             renderInput={(params) => (
               <TextField
@@ -64,30 +65,30 @@ const MemberRegistrationOne = () => {
                 sx={{
                   svg: { color },
                   input: { color },
-                  backgroundColor: "white",
-                  borderColor: "white",
-                  mt: "1rem",
-                  ml: "-1em",
-                  width: "100%",
+                  backgroundColor: 'white',
+                  borderColor: 'white',
+                  mt: '1rem',
+                  ml: '-1em',
+                  width: '100%',
                 }}
               />
             )}
           />
         </Stack>
-        <Button variant="contained" sx={{ mt: "1rem", mb: "1rem" }}>
+        <Button variant="contained" sx={{ mt: '1rem', mb: '1rem' }}>
           Next
         </Button>
 
         <Box
           sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}
         >
           <Typography variant="string">
             <Link href="/login">
-              <MuiLink sx={{ cursor: "pointer" }}>
+              <MuiLink sx={{ cursor: 'pointer' }}>
                 Already have an account?
               </MuiLink>
             </Link>
@@ -95,7 +96,7 @@ const MemberRegistrationOne = () => {
         </Box>
       </LocalizationProvider>
     </>
-  )
-}
+  );
+};
 
-export default MemberRegistrationOne
+export default MemberRegistrationOne;
