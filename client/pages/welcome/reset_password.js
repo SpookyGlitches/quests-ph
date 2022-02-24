@@ -22,29 +22,32 @@ export default function ResetPassword() {
   };
 
   return (
-    //   <ThemeProvider theme={theme}>
-        <Grid container component="main" sx={{ height: '100vh' }}>
-            <CssBaseline />
-            <Grid item xs={false} sm={4}
-            md={6}
-            sx={{
-                bgcolor: '#755CDE',
-                backgroundRepeat: 'no-repeat',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-            }}
-            >
-            <Carousel
-            autoPlay
-            infiniteLoop
-            showThumbs={false}
-            sx={{
-                height: "100%",
-                width: "100%",
-                backgroundColor: "#755CDE",
-            }}
-            >
-            <img
+    <Grid
+      container
+      sx={{
+        backgroundColor: "background.paper",
+        height: "100vh",
+        width: "100vw",
+      }}
+    >
+      <Grid
+        item
+        xs={12}
+        sm={6}
+        order={{ xs: 3, sm: 2 }}
+        sx={{ height: "100%", backgroundColor: "gray" }}
+      >
+        <Carousel
+          autoPlay
+          infiniteLoop
+          showThumbs={false}
+          sx={{
+            height: "100%",
+            width: "100%",
+            backgroundColor: "#755CDE",
+          }}
+        >
+          <img
                 style={{ width: "auto", height: "auto%" }}
                 alt="Quests"
                 src="/assets/resetpassword/carousel1.png"
@@ -61,15 +64,20 @@ export default function ResetPassword() {
                 alt="Quests"
                 src="/assets/resetpassword/carousel3.png"
             />
-            </Carousel>
-            </Grid>
-            <Grid item xs={12} sm={8} md={6} elevation={6} square>
-
+        </Carousel>
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        sm={6}
+        order={{ xs: 2, sm: 3 }}
+        sx={{ height: "100%" }}
+      >
                 <Box
                 sx={{
                 display: "flex",
-                justifyContent: "center",
                 flexDirection: "column",
+                justifyContent: "center",
                 height: "100%",
                 width: "100%",
                 gap: 3,
@@ -128,7 +136,7 @@ export default function ResetPassword() {
                         </Typography>
                     </Box>
                 </Box>
-            </Grid>
-        </Grid>
+      </Grid>
+    </Grid>
   );
 }
