@@ -66,8 +66,8 @@ export default function Register() {
             width: '100%',
             gap: 3,
             padding: {
-              xs: '4rem',
-              md: '7rem',
+              xs: '2rem',
+              md: '5rem',
             },
           }}
         >

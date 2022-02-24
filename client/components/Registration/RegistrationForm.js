@@ -59,7 +59,7 @@ export default function RegistrationForm() {
             </StepLabel>
             <StepContent>
               <Typography>{getStepContent(index)}</Typography>
-              <Box sx={{ mb: 2 }}>
+              <Box sx={{ mb: 2 }} textAlign="center">
                 <div>
                   <Button
                     variant="contained"
