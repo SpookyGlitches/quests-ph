@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import { Link as MuiLink } from '@mui/material';
 import Link from 'next/link';
@@ -12,15 +11,6 @@ import Carousel from 'react-material-ui-carousel';
 
 export default function ResetPassword() {
   
-    const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-    });
-  };
-
   return (
     <Grid
       container
