@@ -20,10 +20,12 @@ const theme = createTheme({
         cursor: "pointer",
       },
     },
-    shape: {
-      borderRadius: 10,
-    },
   },
+  typography: {
+		h4: {
+			fontWeight: 700,
+		},
+	},
 })
 
 export default theme
