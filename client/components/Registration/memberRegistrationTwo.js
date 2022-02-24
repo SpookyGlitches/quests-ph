@@ -2,7 +2,6 @@ import * as React from 'react';
 import {
   Typography,
   TextField,
-  Button,
   Box,
   Stack,
   Link as MuiLink,
@@ -49,7 +48,11 @@ const MemberRegistrationTwo = () => {
           alignItems: 'center',
         }}
       >
-        <Typography variant="string" sx={{ mt: '1rem', mb: '1rem' }}>
+        <Typography
+          variant="string"
+          sx={{ mt: '1rem', mb: '1rem' }}
+          textAlign="center"
+        >
           By signing up, I accept the{' '}
           <MuiLink
             sx={{ cursor: 'pointer' }}
