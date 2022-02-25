@@ -1,31 +1,37 @@
 {
-	"name": "client",
-	"private": true,
-	"scripts": {
-		"dev": "next dev",
-		"build": "next build",
-		"start": "next start",
-		"lint": "next lint"
-	},
-	"dependencies": {
-		"@date-io/date-fns": "^2.13.1",
-		"@emotion/react": "^11.7.1",
-		"@emotion/styled": "^11.6.0",
-		"@fontsource/roboto": "^4.5.3",
-		"@mui/icons-material": "^5.4.2",
-		"@mui/lab": "^5.0.0-alpha.70",
-		"@mui/material": "^5.4.2",
-		"axios": "^0.26.0",
-		"date-fns": "^2.28.0",
-		"next": "12.0.10",
-		"react": "17.0.2",
-		"react-clamp-lines": "^3.0.2",
-		"react-dom": "17.0.2",
-		"react-hook-form": "^7.27.0"
-	},
-	"devDependencies": {
-		"@faker-js/faker": "^6.0.0-alpha.6",
-		"eslint": "8.9.0",
-		"eslint-config-next": "12.0.10"
-	}
+  "name": "client",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "prepare": "cd .. && husky install client/.husky",
+    "pre-commit": "yarn eslint . --ext .js --ext .jsx && yarn pretty-quick --staged"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
+    "@fontsource/roboto": "^4.5.3",
+    "@mui/icons-material": "^5.4.2",
+    "@mui/lab": "^5.0.0-alpha.70",
+    "@mui/material": "^5.4.2",
+    "axios": "^0.26.0",
+    "date-fns": "^2.28.0",
+    "next": "12.0.10",
+    "react": "17.0.2",
+    "react-clamp-lines": "^3.0.2",
+    "react-dom": "17.0.2",
+    "react-hook-form": "^7.27.0",
+    "react-material-ui-carousel": "^3.2.0"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^6.0.0-alpha.6",
+    "eslint": "8.9.0",
+    "eslint-config-next": "12.0.10",
+    "eslint-config-prettier": "^8.4.0",
+    "husky": "^7.0.4",
+    "prettier": "^2.5.1",
+    "pretty-quick": "^3.1.3"
+  }
 }
