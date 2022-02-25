@@ -24,7 +24,7 @@ const PostsList = ({ posts }) => {
 	};
 
 	return (
-		<Box>
+		<div>
 			<Popper
 				open={openPostOptions}
 				anchorEl={postOptionsAnchor}
@@ -71,7 +71,7 @@ const PostsList = ({ posts }) => {
 					);
 				})}
 			</Stack>
-		</Box>
+		</div>
 	);
 };
 

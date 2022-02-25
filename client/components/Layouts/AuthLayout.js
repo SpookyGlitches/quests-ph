@@ -1,6 +1,5 @@
 import { Grid, Box } from "@mui/material";
-import Carousel from "react-material-ui-carousel";
-
+import AuthCarousel from "../Auth/AuthCarousel"
 const AuthLayout = ({ children }) => {
 	return (
 		<Grid
@@ -18,19 +17,7 @@ const AuthLayout = ({ children }) => {
 				order={{ xs: 3, sm: 2 }}
 				sx={{ height: "100%", backgroundColor: "primary.main" }}
 			>
-				<Carousel
-					autoPlay
-					infiniteLoop
-					showThumbs={false}
-					sx={{
-						height: "100%",
-						width: "100%",
-					}}
-				>
-					<img alt="Quests Carousel Image 1" src="/auth/carousel1.png" />
-					<img alt="Quests Carousel Image 2" src="/auth/carousel2.png" />
-					<img alt="Quests Carousel Image 3" src="/auth/carousel3.png" />
-				</Carousel>
+				<AuthCarousel />
 			</Grid>
 			<Grid
 				item

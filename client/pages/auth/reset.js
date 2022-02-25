@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import AuthLayout from "../../components/Layouts/AuthLayout";
-import AuthHeader from "../../components/auth/AuthHeader";
+import AuthHeader from "../../components/Auth/AuthHeader";
 
 export default function ResetPassword() {
   return (

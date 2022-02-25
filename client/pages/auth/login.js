@@ -8,7 +8,8 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import AuthLayout from "../../components/Layouts/AuthLayout";
-import AuthHeader from "../../components/auth/AuthHeader";
+import AuthHeader from "../../components/Auth/AuthHeader";
+
 export default function Login() {
   return (
     <AuthLayout>

@@ -58,12 +58,12 @@ const Post = ({
 				}
 				title={username}
 				subheader={
-					<Box>
+					<div>
 						{formatRelative(
 							new Date(JSON.parse(createdAt)),
 							new Date()
 						)}
-					</Box>
+					</div>
 				}
 			/>
 			{images.length > 0 ? (
@@ -92,14 +92,14 @@ const Post = ({
 					)}
 				</Box>
 			) : (
-				<Box>
+				<div>
 					<CardMedia
 						component="video"
 						image="/the-feels.mp4"
 						title="title"
 						controls
 					/>
-				</Box>
+				</div>
 			)}
 
 			<CardContent sx={{ width: "100%" }}>
