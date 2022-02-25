@@ -6,7 +6,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prepare": "cd .. && husky install client/.husky"
+    "prepare": "cd .. && husky install client/.husky",
+    "pre-commit": "yarn eslint --fix && yarn pretty-quick"
   },
   "dependencies": {
     "@emotion/react": "^11.7.1",
@@ -29,13 +30,7 @@
     "eslint-config-next": "12.0.10",
     "eslint-config-prettier": "^8.4.0",
     "husky": "^7.0.4",
-    "lint-staged": "^12.3.4",
-    "prettier": "^2.5.1"
-  },
-  "lint-staged": {
-    "*.{js,jsx}": [
-      "eslint --fix",
-      "prettier --write ."
-    ]
+    "prettier": "^2.5.1",
+    "pretty-quick": "^3.1.3"
   }
 }
