@@ -5,7 +5,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prepare": "cd .. && husky install client/.husky",
+    "pre-commit": "yarn eslint . --ext .js --ext .jsx && yarn pretty-quick --staged"
   },
   "dependencies": {
     "@emotion/react": "^11.7.1",
@@ -25,6 +27,10 @@
   "devDependencies": {
     "@faker-js/faker": "^6.0.0-alpha.6",
     "eslint": "8.9.0",
-    "eslint-config-next": "12.0.10"
+    "eslint-config-next": "12.0.10",
+    "eslint-config-prettier": "^8.4.0",
+    "husky": "^7.0.4",
+    "prettier": "^2.5.1",
+    "pretty-quick": "^3.1.3"
   }
 }
