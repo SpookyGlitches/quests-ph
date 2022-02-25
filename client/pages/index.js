@@ -1,6 +1,6 @@
-import AppLayout from "../components/Layouts/AppLayout";
-const x = "123"
+import AppLayout from '../components/Layouts/AppLayout';
+const x = '1423';
 
 export default function Home() {
-	return <AppLayout>hello</AppLayout>;
+  return <AppLayout>hello</AppLayout>;
 }
