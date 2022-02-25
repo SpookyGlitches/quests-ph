@@ -8,7 +8,6 @@ export default function VerifyEmail() {
 	return (
 		<AuthLayout>
 			<AuthHeader subtitle="Sign in to your account" />
-
 			<Stack spacing={4} sx={{ my: 2 }}>
 				<Typography variant="h6">
 					We have sent an email to ninomaeianis@hololive.com.
