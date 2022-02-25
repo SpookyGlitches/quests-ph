@@ -7,7 +7,7 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "cd .. && husky install client/.husky",
-    "pre-commit": "yarn eslint --fix && yarn pretty-quick"
+    "pre-commit": "yarn eslint . --ext .js --ext .jsx && yarn pretty-quick"
   },
   "dependencies": {
     "@emotion/react": "^11.7.1",
