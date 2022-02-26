@@ -1,14 +1,29 @@
 import * as React from 'react';
+import { useState } from 'react';
 import {
   Typography,
   TextField,
   Box,
   Stack,
+  InputAdornment,
+  IconButton,
   Link as MuiLink,
 } from '@mui/material';
-import Link from 'next/link';
+
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const MemberRegistrationTwo = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleMouseDownPassword = () => setShowPassword(!showPassword);
+
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const handleClickShowConfirmPassword = () =>
+    setShowConfirmPassword(!showConfirmPassword);
+  const handleMouseDownConfirmPassword = () =>
+    setShowConfirmPassword(!showConfirmPassword);
+
   return (
     <>
       <Stack direction="column" spacing={2}>
@@ -18,13 +33,28 @@ const MemberRegistrationTwo = () => {
           style={{}}
           id="filled-required"
           label="Email Address"
+          name="emailAddress"
           sx={{}}
         />
         <TextField
           fullWidth
           id="filled-password-input"
           label="Password"
-          type="password"
+          type={showPassword ? 'text' : 'password'}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+          name="password"
           autoComplete="current-password"
           sx={{}}
         />
@@ -32,14 +62,25 @@ const MemberRegistrationTwo = () => {
           fullWidth
           id="filled-password-input"
           label="Confirm Password"
-          type="password"
+          type={showConfirmPassword ? 'text' : 'password'}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowConfirmPassword}
+                  onMouseDown={handleMouseDownConfirmPassword}
+                >
+                  {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+          name="confirmPassword"
           autoComplete="current-password"
           sx={{}}
         />
       </Stack>
-      {/* <Button variant="contained" sx={{ mt: "1rem", mb: "1rem" }}>
-        Sign Up
-      </Button> */}
 
       <Box
         sx={{

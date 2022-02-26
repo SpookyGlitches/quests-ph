@@ -12,12 +12,44 @@ import DatePicker from '@mui/lab/DatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
+import useForm from '../../hooks/useForm';
+
 const MemberRegistrationOne = () => {
   const [value, setValue] = React.useState(null);
   const handleChange = (newValue) => {
     setValue(newValue);
   };
   const color = '#858393';
+
+  const stateSchema = {
+    displayName: {value: "", error: ""},
+    fullName: {value: "", error: ""},
+  };
+
+  const stateValidatorSchema = {
+    displayName: {
+      required: true,
+      validator: {
+        func: (value) => /^[[A-Za-z][A-Za-z0-9_]{7,29}$/.test(value),
+        error: 'Username must be 8-30 characters',
+      }
+    },
+    fullName: {
+      required: true,
+      validator: {
+        func: (value) => /^[[A-Za-z][A-Za-z0-9_]{7,29}$/.test(value),
+        error: 'Full Name must be 8-30 characters',
+      }
+    }
+    
+  }
+  
+  const { values, errors, dirty, handleOnChange } = useForm(
+    stateSchema,
+    stateValidatorSchema,
+  );
+  const { displayName, fullName } = values;
+
   return (
     <>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -42,19 +74,40 @@ const MemberRegistrationOne = () => {
             style={{}}
             id="filled-required"
             label="Display Name"
+            name="displayName"
+            value={displayName}
+            onChange={handleOnChange}
           />
+          {errors.displayName && dirty.displayName && (
+            <Typography
+              style={{ marginTop: '0', color: 'red', fontWeight: '200' }}
+            >
+              {errors.displayName}
+            </Typography>,
+          )}
           <TextField
             fullWidth
             required
             style={{}}
             id="filled-required"
             label="Full Name"
+            name="fullName"
+            value={fullName}
+            onChange={handleOnChange}
             sx={{}}
           />
+          {errors.fullName && dirty.fullName && (
+              <Typography
+                style={{ marginTop: '0', color: 'red', fontWeight: '200' }}
+              >
+                {errors.fullName}
+              </Typography>,
+            )}
 
           <DatePicker
             label="Birthday"
             value={value}
+            name="birthdate"
             onChange={(newValue) => {
               setValue(newValue);
             }}
