@@ -14,7 +14,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
 import useForm from '../../hooks/useForm';
 
-const MemberRegistrationOne = () => {
+const MemberRegistrationOne = ({activeStep, steps, handleNext}) => {
   const [value, setValue] = React.useState(null);
   const handleChange = (newValue) => {
     setValue(newValue);
@@ -61,10 +61,11 @@ const MemberRegistrationOne = () => {
               width: '100%',
               backgroundColor: 'white',
               color: 'black',
+              marginTop: '1rem'
             }}
             variant="contained"
           >
-            <img src="/assets/google.png" width="15" height="15" /> &nbsp; Sign
+            <img src="/assets/google.png" width="15" height="15"  /> &nbsp; Sign
             Up with Google
           </Button>
           <Typography align="center">or</Typography>
@@ -126,6 +127,20 @@ const MemberRegistrationOne = () => {
               />
             )}
           />
+          { !displayName ||
+            !fullName
+            ?
+            (
+              <Button variant="contained" disabled>
+                {activeStep === steps.length ? 'Finish' : 'Next'}
+                
+                </Button>
+            ) :
+            <Button variant="contained" onClick={handleNext}>
+              {activeStep === steps.length ? 'Finish' : 'Next'}
+              </Button>
+          }
+          
         </Stack>
 
         <Box

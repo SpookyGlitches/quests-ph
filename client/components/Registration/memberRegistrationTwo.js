@@ -34,7 +34,7 @@ const MemberRegistrationTwo = () => {
           id="filled-required"
           label="Email Address"
           name="emailAddress"
-          sx={{}}
+          sx={{ mt: '1rem' }}
         />
         <TextField
           fullWidth
