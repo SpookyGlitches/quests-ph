@@ -19,15 +19,14 @@ export default function HorizontalLinearStepper() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
 
-  const isStepOptional = (step) => {
-    return step === 1;
-  };
-
   const isStepSkipped = (step) => {
     return skipped.has(step);
   };
 
   const handleNext = () => {
+    if (!myForm.current.checkValidity()) {
+      return;
+    }
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
@@ -41,6 +40,8 @@ export default function HorizontalLinearStepper() {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
+
+  const myForm = React.useRef(null);
 
   function getStepContent(step) {
     switch (step) {
@@ -69,30 +70,32 @@ export default function HorizontalLinearStepper() {
           );
         })}
       </Stepper>
-      {activeStep === steps.length ? (
-        // If all entries are correct or validation has finished without any error, proceed to this
-        <MemberRegistrationThree />
-      ) : (
-        <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>
-            {getStepContent(activeStep)}
-          </Typography>
-          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Button
-              color="inherit"
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              sx={{ mr: 1 }}
-            >
-              Back
-            </Button>
+      <form action="/" method="POST" ref={myForm}>
+        {activeStep === steps.length ? (
+          // If all entries are correct or validation has finished without any error, proceed to this
+          <MemberRegistrationThree />
+        ) : (
+          <React.Fragment>
+            <Typography sx={{ mt: 2, mb: 1 }}>
+              {getStepContent(activeStep)}
+            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+              <Button
+                color="inherit"
+                disabled={activeStep === 0}
+                onClick={handleBack}
+                sx={{ mr: 1 }}
+              >
+                Back
+              </Button>
 
-            <Button onClick={handleNext}>
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-            </Button>
-          </Box>
-        </React.Fragment>
-      )}
+              <Button onClick={handleNext}>
+                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+              </Button>
+            </Box>
+          </React.Fragment>
+        )}
+      </form>
     </Box>
   );
 }
