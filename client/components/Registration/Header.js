@@ -1,4 +1,4 @@
-import { Typography, Box } from "@mui/material"
+import { Typography, Box } from '@mui/material';
 
 const Header = () => {
   return (
@@ -7,9 +7,10 @@ const Header = () => {
         <Typography
           variant="h4"
           sx={{
-            textAlign: "left",
-            fontWeight: "bold",
-            color: "#755CDE",
+            textAlign: 'left',
+            fontWeight: 'bold',
+            color: '#755CDE',
+            mt: '1rem',
           }}
         >
           Quests
@@ -17,16 +18,16 @@ const Header = () => {
         <Typography
           variant="h5"
           sx={{
-            textAlign: "left",
-            fontWeight: "bold",
-            color: "black",
+            textAlign: 'left',
+            fontWeight: 'bold',
+            color: 'black',
           }}
         >
           Create an account.
         </Typography>
       </Box>
     </>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

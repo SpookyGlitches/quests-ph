@@ -2,9 +2,7 @@ import * as React from 'react';
 import Link from 'next/link';
 import {
   Typography,
-  TextField,
   Box,
-  Stack,
   Button,
   StepLabel,
   Step,
