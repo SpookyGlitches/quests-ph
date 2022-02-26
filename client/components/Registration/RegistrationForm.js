@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import MemberRegistrationOne from './MemberRegistrationOne';
 import MemberRegistrationTwo from './MemberRegistrationTwo';
+import MemberRegistrationThree from './MemberRegistrationThree';
 
 const steps = ['', ''];
 
@@ -41,25 +42,6 @@ export default function HorizontalLinearStepper() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleSkip = () => {
-    if (!isStepOptional(activeStep)) {
-      // You probably want to guard against something like this,
-      // it should never occur unless someone's actively trying to break something.
-      throw new Error("You can't skip a step that isn't optional.");
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
-  };
-
-  const handleReset = () => {
-    setActiveStep(0);
-  };
-
   function getStepContent(step) {
     switch (step) {
       case 0:
@@ -72,7 +54,7 @@ export default function HorizontalLinearStepper() {
   }
   return (
     <Box sx={{ width: '100%' }}>
-      <Stepper activeStep={activeStep}>
+      <Stepper activeStep={activeStep} sx={{ mt: '-1rem' }}>
         {steps.map((label, index) => {
           const stepProps = {};
           const labelProps = {};
@@ -88,19 +70,8 @@ export default function HorizontalLinearStepper() {
         })}
       </Stepper>
       {activeStep === steps.length ? (
-        <React.Fragment>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <Typography sx={{ mt: 2, mb: 1 }} variant="h6">
-              Sign up complete{' '}
-            </Typography>
-          </Box>
-        </React.Fragment>
+        // If all entries are correct or validation has finished without any error, proceed to this
+        <MemberRegistrationThree />
       ) : (
         <React.Fragment>
           <Typography sx={{ mt: 2, mb: 1 }}>

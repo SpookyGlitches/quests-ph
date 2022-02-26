@@ -21,7 +21,7 @@ const MemberRegistrationOne = () => {
   return (
     <>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <Stack direction="column" spacing={2}>
+        <Stack direction="column" spacing={1.5}>
           <Button
             style={{
               borderRadius: 10,
@@ -42,7 +42,6 @@ const MemberRegistrationOne = () => {
             style={{}}
             id="filled-required"
             label="Display Name"
-            sx={{}}
           />
           <TextField
             fullWidth
@@ -75,9 +74,6 @@ const MemberRegistrationOne = () => {
             )}
           />
         </Stack>
-        {/* <Button variant="contained" sx={{ mt: '1rem', mb: '1rem' }}>
-          Next
-        </Button> */}
 
         <Box
           sx={{

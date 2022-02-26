@@ -3,14 +3,14 @@ import { Typography, Box } from '@mui/material';
 const Header = () => {
   return (
     <>
-      <Box>
+      <Box sx={{}}>
         <Typography
           variant="h4"
           sx={{
             textAlign: 'left',
             fontWeight: 'bold',
             color: '#755CDE',
-            mt: '1rem',
+            mt: '2rem',
           }}
         >
           Quests
