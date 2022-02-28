@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { Grid, Box, Typography, Link as MuiLink } from '@mui/material';
 import Carousel from 'react-material-ui-carousel';
-import Header from '../components/Registration/Header';
-import RegistrationForm from '../components/Registration/RegistrationForm';
+import RegistrationForm from '../../components/Registration/RegistrationForm';
 
 export default function Register() {
   return (
