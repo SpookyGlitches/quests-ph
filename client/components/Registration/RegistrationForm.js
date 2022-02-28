@@ -53,6 +53,7 @@ export default function HorizontalLinearStepper() {
             handleNext={handleNext}
             activeStep={activeStep}
             steps={step}
+            handleBack={handleBack}
           />
         );
       default:

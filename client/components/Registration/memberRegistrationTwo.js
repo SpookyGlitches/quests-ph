@@ -16,7 +16,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import useForm from '../../hooks/useForm';
 
-const MemberRegistrationTwo = ({activeStep, steps, handleNext}) => {
+const MemberRegistrationTwo = ({activeStep, steps, handleNext, handleBack}) => {
 
   
   const [showPassword, setShowPassword] = useState(false);
@@ -140,6 +140,14 @@ const MemberRegistrationTwo = ({activeStep, steps, handleNext}) => {
         {confirmPassword != password ? (
           <Typography style={{color: "red"}}>Passwords do not match!</Typography>
         ) : null }
+        <Button
+              color="inherit"
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              sx={{ mr: 1 }}
+            >
+              Back
+            </Button>
         { !emailAddress ||
             !password ||
             !confirmPassword || confirmPassword != password
