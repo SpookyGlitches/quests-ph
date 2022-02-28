@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { Grid, Box, Typography, Link as MuiLink } from '@mui/material';
+import { Grid, Box, Link as MuiLink } from '@mui/material';
 import Carousel from 'react-material-ui-carousel';
 import RegistrationForm from '../../components/Registration/RegistrationForm';
+import Header from '../../components/Registration/Header';
 
 export default function Register() {
   return (
@@ -70,6 +71,7 @@ export default function Register() {
             },
           }}
         >
+          <Header />
           <RegistrationForm />
         </Box>
       </Grid>

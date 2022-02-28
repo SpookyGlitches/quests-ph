@@ -11,9 +11,8 @@ import Link from 'next/link';
 import DatePicker from '@mui/lab/DatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-
 import useForm from '../../hooks/useForm';
-import Header from './Header';
+
 
 const MemberRegistrationOne = ({activeStep, steps, handleNext}) => {
   const [value, setValue] = React.useState(null);
@@ -54,7 +53,6 @@ const MemberRegistrationOne = ({activeStep, steps, handleNext}) => {
   
   return (
     <>
-    <Header />
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <Stack direction="column" spacing={1.5}>
           <Button
