@@ -4,13 +4,22 @@ import {
   Button,
   Box,
   Stack,
+  InputAdornment,
+  IconButton,
   Link as MuiLink,
 } from "@mui/material";
+import { useState } from "react";
 import Link from "next/link";
 import AuthLayout from "../../components/Layouts/AuthLayout";
 import AuthHeader from "../../components/Auth/AuthHeader";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 export default function Login() {
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleMouseDownPassword = () => setShowPassword(!showPassword);
+
   return (
     <AuthLayout>
       <AuthHeader subtitle="Sign in to your account" />
@@ -25,8 +34,22 @@ export default function Login() {
           fullWidth
           id="filled-password-input"
           label="Password"
-          type="password"
+          name="password"
+          type={showPassword ? "text" : "password"}
           autoComplete="current-password"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
       </Stack>
       <Button variant="contained">Sign In</Button>
