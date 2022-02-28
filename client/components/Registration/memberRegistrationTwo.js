@@ -17,6 +17,8 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import useForm from '../../hooks/useForm';
 
 const MemberRegistrationTwo = ({activeStep, steps, handleNext}) => {
+
+  
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
@@ -26,7 +28,7 @@ const MemberRegistrationTwo = ({activeStep, steps, handleNext}) => {
     setShowConfirmPassword(!showConfirmPassword);
   const handleMouseDownConfirmPassword = () =>
     setShowConfirmPassword(!showConfirmPassword);
-
+  
 
     const stateSchema = {
       emailAddress: {value: "", error: ""},
@@ -138,8 +140,6 @@ const MemberRegistrationTwo = ({activeStep, steps, handleNext}) => {
         {confirmPassword != password ? (
           <Typography style={{color: "red"}}>Passwords do not match!</Typography>
         ) : null }
-
-
         { !emailAddress ||
             !password ||
             !confirmPassword || confirmPassword != password

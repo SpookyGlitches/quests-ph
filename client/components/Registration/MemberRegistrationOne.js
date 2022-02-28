@@ -14,6 +14,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
 import useForm from '../../hooks/useForm';
 
+
 const MemberRegistrationOne = ({activeStep, steps, handleNext}) => {
   const [value, setValue] = React.useState(null);
   const handleChange = (newValue) => {
@@ -50,6 +51,7 @@ const MemberRegistrationOne = ({activeStep, steps, handleNext}) => {
   );
   const { displayName, fullName } = values;
 
+  
   return (
     <>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -127,6 +129,7 @@ const MemberRegistrationOne = ({activeStep, steps, handleNext}) => {
               />
             )}
           />
+          
           { !displayName ||
             !fullName
             ?
