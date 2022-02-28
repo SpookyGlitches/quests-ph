@@ -4,6 +4,7 @@ import {
   Typography,
   TextField,
   Box,
+  Button,
   Stack,
   InputAdornment,
   IconButton,
@@ -13,7 +14,9 @@ import {
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-const MemberRegistrationTwo = () => {
+import useForm from '../../hooks/useForm';
+
+const MemberRegistrationTwo = ({activeStep, steps, handleNext}) => {
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
@@ -23,6 +26,38 @@ const MemberRegistrationTwo = () => {
     setShowConfirmPassword(!showConfirmPassword);
   const handleMouseDownConfirmPassword = () =>
     setShowConfirmPassword(!showConfirmPassword);
+
+
+    const stateSchema = {
+      emailAddress: {value: "", error: ""},
+      password: {value: "", error: ""},
+      confirmPassword: {value: "", error: ""},
+    };
+  
+    const stateValidatorSchema = {
+      emailAddress: {
+        required: true,
+        validator: {
+          func: (value) => /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/.test(value),
+          error: 'Email must be a valid email address',
+        }
+      },
+      password: {
+        required: true,
+        validator: {
+          func: (value) => /^(?=.*[A-Za-z])(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/.test(value),
+          error: 'Password must be at least 8 characters and at least one special character',
+        }
+      }
+      
+    }
+    
+    const { values, errors, dirty, handleOnChange } = useForm(
+      stateSchema,
+      stateValidatorSchema,
+    );
+    const { emailAddress, password, confirmPassword } = values;
+
 
   return (
     <>
@@ -34,8 +69,17 @@ const MemberRegistrationTwo = () => {
           id="filled-required"
           label="Email Address"
           name="emailAddress"
+          value={emailAddress}
+          onChange={handleOnChange}
           sx={{ mt: '1rem' }}
         />
+        {errors.emailAddress && dirty.emailAddress && (
+            <Typography
+              style={{ marginTop: '0', color: 'red', fontWeight: '200' }}
+            >
+              {errors.emailAddress}
+            </Typography>,
+          )}
         <TextField
           fullWidth
           id="filled-password-input"
@@ -55,9 +99,18 @@ const MemberRegistrationTwo = () => {
             ),
           }}
           name="password"
+          value={password}
+          onChange={handleOnChange}
           autoComplete="current-password"
           sx={{}}
         />
+        {errors.password && dirty.password && (
+            <Typography
+              style={{ marginTop: '0', color: 'red', fontWeight: '200' }}
+            >
+              {errors.password}
+            </Typography>,
+          )}
         <TextField
           fullWidth
           id="filled-password-input"
@@ -77,9 +130,30 @@ const MemberRegistrationTwo = () => {
             ),
           }}
           name="confirmPassword"
+          value={confirmPassword}
+          onChange={handleOnChange}
           autoComplete="current-password"
           sx={{}}
         />
+        {confirmPassword != password ? (
+          <Typography style={{color: "red"}}>Passwords do not match!</Typography>
+        ) : null }
+
+
+        { !emailAddress ||
+            !password ||
+            !confirmPassword || confirmPassword != password
+            ?
+            (
+              <Button variant="contained" disabled>
+                {activeStep === steps.length ? 'Finish' : 'Sign Up'}
+                
+                </Button>
+            ) :
+            <Button variant="contained" onClick={handleNext}>
+              {activeStep === steps.length ? 'Finish' : 'Sign Up'}
+              </Button>
+          }
       </Stack>
 
       <Box

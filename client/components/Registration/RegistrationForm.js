@@ -49,7 +49,14 @@ export default function HorizontalLinearStepper() {
         );
       // return <MemberRegistrationOne />;
       case 1:
-        return <MemberRegistrationTwo />;
+        return (
+          <MemberRegistrationTwo
+            handleNext={handleNext}
+            activeStep={activeStep}
+            steps={step}
+          />
+        );
+      //return <MemberRegistrationTwo />;
       default:
         return 'Unknown step';
     }

@@ -31,7 +31,7 @@ const MemberRegistrationOne = ({activeStep, steps, handleNext}) => {
       required: true,
       validator: {
         func: (value) => /^[[A-Za-z][A-Za-z0-9_]{7,29}$/.test(value),
-        error: 'Username must be 8-30 characters',
+        error: 'Display Name must be 8-30 characters',
       }
     },
     fullName: {
