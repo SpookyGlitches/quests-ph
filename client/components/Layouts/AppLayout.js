@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { CssBaseline, Box, Toolbar } from "@mui/material";
-import Navbar from "../Navbar/Index";
-import Sidebar from "../Sidebar/Index";
+import Navbar from "../Common/Navbar";
+import Sidebar from "../Common/Sidebar";
 const drawerWidth = 240;
 
 const AppLayout = ({ children }) => {

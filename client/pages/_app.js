@@ -10,13 +10,13 @@ import DateAdapter from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 
 function MyApp({ Component, pageProps }) {
-	return (
-		<ThemeProvider theme={theme}>
-			<LocalizationProvider dateAdapter={DateAdapter}>
-				<Component {...pageProps} />
-			</LocalizationProvider>
-		</ThemeProvider>
-	);
+  return (
+    <ThemeProvider theme={theme}>
+      <LocalizationProvider dateAdapter={DateAdapter}>
+        <Component {...pageProps} />
+      </LocalizationProvider>
+    </ThemeProvider>
+  );
 }
 
 export default MyApp;
