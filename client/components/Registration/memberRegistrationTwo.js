@@ -15,6 +15,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import useForm from '../../hooks/useForm';
+import Header from './Header';
 
 const MemberRegistrationTwo = ({activeStep, steps, handleNext, handleBack}) => {
 
@@ -63,6 +64,7 @@ const MemberRegistrationTwo = ({activeStep, steps, handleNext, handleBack}) => {
 
   return (
     <>
+    <Header />
       <Stack direction="column" spacing={2}>
         <TextField
           fullWidth

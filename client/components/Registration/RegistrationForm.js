@@ -1,13 +1,5 @@
 import * as React from 'react';
-import {
-  Typography,
-  Box,
-  Button,
-  StepLabel,
-  Step,
-  Stepper,
-  Link as MuiLink,
-} from '@mui/material';
+import { Box, StepLabel, Step, Stepper, Link as MuiLink } from '@mui/material';
 import MemberRegistrationOne from './MemberRegistrationOne';
 import MemberRegistrationTwo from './MemberRegistrationTwo';
 import MemberRegistrationThree from './MemberRegistrationThree';
@@ -79,7 +71,7 @@ export default function HorizontalLinearStepper() {
       </Stepper>
       <>
         {activeStep === steps.length ? (
-          <Typography>All Steps Completed</Typography>
+          <MemberRegistrationThree />
         ) : (
           <div>{getStepContent(activeStep)}</div>
         )}
