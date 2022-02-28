@@ -1,4 +1,4 @@
-import { createTheme } from "@mui/material/styles"
+import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
   palette: {
@@ -20,10 +20,23 @@ const theme = createTheme({
         cursor: "pointer",
       },
     },
-    shape: {
-      borderRadius: 10,
+    MuiTextField: {
+      defaultProps: {
+        variant: "filled",
+      },
     },
   },
-})
+  shape: {
+    borderRadius: 10,
+  },
+  typography: {
+    h4: {
+      fontWeight: 700,
+    },
+    button: {
+      textTransform: "none",
+    },
+  },
+});
 
-export default theme
+export default theme;
