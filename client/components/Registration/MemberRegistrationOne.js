@@ -24,6 +24,7 @@ const MemberRegistrationOne = ({activeStep, steps, handleNext}) => {
   const stateSchema = {
     displayName: {value: "", error: ""},
     fullName: {value: "", error: ""},
+    birthdate: {value: "", error: ""},
   };
 
   const stateValidatorSchema = {
@@ -40,7 +41,7 @@ const MemberRegistrationOne = ({activeStep, steps, handleNext}) => {
         func: (value) => /^[[A-Za-z][A-Za-z0-9_]{7,29}$/.test(value),
         error: 'Full Name must be 8-30 characters',
       }
-    }
+    },
     
   }
   
@@ -50,8 +51,8 @@ const MemberRegistrationOne = ({activeStep, steps, handleNext}) => {
   );
   const { displayName, fullName } = values;
 
-  
   return (
+   
     <>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <Stack direction="column" spacing={1.5}>
@@ -108,8 +109,9 @@ const MemberRegistrationOne = ({activeStep, steps, handleNext}) => {
 
           <DatePicker
             label="Birthday"
-            value={value}
             name="birthdate"
+            value={value}
+            maxDate = {new Date()}
             onChange={(newValue) => {
               setValue(newValue);
             }}
@@ -120,7 +122,8 @@ const MemberRegistrationOne = ({activeStep, steps, handleNext}) => {
               />
             )}
           />
-          
+  
+
           { !displayName ||
             !fullName
             ?
