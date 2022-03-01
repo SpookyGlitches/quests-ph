@@ -148,7 +148,7 @@ const MemberRegistrationOne = ({activeStep, steps, handleNext}) => {
           }}
         >
           <Typography variant="string" sx={{ mt: '1rem', mb: '1rem' }}>
-            <Link href="/login">
+            <Link href="/auth/login">
               <MuiLink
                 sx={{ cursor: 'pointer' }}
                 style={{ textDecoration: 'none' }}
