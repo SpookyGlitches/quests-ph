@@ -9,8 +9,6 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import DatePicker from "@mui/lab/DatePicker";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import useForm from "../../hooks/useForm";
 
 const MemberRegistrationOne = ({ activeStep, steps, handleNext }) => {
@@ -51,105 +49,103 @@ const MemberRegistrationOne = ({ activeStep, steps, handleNext }) => {
 
   return (
     <>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <Stack direction="column" spacing={1.5}>
-          <Button
-            style={{
-              borderRadius: 10,
-              minheight: "56px",
-              width: "100%",
-              backgroundColor: "white",
-              color: "black",
-              marginTop: "1rem",
-            }}
-            variant="contained"
-          >
-            <img
-              src="/assets/google.png"
-              width="15"
-              height="15"
-              alt="questsgoogle"
-            />{" "}
-            &nbsp; Sign Up with Google
-          </Button>
-          <Typography align="center">or</Typography>
-          <TextField
-            fullWidth
-            required
-            style={{}}
-            id="filled-required"
-            label="Display Name"
-            name="displayName"
-            value={displayName}
-            onChange={handleOnChange}
-          />
-          {errors.displayName && dirty.displayName && (
-            <Typography
-              style={{ marginTop: "0", color: "red", fontWeight: "200" }}
-            >
-              {errors.displayName}
-            </Typography>
-          )}
-          <TextField
-            fullWidth
-            required
-            style={{}}
-            id="filled-required"
-            label="Full Name"
-            name="fullName"
-            value={fullName}
-            onChange={handleOnChange}
-            sx={{}}
-          />
-          {errors.fullName && dirty.fullName && (
-            <Typography
-              style={{ marginTop: "0", color: "red", fontWeight: "200" }}
-            >
-              {errors.fullName}
-            </Typography>
-          )}
-
-          <DatePicker
-            label="Birthday"
-            name="birthdate"
-            value={value}
-            maxDate={new Date()}
-            onChange={(newValue) => {
-              setValue(newValue);
-            }}
-            renderInput={(params) => <TextField {...params} />}
-          />
-
-          {!displayName || !fullName ? (
-            <Button variant="contained" disabled>
-              {activeStep === steps.length ? "Finish" : "Next"}
-            </Button>
-          ) : (
-            <Button variant="contained" onClick={handleNext}>
-              {activeStep === steps.length ? "Finish" : "Next"}
-            </Button>
-          )}
-        </Stack>
-
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+      <Stack direction="column" spacing={1.5}>
+        <Button
+          style={{
+            borderRadius: 10,
+            minHeight: "56px",
+            width: "100%",
+            backgroundColor: "white",
+            color: "black",
+            marginTop: "1rem",
           }}
+          variant="contained"
         >
-          <Typography variant="string" sx={{ mt: "1rem", mb: "1rem" }}>
-            <Link href="/auth/login" passHref>
-              <MuiLink
-                sx={{ cursor: "pointer" }}
-                style={{ textDecoration: "none" }}
-              >
-                Already have an account?
-              </MuiLink>
-            </Link>
+          <img
+            src="/assets/google.png"
+            width="15"
+            height="15"
+            alt="questsgoogle"
+          />{" "}
+          &nbsp; Sign Up with Google
+        </Button>
+        <Typography align="center">or</Typography>
+        <TextField
+          fullWidth
+          required
+          style={{}}
+          id="filled-required"
+          label="Display Name"
+          name="displayName"
+          value={displayName}
+          onChange={handleOnChange}
+        />
+        {errors.displayName && dirty.displayName && (
+          <Typography
+            style={{ marginTop: "0", color: "red", fontWeight: "200" }}
+          >
+            {errors.displayName}
           </Typography>
-        </Box>
-      </LocalizationProvider>
+        )}
+        <TextField
+          fullWidth
+          required
+          style={{}}
+          id="filled-required"
+          label="Full Name"
+          name="fullName"
+          value={fullName}
+          onChange={handleOnChange}
+          sx={{}}
+        />
+        {errors.fullName && dirty.fullName && (
+          <Typography
+            style={{ marginTop: "0", color: "red", fontWeight: "200" }}
+          >
+            {errors.fullName}
+          </Typography>
+        )}
+
+        <DatePicker
+          label="Birthday"
+          name="birthdate"
+          value={value}
+          maxDate={new Date()}
+          onChange={(newValue) => {
+            setValue(newValue);
+          }}
+          renderInput={(params) => <TextField {...params} />}
+        />
+
+        {!displayName || !fullName ? (
+          <Button variant="contained" disabled>
+            {activeStep === steps.length ? "Finish" : "Next"}
+          </Button>
+        ) : (
+          <Button variant="contained" onClick={handleNext}>
+            {activeStep === steps.length ? "Finish" : "Next"}
+          </Button>
+        )}
+      </Stack>
+
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="string" sx={{ mt: "1rem", mb: "1rem" }}>
+          <Link href="/auth/login" passHref>
+            <MuiLink
+              sx={{ cursor: "pointer" }}
+              style={{ textDecoration: "none" }}
+            >
+              Already have an account?
+            </MuiLink>
+          </Link>
+        </Typography>
+      </Box>
     </>
   );
 };
