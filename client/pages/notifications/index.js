@@ -1,7 +1,6 @@
 import React from "react";
 import AppLayout from "../../components/Layouts/AppLayout";
 import {
-  ListItemButton,
   Button,
   Box,
   Container,
@@ -32,7 +31,7 @@ const index = () => {
           </Typography>
 
           <List sx={{ width: "70vw", bgcolor: "background.paper" }}>
-            <ListItem alignItems="flex-start">
+            <ListItem button alignItems="flex-start">
               <ListItemAvatar>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
               </ListItemAvatar>
@@ -57,7 +56,7 @@ const index = () => {
               </Button>
             </ListItem>
             <Divider variant="inset" component="li" />
-            <ListItem alignItems="flex-start">
+            <ListItem button alignItems="flex-start">
               <ListItemAvatar>
                 <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
               </ListItemAvatar>
@@ -82,7 +81,7 @@ const index = () => {
               </Button>
             </ListItem>
             <Divider variant="inset" component="li" />
-            <ListItem alignItems="flex-start">
+            <ListItem button alignItems="flex-start">
               <ListItemAvatar>
                 <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
               </ListItemAvatar>
@@ -107,7 +106,7 @@ const index = () => {
               </Button>
             </ListItem>
             <Divider variant="inset" component="li" />
-            <ListItem alignItems="flex-start">
+            <ListItem button alignItems="flex-start">
               <ListItemAvatar>
                 <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
               </ListItemAvatar>
@@ -132,7 +131,7 @@ const index = () => {
               </Button>
             </ListItem>
             <Divider variant="inset" component="li" />
-            <ListItem alignItems="flex-start">
+            <ListItem button alignItems="flex-start">
               <ListItemAvatar>
                 <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
               </ListItemAvatar>
@@ -157,7 +156,7 @@ const index = () => {
               </Button>
             </ListItem>
             <Divider variant="inset" component="li" />
-            <ListItem alignItems="flex-start">
+            <ListItem button alignItems="flex-start">
               <ListItemAvatar>
                 <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
               </ListItemAvatar>
