@@ -18,7 +18,6 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
-  const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
   return (
     <AuthLayout>
@@ -43,7 +42,6 @@ export default function Login() {
                 <IconButton
                   aria-label="toggle password visibility"
                   onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
                 >
                   {showPassword ? <Visibility /> : <VisibilityOff />}
                 </IconButton>
