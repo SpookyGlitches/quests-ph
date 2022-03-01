@@ -1,13 +1,13 @@
-import { Grid, Box } from '@mui/material';
-import AuthCarousel from '../Auth/AuthCarousel';
+import { Grid, Box } from "@mui/material";
+import AuthCarousel from "../Auth/AuthCarousel";
 const AuthLayout = ({ children }) => {
   return (
     <Grid
       container
       sx={{
-        backgroundColor: 'background.default',
-        height: '100vh',
-        width: '100vw',
+        backgroundColor: "background.default",
+        height: "100vh",
+        width: "100vw",
       }}
     >
       <Grid
@@ -15,7 +15,7 @@ const AuthLayout = ({ children }) => {
         xs={12}
         sm={6}
         order={{ xs: 3, sm: 2 }}
-        sx={{ height: '100%', backgroundColor: 'primary.main' }}
+        sx={{ height: "100%", backgroundColor: "primary.main" }}
       >
         <AuthCarousel />
       </Grid>
@@ -24,19 +24,19 @@ const AuthLayout = ({ children }) => {
         xs={12}
         sm={6}
         order={{ xs: 2, sm: 3 }}
-        sx={{ height: '100%' }}
+        sx={{ height: "100%" }}
       >
         <Box
           sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            height: '100%',
-            width: '100%',
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+            height: "100%",
+            width: "100%",
             gap: 3,
             padding: {
-              xs: '4rem',
-              md: '7rem',
+              xs: "4rem",
+              md: "7rem",
             },
           }}
         >
