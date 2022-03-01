@@ -116,15 +116,7 @@ const MemberRegistrationOne = ({activeStep, steps, handleNext}) => {
             renderInput={(params) => (
               <TextField
                 {...params}
-                sx={{
-                  svg: { color },
-                  input: { color },
-                  backgroundColor: 'white',
-                  borderColor: 'white',
-                  mt: '1rem',
-                  ml: '-1em',
-                  width: '100%',
-                }}
+                sx={{}}
               />
             )}
           />
