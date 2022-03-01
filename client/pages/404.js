@@ -5,7 +5,7 @@ export default function Custom404() {
   return (
     <>
       <Stack
-        spacing={2}
+        spacing={4}
         alignItems="center"
         justifyContent="center"
         borderRadius="1rem"
@@ -14,11 +14,11 @@ export default function Custom404() {
         <Typography variant="h1" sx={{}}>
           404
         </Typography>
-        <Typography variant="h6" sx={{}}>
+        <Typography variant="h6" sx={{ mt: "1rem" }}>
           This page could not be found
         </Typography>
 
-        <Typography>
+        <Typography sx={{ mt: "1rem" }}>
           <Link href="/">
             <MuiLink sx={{ color: "#755cde", fontSize: "1rem" }}>
               Go Back Home
