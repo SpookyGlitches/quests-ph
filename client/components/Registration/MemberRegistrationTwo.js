@@ -187,14 +187,14 @@ const MemberRegistrationTwo = ({
             sx={{ cursor: "pointer" }}
             style={{ textDecoration: "none" }}
           >
-            <a href="/quests-terms">Quests Terms of Service</a>
+            <a href="/landing/terms-of-service">Quests Terms of Service</a>
           </MuiLink>{" "}
           and acknowledge the{" "}
           <MuiLink
             sx={{ cursor: "pointer" }}
             style={{ textDecoration: "none" }}
           >
-            <a href="/privacy-policy">Privacy Policy</a>
+            <a href="/landing/privacy_policy">Privacy Policy</a>
           </MuiLink>
           .
         </Typography>
