@@ -1,5 +1,6 @@
 import { Typography } from "@mui/material";
 
+// im missing typescript :(
 export default function AuthHeader({ title, subtitle }) {
   return (
     <div>
