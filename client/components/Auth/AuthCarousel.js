@@ -7,8 +7,8 @@ const AuthCarousel = () => {
       infiniteLoop
       showThumbs={false}
       sx={{
-        height: "auto",
-        width: "auto",
+        height: "100%",
+        width: "100%",
         backgroundColor: "#755CDE",
       }}
     >
