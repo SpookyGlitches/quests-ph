@@ -19,7 +19,6 @@ const MemberRegistrationOne = ({activeStep, steps, handleNext}) => {
   const handleChange = (newValue) => {
     setValue(newValue);
   };
-  const color = '#858393';
 
   const stateSchema = {
     displayName: {value: "", error: ""},
@@ -108,6 +107,7 @@ const MemberRegistrationOne = ({activeStep, steps, handleNext}) => {
             )}
 
           <DatePicker
+          
             label="Birthday"
             name="birthdate"
             value={value}
@@ -118,14 +118,14 @@ const MemberRegistrationOne = ({activeStep, steps, handleNext}) => {
             renderInput={(params) => (
               <TextField
                 {...params}
-                sx={{}}
+                
               />
             )}
           />
   
 
           { !displayName ||
-            !fullName
+            !fullName 
             ?
             (
               <Button variant="contained" disabled>
