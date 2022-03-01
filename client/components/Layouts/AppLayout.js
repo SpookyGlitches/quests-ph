@@ -37,7 +37,7 @@ const AppLayout = ({ children }) => {
               width: {
                 xs: "100%",
                 md: "85%",
-                lg: "75%",
+                lg: "80%",
               },
             }}
           >
