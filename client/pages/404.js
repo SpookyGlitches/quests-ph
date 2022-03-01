@@ -19,8 +19,10 @@ export default function Custom404() {
         </Typography>
 
         <Typography sx={{ mt: "1rem" }}>
-          <Link href="/">
-            <MuiLink sx={{ color: "#755cde", fontSize: "1rem" }}>
+          <Link href="/" passHref>
+            <MuiLink
+              sx={{ color: "#755cde", fontSize: "1rem", fontWeight: "medium" }}
+            >
               Go Back Home
             </MuiLink>
           </Link>
