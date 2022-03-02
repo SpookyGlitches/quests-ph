@@ -1,19 +1,23 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Tabs, Tab } from "@mui/material";
 import Link from "next/link";
 import { Link as MuiLink } from "@mui/material";
 
 const muiLinkProps = {
   component: "button",
   variant: "body2",
-  color: "inherit",
-  sx: {
-    "&:hover": {
-      color: "primary.main",
-    },
-  },
+};
+import { useRouter } from "next/router";
+
+const getLinkStyles = (routerAsPath, basePath, tab) => {
+  return {
+    fontWeight: routerAsPath.startsWith(`${basePath}/${tab}`) ? "bold" : "",
+  };
 };
 
 export default function QuestHeader() {
+  const router = useRouter();
+  const basePath = `/quests/${router.query.id}`;
+
   return (
     <Box
       sx={{
@@ -53,28 +57,57 @@ export default function QuestHeader() {
           display: "flex",
           flexWrap: "wrap",
           columnGap: 2,
-          textOverflow: "hidden",
           justifyContent: "center",
           rowGap: 1,
         }}
       >
-        <Link href="/" passHref>
-          <MuiLink {...muiLinkProps}>Overview</MuiLink>
+        <Link href={`${basePath}/overview`} passHref>
+          <MuiLink
+            {...muiLinkProps}
+            sx={getLinkStyles(router.asPath, basePath, "overview")}
+          >
+            Overview
+          </MuiLink>
         </Link>
-        <Link href="/" passHref>
-          <MuiLink {...muiLinkProps}>Posts</MuiLink>
+        <Link href={`${basePath}/posts`} passHref>
+          <MuiLink
+            {...muiLinkProps}
+            sx={getLinkStyles(router.asPath, basePath, "posts")}
+          >
+            Posts
+          </MuiLink>
         </Link>
-        <Link href="/" passHref>
-          <MuiLink {...muiLinkProps}>Tasks</MuiLink>
+        <Link href={`${basePath}/tasks`} passHref>
+          <MuiLink
+            {...muiLinkProps}
+            sx={getLinkStyles(router.asPath, basePath, "tasks")}
+          >
+            Tasks
+          </MuiLink>
         </Link>
-        <Link href="/" passHref>
-          <MuiLink {...muiLinkProps}>Party</MuiLink>
+        <Link href={`${basePath}/party`} href="/" passHref>
+          <MuiLink
+            {...muiLinkProps}
+            sx={getLinkStyles(router.asPath, basePath, "party")}
+          >
+            Party
+          </MuiLink>
         </Link>
-        <Link href="/" passHref>
-          <MuiLink {...muiLinkProps}>Wiki</MuiLink>
+        <Link href={`${basePath}/wiki`} passHref>
+          <MuiLink
+            {...muiLinkProps}
+            sx={getLinkStyles(router.asPath, basePath, "wiki")}
+          >
+            Wiki
+          </MuiLink>
         </Link>
-        <Link href="/" passHref>
-          <MuiLink {...muiLinkProps}>Chat</MuiLink>
+        <Link href={`${basePath}/chat`} passHref>
+          <MuiLink
+            {...muiLinkProps}
+            sx={getLinkStyles(router.asPath, basePath, "chat")}
+          >
+            Chat
+          </MuiLink>
         </Link>
       </Box>
     </Box>
