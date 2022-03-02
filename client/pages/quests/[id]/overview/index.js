@@ -94,8 +94,7 @@ export default function Overview({ data }) {
       <Box
         sx={{
           backgroundColor: "background.paper",
-          paddingX: "2rem",
-          paddingY: "3rem",
+          padding: "2rem",
           borderRadius: 2,
         }}
       >
