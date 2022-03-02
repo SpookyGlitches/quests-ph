@@ -1,4 +1,4 @@
-import { Box, Typography, Tabs, Tab } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Link from "next/link";
 import { Link as MuiLink } from "@mui/material";
 
@@ -26,8 +26,8 @@ export default function QuestHeader() {
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "column",
-        paddingTop: "1.5rem",
-        paddingBottom: "0.6rem",
+        paddingTop: "2rem",
+        paddingBottom: "1rem",
         flex: 1,
         maxHeight: "20rem",
         gap: 2,
@@ -85,7 +85,7 @@ export default function QuestHeader() {
             Tasks
           </MuiLink>
         </Link>
-        <Link href={`${basePath}/party`} href="/" passHref>
+        <Link href={`${basePath}/party`} passHref>
           <MuiLink
             {...muiLinkProps}
             sx={getLinkStyles(router.asPath, basePath, "party")}
