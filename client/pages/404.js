@@ -9,7 +9,11 @@ export default function Custom404() {
         alignItems="center"
         justifyContent="center"
         borderRadius="1rem"
-        sx={{ background: "#f5f5f5", margin: "5rem", padding: "5rem" }}
+        sx={{
+          background: "background.default",
+          margin: "5rem",
+          padding: "5rem",
+        }}
       >
         <Typography variant="h1" sx={{}}>
           404
