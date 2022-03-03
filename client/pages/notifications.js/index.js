@@ -24,8 +24,10 @@ import MarkEmailReadIcon from '@mui/icons-material/MarkEmailRead';
 
 const index = () => {
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [unread, setRead] = useState(true);
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [markallread, setMarkAllRead] = useState(true);
 
   const readHandler = () => {
