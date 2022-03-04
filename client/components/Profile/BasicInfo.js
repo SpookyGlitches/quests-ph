@@ -22,7 +22,13 @@ export default function BasicInfo() {
       >
         Ina
       </Avatar>
-      <Typography color="primary" variant="h5">
+      <Typography
+        color="primary"
+        variant="h5"
+        justifyContent="center"
+        align="center"
+        sx={{ wordBreak: "break-all" }}
+      >
         Ninomae Inanis
       </Typography>
       <Typography variant="body2">inainainaaaaa</Typography>

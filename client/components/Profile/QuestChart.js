@@ -15,6 +15,7 @@ ChartJS.register(
   Tooltip,
   Legend,
 );
+
 import { Bar } from "react-chartjs-2";
 import { Box, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
@@ -25,20 +26,22 @@ export default function QuestChart() {
   return (
     <Box
       sx={{
-        width: "100%",
         backgroundColor: "background.paper",
         borderRadius: 2,
         padding: "1rem",
       }}
     >
       <Typography align="center" variant="h6" sx={{ marginY: "0.5rem" }}>
-        Number of Quests Completed
+        Quests Completed
       </Typography>
       <Box
         sx={{
-          // idk what im doing :)
-          maxHeight: { sm: "50rem", lg: "10rem" },
+          position: "relative",
           padding: "0.2rem",
+          "& canvas": {
+            width: "100%!important",
+            // maxHeight: "40rem!important",
+          },
         }}
       >
         <Bar
@@ -65,19 +68,11 @@ export default function QuestChart() {
                 grid: {
                   display: false,
                 },
-                ticks: {
-                  font: {
-                    //   weight: "bold",
-                  },
-                },
+                ticks: {},
               },
               y: {
                 ticks: {
                   precision: 0,
-
-                  font: {
-                    //   weight: "bold",
-                  },
                 },
               },
             },

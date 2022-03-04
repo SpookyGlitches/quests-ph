@@ -94,7 +94,7 @@ export default function BadgesList() {
           justifyContent: "center",
         }}
       >
-        <Typography sx={{ marginBottom: "1.25rem" }} variant="h6">
+        <Typography sx={{ marginBottom: "1rem" }} variant="h6">
           Badges
         </Typography>
         <Box
@@ -103,16 +103,12 @@ export default function BadgesList() {
             width: "100%",
             flexGrow: 1,
             flexWrap: "wrap",
-            gap: 1,
+            gap: 5,
             height: "auto",
             justifyContent: "space-around",
           }}
         >
           {badgeItems()}
-          {/* {badges
-            .slice(pagination.start, pagination.end + 1)
-
-            ))} */}
         </Box>
       </Box>
       <Box variant="body2">
