@@ -129,13 +129,13 @@ export default function Home() {
             {/* https://stackoverflow.com/questions/66226576/using-the-material-ui-link-component-with-the-next-js-link-component */}
             <Typography variant="string">
               Not yet registered?{' '}
-              <Link href="/">
+              <Link href="/auth/register">
                 <MuiLink sx={{ cursor: 'pointer' }}>Create an account</MuiLink>
               </Link>
             </Typography>
             <Typography variant="string">
               Forgot password?{' '}
-              <Link href="/">
+              <Link href="/auth/reset">
                 <MuiLink sx={{ cursor: 'pointer' }}>Click here</MuiLink>
               </Link>
             </Typography>
