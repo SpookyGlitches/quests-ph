@@ -1,11 +1,10 @@
 import CreatePost from "../../../../components/Quest/Post/CreatePost";
-import AppLayout from "../../../../components/Layouts/AppLayout";
+import QuestLayout from "../../../../components/Layouts/QuestLayout";
 
 export default function Create() {
   return (
-    <AppLayout>
-      {/* todo pa ang quest layout */}
+    <QuestLayout>
       <CreatePost />
-    </AppLayout>
+    </QuestLayout>
   );
 }

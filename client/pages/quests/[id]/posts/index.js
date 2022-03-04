@@ -1,20 +1,14 @@
 import { faker } from "@faker-js/faker";
-import PostsList from "../../components/Quest/Post/PostsList";
-import { Box, Container } from "@mui/material";
+import PostsList from "../../../../components/Quest/Post/PostsList";
+import QuestLayout from "../../../../components/Layouts/QuestLayout";
 
 const Index = ({ data }) => {
   return (
-    <Box
-      sx={{
-        width: "100%",
-        backgroundColor: "background.default",
-        padding: "1rem",
-      }}
-    >
-      <Container sx={{ width: "50vw" }}>
+    <QuestLayout>
+      <div>
         <PostsList posts={data} />
-      </Container>
-    </Box>
+      </div>
+    </QuestLayout>
   );
 };
 export default Index;
