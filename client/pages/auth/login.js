@@ -4,13 +4,21 @@ import {
   Button,
   Box,
   Stack,
+  InputAdornment,
+  IconButton,
   Link as MuiLink,
 } from "@mui/material";
+import { useState } from "react";
 import Link from "next/link";
 import AuthLayout from "../../components/Layouts/AuthLayout";
 import AuthHeader from "../../components/Auth/AuthHeader";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 export default function Login() {
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+
   return (
     <AuthLayout>
       <AuthHeader subtitle="Sign in to your account" />
@@ -25,8 +33,21 @@ export default function Login() {
           fullWidth
           id="filled-password-input"
           label="Password"
-          type="password"
+          name="password"
+          type={showPassword ? "text" : "password"}
           autoComplete="current-password"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
       </Stack>
       <Button variant="contained">Sign In</Button>
@@ -39,13 +60,13 @@ export default function Login() {
       >
         <Typography variant="string" align="center">
           Not yet registered?{" "}
-          <Link href="/" passHref>
+          <Link href="/auth/register" passHref>
             <MuiLink sx={{ cursor: "pointer" }}>Create an account</MuiLink>
           </Link>
         </Typography>
         <Typography variant="string" align="center">
           Forgot password?{" "}
-          <Link href="/" passHref>
+          <Link href="/auth/reset" passHref>
             <MuiLink sx={{ cursor: "pointer" }}>Click here</MuiLink>
           </Link>
         </Typography>
