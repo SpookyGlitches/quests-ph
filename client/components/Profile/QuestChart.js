@@ -40,7 +40,7 @@ export default function QuestChart() {
           padding: "0.2rem",
           "& canvas": {
             width: "100%!important",
-            // maxHeight: "40rem!important",
+            maxHeight: "10rem!important",
           },
         }}
       >
