@@ -14,16 +14,10 @@ import {
   List,
 } from "@mui/material";
 
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import MarkEmailReadIcon from '@mui/icons-material/MarkEmailRead';
-
-
-
-
-
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
 
 const index = () => {
-
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [unread, setRead] = useState(true);
 
@@ -32,11 +26,11 @@ const index = () => {
 
   const readHandler = () => {
     setRead(false);
-  }
+  };
 
   const markAllRead = () => {
     setMarkAllRead(false);
-  }
+  };
 
   return (
     <AppLayout>
@@ -49,26 +43,24 @@ const index = () => {
       >
         <Container sx={{ width: "70vw", marginLeft: 1 }}>
           {/* <PostsList posts={data} /> */}
-          <Typography variant="h4" sx={{ cmarginLeft: 0, color: '#755cde'}}>
+          <Typography variant="h4" sx={{ cmarginLeft: 0, color: "#755cde" }}>
             Notifications
             <Tooltip title="Mark all as read" followCursor>
-           
-            <Button
-            onClick={markAllRead}
-            display="flex" 
-            directon="flex-start"
-            endIcon={ <MarkEmailReadIcon  style={{ fontSize: 30 }}/> } /> 
+              <Button
+                onClick={markAllRead}
+                display="flex"
+                directon="flex-start"
+                endIcon={<MarkEmailReadIcon style={{ fontSize: 30 }} />}
+              />
             </Tooltip>
           </Typography>
 
           <List sx={{ width: "70vw", bgcolor: "background.paper" }}>
-          
             <ListItem button alignItems="flex-start">
               <ListItemAvatar>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
               </ListItemAvatar>
-              
-              
+
               <ListItemText
                 primary="Brunch this weekend?"
                 secondary={
@@ -85,11 +77,14 @@ const index = () => {
                   </React.Fragment>
                 }
               />
-              { unread && markallread ? 
-              <Button onClick={readHandler}>
-              <FiberManualRecordIcon style={{ fontSize: 15}}/>
-              </Button> : [] }
-            </ListItem> 
+              {unread && markallread ? (
+                <Button onClick={readHandler}>
+                  <FiberManualRecordIcon style={{ fontSize: 15 }} />
+                </Button>
+              ) : (
+                []
+              )}
+            </ListItem>
 
             <ListItem button alignItems="flex-start">
               <ListItemAvatar>
@@ -111,30 +106,6 @@ const index = () => {
                   </React.Fragment>
                 }
               />
-              
-            </ListItem>
-            <Divider variant="inset" component="li" />
-            <ListItem button alignItems="flex-start">
-              <ListItemAvatar>
-                <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-              </ListItemAvatar>
-              <ListItemText
-                primary="Summer BBQ"
-                secondary={
-                  <React.Fragment> 
-                    <Typography
-                      sx={{ display: "inline" }}
-                      component="span"
-                      variant="body2"
-                      color="text.primary"
-                    >
-                      3d
-                    </Typography>
-                    {" — Wish I could come, but I'm out of town this…"}
-                  </React.Fragment>
-                }
-              />
-             
             </ListItem>
             <Divider variant="inset" component="li" />
             <ListItem button alignItems="flex-start">
@@ -157,7 +128,6 @@ const index = () => {
                   </React.Fragment>
                 }
               />
-             
             </ListItem>
             <Divider variant="inset" component="li" />
             <ListItem button alignItems="flex-start">
@@ -180,10 +150,6 @@ const index = () => {
                   </React.Fragment>
                 }
               />
-               { unread && markallread ? 
-              <Button onClick={readHandler}>
-              <FiberManualRecordIcon style={{ fontSize: 15}}/>
-              </Button> : [] } 
             </ListItem>
             <Divider variant="inset" component="li" />
             <ListItem button alignItems="flex-start">
@@ -206,14 +172,45 @@ const index = () => {
                   </React.Fragment>
                 }
               />
-              { unread && markallread ? 
-              <Button onClick={readHandler}>
-              <FiberManualRecordIcon style={{ fontSize: 15}}/>
-              </Button> : [] } 
+              {unread && markallread ? (
+                <Button onClick={readHandler}>
+                  <FiberManualRecordIcon style={{ fontSize: 15 }} />
+                </Button>
+              ) : (
+                []
+              )}
             </ListItem>
-          </List> 
-        </Container> 
-        
+            <Divider variant="inset" component="li" />
+            <ListItem button alignItems="flex-start">
+              <ListItemAvatar>
+                <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
+              </ListItemAvatar>
+              <ListItemText
+                primary="Summer BBQ"
+                secondary={
+                  <React.Fragment>
+                    <Typography
+                      sx={{ display: "inline" }}
+                      component="span"
+                      variant="body2"
+                      color="text.primary"
+                    >
+                      3d
+                    </Typography>
+                    {" — Wish I could come, but I'm out of town this…"}
+                  </React.Fragment>
+                }
+              />
+              {unread && markallread ? (
+                <Button onClick={readHandler}>
+                  <FiberManualRecordIcon style={{ fontSize: 15 }} />
+                </Button>
+              ) : (
+                []
+              )}
+            </ListItem>
+          </List>
+        </Container>
       </Box>
     </AppLayout>
   );
