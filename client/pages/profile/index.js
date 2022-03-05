@@ -16,8 +16,8 @@ export default function Profile() {
           marginBottom: "2.5rem",
           flexDirection: "column",
           flexWrap: "wrap",
-          gap: 5,
-          width: "90%",
+          gap: 3,
+          width: "80%",
         }}
       >
         <BasicInfo />
