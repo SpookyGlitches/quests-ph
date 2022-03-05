@@ -3,7 +3,7 @@ import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRound
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import { useState } from "react";
 
-const itemsToDisplay = 4;
+const itemsToDisplay = 3;
 const colors = [
   "#EB5B5B",
   "#28D4D4",

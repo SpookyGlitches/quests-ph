@@ -10,19 +10,25 @@ export default function Profile() {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "center",
-          alignItem: "center",
+          alignItems: { xs: "center", lg: "flex-start" },
           marginTop: "1rem",
           marginBottom: "2.5rem",
           flexDirection: "column",
           flexWrap: "wrap",
-          gap: 3,
-          width: "80%",
         }}
       >
-        <BasicInfo />
-        <BadgesList />
-        <QuestChart />
+        <Box
+          sx={{
+            display: "flex",
+            width: { sm: "100%", md: "80%", lg: "75%" },
+            flexDirection: "column",
+            gap: 2,
+          }}
+        >
+          <BasicInfo />
+          <BadgesList />
+          <QuestChart />
+        </Box>
       </Box>
     </AppLayout>
   );
