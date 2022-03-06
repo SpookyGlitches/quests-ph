@@ -16,6 +16,7 @@
     "@mui/icons-material": "^5.4.2",
     "@mui/lab": "^5.0.0-alpha.70",
     "@mui/material": "^5.4.2",
+    "@udecode/plate": "^10.2.0",
     "axios": "^0.26.0",
     "date-fns": "^2.28.0",
     "next": "12.0.10",
@@ -24,7 +25,12 @@
     "react-dom": "17.0.2",
     "react-dropzone": "^12.0.4",
     "react-hook-form": "^7.27.0",
-    "react-material-ui-carousel": "^3.2.0"
+    "react-material-ui-carousel": "^3.2.0",
+    "slate": "^0.73.1",
+    "slate-history": "^0.66.0",
+    "slate-hyperscript": "^0.67.0",
+    "slate-react": "^0.74.0",
+    "styled-components": "^5.3.3"
   },
   "devDependencies": {
     "@faker-js/faker": "^6.0.0-alpha.6",
