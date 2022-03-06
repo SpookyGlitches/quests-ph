@@ -43,9 +43,11 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
     },
     "&:not(:first-of-type)": {
       borderRadius: theme.shape.borderRadius,
+      padding: 3,
     },
     "&:first-of-type": {
       borderRadius: theme.shape.borderRadius,
+      padding: 3,
     },
   },
 }));
@@ -121,6 +123,7 @@ export default function Toolbar() {
         backgroundColor: "background.paper",
         display: "flex",
         flexWrap: "wrap",
+        marginBottom: "1rem",
       }}
     >
       <StyledToggleButtonGroup color="primary" sx={{}}>

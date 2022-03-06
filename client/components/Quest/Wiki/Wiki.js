@@ -22,22 +22,29 @@ const Wiki = () => {
     placeholder: "Hello",
     style: {
       padding: "0.25rem 0.5rem",
-      minHeight: "10rem",
+      height: "100%",
       width: "100%",
-      backgroundColor: "white",
     },
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box
+      sx={{
+        width: "100%",
+        backgroundColor: "background.paper",
+        borderRadius: 2,
+        overflow: "hidden",
+        padding: "1rem",
+        minHeight: "25rem",
+      }}
+    >
+      <Toolbar />
       <Plate
         editableProps={editableProps}
         value={plateValue}
         plugins={plugins}
         onChange={onChangeDebug}
-      >
-        <Toolbar />
-      </Plate>
+      />
     </Box>
   );
 };
