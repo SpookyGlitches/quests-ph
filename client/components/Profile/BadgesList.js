@@ -1,7 +1,14 @@
-import { Box, IconButton, Typography } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  Typography,
+  Popper,
+  Fade,
+  Paper,
+} from "@mui/material";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const itemsToDisplay = 3;
 const colors = [
@@ -15,15 +22,32 @@ const colors = [
 ];
 
 export default function BadgesList() {
-  const badges = [];
+  const [badges, setBadges] = useState([]);
   const [pagination, setPagination] = useState({
     start: 0,
     end: itemsToDisplay - 1,
   });
+  const [openPopper, setOpenPopper] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
 
-  for (let x = 0; x < 28; x++) {
-    badges.push(colors[Math.floor(Math.random() * colors.length)]);
-  }
+  const handleBadgeClick = (event) => {
+    if (event.currentTarget) setAnchorEl(event.currentTarget);
+    setOpenPopper((prev) => !prev);
+    event.stopPropagation();
+  };
+
+  const initBadges = () => {
+    const temp = [];
+    for (let x = 0; x < 28; x++) {
+      temp.push(colors[Math.floor(Math.random() * colors.length)]);
+    }
+    setBadges(temp);
+  };
+
+  useEffect(() => {
+    initBadges();
+  }, []);
+
   const incrementPagination = () => {
     if (pagination.end - (badges.length - 1) == 0) return;
     if (pagination.end >= badges.length) return;
@@ -47,8 +71,10 @@ export default function BadgesList() {
     return preview.map((item, index) => (
       <Box
         key={index}
+        onClick={handleBadgeClick}
         sx={{
           height: "5rem",
+          cursor: "pointer",
           width: "5rem",
           backgroundColor: item,
           borderRadius: "50%",
@@ -96,6 +122,48 @@ export default function BadgesList() {
           </IconButton>
         </Box>
       </Box>
+
+      <Popper
+        open={openPopper}
+        anchorEl={anchorEl}
+        placement={"top-end"}
+        transition
+      >
+        {({ TransitionProps }) => (
+          <Fade {...TransitionProps} timeout={350}>
+            <Paper
+              sx={{
+                bgcolor: "background.paper",
+                overflow: "hidden",
+                maxWidth: "14rem",
+              }}
+            >
+              <Box
+                sx={{
+                  backgroundColor: "primary.main",
+                  minHeight: "0.8rem",
+                }}
+              ></Box>
+              <Box sx={{ padding: 0.75 }}>
+                <Typography variant="subtitle2">Early Bird</Typography>
+                <Typography variant="caption">
+                  Given to the early users of the Quests application
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                  }}
+                >
+                  <Typography variant="caption" sx={{ color: "gray" }}>
+                    given March 2, 2021
+                  </Typography>
+                </Box>
+              </Box>
+            </Paper>
+          </Fade>
+        )}
+      </Popper>
     </Box>
   );
 }
