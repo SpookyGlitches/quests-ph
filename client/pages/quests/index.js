@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import AppLayout from "../../components/Layouts/AppLayout";
 
 import {
@@ -20,10 +20,6 @@ import ScheduleIcon from "@mui/icons-material/Schedule";
 import AddIcon from "@mui/icons-material/Add";
 
 const index = () => {
-  const handleBankIcon = () => {
-    window.location.href = "/quests";
-  };
-
   return (
     <AppLayout>
       <Box p={{ xs: 1, sm: 2, md: 3 }}>
