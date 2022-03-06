@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React from "react";
 import {
   Box,
   Typography,
@@ -10,12 +10,10 @@ import {
   FormGroup,
   Grid,
   Avatar,
-  Paper,
   AvatarGroup,
-  Item,
 } from "@mui/material";
 
-import { deepOrange, deepGreen, deepPurple } from "@mui/material/colors";
+import { deepOrange, deepPurple } from "@mui/material/colors";
 
 const TasksLists = () => {
   return (
