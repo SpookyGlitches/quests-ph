@@ -12,7 +12,7 @@ import {
   Pagination,
   Select,
   Paper,
-  List,
+  MenuItem,
 } from "@mui/material";
 
 import ScheduleIcon from "@mui/icons-material/Schedule";
