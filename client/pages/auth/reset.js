@@ -1,22 +1,22 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import { Link as MuiLink } from '@mui/material';
-import Link from 'next/link';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import Carousel from 'react-material-ui-carousel';
+import * as React from "react";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import { Link as MuiLink } from "@mui/material";
+import Link from "next/link";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import Carousel from "react-material-ui-carousel";
 
 export default function ResetPassword() {
   return (
     <Grid
       container
       sx={{
-        backgroundColor: 'background.paper',
-        height: '100vh',
-        width: '100vw',
+        backgroundColor: "background.paper",
+        height: "100vh",
+        width: "100vw",
       }}
     >
       <Grid
@@ -24,32 +24,32 @@ export default function ResetPassword() {
         xs={12}
         sm={6}
         order={{ xs: 3, sm: 2 }}
-        sx={{ height: '100%', backgroundColor: 'gray' }}
+        sx={{ height: "100%", backgroundColor: "gray" }}
       >
         <Carousel
           autoPlay
           infiniteLoop
           showThumbs={false}
           sx={{
-            height: '100%',
-            width: '100%',
-            backgroundColor: 'primary.main',
+            height: "100%",
+            width: "100%",
+            backgroundColor: "primary.main",
           }}
         >
           <img
-            style={{ width: 'auto', height: 'auto%' }}
+            style={{ width: "auto", height: "auto%" }}
             alt="Quests"
             src="/assets/resetpassword/carousel1.png"
           />
 
           <img
-            style={{ width: 'auto', height: 'auto' }}
+            style={{ width: "auto", height: "auto" }}
             alt="Quests"
             src="/assets/resetpassword/carousel2.png"
           />
 
           <img
-            style={{ width: 'auto', height: 'auto' }}
+            style={{ width: "auto", height: "auto" }}
             alt="Quests"
             src="/assets/resetpassword/carousel3.png"
           />
@@ -60,19 +60,19 @@ export default function ResetPassword() {
         xs={12}
         sm={6}
         order={{ xs: 2, sm: 3 }}
-        sx={{ height: '100%' }}
+        sx={{ height: "100%" }}
       >
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            height: '100%',
-            width: '100%',
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            height: "100%",
+            width: "100%",
             gap: 3,
             padding: {
-              xs: '4rem',
-              md: '7rem',
+              xs: "4rem",
+              md: "7rem",
             },
           }}
         >
@@ -80,8 +80,8 @@ export default function ResetPassword() {
             <Typography
               variant="h4"
               sx={{
-                textAlign: 'left',
-                color: 'primary.main',
+                textAlign: "left",
+                color: "primary.main",
               }}
             >
               Quests
@@ -89,8 +89,8 @@ export default function ResetPassword() {
             <Typography
               variant="h5"
               sx={{
-                textAlign: 'left',
-                color: 'black',
+                textAlign: "left",
+                color: "black",
               }}
             >
               Reset your password.
@@ -109,16 +109,16 @@ export default function ResetPassword() {
           <Button variant="contained">Reset Password</Button>
           <Box
             sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
             {/* https://stackoverflow.com/questions/66226576/using-the-material-ui-link-component-with-the-next-js-link-component */}
             <Typography variant="string">
-              Not yet registered?{' '}
+              Not yet registered?{" "}
               <Link href="/auth/register">
-                <MuiLink sx={{ cursor: 'pointer' }}>Create an account</MuiLink>
+                <MuiLink sx={{ cursor: "pointer" }}>Create an account</MuiLink>
               </Link>
             </Typography>
           </Box>
