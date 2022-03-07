@@ -10,27 +10,25 @@ import {
   InsertLinkRounded,
   FormatListNumberedRounded,
 } from "@mui/icons-material";
+
 import {
   usePlateEditorRef,
   getPluginType,
   isMarkActive,
   toggleMark,
   toggleNodeType,
-  ELEMENT_PARAGRAPH,
   someNode,
-  getAndUpsertLink,
-  toggleList,
+} from "@udecode/plate-core";
+import { ELEMENT_PARAGRAPH } from "@udecode/plate-paragraph";
+import {
   MARK_STRIKETHROUGH,
   MARK_BOLD,
   MARK_ITALIC,
   MARK_UNDERLINE,
-  ELEMENT_UL,
-  ELEMENT_OL,
-  ELEMENT_H1,
-  ELEMENT_H2,
-  ELEMENT_H3,
-  ELEMENT_LINK,
-} from "@udecode/plate";
+} from "@udecode/plate-basic-marks";
+import { ELEMENT_UL, ELEMENT_OL, toggleList } from "@udecode/plate-list";
+import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from "@udecode/plate-heading";
+import { ELEMENT_LINK, getAndUpsertLink } from "@udecode/plate-link";
 import { ToggleButtonGroup, ToggleButton, Box, Divider } from "@mui/material";
 import { styled } from "@mui/material/styles";
 

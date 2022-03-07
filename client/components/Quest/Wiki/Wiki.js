@@ -1,13 +1,13 @@
 import { Box } from "@mui/material";
-import { Plate } from "@udecode/plate";
+// import { Plate } from "@udecode/plate";
 import { useState } from "react";
 import Toolbar from "./Toolbar";
 import { plugins } from "../../../config/plate/plugins";
-
+import { Plate } from "@udecode/plate-core";
 const initialValue = [
   {
     type: "p",
-    children: [{ text: "hello" }],
+    children: [{ text: "" }],
   },
 ];
 
@@ -19,7 +19,7 @@ const Wiki = () => {
   };
 
   const editableProps = {
-    placeholder: "Hello",
+    placeholder: "Type something...",
     style: {
       padding: "0.25rem 0.5rem",
       height: "100%",

@@ -16,7 +16,13 @@
     "@mui/icons-material": "^5.4.2",
     "@mui/lab": "^5.0.0-alpha.70",
     "@mui/material": "^5.4.2",
-    "@udecode/plate": "^10.2.0",
+    "@udecode/plate-basic-marks": "^10.1.2",
+    "@udecode/plate-common": "^7.0.2",
+    "@udecode/plate-core": "^10.1.2",
+    "@udecode/plate-heading": "^10.1.2",
+    "@udecode/plate-link": "^10.1.2",
+    "@udecode/plate-list": "^10.1.2",
+    "@udecode/plate-paragraph": "^10.1.2",
     "axios": "^0.26.0",
     "date-fns": "^2.28.0",
     "next": "12.0.10",
@@ -29,8 +35,7 @@
     "slate": "^0.73.1",
     "slate-history": "^0.66.0",
     "slate-hyperscript": "^0.67.0",
-    "slate-react": "^0.74.0",
-    "styled-components": "^5.3.3"
+    "slate-react": "^0.74.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^6.0.0-alpha.6",
