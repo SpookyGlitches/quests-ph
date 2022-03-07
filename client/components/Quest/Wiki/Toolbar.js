@@ -1,15 +1,13 @@
-import {
-  Looks3Rounded,
-  LooksOneRounded,
-  LooksTwoRounded,
-  FormatBoldRounded,
-  FormatItalicRounded,
-  FormatUnderlinedRounded,
-  FormatListBulletedRounded,
-  StrikethroughSRounded,
-  InsertLinkRounded,
-  FormatListNumberedRounded,
-} from "@mui/icons-material";
+import Looks3RoundedIcon from "@mui/icons-material/Looks3Rounded";
+import LooksOneRoundedIcon from "@mui/icons-material/LooksOneRounded";
+import LooksTwoRoundedIcon from "@mui/icons-material/LooksTwoRounded";
+import FormatBoldRoundedIcon from "@mui/icons-material/FormatBoldRounded";
+import FormatItalicRoundedIcon from "@mui/icons-material/FormatItalicRounded";
+import FormatUnderlinedRoundedIcon from "@mui/icons-material/FormatUnderlinedRounded";
+import FormatListBulletedRoundedIcon from "@mui/icons-material/FormatListBulletedRounded";
+import StrikethroughSRoundedIcon from "@mui/icons-material/StrikethroughSRounded";
+import InsertLinkRoundedIcon from "@mui/icons-material/InsertLinkRounded";
+import FormatListNumberedRoundedIcon from "@mui/icons-material/FormatListNumberedRounded";
 
 import {
   usePlateEditorRef,
@@ -31,6 +29,7 @@ import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from "@udecode/plate-heading";
 import { ELEMENT_LINK, getAndUpsertLink } from "@udecode/plate-link";
 import { ToggleButtonGroup, ToggleButton, Box, Divider } from "@mui/material";
 import { styled } from "@mui/material/styles";
+// import  L from "@mui/icons-material";
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   "& .MuiToggleButtonGroup-grouped": {
@@ -126,43 +125,43 @@ export default function Toolbar() {
     >
       <StyledToggleButtonGroup color="primary" sx={{}}>
         <ToggleButton {...getMarkProps(MARK_BOLD)}>
-          <FormatBoldRounded />
+          <FormatBoldRoundedIcon />
         </ToggleButton>
         <ToggleButton {...getMarkProps(MARK_ITALIC)}>
-          <FormatItalicRounded />
+          <FormatItalicRoundedIcon />
         </ToggleButton>
         <ToggleButton {...getMarkProps(MARK_UNDERLINE)}>
-          <FormatUnderlinedRounded />
+          <FormatUnderlinedRoundedIcon />
         </ToggleButton>
         <ToggleButton {...getMarkProps(MARK_STRIKETHROUGH)}>
-          <StrikethroughSRounded />
+          <StrikethroughSRoundedIcon />
         </ToggleButton>
       </StyledToggleButtonGroup>
       <Divider flexItem orientation="vertical" sx={{ mx: 0.5, my: 1 }} />
       <StyledToggleButtonGroup color="primary">
         <ToggleButton {...getListProps(ELEMENT_UL)}>
-          <FormatListBulletedRounded />
+          <FormatListBulletedRoundedIcon />
         </ToggleButton>
         <ToggleButton {...getListProps(ELEMENT_OL)}>
-          <FormatListNumberedRounded />
+          <FormatListNumberedRoundedIcon />
         </ToggleButton>
       </StyledToggleButtonGroup>
       <Divider flexItem orientation="vertical" sx={{ mx: 0.5, my: 1 }} />
       <StyledToggleButtonGroup color="primary">
         <ToggleButton {...getNodeProps(ELEMENT_H1)}>
-          <LooksOneRounded />
+          <LooksOneRoundedIcon />
         </ToggleButton>
         <ToggleButton {...getNodeProps(ELEMENT_H2)}>
-          <LooksTwoRounded />
+          <LooksTwoRoundedIcon />
         </ToggleButton>
         <ToggleButton {...getNodeProps(ELEMENT_H3)}>
-          <Looks3Rounded />
+          <Looks3RoundedIcon />
         </ToggleButton>
       </StyledToggleButtonGroup>
       <Divider flexItem orientation="vertical" sx={{ mx: 0.5, my: 1 }} />
       <StyledToggleButtonGroup color="primary">
         <ToggleButton {...getLinkProps(ELEMENT_LINK)}>
-          <InsertLinkRounded />
+          <InsertLinkRoundedIcon />
         </ToggleButton>
       </StyledToggleButtonGroup>
     </Box>
