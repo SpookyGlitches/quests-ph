@@ -20,27 +20,28 @@ const theme = createTheme({
         cursor: "pointer",
       },
     },
-    shape: {
-      borderRadius: 10,
+    MuiTextField: {
+      defaultProps: {
+        variant: "filled",
+      },
     },
   },
+  shape: {
+    borderRadius: 10,
+  },
   typography: {
-    h1: {
-      fontWeight: "bold",
-    },
-    h2: {
-      fontWeight: "bold",
-    },
     h3: {
-      fontWeight: "bold",
+      fontWeight: 700,
     },
     h4: {
-      fontWeight: "bold",
+      fontWeight: 700,
     },
     h5: {
-      fontWeight: "bold",
+      fontWeight: 700,
     },
-    h6: { fontWeight: "bold" },
+    button: {
+      textTransform: "none",
+    },
   },
 });
 
