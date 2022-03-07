@@ -1,3 +1,10 @@
+import { ELEMENT_PARAGRAPH } from "@udecode/plate-paragraph";
+import { ELEMENT_UL, ELEMENT_OL, toggleList } from "@udecode/plate-list";
+import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from "@udecode/plate-heading";
+import { ELEMENT_LINK, getAndUpsertLink } from "@udecode/plate-link";
+import { ToggleButtonGroup, ToggleButton, Box, Divider } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
 import Looks3RoundedIcon from "@mui/icons-material/Looks3Rounded";
 import LooksOneRoundedIcon from "@mui/icons-material/LooksOneRounded";
 import LooksTwoRoundedIcon from "@mui/icons-material/LooksTwoRounded";
@@ -17,19 +24,12 @@ import {
   toggleNodeType,
   someNode,
 } from "@udecode/plate-core";
-import { ELEMENT_PARAGRAPH } from "@udecode/plate-paragraph";
 import {
   MARK_STRIKETHROUGH,
   MARK_BOLD,
   MARK_ITALIC,
   MARK_UNDERLINE,
 } from "@udecode/plate-basic-marks";
-import { ELEMENT_UL, ELEMENT_OL, toggleList } from "@udecode/plate-list";
-import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from "@udecode/plate-heading";
-import { ELEMENT_LINK, getAndUpsertLink } from "@udecode/plate-link";
-import { ToggleButtonGroup, ToggleButton, Box, Divider } from "@mui/material";
-import { styled } from "@mui/material/styles";
-// import  L from "@mui/icons-material";
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   "& .MuiToggleButtonGroup-grouped": {
@@ -54,7 +54,9 @@ export default function Toolbar() {
 
   const baseProps = {
     size: "small",
+    value: "",
   };
+
   const getMarkProps = (key) => {
     return {
       ...baseProps,
@@ -137,7 +139,9 @@ export default function Toolbar() {
           <StrikethroughSRoundedIcon />
         </ToggleButton>
       </StyledToggleButtonGroup>
+
       <Divider flexItem orientation="vertical" sx={{ mx: 0.5, my: 1 }} />
+
       <StyledToggleButtonGroup color="primary">
         <ToggleButton {...getListProps(ELEMENT_UL)}>
           <FormatListBulletedRoundedIcon />
@@ -146,7 +150,9 @@ export default function Toolbar() {
           <FormatListNumberedRoundedIcon />
         </ToggleButton>
       </StyledToggleButtonGroup>
+
       <Divider flexItem orientation="vertical" sx={{ mx: 0.5, my: 1 }} />
+
       <StyledToggleButtonGroup color="primary">
         <ToggleButton {...getNodeProps(ELEMENT_H1)}>
           <LooksOneRoundedIcon />
@@ -158,7 +164,9 @@ export default function Toolbar() {
           <Looks3RoundedIcon />
         </ToggleButton>
       </StyledToggleButtonGroup>
+
       <Divider flexItem orientation="vertical" sx={{ mx: 0.5, my: 1 }} />
+
       <StyledToggleButtonGroup color="primary">
         <ToggleButton {...getLinkProps(ELEMENT_LINK)}>
           <InsertLinkRoundedIcon />
