@@ -1,18 +1,3 @@
-// import {
-//   createBoldPlugin,
-//   createHistoryPlugin,
-//   createItalicPlugin,
-//   createListPlugin,
-//   createReactPlugin,
-//   createStrikethroughPlugin,
-//   createUnderlinePlugin,
-//   createPlugins,
-//   createPlateUI,
-//   createParagraphPlugin,
-//   createHeadingPlugin,
-//   createLinkPlugin,
-// } from "@udecode/plate";
-
 import {
   createBasicMarksPlugin,
   MARK_BOLD,
@@ -35,6 +20,7 @@ import {
   createPlugins,
 } from "@udecode/plate-core";
 import styled from "@emotion/styled";
+import { Link } from "@mui/material";
 
 const UnorderedListElement = styled("ul")(() => ({
   "& > div": {
@@ -48,17 +34,36 @@ const OrderedListElement = styled("ol")(() => ({
   },
 }));
 
-const LinkElement = styled("a")(({ theme }) => ({
-  color: theme.palette.primary.main,
-}));
+const LinkElement = (props) => {
+  const { attributes, children, nodeProps, element } = props;
+  return (
+    <Link {...attributes} href={element.url} {...nodeProps}>
+      {children}
+    </Link>
+  );
+};
 
-const BoldElement = styled("b")();
-const ItalicElement = styled("i")();
+// hacking!
+const BoldElement = styled("strong")();
+const ItalicElement = styled("em")();
 const UnderlineElement = styled("u")();
 const StrikethroughElement = styled("s")();
-const H1Element = styled("h1")();
-const H2Element = styled("h2")();
-const H3Element = styled("h3")();
+const H1Element = styled("h2")();
+const H2Element = styled("h3")();
+const H3Element = styled("h4")();
+
+export const components = {
+  [ELEMENT_UL]: UnorderedListElement,
+  [ELEMENT_OL]: OrderedListElement,
+  [MARK_BOLD]: BoldElement,
+  [MARK_ITALIC]: ItalicElement,
+  [MARK_UNDERLINE]: UnderlineElement,
+  [MARK_STRIKETHROUGH]: StrikethroughElement,
+  [ELEMENT_H1]: H1Element,
+  [ELEMENT_H2]: H2Element,
+  [ELEMENT_H3]: H3Element,
+  [ELEMENT_LINK]: LinkElement,
+};
 
 export const plugins = createPlugins(
   [
@@ -74,17 +79,6 @@ export const plugins = createPlugins(
     createListPlugin(),
   ],
   {
-    components: {
-      [ELEMENT_UL]: UnorderedListElement,
-      [ELEMENT_OL]: OrderedListElement,
-      [ELEMENT_LINK]: LinkElement,
-      [MARK_BOLD]: BoldElement,
-      [MARK_ITALIC]: ItalicElement,
-      [MARK_UNDERLINE]: UnderlineElement,
-      [MARK_STRIKETHROUGH]: StrikethroughElement,
-      [ELEMENT_H1]: H1Element,
-      [ELEMENT_H2]: H2Element,
-      [ELEMENT_H3]: H3Element,
-    },
+    components,
   },
 );

@@ -49,13 +49,13 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   },
 }));
 
-export default function Toolbar() {
-  const editor = usePlateEditorRef();
+const baseProps = {
+  size: "small",
+  value: "",
+};
 
-  const baseProps = {
-    size: "small",
-    value: "",
-  };
+export default function Toolbar() {
+  const editor = usePlateEditorRef("1");
 
   const getMarkProps = (key) => {
     return {
@@ -69,6 +69,9 @@ export default function Toolbar() {
   };
 
   const getNodeProps = (key) => {
+    const isDisabled =
+      someNode(editor, { match: { type: ELEMENT_UL } }) ||
+      someNode(editor, { match: { type: ELEMENT_OL } });
     return {
       ...baseProps,
       selected: someNode(editor, {
@@ -76,6 +79,7 @@ export default function Toolbar() {
           type: key,
         },
       }),
+      disabled: isDisabled,
       onMouseDown: (e) => {
         e.preventDefault();
         toggleNodeType(editor, {
@@ -116,12 +120,16 @@ export default function Toolbar() {
     };
   };
 
+  // useEffect(() => {
+  //   if (isEditing) selectEditor(editor, {  });
+  // }, [isEditing]);
+
   return (
     <Box
       sx={{
-        backgroundColor: "background.paper",
         display: "flex",
         flexWrap: "wrap",
+        borderRadius: 2,
         marginBottom: "1rem",
       }}
     >
