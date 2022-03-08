@@ -15,8 +15,8 @@ import {
 } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
 
-function createData(name, calories, firstInitial, fat) {
-  return { name, calories, firstInitial, fat };
+function createData(num, name, firstInitial, score) {
+  return { num, name, firstInitial, score };
 }
 
 const rows = [
@@ -51,7 +51,7 @@ const partyList = () => {
               <TableBody>
                 {rows.map((row) => (
                   <TableRow
-                    key={row.name}
+                    key={row.num}
                     sx={{
                       "&:last-child td, &:last-child th": {
                         border: 0,
@@ -59,7 +59,7 @@ const partyList = () => {
                     }}
                   >
                     <TableCell component="th" scope="row">
-                      {row.name}
+                      {row.num}
                     </TableCell>
                     <TableCell align="center" sx={{}} padding="none">
                       <CardHeader
@@ -74,10 +74,10 @@ const partyList = () => {
                             {row.firstInitial}
                           </Avatar>
                         }
-                        title={row.calories}
+                        title={row.name}
                       />
                     </TableCell>
-                    <TableCell align="right">{row.fat}</TableCell>
+                    <TableCell align="right">{row.score}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -91,6 +91,9 @@ const partyList = () => {
               style={{
                 maxWidth: "80px",
                 minWidth: "80px",
+                backgroundColor: "#E8E8E8",
+                borderColor: "#E8E8E8",
+                color: "#B0B0B0",
               }}
             >
               Leave

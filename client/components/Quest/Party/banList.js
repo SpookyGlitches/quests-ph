@@ -1,130 +1,110 @@
 import React from "react";
 import {
   Box,
+  Button,
   Typography,
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
-  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  CardHeader,
   Avatar,
-  AvatarGroup,
 } from "@mui/material";
+import { tableCellClasses } from "@mui/material/TableCell";
+import { deepOrange } from "@mui/material/colors";
+function createData(num, name, button) {
+  return { num, name, button };
+}
 
-import { deepOrange, deepPurple } from "@mui/material/colors";
-
+const rows = [
+  createData(
+    "1",
+    "watamesheep",
+    <Button
+      variant="outlined"
+      color="primary"
+      style={{
+        backgroundColor: "#E8E8E8",
+        borderColor: "#E8E8E8",
+        color: "#B0B0B0",
+      }}
+    >
+      Revoke
+    </Button>,
+  ),
+  createData(
+    "2",
+    "wewewew",
+    <Button
+      variant="outlined"
+      color="primary"
+      style={{
+        backgroundColor: "#E8E8E8",
+        borderColor: "#E8E8E8",
+        color: "#B0B0B0",
+      }}
+    >
+      Revoke
+    </Button>,
+  ),
+];
 const banList = () => {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Box
         sx={{
           p: 1,
-          m: 1,
-        }}
-        spacing={3}
-      ></Box>
-
-      <Box
-        sx={{
-          p: 1,
           m: 3,
         }}
       >
-        <Typography variant="h4" sx={{ color: "#755cde", marginTop: "-1em" }}>
+        <Typography variant="h4" sx={{ color: "#755cde", marginTop: "0em" }}>
           Bans
         </Typography>
 
-        <Grid
-          item
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            marginBottom: 2,
-          }}
-        >
-          <FormGroup>
-            <FormControlLabel
-              sx={{ marginLeft: "2px" }}
-              control={
-                <Checkbox
-                  sx={{
-                    "&.MuiCheckbox-root": {
-                      margin: 0,
-                      padding: 0,
-                    },
-                  }}
-                />
-              }
-              label="Task 2"
-              checked
-            />
-          </FormGroup>
-
-          <Typography>Today 11:50 PM</Typography>
-          <Typography>30 pts</Typography>
-          <AvatarGroup>
-            <Avatar sx={{ width: 17, height: 17 }} />
-            <Avatar sx={{ width: 17, height: 17 }} />
-            <Avatar sx={{ width: 17, height: 17 }} />
-            <Avatar sx={{ width: 17, height: 17 }} />
-            <Avatar sx={{ width: 17, height: 17 }} />
-          </AvatarGroup>
-        </Grid>
-        <Grid
-          item
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            marginBottom: 2,
-          }}
-        >
-          <FormGroup>
-            <FormControlLabel
-              sx={{ marginLeft: "2px" }}
-              control={
-                <Checkbox
-                  sx={{
-                    "&.MuiCheckbox-root": {
-                      margin: 0,
-                      padding: 0,
-                    },
-                  }}
-                />
-              }
-              label="Task 1"
-              checked
-            />
-          </FormGroup>
-
-          <Typography>Today 11:50 PM</Typography>
-          <Typography>30 pts</Typography>
-
-          <AvatarGroup>
-            <Avatar sx={{ width: 17, height: 17, bgcolor: deepOrange[500] }}>
-              RJ
-            </Avatar>
-            <Avatar sx={{ width: 17, height: 17, bgcolor: deepPurple[500] }}>
-              EARL
-            </Avatar>
-            <Avatar sx={{ width: 17, height: 17, bgcolor: deepPurple[500] }}>
-              JERBY
-            </Avatar>
-            <Avatar sx={{ width: 17, height: 17, bgcolor: deepPurple[500] }}>
-              JERBY
-            </Avatar>
-            <Avatar sx={{ width: 17, height: 17, bgcolor: deepPurple[500] }}>
-              JERBY
-            </Avatar>
-          </AvatarGroup>
-        </Grid>
+        <TableContainer>
+          <Table
+            sx={{
+              minWidth: 100,
+              [`& .${tableCellClasses.root}`]: {
+                borderBottom: "none",
+              },
+            }}
+            size="small"
+            aria-label="ban table"
+          >
+            <TableHead>
+              <TableRow>
+                <TableCell></TableCell>
+                <TableCell align="right"></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <TableRow
+                  key={row.num}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    <CardHeader
+                      avatar={
+                        <Avatar
+                          sx={{
+                            bgcolor: deepOrange[500],
+                          }}
+                        ></Avatar>
+                      }
+                      title={row.name}
+                    />
+                  </TableCell>
+                  <TableCell align="right">{row.button}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Box>
-
-      <Box
-        sx={{
-          p: 1,
-          m: 1,
-        }}
-        spacing={3}
-      ></Box>
     </Box>
   );
 };
