@@ -30,6 +30,12 @@ const theme = createTheme({
     borderRadius: 10,
   },
   typography: {
+    h1: {
+      fontWeight: 700,
+    },
+    h2: {
+      fontWeight: 700,
+    },
     h3: {
       fontWeight: 700,
     },
@@ -37,6 +43,9 @@ const theme = createTheme({
       fontWeight: 700,
     },
     h5: {
+      fontWeight: 700,
+    },
+    h6: {
       fontWeight: 700,
     },
     button: {
