@@ -9,44 +9,43 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import DatePicker from "@mui/lab/DatePicker";
-import useForm from "../../hooks/useForm";
+import moment from "moment";
+import { Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
-const MemberRegistrationOne = ({ activeStep, steps, handleNext }) => {
-  const [value, setValue] = React.useState(null);
+const schema = yup.object().shape({
+  displayName: yup.string().required("Please enter a display name"),
+  dateOfBirth: yup
+    .string()
+    .nullable()
+    .test("dateOfBirth", "You must be 18 years or older", function (value) {
+      return moment().diff(moment(value, "YYYY-MM-DD"), "years") >= 18;
+    })
+    .required("Please enter your age"),
+});
+
+const MemberRegistrationOne = () => {
+  // const MemberRegistrationOne = ({ activeStep, steps, handleNext }) => { //old
+  //const [value, setValue] = React.useState(null);
   //eslint-disable-next-line
-  const handleChange = (newValue) => {
-    setValue(newValue);
+  // const handleChange = (newValue) => {
+  //   setValue(newValue);
+  // };
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+  const submitForm = (data) => {
+    //handleNext(); this shit doesnt work huhu
+    console.log(data);
   };
-
-  const stateSchema = {
-    displayName: { value: "", error: "" },
-    fullName: { value: "", error: "" },
-    birthdate: { value: "", error: "" },
-  };
-
-  const stateValidatorSchema = {
-    displayName: {
-      required: true,
-      validator: {
-        func: (value) => /^[[A-Za-z][A-Za-z0-9_]{7,29}$/.test(value),
-        error: "Display Name must be 8-30 characters",
-      },
-    },
-    fullName: {
-      required: true,
-      validator: {
-        func: (value) => /^[[A-Za-z][A-Za-z0-9_]{7,29}$/.test(value),
-        error: "Full Name must be 8-30 characters",
-      },
-    },
-  };
-
-  const { values, errors, dirty, handleOnChange } = useForm(
-    stateSchema,
-    stateValidatorSchema,
-  );
-  const { displayName, fullName } = values;
-
   return (
     <>
       <Stack direction="column" spacing={1.5}>
@@ -70,62 +69,81 @@ const MemberRegistrationOne = ({ activeStep, steps, handleNext }) => {
           &nbsp; Sign Up with Google
         </Button>
         <Typography align="center">or</Typography>
-        <TextField
-          fullWidth
-          required
-          style={{}}
-          id="filled-required"
-          label="Display Name"
-          name="displayName"
-          value={displayName}
-          onChange={handleOnChange}
-        />
-        {errors.displayName && dirty.displayName && (
-          <Typography
-            style={{ marginTop: "0", color: "red", fontWeight: "200" }}
-          >
-            {errors.displayName}
-          </Typography>
-        )}
-        <TextField
-          fullWidth
-          required
-          style={{}}
-          id="filled-required"
-          label="Full Name"
-          name="fullName"
-          value={fullName}
-          onChange={handleOnChange}
-          sx={{}}
-        />
-        {errors.fullName && dirty.fullName && (
-          <Typography
-            style={{ marginTop: "0", color: "red", fontWeight: "200" }}
-          >
-            {errors.fullName}
-          </Typography>
-        )}
 
-        <DatePicker
-          label="Birthday"
-          name="birthdate"
-          value={value}
-          maxDate={new Date()}
-          onChange={(newValue) => {
-            setValue(newValue);
-          }}
-          renderInput={(params) => <TextField {...params} />}
-        />
+        <form
+          noValidate
+          onSubmit={handleSubmit(submitForm)}
+          className="signup-form"
+        >
+          <TextField
+            id="displayName"
+            name="displayName"
+            label="Display Name"
+            fullWidth
+            margin="dense"
+            {...register("displayName")}
+            error={errors.displayName ? true : false}
+          />
+          <Typography
+            style={{
+              color: "red",
+              fontWeight: "500",
+              fontSize: "12px",
+              textAlign: "left",
+            }}
+          >
+            {errors.displayName?.message}
+          </Typography>
 
-        {!displayName || !fullName ? (
-          <Button variant="contained" disabled>
-            {activeStep === steps.length ? "Finish" : "Next"}
+          <TextField
+            id="fullName"
+            name="fullName"
+            label="Full Name"
+            fullWidth
+            margin="dense"
+            {...register("fullName")}
+          />
+          <Controller
+            name="dateOfBirth"
+            control={control}
+            defaultValue={null}
+            render={({
+              field: { onChange, value },
+              fieldState: { error, invalid },
+            }) => (
+              <DatePicker
+                label="Date of birth"
+                disableFuture
+                value={value}
+                onChange={(value) =>
+                  onChange(moment(value).format("YYYY-MM-DD"))
+                }
+                renderInput={(params) => (
+                  // console.log(invalid),
+                  <TextField
+                    error={invalid}
+                    helperText={invalid ? error.message : null}
+                    id="dateOfBirth"
+                    variant="standard"
+                    margin="dense"
+                    fullWidth
+                    color="primary"
+                    autoComplete="bday"
+                    {...params}
+                  />
+                )}
+              />
+            )}
+          />
+          <Button
+            color="primary"
+            variant="contained"
+            type="submit"
+            sx={{ mt: 5 }}
+          >
+            Next
           </Button>
-        ) : (
-          <Button variant="contained" onClick={handleNext}>
-            {activeStep === steps.length ? "Finish" : "Next"}
-          </Button>
-        )}
+        </form>
       </Stack>
 
       <Box

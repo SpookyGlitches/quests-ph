@@ -8,11 +8,11 @@ const steps = ["", ""];
 
 export default function HorizontalLinearStepper() {
   const [activeStep, setActiveStep] = React.useState(0);
-
+  //eslint-disable-next-line
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
-
+  //eslint-disable-next-line
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
@@ -20,22 +20,24 @@ export default function HorizontalLinearStepper() {
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return (
-          <MemberRegistrationOne
-            handleNext={handleNext}
-            activeStep={activeStep}
-            steps={step}
-          />
-        );
+        return <MemberRegistrationOne />;
+      // return (
+      //   <MemberRegistrationOne
+      //     handleNext={handleNext}
+      //     activeStep={activeStep}
+      //     steps={step}
+      //   />
+      // );
       case 1:
-        return (
-          <MemberRegistrationTwo
-            handleNext={handleNext}
-            activeStep={activeStep}
-            steps={step}
-            handleBack={handleBack}
-          />
-        );
+        return <MemberRegistrationTwo />;
+      // return (
+      //   <MemberRegistrationTwo
+      //     handleNext={handleNext}
+      //     activeStep={activeStep}
+      //     steps={step}
+      //     handleBack={handleBack}
+      //   />
+      // );
       default:
         return "Unknown step";
     }
