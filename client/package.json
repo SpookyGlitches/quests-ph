@@ -17,7 +17,6 @@
     "@mui/lab": "^5.0.0-alpha.70",
     "@mui/material": "^5.4.2",
     "@udecode/plate-basic-marks": "^10.1.2",
-    "@udecode/plate-common": "^7.0.2",
     "@udecode/plate-core": "^10.1.2",
     "@udecode/plate-heading": "^10.1.2",
     "@udecode/plate-link": "^10.1.2",

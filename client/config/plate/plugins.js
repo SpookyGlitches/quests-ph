@@ -1,5 +1,8 @@
 import {
-  createBasicMarksPlugin,
+  createBoldPlugin,
+  createItalicPlugin,
+  createStrikethroughPlugin,
+  createUnderlinePlugin,
   MARK_BOLD,
   MARK_ITALIC,
   MARK_STRIKETHROUGH,
@@ -73,7 +76,10 @@ export const plugins = createPlugins(
     createParagraphPlugin(),
     createHeadingPlugin(),
 
-    createBasicMarksPlugin(),
+    createBoldPlugin(),
+    createItalicPlugin(),
+    createUnderlinePlugin(),
+    createStrikethroughPlugin(),
 
     createLinkPlugin(),
     createListPlugin(),

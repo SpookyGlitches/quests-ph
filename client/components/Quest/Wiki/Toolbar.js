@@ -17,13 +17,14 @@ import InsertLinkRoundedIcon from "@mui/icons-material/InsertLinkRounded";
 import FormatListNumberedRoundedIcon from "@mui/icons-material/FormatListNumberedRounded";
 
 import {
-  usePlateEditorRef,
   getPluginType,
   isMarkActive,
   toggleMark,
   toggleNodeType,
   someNode,
+  usePlateEditorState,
 } from "@udecode/plate-core";
+
 import {
   MARK_STRIKETHROUGH,
   MARK_BOLD,
@@ -55,7 +56,7 @@ const baseProps = {
 };
 
 export default function Toolbar() {
-  const editor = usePlateEditorRef("1");
+  const editor = usePlateEditorState();
 
   const getMarkProps = (key) => {
     return {
@@ -119,10 +120,6 @@ export default function Toolbar() {
       },
     };
   };
-
-  // useEffect(() => {
-  //   if (isEditing) selectEditor(editor, {  });
-  // }, [isEditing]);
 
   return (
     <Box

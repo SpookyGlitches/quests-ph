@@ -7,7 +7,7 @@ import { Plate } from "@udecode/plate-core";
 const initialValue = [
   {
     type: "p",
-    children: [{ text: " " }],
+    children: [{ text: "" }],
   },
 ];
 
@@ -30,6 +30,7 @@ const Wiki = () => {
       height: "100%",
       width: "100%",
     },
+    autoFocus: true,
     readOnly: !isEditing,
     contentEditable: !isEditing,
   };

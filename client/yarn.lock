@@ -562,14 +562,6 @@
   dependencies:
     "@udecode/plate-core" "10.1.2"
 
-"@udecode/plate-common@^7.0.2":
-  version "7.0.2"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-common/-/plate-common-7.0.2.tgz#cd2fc3ffdc70c41a43a71356742a9cf61b7991c7"
-  integrity sha512-FYggaasSk7Acy+l/N+dMCuBrVKXwEyRFATry4c5crjQqqhz7PPKtNmmpBGVOLFrEuI76gzZXzk3IrXRwPQebbQ==
-  dependencies:
-    "@udecode/plate-core" "7.0.2"
-    is-hotkey "^0.1.6"
-
 "@udecode/plate-core@10.1.2", "@udecode/plate-core@^10.1.2":
   version "10.1.2"
   resolved "https://registry.yarnpkg.com/@udecode/plate-core/-/plate-core-10.1.2.tgz#160059834a0a6f1c28c07d6e6ed3b788a9599b5a"
@@ -581,15 +573,6 @@
     lodash "4.17.21"
     use-deep-compare "1.1.0"
     zustand "3.7.0"
-
-"@udecode/plate-core@7.0.2":
-  version "7.0.2"
-  resolved "https://registry.yarnpkg.com/@udecode/plate-core/-/plate-core-7.0.2.tgz#7205e65945ab43f5df9f8d328515553ddbe29484"
-  integrity sha512-YFmzVRcRWkWRbqRuD/guCHuSb/NSdUtUocSz1XL7I/oCzZgXY5ddqsj6Aciu2hiiI0s9PeeAPwmegOi1lsClRg==
-  dependencies:
-    clsx "^1.1.1"
-    lodash "^4.17.21"
-    zustand "^3.4.2"
 
 "@udecode/plate-heading@^10.1.2":
   version "10.1.2"
@@ -1803,7 +1786,7 @@ lodash.merge@^4.6.2:
   resolved "https://registry.npmjs.org/lodash.merge/-/lodash.merge-4.6.2.tgz"
   integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
 
-lodash@4.17.21, lodash@^4.17.21, lodash@^4.17.4:
+lodash@4.17.21, lodash@^4.17.4:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -2651,8 +2634,3 @@ zustand@3.7.0:
   version "3.7.0"
   resolved "https://registry.yarnpkg.com/zustand/-/zustand-3.7.0.tgz#a5c68fb06bdee9c63ad829de2432635be6d0ce69"
   integrity sha512-USzVzLGrvZ8VK1/sEsOAmeqa8N7D3OBdZskVaL7DL89Q4QLTYD053iIlZ5KDidyZ+Od80Dttin/f8ZulOLFFDQ==
-
-zustand@^3.4.2:
-  version "3.7.1"
-  resolved "https://registry.yarnpkg.com/zustand/-/zustand-3.7.1.tgz#7388f0a7175a6c2fd9a2880b383a4bf6cdf6b7c6"
-  integrity sha512-wHBCZlKj+bg03/hP+Tzv24YhnqqP8MCeN9ECPDXoF01062SIbnfl3j9O0znkDw1lNTY0a8WN3F///a0UhhaEqg==
