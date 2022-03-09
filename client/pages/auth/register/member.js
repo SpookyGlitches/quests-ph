@@ -264,7 +264,7 @@ export default function Register() {
               type="submit"
               onClick={handleBack}
               sx={{
-                mb: 2,
+                mb: 1,
                 boxShadow: 0,
                 ":hover": {
                   bgcolor: "white",
