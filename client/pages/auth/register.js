@@ -351,6 +351,35 @@ export default function Register() {
               Sign Up
             </Button>
           </Stack>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Typography
+              variant="string"
+              sx={{ mt: "0rem", mb: "1rem" }}
+              textAlign="center"
+            >
+              By signing up, I accept the{" "}
+              <MuiLink
+                sx={{ cursor: "pointer" }}
+                style={{ textDecoration: "none" }}
+              >
+                <a href="/landing/terms-of-service">Quests Terms of Service</a>
+              </MuiLink>{" "}
+              and acknowledge the{" "}
+              <MuiLink
+                sx={{ cursor: "pointer" }}
+                style={{ textDecoration: "none" }}
+              >
+                <a href="/landing/privacy_policy">Privacy Policy</a>
+              </MuiLink>
+              .
+            </Typography>
+          </Box>
         </>
       )}
     </AuthLayout>
