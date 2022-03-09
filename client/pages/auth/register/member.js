@@ -368,6 +368,7 @@ export default function Register() {
                 sx={{ cursor: "pointer" }}
                 style={{ textDecoration: "none" }}
               >
+                {/* eslint-disable-next-line */}
                 <a href="/landing/terms-of-service">Quests Terms of Service</a>
               </MuiLink>{" "}
               and acknowledge the{" "}
