@@ -8,9 +8,7 @@ import {
   Typography,
   ListItemText,
   Chip,
-  Button,
   Divider,
-  TextField,
 } from "@mui/material";
 const ChatContent = () => {
   return (
