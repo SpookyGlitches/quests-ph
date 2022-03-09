@@ -41,7 +41,10 @@ export default function ToDo() {
   return (
     <Box
       sx={{
-        padding: "1rem",
+        paddingX: "2rem",
+        paddingY: "1.5rem",
+        backgroundColor: "background.paper",
+        borderRadius: 2,
       }}
     >
       <Stack spacing={1}>
