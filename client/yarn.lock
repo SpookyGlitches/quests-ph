@@ -560,6 +560,76 @@
     "@typescript-eslint/types" "5.12.0"
     eslint-visitor-keys "^3.0.0"
 
+"@udecode/plate-basic-marks@^10.1.2":
+  version "10.1.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-basic-marks/-/plate-basic-marks-10.1.2.tgz#722ab5c89aab30a70927d6836c839b9b979b4866"
+  integrity sha512-KC8bHG0LG9YntwDC458axxwvk2BNvSnyayiQl2y9NBK94Do82VFEKAdOZ505UUsQVcuvO1CdX6A/y1zw2OGCVQ==
+  dependencies:
+    "@udecode/plate-core" "10.1.2"
+
+"@udecode/plate-core@10.1.2", "@udecode/plate-core@^10.1.2":
+  version "10.1.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-core/-/plate-core-10.1.2.tgz#160059834a0a6f1c28c07d6e6ed3b788a9599b5a"
+  integrity sha512-bVl4m7lTybZ5ooRbBoNM/QOO0oT/+//j6X9MIouyHAxWKMnBHg9oWGp9+BOZkJQ2kPiz8mzWSLm7Bc9jMYro5w==
+  dependencies:
+    "@udecode/zustood" "0.4.4"
+    clsx "1.1.1"
+    jotai "1.5.3"
+    lodash "4.17.21"
+    use-deep-compare "1.1.0"
+    zustand "3.7.0"
+
+"@udecode/plate-heading@^10.1.2":
+  version "10.1.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-heading/-/plate-heading-10.1.2.tgz#8571ecad256b3ed16e5aa1b0880a7030f6b01b49"
+  integrity sha512-D+QAEX3JiSD1+W12RcXhG/MPU7UNz2xUpokO/3VNnyq5WPOlBB8tEkLZei9gIe0ItLvDFLIqwJ+rFLJ7lLhbOA==
+  dependencies:
+    "@udecode/plate-core" "10.1.2"
+
+"@udecode/plate-link@^10.1.2":
+  version "10.1.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-link/-/plate-link-10.1.2.tgz#323beb13a244a74b80963b1492e044e8fa25ea3d"
+  integrity sha512-grrImrGmOUxlmXuL4rw83qna/YoL/PdTU+9bwX4aSiVbAljiJYUMNpfmwJb5kqOJ7CUhKYXQvkPRjVLuXQSQJw==
+  dependencies:
+    "@udecode/plate-core" "10.1.2"
+    "@udecode/plate-normalizers" "10.1.2"
+
+"@udecode/plate-list@^10.1.2":
+  version "10.1.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-list/-/plate-list-10.1.2.tgz#bb00db51f1d10aa37389f107531f9876f42e9ea1"
+  integrity sha512-EyuRa0/mTFpwi9XH5agoMBC4c27gGgOpDWdQfKO7ibhPrnI+sdjaHIOgTayleifioEax99asCsQYnOcaB8v2Jw==
+  dependencies:
+    "@udecode/plate-core" "10.1.2"
+    "@udecode/plate-reset-node" "10.1.2"
+
+"@udecode/plate-normalizers@10.1.2":
+  version "10.1.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-normalizers/-/plate-normalizers-10.1.2.tgz#acddb549f46292b00dfa7e804fa271a4c28dd4d9"
+  integrity sha512-xUWkJllupqOMUtmFObozqhtrPVOOEvBnRFKdSQdNsmoc8OGLyO799zggZqwBwNOZVklc5nyHV+ypUSPAjbhQBQ==
+  dependencies:
+    "@udecode/plate-core" "10.1.2"
+
+"@udecode/plate-paragraph@^10.1.2":
+  version "10.1.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-paragraph/-/plate-paragraph-10.1.2.tgz#838d7939c6bf95175822843277dd207f877c1c3b"
+  integrity sha512-5CWjoiZOOqkNROvBLv0NErtID3rBcL7O3caqAl31pp9pHuJjmZMmD2a7S4XZ9wqmbt7wtYOq9S+4uP8wBIOXCw==
+  dependencies:
+    "@udecode/plate-core" "10.1.2"
+
+"@udecode/plate-reset-node@10.1.2":
+  version "10.1.2"
+  resolved "https://registry.yarnpkg.com/@udecode/plate-reset-node/-/plate-reset-node-10.1.2.tgz#4a2676a6eb47293a2c3c7bddb9ed7fff5a2d4b53"
+  integrity sha512-bJ74SNl1QNchEPBaXV9Utr8cT7KUMSCYgMFjs6XE1K2SmgGylucIIAIeG+4sUSD1b/G5GdlGYAEHBbXGke/meg==
+  dependencies:
+    "@udecode/plate-core" "10.1.2"
+
+"@udecode/zustood@0.4.4":
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/@udecode/zustood/-/zustood-0.4.4.tgz#0f3467f1ec3656623c16bb803d64e6dc55ea7b42"
+  integrity sha512-OtkRGu8TKBkidOOf28TY4tqYJRhMAiVt+BF6lHbF/FnXRmOa8eLal8Q/k9sqQcGzQAHBaZYcx0pR1+wlQzaurg==
+  dependencies:
+    immer "9.0.6"
+
 acorn-jsx@^5.3.1:
   version "5.3.2"
   resolved "https://registry.npmjs.org/acorn-jsx/-/acorn-jsx-5.3.2.tgz"
@@ -878,6 +948,11 @@ define-properties@^1.1.3:
   integrity sha512-3MqfYKj2lLzdMSf8ZIZE/V+Zuy+BgD6f164e8K2w7dgnpKArBDerGYpM46IYYcjnkdPNMjPk9A6VFB8+3SKlXQ==
   dependencies:
     object-keys "^1.0.12"
+
+dequal@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/dequal/-/dequal-1.0.0.tgz#41c6065e70de738541c82cdbedea5292277a017e"
+  integrity sha512-/Nd1EQbQbI9UbSHrMiKZjFLrXSnU328iQdZKPQf78XQI6C+gutkFUeoHpG5J08Ioa6HeRbRNFpSIclh1xyG0mw==
 
 dir-glob@^3.0.1:
   version "3.0.1"
@@ -1462,6 +1537,14 @@ ignore@^5.1.4, ignore@^5.2.0:
   resolved "https://registry.npmjs.org/ignore/-/ignore-5.2.0.tgz"
   integrity sha512-CmxgYGiEPCLhfLnpPp1MoRmifwEIOgjcHXxOBjv7mY96c+eWScsOP9c112ZyLdWHi0FxHjI+4uVhKYp/gcdRmQ==
 
+<<<<<<< HEAD
+=======
+immer@9.0.6:
+  version "9.0.6"
+  resolved "https://registry.yarnpkg.com/immer/-/immer-9.0.6.tgz#7a96bf2674d06c8143e327cbf73539388ddf1a73"
+  integrity sha512-G95ivKpy+EvVAnAab4fVa4YGYn24J1SpEktnJX7JJ45Bd7xqME/SCplFzYFmTbrkwZbQ4xJK1xMTUYBkN6pWsQ==
+
+>>>>>>> main
 immer@^9.0.6:
   version "9.0.12"
   resolved "https://registry.yarnpkg.com/immer/-/immer-9.0.12.tgz#2d33ddf3ee1d247deab9d707ca472c8c942a0f20"
@@ -1624,6 +1707,11 @@ isexe@^2.0.0:
   resolved "https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz"
   integrity sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=
 
+jotai@1.5.3:
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/jotai/-/jotai-1.5.3.tgz#0157f962c6cd7d28389f9606a1eefebf223801ed"
+  integrity sha512-iD8MkbehxTjfRUtIJJdyQcjbAe2MqjW1+oFc5lvfgRjLHwjRQyWnZC3gdGAOQCOqUSPZHOBGgWyP/8gBDckaNQ==
+
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.npmjs.org/js-tokens/-/js-tokens-4.0.0.tgz"
@@ -1716,7 +1804,11 @@ lodash.merge@^4.6.2:
   resolved "https://registry.npmjs.org/lodash.merge/-/lodash.merge-4.6.2.tgz"
   integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
 
+<<<<<<< HEAD
 lodash@^4.17.21, lodash@^4.17.4:
+=======
+lodash@4.17.21, lodash@^4.17.4:
+>>>>>>> main
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -2318,10 +2410,17 @@ slate-hyperscript@^0.67.0:
   dependencies:
     is-plain-object "^5.0.0"
 
+<<<<<<< HEAD
 slate-react@^0.74.2:
   version "0.74.2"
   resolved "https://registry.yarnpkg.com/slate-react/-/slate-react-0.74.2.tgz#da184e5bc86d3fb1f2922be4aefc39bc9bddbe13"
   integrity sha512-NX9lFpHoEcHZ44KVJk1QvXoof5nN+QbDZ/zaAVklBn/XXbjogm1P6d/QqUStB2faKecZrV4BDRMq0Kw3WIpvaA==
+=======
+slate-react@^0.74.0:
+  version "0.74.0"
+  resolved "https://registry.yarnpkg.com/slate-react/-/slate-react-0.74.0.tgz#8980a8edb1bad6772faf8bd74f7968e3f89783d8"
+  integrity sha512-L5fEuwfUQN61Hhxk2NBoh2teaZj653j3pzA2svEopk3G7E9Zt7MNssuLsH8PZ3YB/+Y+xQJZ3hkkrLX9wamxLg==
+>>>>>>> main
   dependencies:
     "@types/is-hotkey" "^0.1.1"
     "@types/lodash" "^4.14.149"
@@ -2528,6 +2627,13 @@ uri-js@^4.2.2:
   dependencies:
     punycode "^2.1.0"
 
+use-deep-compare@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/use-deep-compare/-/use-deep-compare-1.1.0.tgz#85580dde751f68400bf6ef7e043c7f986595cef8"
+  integrity sha512-6yY3zmKNCJ1jjIivfZMZMReZjr8e6iC6Uqtp701jvWJ6ejC/usXD+JjmslZDPJQgX8P4B1Oi5XSLHkOLeYSJsA==
+  dependencies:
+    dequal "1.0.0"
+
 use-subscription@1.5.1:
   version "1.5.1"
   resolved "https://registry.npmjs.org/use-subscription/-/use-subscription-1.5.1.tgz"
@@ -2578,6 +2684,7 @@ yaml@^1.7.2:
   resolved "https://registry.npmjs.org/yaml/-/yaml-1.10.2.tgz"
   integrity sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==
 
+<<<<<<< HEAD
 yup@^0.32.11:
   version "0.32.11"
   resolved "https://registry.yarnpkg.com/yup/-/yup-0.32.11.tgz#d67fb83eefa4698607982e63f7ca4c5ed3cf18c5"
@@ -2590,3 +2697,9 @@ yup@^0.32.11:
     nanoclone "^0.2.1"
     property-expr "^2.0.4"
     toposort "^2.0.2"
+=======
+zustand@3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/zustand/-/zustand-3.7.0.tgz#a5c68fb06bdee9c63ad829de2432635be6d0ce69"
+  integrity sha512-USzVzLGrvZ8VK1/sEsOAmeqa8N7D3OBdZskVaL7DL89Q4QLTYD053iIlZ5KDidyZ+Od80Dttin/f8ZulOLFFDQ==
+>>>>>>> main
