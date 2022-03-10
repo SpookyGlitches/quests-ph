@@ -14,11 +14,6 @@
     "@emotion/styled": "^11.6.0",
     "@fontsource/roboto": "^4.5.3",
     "@hookform/resolvers": "^2.8.8",
-<<<<<<< HEAD
-    "@material-ui/core": "^4.12.3",
-    "@material-ui/icons": "^4.11.2",
-=======
->>>>>>> main
     "@mui/icons-material": "^5.4.2",
     "@mui/lab": "^5.0.0-alpha.70",
     "@mui/material": "^5.4.2",
@@ -31,10 +26,7 @@
     "axios": "^0.26.0",
     "chart.js": "^3.7.1",
     "date-fns": "^2.28.0",
-<<<<<<< HEAD
     "material-ui-dropzone": "^3.5.0",
-=======
->>>>>>> main
     "moment": "^2.29.1",
     "next": "12.0.10",
     "react": "17.0.2",
@@ -49,10 +41,7 @@
     "slate-hyperscript": "^0.67.0",
     "slate-react": "^0.74.0",
     "yup": "^0.32.11"
-<<<<<<< HEAD
-=======
     
->>>>>>> main
   },
   "devDependencies": {
     "@faker-js/faker": "^6.0.0-alpha.6",
