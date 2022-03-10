@@ -1,5 +1,5 @@
 import AppLayout from "../../components/Layouts/AppLayout";
-import SearchBar from "../../components/Friends/search.js";
+import SearchBar from "../../components/Friends/Search.js";
 import ListHolder from "../../components/Friends/FriendListHolder.js";
 
 const Index = () => {
@@ -7,23 +7,11 @@ const Index = () => {
     <AppLayout>
       <div>
         <SearchBar />
-        <ListHolder
-          requestName="Incoming Requests"
-          fullname="Pretty Boy"
-          username="prettyboy912"
-        />
+        <ListHolder requestName="Incoming Requests" />
 
-        <ListHolder
-          requestName="Outgoing Requests"
-          fullname="Boy Pretty"
-          username="ngekngokprettyboy912"
-        />
+        <ListHolder requestName="Outgoing Requests" />
 
-        <ListHolder
-          requestName="Friends"
-          fullname="Pretty Boy"
-          username="Prettyngekngok231"
-        />
+        <ListHolder requestName="Friends" />
       </div>
     </AppLayout>
   );

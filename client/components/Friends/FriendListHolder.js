@@ -13,14 +13,34 @@ const ListHolder = (props) => {
         borderRadius: 2,
       }}
     >
-      <Typography color="primary" variant="h3">
+      <Typography color="primary" variant="h4">
         {props.requestName}
       </Typography>
 
       <FriendField
         fieldType={props.requestName}
-        fullname={props.fullname}
-        username={props.username}
+        fullname="Pretty Boy"
+        username="prettyboy912"
+      />
+      <FriendField
+        fieldType={props.requestName}
+        fullname="Pretty Boy"
+        username="prettyboy912"
+      />
+      <FriendField
+        fieldType={props.requestName}
+        fullname="Pretty Boy"
+        username="prettyboy912"
+      />
+      <FriendField
+        fieldType={props.requestName}
+        fullname="Pretty Boy"
+        username="prettyboy912"
+      />
+      <FriendField
+        fieldType={props.requestName}
+        fullname="Pretty Boy"
+        username="prettyboy912"
       />
     </Box>
   );
