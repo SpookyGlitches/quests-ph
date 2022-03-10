@@ -162,6 +162,7 @@ export default function Register() {
             alert("success2");
 
             setActiveStep((prevActiveStep) => prevActiveStep + 1);
+            handleSubmit(onSubmit)();
           })
           .catch((err) => {
             alert(err);
@@ -553,6 +554,25 @@ export default function Register() {
               .
             </Typography>
           </Box>
+        </>
+      ) : (
+        <></>
+      )}
+      {activeStep == 3 ? (
+        <>
+          <Stack direction="column" spacing={1.5} sx={{ alignItems: "center" }}>
+            <Typography align="center" sx={{ fontSize: "15px" }}>
+              You have successfully registered for a mentor account.
+            </Typography>
+            <Link href="/auth/login" passHref>
+              <MuiLink
+                sx={{ cursor: "pointer" }}
+                style={{ textDecoration: "none" }}
+              >
+                Login
+              </MuiLink>
+            </Link>
+          </Stack>
         </>
       ) : (
         <></>
