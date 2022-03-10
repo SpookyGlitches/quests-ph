@@ -28,7 +28,8 @@ import { Controller } from "react-hook-form";
 import moment from "moment";
 import { useState } from "react";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
-// import { DropzoneArea } from "material-ui-dropzone";
+import { useDropzone } from "react-dropzone";
+import CloudUploadRoundedIcon from "@mui/icons-material/CloudUploadRounded";
 
 // const stepOneValidations = yup.object().shape({
 //   displayName: yup.string().required("Please enter a display name"),
@@ -61,6 +62,19 @@ export default function Register() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const handleClickShowConfirmPassword = () =>
     setShowConfirmPassword(!showConfirmPassword);
+
+  const { getRootProps, getInputProps } = useDropzone({
+    accept:
+      "image/*, application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/msword",
+    onDropAccepted: (acceptedFiles) => {
+      //console.log("Accepted:");
+      console.log(acceptedFiles);
+    },
+    onDropRejected: (rejectedFiles) => {
+      //console.log("Rejected:");
+      console.log(rejectedFiles);
+    },
+  });
 
   const stateSchema = {
     email: { value: "", error: "" },
@@ -459,7 +473,7 @@ export default function Register() {
             <TextField
               label="If yes, what kind of mentoring?"
               multiline={true}
-              rows={4}
+              rows={3}
               fullWidth
               sx={{ mt: 2 }}
               margin="dense"
@@ -468,13 +482,50 @@ export default function Register() {
               // error={errors.email ? true : false}
             />
 
-            {/* <DropzoneArea
-              acceptedFiles={["image/*", "video/*", "application/*"]}
-              showFileNames
-              dropzoneText="Choose a file or drag it here "
-              showAlerts={false}
-              filesLimit={1}
-            /> */}
+            <Box
+              {...getRootProps({ className: "dropzone" })}
+              sx={{
+                height: "7rem",
+                background: "#e7e7e7",
+                borderColor: "#cbcbcb",
+                borderRadius: "2px",
+                borderWidth: "thin",
+                cursor: "pointer",
+              }}
+            >
+              <input {...getInputProps()} />
+              <Typography
+                align="left"
+                sx={{ color: "#625e5c", fontSize: "16px", ml: 1, mt: 1 }}
+              >
+                Upload supporting document/s here
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "column",
+                  height: "100%",
+                  padding: "2rem",
+                }}
+              >
+                <CloudUploadRoundedIcon
+                  sx={{
+                    mt: "-1em",
+                    fontSize: "2rem",
+                  }}
+                />
+
+                <Typography
+                  variant="body2"
+                  align="center"
+                  sx={{ fontSize: "9px" }}
+                >
+                  Choose a file or drag it here.
+                </Typography>
+              </Box>
+            </Box>
             <Button
               color="primary"
               variant="contained"
@@ -485,6 +536,37 @@ export default function Register() {
               Sign Up
             </Button>
           </Stack>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Typography
+              variant="string"
+              sx={{ mt: "0rem", mb: "1rem" }}
+              textAlign="center"
+            >
+              By signing up, I accept the{" "}
+              <MuiLink
+                sx={{ cursor: "pointer" }}
+                style={{ textDecoration: "none" }}
+              >
+                {/* eslint-disable-next-line */}
+                <a href="/landing/terms-of-service">Quests Terms of Service</a>
+              </MuiLink>{" "}
+              and acknowledge the{" "}
+              <MuiLink
+                sx={{ cursor: "pointer" }}
+                style={{ textDecoration: "none" }}
+              >
+                {/* eslint-disable-next-line */}
+                <a href="/landing/privacy-policy">Privacy Policy</a>
+              </MuiLink>
+              .
+            </Typography>
+          </Box>
         </>
       ) : (
         <></>
