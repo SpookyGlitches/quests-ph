@@ -16,7 +16,7 @@ import {
   //   InputLabel,
   MenuItem,
   //   FormControl,
-  //   Select,
+  Select,
   Link as MuiLink,
 } from "@mui/material";
 import Link from "next/link";
@@ -24,35 +24,44 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import DatePicker from "@mui/lab/DatePicker";
 import { Controller } from "react-hook-form";
-// import * as yup from "yup";
+import * as yup from "yup";
 import moment from "moment";
 import { useState } from "react";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import { useDropzone } from "react-dropzone";
 import CloudUploadRoundedIcon from "@mui/icons-material/CloudUploadRounded";
 
-// const stepOneValidations = yup.object().shape({
-//   displayName: yup.string().required("Please enter a display name"),
-//   dateOfBirth: yup
-//     .string()
-//     .nullable()
-//     .test("dateOfBirth", "You must be 18 years or older", function (value) {
-//       return moment().diff(moment(value, "YYYY-MM-DD"), "years") >= 18;
-//     })
-//     .required("Please enter your age"),
-// });
-// const stepTwoValidations = yup.object().shape({
-//   email: yup.string().required("Email is required").email("Email is invalid"),
-//   password: yup
-//     .string()
-//     .required("Password is required")
-//     .min(6, "Password must be at least 6 characters")
-//     .max(40, "Password must not exceed 40 characters"),
-//   confirmPassword: yup
-//     .string()
-//     .required("Confirm Password is required")
-//     .oneOf([yup.ref("password"), null], "Confirm Password does not match"),
-// });
+const stepOneValidations = yup.object().shape({
+  displayName: yup.string().required("Please enter a display name"),
+  fullName: yup
+    .string()
+    .matches(/^[A-Za-z ]*$/, "Please enter valid name")
+    .max(40)
+    .required(),
+  dateOfBirth: yup
+    .string()
+    .nullable()
+    .test("dateOfBirth", "You must be 18 years or older", function (value) {
+      return moment().diff(moment(value, "YYYY-MM-DD"), "years") >= 18;
+    })
+    .required("Please enter your age"),
+});
+const stepTwoValidations = yup.object().shape({
+  email: yup.string().required("Email is required").email("Email is invalid"),
+  password: yup
+    .string()
+    .required("Password is required")
+    .min(6, "Password must be at least 6 characters")
+    .max(40, "Password must not exceed 40 characters"),
+  confirmPassword: yup
+    .string()
+    .required("Confirm Password is required")
+    .oneOf([yup.ref("password"), null], "Confirm Password does not match"),
+});
+const stepThreeValidations = yup.object().shape({
+  experience: yup.string().required(),
+  detailedExperience: yup.string().max(255),
+});
 const steps = ["", "", ""];
 export default function Register() {
   const [activeStep, setActiveStep] = useState(0);
@@ -84,17 +93,20 @@ export default function Register() {
   const {
     register,
     handleSubmit,
-    // watch,
+    watch,
     control,
     handleOnChange,
     //eslint-disable-next-line
     formState: { errors },
   } = useForm(stateSchema);
-  //   const watchdisplayName = watch("displayName", "");
-  //   const watchDateofBirth = watch("dateOfBirth", "");
-  //   const watchEmail = watch("email", "");
-  //   const watchPassword = watch("password", "");
-  //   const watchConfirmPassword = watch("confirmPassword", "");
+  const watchdisplayName = watch("displayName", "");
+  const watchFullName = watch("fullName", "");
+  const watchDateofBirth = watch("dateOfBirth", "");
+  const watchEmail = watch("email", "");
+  const watchPassword = watch("password", "");
+  const watchConfirmPassword = watch("confirmPassword", "");
+  const watchExperience = watch("experience", "");
+  const watchdetailedExperience = watch("detailedExperience", "");
 
   const onSubmit = (values) => {
     alert(JSON.stringify(values));
@@ -102,50 +114,59 @@ export default function Register() {
   const handleNext = async () => {
     switch (activeStep) {
       case 0:
-        // stepOneValidations
-        //   .validate({
-        //     displayName: watchdisplayName,
-        //     dateOfBirth: watchDateofBirth,
-        //   })
-        //   //eslint-disable-next-line
-        //   .then((value) => {
-        //     alert("success");
-
-        //     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        //   })
-        //   .catch((err) => {
-        //     alert(err);
-        //     return;
-        //   });
+        stepOneValidations
+          .validate({
+            displayName: watchdisplayName,
+            fullName: watchFullName,
+            dateOfBirth: watchDateofBirth,
+          })
+          //eslint-disable-next-line
+          .then((value) => {
+            alert("success");
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+          })
+          .catch((err) => {
+            alert(err);
+            return;
+          });
         console.log("case 0");
-        alert("case 0");
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
         break;
       case 1:
-        // stepTwoValidations
-        //   .validate({
-        //     email: watchEmail,
-        //     password: watchPassword,
-        //     confirmPassword: watchConfirmPassword,
-        //   })
-        //   //eslint-disable-next-line
-        //   .then((value) => {
-        //     alert("success2");
+        stepTwoValidations
+          .validate({
+            email: watchEmail,
+            password: watchPassword,
+            confirmPassword: watchConfirmPassword,
+          })
+          //eslint-disable-next-line
+          .then((value) => {
+            alert("success2");
 
-        //     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        //   })
-        //   .catch((err) => {
-        //     alert(err);
-        //     return;
-        //   });
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+          })
+          .catch((err) => {
+            alert(err);
+            return;
+          });
         console.log("case 1");
-        alert("case 1");
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
         break;
       case 2:
+        stepThreeValidations
+          .validate({
+            experience: watchExperience,
+            detailedExperience: watchdetailedExperience,
+          })
+          //eslint-disable-next-line
+          .then((value) => {
+            alert("success2");
+
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+          })
+          .catch((err) => {
+            alert(err);
+            return;
+          });
         console.log("case 2");
-        alert("case 2");
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
         break;
       case 3:
         handleSubmit(onSubmit)();
@@ -156,21 +177,6 @@ export default function Register() {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-  const [age, setAge] = React.useState("");
-  //   const handleChange = (event) => {
-  //     setAge(event.target.value);
-  //   };
-
-  const answers = [
-    {
-      value: "1",
-      label: "Yes",
-    },
-    {
-      value: "2",
-      label: "No",
-    },
-  ];
 
   return (
     <AuthLayout>
@@ -431,53 +437,35 @@ export default function Register() {
               />
               &nbsp; Back
             </Button>
-            {/* <Typography
-              style={{
-                fontSize: "13px",
-                color: "#989898",
-                marginTop: "0em",
-              }}
-            >
-              Do you have any experience in mentoring?
-            </Typography> */}
-            {/* <FormControl variant="filled" sx={{ m: 1 }}>
-              <InputLabel id="demo-simple-select-label"></InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={age}
-                label="Age"
-                onChange={handleChange}
-              >
-                <MenuItem value={10}>Yes</MenuItem>
-                <MenuItem value={20}>No</MenuItem>
-              </Select>
-            </FormControl> */}
 
+            <Controller
+              name="experience"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  // defaultValue={options[0]}
+                  {...field}
+                  variant="filled"
+                  isClearable
+                  isSearchable={false}
+                  className="react-dropdown"
+                  classNamePrefix="dropdown"
+                  // options={options}
+                >
+                  <MenuItem value={10}>Yes</MenuItem>
+                  <MenuItem value={20}>No</MenuItem>
+                </Select>
+              )}
+            />
             <TextField
-              id="gender-select"
-              select
-              label="Do you have any experience in mentoring?"
-              placeholder="Hello" // <<<<< See here
-              value={age}
-              onChange={(data) => setAge(data.target.value)}
-              margin="normal"
-              variant="filled"
-            >
-              {answers.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
-            <TextField
+              name="detailedExperience"
               label="If yes, what kind of mentoring?"
               multiline={true}
               rows={3}
               fullWidth
               sx={{ mt: 2 }}
               margin="dense"
-              {...register("experience")}
+              {...register("detailedExperience")}
 
               // error={errors.email ? true : false}
             />
