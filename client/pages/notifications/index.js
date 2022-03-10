@@ -39,10 +39,13 @@ const index = () => {
           width: "100%",
           backgroundColor: "white",
           padding: "1rem",
+          borderRadius: 1,
+          height: "100%",
+
+          borderColor: "grey.500",
         }}
       >
-        <Container sx={{ width: "70vw", marginLeft: 1 }}>
-          {/* <PostsList posts={data} /> */}
+        <Container sx={{ width: "60vw", marginLeft: 1 }}>
           <Typography variant="h4" sx={{ cmarginLeft: 0, color: "#755cde" }}>
             Notifications
             <Tooltip title="Mark all as read" followCursor>
@@ -55,7 +58,13 @@ const index = () => {
             </Tooltip>
           </Typography>
 
-          <List sx={{ width: "70vw", bgcolor: "background.paper" }}>
+          <List
+            sx={{
+              width: "60vw",
+              bgcolor: "background.paper",
+              overflow: "hidden",
+            }}
+          >
             <ListItem button alignItems="flex-start">
               <ListItemAvatar>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
@@ -85,7 +94,36 @@ const index = () => {
                 []
               )}
             </ListItem>
+            <ListItem button alignItems="flex-start">
+              <ListItemAvatar>
+                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+              </ListItemAvatar>
 
+              <ListItemText
+                primary="Brunch this weekend?"
+                secondary={
+                  <React.Fragment>
+                    <Typography
+                      sx={{ display: "inline" }}
+                      component="span"
+                      variant="body2"
+                      color="text.primary"
+                    >
+                      15 hours ago
+                    </Typography>
+                    {" — I'll be in your neighborhood doing errands this…"}
+                  </React.Fragment>
+                }
+              />
+              {unread && markallread ? (
+                <Button onClick={readHandler}>
+                  <FiberManualRecordIcon style={{ fontSize: 15 }} />
+                </Button>
+              ) : (
+                []
+              )}
+            </ListItem>
+            <Divider variant="inset" component="li" />
             <ListItem button alignItems="flex-start">
               <ListItemAvatar>
                 <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />

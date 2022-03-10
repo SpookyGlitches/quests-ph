@@ -8,25 +8,28 @@ import {
   CardContent,
   Stack,
   Typography,
-  TextField,
   FormControl,
   Pagination,
   Select,
-  MenuItem,
   Paper,
+  MenuItem,
 } from "@mui/material";
 
 import ScheduleIcon from "@mui/icons-material/Schedule";
-import AddIcon from "@mui/icons-material/Add";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const index = () => {
+  const handleBankIcon = () => {
+    window.location.href = "/quests";
+  };
+
   return (
     <AppLayout>
       <Box p={{ xs: 1, sm: 2, md: 3 }}>
         <Paper>
           <Box p={3}>
             <Typography variant="h3" sx={{ color: "#755cde" }}>
-              Quests
+              Available Quests
             </Typography>
           </Box>
           <Box
@@ -38,22 +41,16 @@ const index = () => {
             }}
             spacing={3}
           >
-            <TextField
-              sx={{ flexGrow: 1 }}
-              id="standard-basic"
-              label="Search for Quest"
-              variant="standard"
-            />
-
             <Button
-              sx={{ maxHeight: "45px", marginRight: 2 }}
+              sx={{ maxHeight: "45px" }}
               variant="contained"
-              startIcon={<AddIcon />}
+              startIcon={<ArrowBackIcon />}
+              onClick={handleBankIcon}
             >
-              Quest{" "}
+              Back{" "}
             </Button>
 
-            <FormControl sx={{ minWidth: 80 }}>
+            <FormControl sx={{ minWidth: 100 }}>
               <Select sx={{ height: "80%" }} displayEmpty>
                 <MenuItem>Health</MenuItem>
                 <MenuItem>Health</MenuItem>
@@ -119,9 +116,9 @@ const index = () => {
 
           <Stack
             p={{ xs: 1, sm: 2, md: 3 }}
-            style={{ width: "33%", margin: "auto" }}
+            style={{ width: "40%", margin: "auto" }}
           >
-            <Pagination variant="outlined" shape="rounded" count={4} />
+            <Pagination variant="outlined" shape="rounded" count={5} />
           </Stack>
         </Paper>
       </Box>
