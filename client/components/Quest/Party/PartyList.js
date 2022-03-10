@@ -104,7 +104,6 @@ const partyList = () => {
 
                   <TableCell align="center">Points</TableCell>
                   <TableCell></TableCell>
-                  <TableCell></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -138,10 +137,10 @@ const partyList = () => {
                     </TableCell>
 
                     <TableCell align="center">{row.score}</TableCell>
-                    <TableCell align="center" sx={{ pl: 5 }}>
+                    <TableCell align="center" sx={{}}>
                       {row.ban}
+                      {row.kick}
                     </TableCell>
-                    <TableCell align="center">{row.kick}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
