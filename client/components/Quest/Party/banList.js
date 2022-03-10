@@ -11,6 +11,7 @@ import {
   TableRow,
   CardHeader,
   Avatar,
+  Stack,
 } from "@mui/material";
 import { tableCellClasses } from "@mui/material/TableCell";
 import { deepOrange } from "@mui/material/colors";
@@ -59,51 +60,55 @@ const banList = () => {
           m: 3,
         }}
       >
-        <Typography variant="h4" sx={{ color: "#755cde", marginTop: "0em" }}>
+        <Typography
+          variant="h4"
+          sx={{ color: "primary.main", marginTop: "0em" }}
+        >
           Bans
         </Typography>
-
-        <TableContainer>
-          <Table
-            sx={{
-              minWidth: 100,
-              [`& .${tableCellClasses.root}`]: {
-                borderBottom: "none",
-              },
-            }}
-            size="small"
-            aria-label="ban table"
-          >
-            <TableHead>
-              <TableRow>
-                <TableCell></TableCell>
-                <TableCell align="right"></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row) => (
-                <TableRow
-                  key={row.num}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row" padding="none">
-                    <CardHeader
-                      avatar={
-                        <Avatar
-                          sx={{
-                            bgcolor: deepOrange[500],
-                          }}
-                        ></Avatar>
-                      }
-                      title={row.name}
-                    />
-                  </TableCell>
-                  <TableCell align="right">{row.button}</TableCell>
+        <Stack spacing={2}>
+          <TableContainer sx={{ mb: 0, mt: 0 }}>
+            <Table
+              sx={{
+                minWidth: 100,
+                [`& .${tableCellClasses.root}`]: {
+                  borderBottom: "none",
+                },
+              }}
+              size="small"
+              aria-label="ban table"
+            >
+              <TableHead>
+                <TableRow>
+                  <TableCell></TableCell>
+                  <TableCell align="right"></TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {rows.map((row) => (
+                  <TableRow
+                    key={row.num}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row" padding="none">
+                      <CardHeader
+                        avatar={
+                          <Avatar
+                            sx={{
+                              bgcolor: deepOrange[500],
+                            }}
+                          ></Avatar>
+                        }
+                        title={row.name}
+                      />
+                    </TableCell>
+                    <TableCell align="right">{row.button}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Stack>
       </Box>
     </Box>
   );
