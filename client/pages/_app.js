@@ -6,13 +6,12 @@ import "@fontsource/roboto/700.css";
 
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "../config/theme";
-import DateAdapter from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
-
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
 function MyApp({ Component, pageProps }) {
   return (
     <ThemeProvider theme={theme}>
-      <LocalizationProvider dateAdapter={DateAdapter}>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
         <Component {...pageProps} />
       </LocalizationProvider>
     </ThemeProvider>
