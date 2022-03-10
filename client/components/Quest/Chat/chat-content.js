@@ -8,6 +8,7 @@ import {
   Typography,
   ListItemText,
   Chip,
+  Grid,
   Divider,
 } from "@mui/material";
 const ChatContent = () => {
@@ -35,11 +36,23 @@ const ChatContent = () => {
           </ListItemAvatar>
 
           <ListItemText
-            primary="orangejuice"
+            primary={
+              <Grid sx={{ display: "flex", flexDirection: "row" }}>
+                <Typography sx={{ fontSize: "15px", marginRight: 1 }}>
+                  Monica
+                </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{ color: "#d4d9d4", fontSize: "14px" }}
+                >
+                  Today at 4:50 PM
+                </Typography>
+              </Grid>
+            }
             secondary={
               <React.Fragment>
                 <Typography
-                  sx={{ display: "inline" }}
+                  sx={{ display: "inline", fontSize: "15px" }}
                   component="span"
                   variant="body2"
                   color="text.primary"
@@ -56,11 +69,23 @@ const ChatContent = () => {
           </ListItemAvatar>
 
           <ListItemText
-            primary="orangejuice"
+            primary={
+              <Grid sx={{ display: "flex", flexDirection: "row" }}>
+                <Typography sx={{ fontSize: "15px", marginRight: 1 }}>
+                  Monica
+                </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{ color: "#d4d9d4", fontSize: "14px" }}
+                >
+                  Today at 4:50 PM
+                </Typography>
+              </Grid>
+            }
             secondary={
               <React.Fragment>
                 <Typography
-                  sx={{ display: "inline" }}
+                  sx={{ display: "inline", fontSize: "15px" }}
                   component="span"
                   variant="body2"
                   color="text.primary"
@@ -77,11 +102,23 @@ const ChatContent = () => {
           </ListItemAvatar>
 
           <ListItemText
-            primary="orangejuice"
+            primary={
+              <Grid sx={{ display: "flex", flexDirection: "row" }}>
+                <Typography sx={{ fontSize: "15px", marginRight: 1 }}>
+                  Monica
+                </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{ color: "#d4d9d4", fontSize: "14px" }}
+                >
+                  Today at 4:50 PM
+                </Typography>
+              </Grid>
+            }
             secondary={
               <React.Fragment>
                 <Typography
-                  sx={{ display: "inline" }}
+                  sx={{ display: "inline", fontSize: "15px" }}
                   component="span"
                   variant="body2"
                   color="text.primary"
@@ -98,53 +135,23 @@ const ChatContent = () => {
           </ListItemAvatar>
 
           <ListItemText
-            primary="orangejuice"
-            secondary={
-              <React.Fragment>
-                <Typography
-                  sx={{ display: "inline" }}
-                  component="span"
-                  variant="body2"
-                  color="text.primary"
-                >
-                  Hi, any idea how can i do x?
+            primary={
+              <Grid sx={{ display: "flex", flexDirection: "row" }}>
+                <Typography sx={{ fontSize: "15px", marginRight: 1 }}>
+                  Monica
                 </Typography>
-              </React.Fragment>
-            }
-          />
-        </ListItem>
-        <ListItem alignItems="flex-start">
-          <ListItemAvatar>
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-          </ListItemAvatar>
-
-          <ListItemText
-            primary="orangejuice"
-            secondary={
-              <React.Fragment>
                 <Typography
-                  sx={{ display: "inline" }}
-                  component="span"
-                  variant="body2"
-                  color="text.primary"
+                  variant="h6"
+                  sx={{ color: "#d4d9d4", fontSize: "14px" }}
                 >
-                  Hi, any idea how can i do x?
+                  Today at 4:50 PM
                 </Typography>
-              </React.Fragment>
+              </Grid>
             }
-          />
-        </ListItem>
-        <ListItem alignItems="flex-start">
-          <ListItemAvatar>
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-          </ListItemAvatar>
-
-          <ListItemText
-            primary="orangejuice"
             secondary={
               <React.Fragment>
                 <Typography
-                  sx={{ display: "inline" }}
+                  sx={{ display: "inline", fontSize: "15px" }}
                   component="span"
                   variant="body2"
                   color="text.primary"

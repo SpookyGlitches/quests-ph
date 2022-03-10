@@ -1,8 +1,8 @@
 import React from "react";
 
-import { Box, Button, TextField } from "@mui/material";
+import { Box, IconButton, TextField } from "@mui/material";
 
-import SendIcon from "@mui/icons-material/Send";
+import SendRoundedIcon from "@mui/icons-material/SendRounded";
 const SendMessage = () => {
   return (
     <Box
@@ -10,10 +10,10 @@ const SendMessage = () => {
         marginTop: 2,
         width: "100%",
         display: "flex",
-        border: 1,
+
         flexDirection: "row",
         padding: 1,
-        bgcolor: "#f7f7f7",
+        bgcolor: "#f7f8fa",
       }}
       spacing={3}
     >
@@ -22,10 +22,14 @@ const SendMessage = () => {
           flexGrow: 1,
           marginLeft: 1.5,
         }}
+        placeholder="Send a message"
         variant="standard"
         InputProps={{ disableUnderline: true }}
       />
-      <Button endIcon={<SendIcon sx={{ fontSize: "30px" }} />} />
+
+      <IconButton aria-label="delete" size="small">
+        <SendRoundedIcon sx={{ color: "#755cde" }} />
+      </IconButton>
     </Box>
   );
 };
