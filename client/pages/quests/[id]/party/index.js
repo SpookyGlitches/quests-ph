@@ -1,5 +1,5 @@
 import PartyList from "../../../../components/Quest/Party/PartyList";
-import BanList from "../../../../components/Quest/Party/BannedList";
+import BanList from "../../../../components/Quest/Party/BanList";
 import { Box, Grid } from "@mui/material";
 import QuestLayout from "../../../../components/Layouts/QuestLayout";
 
