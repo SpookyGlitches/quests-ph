@@ -60,7 +60,7 @@ export default function Login() {
       >
         <Typography variant="string" align="center">
           Not yet registered?{" "}
-          <Link href="/auth/register" passHref>
+          <Link href="/auth/register/member" passHref>
             <MuiLink sx={{ cursor: "pointer" }}>Create an account</MuiLink>
           </Link>
         </Typography>
