@@ -83,6 +83,7 @@ export default function Register() {
       //console.log("Rejected:");
       console.log(rejectedFiles);
     },
+    multiple: true,
   });
 
   const stateSchema = {
