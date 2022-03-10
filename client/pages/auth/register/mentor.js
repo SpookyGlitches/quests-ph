@@ -485,7 +485,7 @@ export default function Register() {
             <Box
               {...getRootProps({ className: "dropzone" })}
               sx={{
-                height: "7rem",
+                height: "5.8rem",
                 background: "#e7e7e7",
                 borderColor: "#cbcbcb",
                 borderRadius: "2px",
@@ -494,12 +494,7 @@ export default function Register() {
               }}
             >
               <input {...getInputProps()} />
-              <Typography
-                align="left"
-                sx={{ color: "#625e5c", fontSize: "16px", ml: 1, mt: 1 }}
-              >
-                Upload supporting document/s here
-              </Typography>
+
               <Box
                 sx={{
                   display: "flex",
@@ -510,9 +505,11 @@ export default function Register() {
                   padding: "2rem",
                 }}
               >
+                <Typography sx={{ color: "#625e5c", fontSize: "16px" }}>
+                  Upload supporting document/s here
+                </Typography>
                 <CloudUploadRoundedIcon
                   sx={{
-                    mt: "-1em",
                     fontSize: "2rem",
                   }}
                 />
