@@ -1,5 +1,5 @@
 import AppLayout from "../../components/Layouts/AppLayout";
-import SearchBar from "../../components/Friends/Search.js";
+import SearchBar from "../../components/Friends/searchyy.js";
 import ListHolder from "../../components/Friends/FriendListHolder.js";
 import FilterHolder from "../../components/Friends/FilterHolder.js";
 
@@ -11,11 +11,11 @@ const Index = () => {
 
         <FilterHolder />
 
-        <ListHolder requestName="Incoming Requests" />
+        <ListHolder requestName="Incoming Requests" displayName="imincoming" />
 
-        <ListHolder requestName="Outgoing Requests" />
+        <ListHolder requestName="Outgoing Requests" displayName="imoutgoing" />
 
-        <ListHolder requestName="Friends" />
+        <ListHolder requestName="Friends" displayName="imafriend" />
       </div>
     </AppLayout>
   );
