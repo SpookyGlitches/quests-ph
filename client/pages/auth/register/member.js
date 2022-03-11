@@ -110,12 +110,13 @@ export default function Register() {
             alert("success2");
 
             setActiveStep((prevActiveStep) => prevActiveStep + 1);
+            handleSubmit(onSubmit)();
           })
           .catch((err) => {
             alert(err);
             return;
           });
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+
         break;
       case 2:
         handleSubmit(onSubmit)();
@@ -256,6 +257,9 @@ export default function Register() {
           </Stack>
         </>
       ) : (
+        <></>
+      )}
+      {activeStep == 1 ? (
         <>
           <Stack direction="column" spacing={1.5}>
             <Button
@@ -382,6 +386,27 @@ export default function Register() {
             </Typography>
           </Box>
         </>
+      ) : (
+        <></>
+      )}
+      {activeStep == 2 ? (
+        <>
+          <Stack direction="column" spacing={1.5} sx={{ alignItems: "center" }}>
+            <Typography align="center" sx={{ fontSize: "15px" }}>
+              You have successfully registered for a mentor account.
+            </Typography>
+            <Link href="/auth/login" passHref>
+              <MuiLink
+                sx={{ cursor: "pointer" }}
+                style={{ textDecoration: "none" }}
+              >
+                Login
+              </MuiLink>
+            </Link>
+          </Stack>
+        </>
+      ) : (
+        <></>
       )}
     </AuthLayout>
   );

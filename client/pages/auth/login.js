@@ -23,6 +23,26 @@ export default function Login() {
     <AuthLayout>
       <AuthHeader subtitle="Sign in to your account" />
       <Stack direction="column" spacing={2}>
+        <Button
+          style={{
+            borderRadius: 10,
+            minHeight: "56px",
+            width: "100%",
+            backgroundColor: "white",
+            color: "black",
+            marginTop: "0.5rem",
+          }}
+          variant="contained"
+        >
+          <img
+            src="/assets/google.png"
+            width="15"
+            height="15"
+            alt="questsgoogle"
+          />{" "}
+          &nbsp; Login with Google
+        </Button>
+        <Typography align="center">or</Typography>
         <TextField
           fullWidth
           required
@@ -60,7 +80,7 @@ export default function Login() {
       >
         <Typography variant="string" align="center">
           Not yet registered?{" "}
-          <Link href="/auth/register" passHref>
+          <Link href="/auth/register/member" passHref>
             <MuiLink sx={{ cursor: "pointer" }}>Create an account</MuiLink>
           </Link>
         </Typography>
