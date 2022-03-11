@@ -25,6 +25,13 @@ const theme = createTheme({
         variant: "filled",
       },
     },
+    MuiCardHeader: {
+      styleOverrides: {
+        root: {
+          padding: "0px",
+        },
+      },
+    },
   },
   shape: {
     borderRadius: 10,
