@@ -1,5 +1,5 @@
 import AppLayout from "../../components/Layouts/AppLayout";
-import SearchBar from "../../components/Friends/searchyy.js";
+import SearchBar from "../../components/Friends/Search.js";
 import ListHolder from "../../components/Friends/FriendListHolder.js";
 import FilterHolder from "../../components/Friends/FilterHolder.js";
 
