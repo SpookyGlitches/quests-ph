@@ -7,11 +7,12 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "cd .. && husky install client/.husky",
-    "pre-commit": "yarn eslint . --ext .js --ext .jsx && yarn pretty-quick --staged"
+    "pre-commit": "yarn eslint . --ext .js --ext .jsx --fix && yarn pretty-quick --staged"
   },
   "dependencies": {
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
+    "@faker-js/faker": "^6.0.0-beta.0",
     "@fontsource/roboto": "^4.5.3",
     "@hookform/resolvers": "^2.8.8",
     "@mui/icons-material": "^5.4.2",
@@ -42,8 +43,8 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
-    "@faker-js/faker": "^6.0.0-alpha.6",
     "eslint": "8.9.0",
+    "eslint-config-airbnb": "^19.0.4",
     "eslint-config-next": "12.0.10",
     "eslint-config-prettier": "^8.4.0",
     "husky": "^7.0.4",

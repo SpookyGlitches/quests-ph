@@ -1,6 +1,6 @@
 import { Stack, Popper, Fade, Typography } from "@mui/material";
-import Post from "./Post";
 import { useState } from "react";
+import Post from "./Post";
 import Emoji1 from "../../Icons/Emoji1";
 import Emoji2 from "../../Icons/Emoji2";
 import Emoji3 from "../../Icons/Emoji3";
@@ -57,10 +57,10 @@ const PostsList = ({ posts }) => {
         )}
       </Popper>
       <Stack spacing={5}>
-        {posts.map((data, index) => {
+        {posts.map((data) => {
           return (
             <Post
-              key={index}
+              key={`${data.username}/${data.title}`}
               username={data.username}
               title={data.title}
               createdAt={data.createdAt}

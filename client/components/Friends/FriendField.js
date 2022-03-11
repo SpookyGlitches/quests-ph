@@ -4,24 +4,26 @@ import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import ChatIcon from "@mui/icons-material/Chat";
 
-const FriendField = (props) => {
-  console.log(props.fieldType);
-  if (props.fieldType === "Incoming Requests") {
-    var firstIcon = (
+const FriendField = ({ fieldType, fullName, username }) => {
+  console.log(fieldType);
+  let firstIcon;
+  let secondIcon;
+  if (fieldType === "Incoming Requests") {
+    firstIcon = (
       <DeleteOutlineIcon
         sx={{
           marginRight: "0.5rem",
         }}
       />
     );
-    var secondIcon = (
+    secondIcon = (
       <GroupAddIcon
         sx={{
           marginLeft: "0.5rem",
         }}
       />
     );
-  } else if (props.fieldType === "Outgoing Requests") {
+  } else if (fieldType === "Outgoing Requests") {
     secondIcon = (
       <DeleteOutlineIcon
         sx={{
@@ -68,7 +70,7 @@ const FriendField = (props) => {
             height: "3.75rem",
             width: "3.75rem",
           }}
-        ></Avatar>
+        />
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <Typography
             variant="h5"
@@ -79,7 +81,7 @@ const FriendField = (props) => {
               marginTop: ".25rem",
             }}
           >
-            {props.fullname}
+            {fullName}
           </Typography>
           <Typography
             variant="body1"
@@ -90,7 +92,7 @@ const FriendField = (props) => {
               marginTop: "-.35rem",
             }}
           >
-            {props.username}
+            {username}
           </Typography>
         </Box>
       </Box>

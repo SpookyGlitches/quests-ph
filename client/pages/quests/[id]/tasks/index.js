@@ -1,5 +1,5 @@
-import TaskLists from "../../../../components/Quest/Tasks/TasksLists";
 import { Box, Grid } from "@mui/material";
+import TaskLists from "../../../../components/Quest/Tasks/TasksLists";
 import QuestLayout from "../../../../components/Layouts/QuestLayout";
 
 const index = () => {

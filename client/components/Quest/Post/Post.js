@@ -16,10 +16,10 @@ import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import AddReactionRoundedIcon from "@mui/icons-material/AddReactionRounded";
 import InsertCommentRoundedIcon from "@mui/icons-material/InsertCommentRounded";
 import { formatRelative } from "date-fns";
+import ClampLines from "react-clamp-lines";
 import Emoji1 from "../../Icons/Emoji1";
 import Emoji2 from "../../Icons/Emoji2";
 import Emoji3 from "../../Icons/Emoji3";
-import ClampLines from "react-clamp-lines";
 import StyledPaper from "../../Common/StyledPaper";
 
 const Post = ({

@@ -1,6 +1,38 @@
 import { Box, Checkbox, Typography, Stack } from "@mui/material";
 import faker from "@faker-js/faker";
 import { useState } from "react";
+
+const TaskItem = ({ value }) => {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        gap: 1,
+        alignItems: "center",
+        textOverflow: "ellipsis",
+        overflow: "hidden",
+      }}
+    >
+      <Checkbox edge="start" disableRipple />
+      <Box component="div">
+        <Typography
+          variant="body2"
+          sx={{
+            width: "100%",
+            display: "-webkit-box",
+            WebkitBoxOrient: "vertical",
+            WebkitLineClamp: 2,
+            overflow: "hidden",
+          }}
+        >
+          {value}
+        </Typography>
+        <Typography variant="caption">3 days left, 30 points</Typography>
+      </Box>
+    </Box>
+  );
+};
+
 export default function ToDo() {
   const [items] = useState([
     faker.lorem.lines(3),
@@ -8,36 +40,6 @@ export default function ToDo() {
     faker.lorem.lines(1),
   ]);
 
-  const TaskItem = ({ value }) => {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          gap: 1,
-          alignItems: "center",
-          textOverflow: "ellipsis",
-          overflow: "hidden",
-        }}
-      >
-        <Checkbox edge="start" disableRipple />
-        <Box component="div">
-          <Typography
-            variant="body2"
-            sx={{
-              width: "100%",
-              display: "-webkit-box",
-              WebkitBoxOrient: "vertical",
-              WebkitLineClamp: 2,
-              overflow: "hidden",
-            }}
-          >
-            {value}
-          </Typography>
-          <Typography variant="caption">3 days left, 30 points</Typography>
-        </Box>
-      </Box>
-    );
-  };
   return (
     <Box
       sx={{
@@ -55,6 +57,7 @@ export default function ToDo() {
           sx={{ maxHeight: "10rem", overflowY: "scroll", overflowX: "hidden" }}
         >
           {items.map((value, index) => {
+            // eslint-disable-next-line react/no-array-index-key
             return <TaskItem key={index} value={value} />;
           })}
         </Box>

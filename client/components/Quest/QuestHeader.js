@@ -1,13 +1,12 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Link as MuiLink } from "@mui/material";
 import Link from "next/link";
-import { Link as MuiLink } from "@mui/material";
+import { useRouter } from "next/router";
 
 const muiLinkProps = {
   component: "button",
   variant: "body2",
   color: "black",
 };
-import { useRouter } from "next/router";
 
 const getLinkStyles = (routerAsPath, basePath, tab) => {
   const isActive = routerAsPath.startsWith(`${basePath}/${tab}`);
@@ -68,10 +67,10 @@ export default function QuestHeader() {
           rowGap: 1,
         }}
       >
-        {tabs.map((item, index) => {
+        {tabs.map((item) => {
           const lower = item.toLowerCase();
           return (
-            <Link href={`${basePath}/${lower}`} passHref key={index}>
+            <Link href={`${basePath}/${lower}`} passHref key={item}>
               <MuiLink
                 {...muiLinkProps}
                 sx={getLinkStyles(router.asPath, basePath, lower)}

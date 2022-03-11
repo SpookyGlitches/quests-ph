@@ -1,6 +1,6 @@
 import AppLayout from "../../components/Layouts/AppLayout";
-import SearchBar from "../../components/Friends/search.js";
-import ListHolder from "../../components/Friends/FriendListHolder.js";
+import SearchBar from "../../components/Friends/search";
+import ListHolder from "../../components/Friends/FriendListHolder";
 
 const Index = () => {
   return (

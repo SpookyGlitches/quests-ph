@@ -1,8 +1,8 @@
 import { Box, Button, Typography } from "@mui/material";
 import { useState } from "react";
+import { Plate } from "@udecode/plate-core";
 import { plugins } from "../../../config/plate/plugins";
 import Toolbar from "./Toolbar";
-import { Plate } from "@udecode/plate-core";
 
 const initialValue = [
   {

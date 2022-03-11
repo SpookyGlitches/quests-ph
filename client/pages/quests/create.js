@@ -14,9 +14,9 @@ import {
   Button,
   Step,
 } from "@mui/material";
-import AppLayout from "../../components/Layouts/AppLayout";
 import DatePicker from "@mui/lab/DatePicker";
 import { useState } from "react";
+import AppLayout from "../../components/Layouts/AppLayout";
 
 const steps = ["Set the WOOP", "Configure Settings"];
 
@@ -120,7 +120,7 @@ const Create = () => {
                     <MenuItem>Social</MenuItem>
                     {/* <MenuItem>Social</MenuItem> ??? na pa ba? hahahahha */}
                   </Select>
-                  <FormHelperText></FormHelperText>
+                  <FormHelperText />
                 </FormControl>
                 <FormControl variant="filled">
                   <InputLabel>Difficulty</InputLabel>

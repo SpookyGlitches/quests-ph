@@ -2,6 +2,7 @@ import { Typography, Box, Button, Grid } from "@mui/material";
 import ScheduleRoundedIcon from "@mui/icons-material/ScheduleRounded";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import StyledPaper from "../Common/StyledPaper";
+
 export default function QuestItem({ hasJoined, onJoinClick }) {
   return (
     <StyledPaper sx={{ width: "100%", height: "auto", overflow: "hidden" }}>
@@ -13,7 +14,7 @@ export default function QuestItem({ hasJoined, onJoinClick }) {
               height: "100%",
               minHeight: "5rem",
             }}
-          ></Box>
+          />
         </Grid>
         <Grid item xs={12} md={8}>
           <Box

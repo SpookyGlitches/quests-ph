@@ -43,7 +43,7 @@ export default function BadgesList() {
   }, []);
 
   const incrementPagination = () => {
-    if (pagination.end - (badges.length - 1) == 0) return;
+    if (pagination.end - (badges.length - 1) === 0) return;
     if (pagination.end >= badges.length) return;
     setPagination((prev) => {
       return { start: prev.end + 1, end: prev.end + itemsToDisplay };
@@ -61,10 +61,9 @@ export default function BadgesList() {
 
   const badgeItems = () => {
     const preview = badges.slice(pagination.start, pagination.end + 1);
-    if (preview.length <= 0) return;
-    return preview.map((item, index) => (
+    return preview.map((item) => (
       <Box
-        key={index}
+        key={`${item}`}
         onClick={handleBadgeClick}
         sx={{
           height: "5rem",
@@ -120,7 +119,7 @@ export default function BadgesList() {
       <Popper
         open={openPopper}
         anchorEl={anchorEl}
-        placement={"top-end"}
+        placement="top-end"
         transition
       >
         {({ TransitionProps }) => (
@@ -137,7 +136,7 @@ export default function BadgesList() {
                   backgroundColor: "primary.main",
                   minHeight: "0.8rem",
                 }}
-              ></Box>
+              />
               <Box sx={{ padding: 0.75 }}>
                 <Typography variant="subtitle2">Early Bird</Typography>
                 <Typography variant="caption">

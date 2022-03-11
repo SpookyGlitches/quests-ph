@@ -1,5 +1,4 @@
 import React from "react";
-import AppLayout from "../../components/Layouts/AppLayout";
 
 import {
   Button,
@@ -14,6 +13,7 @@ import {
 } from "@mui/material";
 
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import AppLayout from "../../components/Layouts/AppLayout";
 import QuestsList from "../../components/Quest/QuestsList";
 
 const index = () => {
@@ -57,7 +57,7 @@ const index = () => {
           </Box>
 
           <Box m={2} mp={{ sx: 1, sm: 2, md: 1 }}>
-            <QuestsList hasJoined={true} />
+            <QuestsList hasJoined />
           </Box>
 
           <Stack

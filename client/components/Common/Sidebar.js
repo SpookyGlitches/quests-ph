@@ -18,6 +18,7 @@ import {
 const Sidebar = (props) => {
   const { window, drawerWidth, handleDrawerToggle, mobileOpen } = props;
 
+  // eslint-disable-next-line consistent-return
   const renderIcon = (text) => {
     switch (text) {
       case "Home":
@@ -31,7 +32,6 @@ const Sidebar = (props) => {
       case "Chats":
         return <ChatRoundedIcon />;
       default:
-        return <></>;
     }
   };
 
