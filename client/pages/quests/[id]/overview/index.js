@@ -57,23 +57,25 @@ export default function Overview({ data }) {
       <Box
         sx={{
           backgroundColor: "background.paper",
-          paddingX: "2rem",
-          paddingY: "3rem",
+          padding: "2rem",
           borderRadius: 2,
           marginBottom: "1.3rem",
         }}
       >
-        <Stack spacing={4}>
-          <Box sx={{ position: "relative" }}>
-            <IconButton
-              sx={{ position: "absolute", right: 0 }}
-              onClick={handleWoopPopperClick}
-            >
-              <MoreHorizRoundedIcon />
-            </IconButton>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography variant="h4" color="primary">
+            Overview
+          </Typography>
+          <IconButton onClick={handleWoopPopperClick}>
+            <MoreHorizRoundedIcon />
+          </IconButton>
+        </Box>
+
+        <Stack spacing={4} sx={{ marginTop: "1rem" }}>
+          <div>
             <Typography {...titleTypographyProps}>⭐ Wish</Typography>
             <Typography variant="body1">{data.wish}</Typography>
-          </Box>
+          </div>
           <div>
             <Typography {...titleTypographyProps}>🎁 Outcome</Typography>
             {data.outcome.map((item, index) => (
