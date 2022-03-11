@@ -7,23 +7,14 @@ import EndQuest from "../Quest/EndQuest";
 export default function QuestLayout({ children }) {
   return (
     <AppLayout>
-      <Grid
-        container
-        sx={{ paddingTop: "1.2rem", marginBottom: "2rem" }}
-        columnSpacing={8}
-        rowSpacing={4}
-      >
+      <Grid container sx={{ paddingTop: "1rem" }} spacing={6}>
         <Grid item xs={12} lg={8}>
           <QuestHeader />
           <Box sx={{ marginTop: "2rem" }}>{children}</Box>
         </Grid>
         <Grid item xs={12} lg={4}>
-          <Box
-            sx={{
-              height: "auto",
-            }}
-          >
-            <Stack spacing={5}>
+          <Box sx={{}}>
+            <Stack spacing={4}>
               <Todo />
               <EndQuest />
             </Stack>
