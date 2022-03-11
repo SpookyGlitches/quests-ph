@@ -40,7 +40,6 @@
     "slate-hyperscript": "^0.67.0",
     "slate-react": "^0.74.0",
     "yup": "^0.32.11"
-    
   },
   "devDependencies": {
     "@faker-js/faker": "^6.0.0-alpha.6",

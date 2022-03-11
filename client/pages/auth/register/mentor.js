@@ -1,6 +1,7 @@
 import AuthLayout from "../../../components/Layouts/AuthLayout";
 import AuthHeader from "../../../components/Auth/AuthHeader";
 import { useForm } from "react-hook-form";
+import * as React from "react";
 import {
   TextField,
   Stepper,
@@ -12,6 +13,10 @@ import {
   Typography,
   Box,
   Stack,
+  //   InputLabel,
+  MenuItem,
+  //   FormControl,
+  Select,
   Link as MuiLink,
 } from "@mui/material";
 import Link from "next/link";
@@ -23,9 +28,16 @@ import * as yup from "yup";
 import moment from "moment";
 import { useState } from "react";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
+import { useDropzone } from "react-dropzone";
+import CloudUploadRoundedIcon from "@mui/icons-material/CloudUploadRounded";
 
 const stepOneValidations = yup.object().shape({
   displayName: yup.string().required("Please enter a display name"),
+  fullName: yup
+    .string()
+    .matches(/^[A-Za-z ]*$/, "Please enter valid name")
+    .max(40)
+    .required(),
   dateOfBirth: yup
     .string()
     .nullable()
@@ -46,7 +58,11 @@ const stepTwoValidations = yup.object().shape({
     .required("Confirm Password is required")
     .oneOf([yup.ref("password"), null], "Confirm Password does not match"),
 });
-const steps = ["", ""];
+const stepThreeValidations = yup.object().shape({
+  experience: yup.string().required(),
+  detailedExperience: yup.string().max(255),
+});
+const steps = ["", "", ""];
 export default function Register() {
   const [activeStep, setActiveStep] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
@@ -55,6 +71,20 @@ export default function Register() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const handleClickShowConfirmPassword = () =>
     setShowConfirmPassword(!showConfirmPassword);
+
+  const { getRootProps, getInputProps } = useDropzone({
+    accept:
+      "image/*, application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/msword",
+    onDropAccepted: (acceptedFiles) => {
+      //console.log("Accepted:");
+      console.log(acceptedFiles);
+    },
+    onDropRejected: (rejectedFiles) => {
+      //console.log("Rejected:");
+      console.log(rejectedFiles);
+    },
+    multiple: true,
+  });
 
   const stateSchema = {
     email: { value: "", error: "" },
@@ -71,10 +101,13 @@ export default function Register() {
     formState: { errors },
   } = useForm(stateSchema);
   const watchdisplayName = watch("displayName", "");
+  const watchFullName = watch("fullName", "");
   const watchDateofBirth = watch("dateOfBirth", "");
   const watchEmail = watch("email", "");
   const watchPassword = watch("password", "");
   const watchConfirmPassword = watch("confirmPassword", "");
+  const watchExperience = watch("experience", "");
+  const watchdetailedExperience = watch("detailedExperience", "");
 
   const onSubmit = (values) => {
     alert(JSON.stringify(values));
@@ -85,18 +118,19 @@ export default function Register() {
         stepOneValidations
           .validate({
             displayName: watchdisplayName,
+            fullName: watchFullName,
             dateOfBirth: watchDateofBirth,
           })
           //eslint-disable-next-line
           .then((value) => {
             alert("success");
-
             setActiveStep((prevActiveStep) => prevActiveStep + 1);
           })
           .catch((err) => {
             alert(err);
             return;
           });
+        console.log("case 0");
         break;
       case 1:
         stepTwoValidations
@@ -110,15 +144,33 @@ export default function Register() {
             alert("success2");
 
             setActiveStep((prevActiveStep) => prevActiveStep + 1);
+          })
+          .catch((err) => {
+            alert(err);
+            return;
+          });
+        console.log("case 1");
+        break;
+      case 2:
+        stepThreeValidations
+          .validate({
+            experience: watchExperience,
+            detailedExperience: watchdetailedExperience,
+          })
+          //eslint-disable-next-line
+          .then((value) => {
+            alert("success2");
+
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
             handleSubmit(onSubmit)();
           })
           .catch((err) => {
             alert(err);
             return;
           });
-
+        console.log("case 2");
         break;
-      case 2:
+      case 3:
         handleSubmit(onSubmit)();
       // submit form
     }
@@ -143,7 +195,6 @@ export default function Register() {
           );
         })}
       </Stepper>
-
       {activeStep == 0 ? (
         <>
           <Stack direction="column" spacing={2}>
@@ -159,7 +210,7 @@ export default function Register() {
               variant="contained"
             >
               <img
-                src="/auth/google.png"
+                src="/assets/google.png"
                 width="15"
                 height="15"
                 alt="questsgoogle"
@@ -352,6 +403,123 @@ export default function Register() {
               onClick={handleNext}
               sx={{ mt: 5 }}
             >
+              Next
+            </Button>
+          </Stack>
+        </>
+      ) : (
+        <></>
+      )}
+      {activeStep == 2 ? (
+        <>
+          <Stack direction="column" spacing={1.5}>
+            <Button
+              color="primary"
+              variant="contained"
+              type="submit"
+              onClick={handleBack}
+              sx={{
+                mb: 1,
+                boxShadow: 0,
+                ":hover": {
+                  bgcolor: "white",
+                  color: "white",
+                  boxShadow: 0,
+                },
+              }}
+              style={{
+                maxWidth: "100px",
+                minWidth: "100px",
+                backgroundColor: "transparent",
+                color: "#B0B0B0",
+              }}
+            >
+              <ArrowBackIosRoundedIcon
+                style={{ float: "left", marginLeft: "-1.5em" }}
+              />
+              &nbsp; Back
+            </Button>
+
+            <Controller
+              name="experience"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  // defaultValue={options[0]}
+                  {...field}
+                  variant="filled"
+                  isClearable
+                  isSearchable={false}
+                  className="react-dropdown"
+                  classNamePrefix="dropdown"
+                  // options={options}
+                >
+                  <MenuItem value={10}>Yes</MenuItem>
+                  <MenuItem value={20}>No</MenuItem>
+                </Select>
+              )}
+            />
+            <TextField
+              name="detailedExperience"
+              label="If yes, what kind of mentoring?"
+              multiline={true}
+              rows={3}
+              fullWidth
+              sx={{ mt: 2 }}
+              margin="dense"
+              {...register("detailedExperience")}
+
+              // error={errors.email ? true : false}
+            />
+
+            <Box
+              {...getRootProps({ className: "dropzone" })}
+              sx={{
+                height: "5.8rem",
+                background: "#e7e7e7",
+                borderColor: "#cbcbcb",
+                borderRadius: "2px",
+                borderWidth: "thin",
+                cursor: "pointer",
+              }}
+            >
+              <input {...getInputProps()} />
+
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "column",
+                  height: "100%",
+                  padding: "2rem",
+                }}
+              >
+                <Typography sx={{ color: "#625e5c", fontSize: "16px" }}>
+                  Upload supporting document/s here
+                </Typography>
+                <CloudUploadRoundedIcon
+                  sx={{
+                    fontSize: "2rem",
+                  }}
+                />
+
+                <Typography
+                  variant="body2"
+                  align="center"
+                  sx={{ fontSize: "9px" }}
+                >
+                  Choose a file or drag it here.
+                </Typography>
+              </Box>
+            </Box>
+            <Button
+              color="primary"
+              variant="contained"
+              type="submit"
+              onClick={handleNext}
+              sx={{ mt: 5 }}
+            >
               Sign Up
             </Button>
           </Stack>
@@ -380,7 +548,8 @@ export default function Register() {
                 sx={{ cursor: "pointer" }}
                 style={{ textDecoration: "none" }}
               >
-                <a href="/landing/privacy_policy">Privacy Policy</a>
+                {/* eslint-disable-next-line */}
+                <a href="/landing/privacy-policy">Privacy Policy</a>
               </MuiLink>
               .
             </Typography>
@@ -389,7 +558,7 @@ export default function Register() {
       ) : (
         <></>
       )}
-      {activeStep == 2 ? (
+      {activeStep == 3 ? (
         <>
           <Stack direction="column" spacing={1.5} sx={{ alignItems: "center" }}>
             <Typography align="center" sx={{ fontSize: "15px" }}>
