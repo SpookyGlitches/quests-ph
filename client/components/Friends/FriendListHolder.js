@@ -20,27 +20,27 @@ const ListHolder = (props) => {
       <FriendField
         fieldType={props.requestName}
         fullname="Pretty Boy"
-        displayName={props.displayName}
+        displayName="prettyboy912"
       />
       <FriendField
         fieldType={props.requestName}
         fullname="Pretty Boy"
-        displayName={props.displayName}
+        displayName="prettyboy912"
       />
       <FriendField
         fieldType={props.requestName}
         fullname="Pretty Boy"
-        displayName={props.displayName}
+        displayName="prettyboy912"
       />
       <FriendField
         fieldType={props.requestName}
         fullname="Pretty Boy"
-        displayName={props.displayName}
+        displayName="prettyboy912"
       />
       <FriendField
         fieldType={props.requestName}
         fullname="Pretty Boy"
-        displayName={props.displayName}
+        displayName="prettyboy912"
       />
     </Box>
   );

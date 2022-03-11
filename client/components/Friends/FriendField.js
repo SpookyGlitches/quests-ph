@@ -7,10 +7,8 @@ import { useRouter } from "next/router";
 
 const FriendField = (props) => {
   const router = useRouter();
-  console.log(props.displayName);
-  const handleProfileClick = (name) => () => {
-    console.log(name);
-    router.push("/profile/" + name); //profile page url here
+  const handleProfileClick = (displayName) => () => {
+    router.push("/profile/" + displayName); //profile page url here
   };
 
   let firstIcon, secondIcon;
@@ -54,7 +52,11 @@ const FriendField = (props) => {
       }}
     >
       <Box
-        onClick={handleProfileClick(props.displayName)}
+        onClick={
+          props.fieldType == "Friends"
+            ? handleProfileClick(props.displayName)
+            : null
+        }
         sx={{
           display: "flex",
           justifyContent: "space-between",

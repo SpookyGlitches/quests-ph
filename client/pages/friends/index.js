@@ -11,11 +11,11 @@ const Index = () => {
 
         <FilterHolder />
 
-        <ListHolder requestName="Incoming Requests" displayName="imincoming" />
+        <ListHolder requestName="Incoming Requests" />
 
-        <ListHolder requestName="Outgoing Requests" displayName="imoutgoing" />
+        <ListHolder requestName="Outgoing Requests" />
 
-        <ListHolder requestName="Friends" displayName="imafriend" />
+        <ListHolder requestName="Friends" />
       </div>
     </AppLayout>
   );
