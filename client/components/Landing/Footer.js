@@ -1,18 +1,11 @@
-import Box from "@mui/material/Box";
+import { Typography, Link as MuiLink, Box } from "@mui/material";
 import Link from "next/link";
-import Typography from "@mui/material/Typography";
 
 function Copyright() {
+  const year = new Date().getFullYear();
   return (
-    <Typography
-      variant="body2"
-      sx={{
-        textAlign: "left",
-        color: "primary.main",
-      }}
-    >
-      {"Copyright © "}
-      <Link href="/landing">Quests</Link> {new Date().getFullYear()}
+    <Typography variant="caption" sx={{}}>
+      {`Copyright © Quests ${year}`}
     </Typography>
   );
 }
@@ -22,20 +15,35 @@ const Footer = () => {
     <Box
       component="footer"
       sx={{
-        py: 2,
-        px: 2,
-        mt: "auto",
         display: "flex",
+        flexWrap: "wrap",
+        alignItems: "center",
+        justifyContent: {
+          xs: "space-around",
+          lg: "space-between",
+        },
       }}
     >
-      <Box maxWidth="sm" sx={{ ml: 8 }}>
+      <Box
+        sx={{
+          display: "flex",
+          gap: 4,
+          flexWrap: "wrap",
+        }}
+      >
+        <Typography variant="subtitle2">
+          <Link href="/landing/privacy-policy" passHref>
+            <MuiLink>Privacy Policy</MuiLink>
+          </Link>
+        </Typography>
+        <Typography variant="subtitle2">
+          <Link href="/landing/privacy-policy" passHref>
+            <MuiLink>Terms of Service</MuiLink>
+          </Link>
+        </Typography>
+      </Box>
+      <Box>
         <Copyright />
-      </Box>
-      <Box maxWidth="sm" sx={{ ml: 75 }}>
-        <Link href="/landing/privacy-policy">Privacy Policy</Link>
-      </Box>
-      <Box maxWidth="sm" sx={{ ml: 16 }}>
-        <Link href="/landing/terms-of-service">Terms of Service</Link>
       </Box>
     </Box>
   );
