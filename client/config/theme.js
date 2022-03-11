@@ -25,10 +25,13 @@ const theme = createTheme({
         variant: "filled",
       },
     },
-    MuiCardHeader: {
+    MuiPaper: {
+      defaultProps: {
+        elevation: 0,
+      },
       styleOverrides: {
         root: {
-          padding: "0px",
+          boxShadow: 0,
         },
       },
     },
