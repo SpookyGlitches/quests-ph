@@ -13,6 +13,7 @@ const theme = createTheme({
       default: "#f5f5f5",
     },
   },
+
   components: {
     MuiLink: {
       defaultProps: {
@@ -28,6 +29,11 @@ const theme = createTheme({
     MuiPaper: {
       defaultProps: {
         elevation: 0,
+      },
+    },
+    MuiButtonBase: {
+      defaultProps: {
+        disableRipple: true,
       },
     },
   },
