@@ -22,23 +22,6 @@ const Header = () => {
           <MuiLink>Login</MuiLink>
         </Link>
       </Typography>
-      {/* <Box maxWidth="sm" sx={{ ml: 10 }}>
-        <Typography
-          variant="h5"
-          sx={{
-            color: "primary.main",
-          }}
-        >
-          <Link href="/landing">Quests</Link>
-        </Typography>
-      </Box>
-      <Box maxWidth="sm" sx={{ mr: 10 }}>
-        <Typography variant="h6">
-          <Link color="inherit" href="auth/login">
-            Login
-          </Link>
-        </Typography>
-      </Box> */}
     </Box>
   );
 };

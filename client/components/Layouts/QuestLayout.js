@@ -1,7 +1,7 @@
 import AppLayout from "./AppLayout";
 import { Box, Grid, Stack } from "@mui/material";
 import QuestHeader from "../Quest/QuestHeader";
-import Todo from "../Quest/Task/ToDo";
+import Todo from "../Quest/Tasks/ToDo";
 import EndQuest from "../Quest/EndQuest";
 
 export default function QuestLayout({ children }) {
