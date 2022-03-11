@@ -42,9 +42,8 @@ const Wiki = () => {
         backgroundColor: "background.paper",
         borderRadius: 2,
         overflow: "hidden",
-        padding: "1rem",
         minHeight: "30rem",
-        marginBottom: "2rem",
+        padding: "2rem",
       }}
     >
       <Box
