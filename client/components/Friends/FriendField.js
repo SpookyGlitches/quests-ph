@@ -5,6 +5,7 @@ import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
 
 const FriendField = (props) => {
+  console.log("ASDKJALSKDJ");
   let firstIcon, secondIcon;
   if (props.fieldType === "Incoming Requests") {
     firstIcon = (
