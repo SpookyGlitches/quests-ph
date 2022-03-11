@@ -5,7 +5,6 @@ import {
   Grid,
   Link as MuiLink,
   IconButton,
-  Paper,
   Popper,
   Fade,
 } from "@mui/material";
@@ -15,6 +14,7 @@ import { faker } from "@faker-js/faker";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import { format } from "date-fns";
 import { useState } from "react";
+import StyledPaper from "../../../../components/Common/StyledPaper";
 
 const titleTypographyProps = {
   sx: {
@@ -151,9 +151,9 @@ export default function Overview({ data }) {
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
-            <Paper sx={{ paddingX: "1rem", paddingY: "0.5rem" }}>
+            <StyledPaper sx={{ paddingX: "1rem", paddingY: "0.5rem" }}>
               <Typography>Edit</Typography>
-            </Paper>
+            </StyledPaper>
           </Fade>
         )}
       </Popper>
@@ -165,9 +165,9 @@ export default function Overview({ data }) {
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
-            <Paper sx={{ paddingX: "1rem", paddingY: "0.5rem" }}>
+            <StyledPaper sx={{ paddingX: "1rem", paddingY: "0.5rem" }}>
               <Typography>Edit</Typography>
-            </Paper>
+            </StyledPaper>
           </Fade>
         )}
       </Popper>

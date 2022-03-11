@@ -29,11 +29,6 @@ const theme = createTheme({
       defaultProps: {
         elevation: 0,
       },
-      styleOverrides: {
-        root: {
-          boxShadow: 0,
-        },
-      },
     },
   },
   shape: {

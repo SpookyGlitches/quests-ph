@@ -1,14 +1,8 @@
-import {
-  Box,
-  IconButton,
-  Typography,
-  Popper,
-  Fade,
-  Paper,
-} from "@mui/material";
+import { Box, IconButton, Typography, Popper, Fade } from "@mui/material";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import { useEffect, useState } from "react";
+import StyledPaper from "../Common/StyledPaper";
 
 const itemsToDisplay = 3;
 const colors = [
@@ -131,7 +125,7 @@ export default function BadgesList() {
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
-            <Paper
+            <StyledPaper
               sx={{
                 bgcolor: "background.paper",
                 overflow: "hidden",
@@ -160,7 +154,7 @@ export default function BadgesList() {
                   </Typography>
                 </Box>
               </Box>
-            </Paper>
+            </StyledPaper>
           </Fade>
         )}
       </Popper>

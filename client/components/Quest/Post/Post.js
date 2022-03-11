@@ -9,7 +9,6 @@ import {
   CardContent,
   IconButton,
   CardActions,
-  Paper,
   CardMedia,
   Divider,
 } from "@mui/material";
@@ -21,6 +20,7 @@ import Emoji1 from "../../Icons/Emoji1";
 import Emoji2 from "../../Icons/Emoji2";
 import Emoji3 from "../../Icons/Emoji3";
 import ClampLines from "react-clamp-lines";
+import StyledPaper from "../../Common/StyledPaper";
 
 const Post = ({
   username,
@@ -74,7 +74,7 @@ const Post = ({
           />
 
           {images.length > 1 && (
-            <Paper
+            <StyledPaper
               sx={{
                 position: "absolute",
                 bottom: "1rem",
@@ -82,10 +82,10 @@ const Post = ({
                 padding: "0.2rem",
               }}
             >
-              <Typography variant="subtitle2" display="block">
+              <Typography variant="body2" display="block">
                 {images.length} images
               </Typography>
-            </Paper>
+            </StyledPaper>
           )}
         </Box>
       ) : (
