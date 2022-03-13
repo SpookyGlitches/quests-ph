@@ -7,10 +7,6 @@ import {
   MenuItem,
   FormControl,
   Select,
-  Grid,
-  Card,
-  CardContent,
-  CardMedia,
   Typography,
   TextField,
   Dialog,
@@ -19,6 +15,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
+import Articles from "../../components/Articles/Articles";
 
 export default function Search() {
   const [category, setCategory] = React.useState("");
@@ -35,6 +32,23 @@ export default function Search() {
   const handleChange = (event) => {
     setCategory(event.target.value);
   };
+
+  const renderResults = (val) => {
+    switch (val) {
+      case 0:
+        return <Articles type="health" />;
+
+      case 1:
+        return <Articles type="social" />;
+
+      case 2:
+        return <Articles type="career" />;
+
+      default:
+        return <Articles type="health" />;
+    }
+  };
+
   const handleChangeSubmitArticle = (event) => {
     setCategorySubmit(event.target.value);
   };
@@ -139,200 +153,14 @@ export default function Search() {
               onChange={handleChange}
               style={{ background: "white" }}
             >
-              <MenuItem value={1}>Health</MenuItem>
-              <MenuItem value={2}>Social</MenuItem>
-              <MenuItem value={3}>Career</MenuItem>
+              <MenuItem value={0}>Health</MenuItem>
+              <MenuItem value={1}>Social</MenuItem>
+              <MenuItem value={2}>Career</MenuItem>
             </Select>
           </FormControl>
         </Box>
 
-        <Box>
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
-              <Card
-                sx={{
-                  mb: "1em",
-                  flexDirection: {
-                    xs: "column", // mobile
-                    sm: "row", // tablet and up
-                  },
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  height="140"
-                  image="/assets/banana.jpg"
-                  alt="sample pic"
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    Lorem Ipsum Dolor Sit Amet Tis Uni 1
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={6}>
-              <Card
-                sx={{
-                  display: "flex",
-                  mb: "1em",
-                  flexDirection: {
-                    xs: "column", // mobile
-                    sm: "row", // tablet and up
-                  },
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  alt="banana"
-                  src="/assets/banana.jpg"
-                  sx={{
-                    width: { xs: "100%", sm: 100 },
-                  }}
-                />
-                <Box sx={{ alignSelf: "center", m: 2 }}>
-                  <Typography
-                    style={{
-                      fontSize: "14px",
-                      fontWeight: "bold",
-                      padding: 10,
-                    }}
-                  >
-                    Lorem Ipsum Dolor Sit Amet Tis Uni
-                  </Typography>
-                </Box>
-              </Card>
-              <Card
-                sx={{
-                  display: "flex",
-                  flexDirection: {
-                    xs: "column", // mobile
-                    sm: "row", // tablet and up
-                  },
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  alt="banana"
-                  src="/assets/banana.jpg"
-                  sx={{
-                    width: { xs: "100%", sm: 100 },
-                  }}
-                />
-                <Box sx={{ alignSelf: "center", m: 2 }}>
-                  <Typography
-                    style={{
-                      fontSize: "14px",
-                      fontWeight: "bold",
-                      padding: 10,
-                    }}
-                  >
-                    Lorem Ipsum Dolor Sit Amet Tis Uni
-                  </Typography>
-                </Box>
-              </Card>
-              <Card
-                sx={{
-                  display: "flex",
-                  mt: "1em",
-                  flexDirection: {
-                    xs: "column", // mobile
-                    sm: "row", // tablet and up
-                  },
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  alt="banana"
-                  src="/assets/banana.jpg"
-                  sx={{
-                    width: { xs: "100%", sm: 100 },
-                  }}
-                />
-                <Box sx={{ alignSelf: "center", m: 2 }}>
-                  <Typography
-                    style={{
-                      fontSize: "14px",
-                      fontWeight: "bold",
-                      padding: 10,
-                    }}
-                  >
-                    Lorem Ipsum Dolor Sit Amet Tis Uni 2
-                  </Typography>
-                </Box>
-              </Card>
-            </Grid>
-            <Grid item xs={4}>
-              <Card
-                sx={{
-                  mb: "1em",
-                  flexDirection: {
-                    xs: "column", // mobile
-                    sm: "row", // tablet and up
-                  },
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  height="140"
-                  image="/assets/banana.jpg"
-                  alt="sample pic"
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    Lorem Ipsum Dolor Sit Amet Tis Uni 1
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={4}>
-              <Card
-                sx={{
-                  mb: "1em",
-                  flexDirection: {
-                    xs: "column", // mobile
-                    sm: "row", // tablet and up
-                  },
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  height="140"
-                  image="/assets/banana.jpg"
-                  alt="sample pic"
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    Lorem Ipsum Dolor Sit Amet Tis Uni 1
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={4}>
-              <Card
-                sx={{
-                  mb: "1em",
-                  flexDirection: {
-                    xs: "column", // mobile
-                    sm: "row", // tablet and up
-                  },
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  height="140"
-                  image="/assets/banana.jpg"
-                  alt="sample pic"
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    Lorem Ipsum Dolor Sit Amet Tis Uni 1
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          </Grid>
-        </Box>
+        {renderResults(category)}
       </Box>
     </AppLayout>
   );
