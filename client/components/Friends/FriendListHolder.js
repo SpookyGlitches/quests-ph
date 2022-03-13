@@ -13,33 +13,33 @@ const ListHolder = ({ requestName }) => {
         borderRadius: 2,
       }}
     >
-      <Typography color="primary" variant="h3">
+      <Typography color="primary" variant="h4">
         {requestName}
       </Typography>
 
       <FriendField
         fieldType={requestName}
-        fullname="Pretty Boy"
+        fullName="Pretty Boy"
         username="prettyboy912"
       />
       <FriendField
         fieldType={requestName}
-        fullname="Pretty Boy"
+        fullName="Pretty Boy"
         username="prettyboy912"
       />
       <FriendField
         fieldType={requestName}
-        fullname="Pretty Boy"
+        fullName="Pretty Boy"
         username="prettyboy912"
       />
       <FriendField
         fieldType={requestName}
-        fullname="Pretty Boy"
+        fullName="Pretty Boy"
         username="prettyboy912"
       />
       <FriendField
         fieldType={requestName}
-        fullname="Pretty Boy"
+        fullName="Pretty Boy"
         username="prettyboy912"
       />
     </Box>

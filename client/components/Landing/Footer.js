@@ -37,7 +37,7 @@ const Footer = () => {
           </Link>
         </Typography>
         <Typography variant="subtitle2">
-          <Link href="/landing/privacy-policy" passHref>
+          <Link href="/landing/terms-of-service" passHref>
             <MuiLink>Terms of Service</MuiLink>
           </Link>
         </Typography>

@@ -35,7 +35,7 @@ export default function Login() {
           variant="contained"
         >
           <img
-            src="/assets/google.png"
+            src="/auth/google.png"
             width="15"
             height="15"
             alt="questsgoogle"
