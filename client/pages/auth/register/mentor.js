@@ -13,10 +13,10 @@ import {
   Typography,
   Box,
   Stack,
-  //   InputLabel,
   MenuItem,
-  //   FormControl,
   Select,
+  InputLabel,
+  FormControl,
   Link as MuiLink,
 } from "@mui/material";
 import Link from "next/link";
@@ -30,7 +30,6 @@ import { useState } from "react";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import { useDropzone } from "react-dropzone";
 import CloudUploadRoundedIcon from "@mui/icons-material/CloudUploadRounded";
-
 const stepOneValidations = yup.object().shape({
   displayName: yup.string().required("Please enter a display name"),
   fullName: yup
@@ -93,6 +92,7 @@ export default function Register() {
   };
   const {
     register,
+    setValue,
     handleSubmit,
     watch,
     control,
@@ -100,6 +100,7 @@ export default function Register() {
     //eslint-disable-next-line
     formState: { errors },
   } = useForm(stateSchema);
+
   const watchdisplayName = watch("displayName", "");
   const watchFullName = watch("fullName", "");
   const watchDateofBirth = watch("dateOfBirth", "");
@@ -108,7 +109,6 @@ export default function Register() {
   const watchConfirmPassword = watch("confirmPassword", "");
   const watchExperience = watch("experience", "");
   const watchdetailedExperience = watch("detailedExperience", "");
-
   const onSubmit = (values) => {
     alert(JSON.stringify(values));
   };
@@ -139,8 +139,7 @@ export default function Register() {
             password: watchPassword,
             confirmPassword: watchConfirmPassword,
           })
-          //eslint-disable-next-line
-          .then((value) => {
+          .then(() => {
             alert("success2");
 
             setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -157,8 +156,8 @@ export default function Register() {
             experience: watchExperience,
             detailedExperience: watchdetailedExperience,
           })
-          //eslint-disable-next-line
-          .then((value) => {
+
+          .then(() => {
             alert("success2");
 
             setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -226,15 +225,15 @@ export default function Register() {
               // error={errors ? true : false}
             />
             {/* <Typography
-            style={{
-              color: "red",
-              fontWeight: "500",
-              fontSize: "12px",
-              textAlign: "left",
-            }}
-          >
-            {errors.displayName?.message}
-          </Typography> */}
+              style={{
+                color: "red",
+                fontWeight: "500",
+                fontSize: "12px",
+                textAlign: "left",
+              }}
+            >
+              
+            </Typography> */}
 
             <TextField
               fullWidth
@@ -260,7 +259,6 @@ export default function Register() {
                     onChange(moment(value).format("YYYY-MM-DD"))
                   }
                   renderInput={(params) => (
-                    // console.log(invalid),
                     <TextField
                       sx={{ mt: -2 }}
                       variant="filled"
@@ -439,26 +437,26 @@ export default function Register() {
               />
               &nbsp; Back
             </Button>
+            <FormControl fullWidth variant="filled">
+              <InputLabel
+                id="demo-simple-select-label"
+                style={{ fontSize: "13px" }}
+              >
+                Do you have any experience in mentoring?
+              </InputLabel>
+              <Select
+                {...register("experience")}
+                onChange={(e) =>
+                  setValue("experience", e.target.value, {
+                    shouldValidate: true,
+                  })
+                }
+              >
+                <MenuItem value={1}>Yes</MenuItem>
+                <MenuItem value={2}>No</MenuItem>
+              </Select>
+            </FormControl>
 
-            <Controller
-              name="experience"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  // defaultValue={options[0]}
-                  {...field}
-                  variant="filled"
-                  isClearable
-                  isSearchable={false}
-                  className="react-dropdown"
-                  classNamePrefix="dropdown"
-                  // options={options}
-                >
-                  <MenuItem value={10}>Yes</MenuItem>
-                  <MenuItem value={20}>No</MenuItem>
-                </Select>
-              )}
-            />
             <TextField
               name="detailedExperience"
               label="If yes, what kind of mentoring?"
