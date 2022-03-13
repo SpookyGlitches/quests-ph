@@ -14,35 +14,6 @@ const ListHolder = ({ requestName }) => {
       }}
     >
       <Typography color="primary" variant="h4">
-<<<<<<< HEAD
-        {props.requestName}
-      </Typography>
-
-      <FriendField
-        fieldType={props.requestName}
-        fullname="Pretty Boy"
-        displayName="prettyboy912"
-      />
-      <FriendField
-        fieldType={props.requestName}
-        fullname="Pretty Boy"
-        displayName="prettyboy912"
-      />
-      <FriendField
-        fieldType={props.requestName}
-        fullname="Pretty Boy"
-        displayName="prettyboy912"
-      />
-      <FriendField
-        fieldType={props.requestName}
-        fullname="Pretty Boy"
-        displayName="prettyboy912"
-      />
-      <FriendField
-        fieldType={props.requestName}
-        fullname="Pretty Boy"
-        displayName="prettyboy912"
-=======
         {requestName}
       </Typography>
 
@@ -70,7 +41,6 @@ const ListHolder = ({ requestName }) => {
         fieldType={requestName}
         fullName="Pretty Boy"
         username="prettyboy912"
->>>>>>> main
       />
     </Box>
   );

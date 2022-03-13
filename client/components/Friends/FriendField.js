@@ -3,24 +3,16 @@ import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import GroupAddRoundedIcon from "@mui/icons-material/GroupAddRounded";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
-<<<<<<< HEAD
 import { useRouter } from "next/router";
 
-const FriendField = (props) => {
-  const router = useRouter();
-  const handleProfileClick = (displayName) => () => {
-    router.push("/profile/" + displayName); //profile page url here
-  };
-
-  let firstIcon, secondIcon;
-  if (props.fieldType === "Incoming Requests") {
-=======
-
 const FriendField = ({ fieldType, fullName, username }) => {
+  const router = useRouter();
+  const handleProfileClick = (name) => () => {
+    router.push(`/profile/${name}`); // profile page url here
+  };
   let firstIcon;
   let secondIcon;
   if (fieldType === "Incoming Requests") {
->>>>>>> main
     firstIcon = (
       <IconButton>
         <DeleteRoundedIcon />
@@ -60,11 +52,7 @@ const FriendField = ({ fieldType, fullName, username }) => {
       }}
     >
       <Box
-        onClick={
-          props.fieldType == "Friends"
-            ? handleProfileClick(props.displayName)
-            : null
-        }
+        onClick={fieldType === "Friends" ? handleProfileClick(username) : null}
         sx={{
           display: "flex",
           justifyContent: "space-between",
@@ -75,11 +63,7 @@ const FriendField = ({ fieldType, fullName, username }) => {
           sx={{
             backgroundColor: "primary.main",
           }}
-<<<<<<< HEAD
-        ></Avatar>
-=======
         />
->>>>>>> main
         <Box
           sx={{ display: "flex", flexDirection: "column", marginLeft: "1rem" }}
         >
@@ -101,11 +85,7 @@ const FriendField = ({ fieldType, fullName, username }) => {
               marginTop: "-.4rem",
             }}
           >
-<<<<<<< HEAD
-            {props.displayName}
-=======
             {username}
->>>>>>> main
           </Typography>
         </Box>
       </Box>
