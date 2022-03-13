@@ -1,29 +1,21 @@
 import AppLayout from "../../components/Layouts/AppLayout";
-import SearchBar from "../../components/Friends/search.js";
-import ListHolder from "../../components/Friends/FriendListHolder.js";
+import SearchBar from "../../components/Friends/search";
+import ListHolder from "../../components/Friends/FriendListHolder";
+import FilterHolder from "../../components/Friends/FilterHolder";
 
 const Index = () => {
   return (
     <AppLayout>
       <div>
         <SearchBar />
-        <ListHolder
-          requestName="Incoming Requests"
-          fullname="Pretty Boy"
-          username="prettyboy912"
-        />
 
-        <ListHolder
-          requestName="Outgoing Requests"
-          fullname="Boy Pretty"
-          username="ngekngokprettyboy912"
-        />
+        <FilterHolder />
 
-        <ListHolder
-          requestName="Friends"
-          fullname="Pretty Boy"
-          username="Prettyngekngok231"
-        />
+        <ListHolder requestName="Incoming Requests" />
+
+        <ListHolder requestName="Outgoing Requests" />
+
+        <ListHolder requestName="Friends" />
       </div>
     </AppLayout>
   );

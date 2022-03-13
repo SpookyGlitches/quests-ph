@@ -1,48 +1,38 @@
-import { Avatar, Typography, Box } from "@mui/material";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import { Avatar, Typography, Box, IconButton } from "@mui/material";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import GroupAddRoundedIcon from "@mui/icons-material/GroupAddRounded";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
-import ChatIcon from "@mui/icons-material/Chat";
+import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
 
 const FriendField = (props) => {
-  console.log(props.fieldType);
+  let firstIcon, secondIcon;
   if (props.fieldType === "Incoming Requests") {
-    var firstIcon = (
-      <DeleteOutlineIcon
-        sx={{
-          marginRight: "0.5rem",
-        }}
-      />
+    firstIcon = (
+      <IconButton>
+        <DeleteRoundedIcon />
+      </IconButton>
     );
-    var secondIcon = (
-      <GroupAddIcon
-        sx={{
-          marginLeft: "0.5rem",
-        }}
-      />
+    secondIcon = (
+      <IconButton>
+        <GroupAddRoundedIcon />
+      </IconButton>
     );
   } else if (props.fieldType === "Outgoing Requests") {
     secondIcon = (
-      <DeleteOutlineIcon
-        sx={{
-          marginLeft: "0.5rem",
-        }}
-      />
+      <IconButton>
+        <DeleteRoundedIcon />
+      </IconButton>
     );
   } else {
     firstIcon = (
-      <PersonRemoveIcon
-        sx={{
-          marginRight: "0.5rem",
-        }}
-      />
+      <IconButton>
+        <PersonRemoveIcon />
+      </IconButton>
     );
     secondIcon = (
-      <ChatIcon
-        sx={{
-          marginLeft: "0.5rem",
-        }}
-      />
+      <IconButton>
+        <ChatRoundedIcon />
+      </IconButton>
     );
   }
   return (
@@ -65,29 +55,27 @@ const FriendField = (props) => {
         <Avatar
           sx={{
             backgroundColor: "primary.main",
-            height: "3.75rem",
-            width: "3.75rem",
           }}
         ></Avatar>
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
+        <Box
+          sx={{ display: "flex", flexDirection: "column", marginLeft: "1rem" }}
+        >
           <Typography
-            variant="h5"
+            variant="h6"
             sx={{
               display: "flex",
               alignItems: "center",
-              marginLeft: "1rem",
-              marginTop: ".25rem",
+              marginTop: "-.25rem",
             }}
           >
             {props.fullname}
           </Typography>
           <Typography
-            variant="body1"
+            variant="body2"
             sx={{
               display: "flex",
               alignItems: "center",
-              marginLeft: "1rem",
-              marginTop: "-.35rem",
+              marginTop: "-.4rem",
             }}
           >
             {props.username}
@@ -101,7 +89,7 @@ const FriendField = (props) => {
           flexDirection: "row",
           justifyContent: "space-around",
           alignItems: "center",
-          marginRight: "2rem",
+          marginRight: "1rem",
         }}
       >
         {firstIcon}
