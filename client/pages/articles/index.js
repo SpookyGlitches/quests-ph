@@ -33,7 +33,7 @@ export default function Search() {
     setCategory(event.target.value);
   };
 
-  const renderResults = (val) => {
+  const showArticles = (val) => {
     switch (val) {
       case 0:
         return <Articles type="health" />;
@@ -160,7 +160,7 @@ export default function Search() {
           </FormControl>
         </Box>
 
-        {renderResults(category)}
+        {showArticles(category)}
       </Box>
     </AppLayout>
   );
