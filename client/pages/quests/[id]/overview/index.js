@@ -5,16 +5,16 @@ import {
   Grid,
   Link as MuiLink,
   IconButton,
-  Paper,
   Popper,
   Fade,
 } from "@mui/material";
-import QuestLayout from "../../../../components/Layouts/QuestLayout";
 import Link from "next/link";
 import { faker } from "@faker-js/faker";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import { format } from "date-fns";
 import { useState } from "react";
+import QuestLayout from "../../../../components/Layouts/QuestLayout";
+import StyledPaper from "../../../../components/Common/StyledPaper";
 
 const titleTypographyProps = {
   sx: {
@@ -22,6 +22,19 @@ const titleTypographyProps = {
   },
   variant: "h5",
   fontWeight: "medium",
+};
+
+const WoopMemberStatement = ({ text, name }) => {
+  return (
+    <Box sx={{ marginY: "0.4rem" }}>
+      <Typography variant="body1">
+        {text}
+        <Link href="/" passHref>
+          <MuiLink sx={{ whiteSpace: "nowrap" }}> -{name}</MuiLink>
+        </Link>
+      </Typography>
+    </Box>
+  );
 };
 
 export default function Overview({ data }) {
@@ -39,68 +52,57 @@ export default function Overview({ data }) {
     setOpenSettingsPopper(!openSettingsPopper);
   };
 
-  const WoopMemberStatement = ({ text, name }) => {
-    return (
-      <Box sx={{ marginY: "0.4rem" }}>
-        <Typography variant="body1">
-          {text}
-          <Link href="/" passHref>
-            <MuiLink sx={{ whiteSpace: "nowrap" }}> -{name}</MuiLink>
-          </Link>
-        </Typography>
-      </Box>
-    );
-  };
-
   return (
     <QuestLayout>
       <Box
         sx={{
           backgroundColor: "background.paper",
-          paddingX: "2rem",
-          paddingY: "3rem",
+          padding: "2rem",
           borderRadius: 2,
           marginBottom: "1.3rem",
         }}
       >
-        <Stack spacing={4}>
-          <Box sx={{ position: "relative" }}>
-            <IconButton
-              sx={{ position: "absolute", right: 0 }}
-              onClick={handleWoopPopperClick}
-            >
-              <MoreHorizRoundedIcon />
-            </IconButton>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography variant="h4" color="primary">
+            Overview
+          </Typography>
+          <IconButton onClick={handleWoopPopperClick}>
+            <MoreHorizRoundedIcon />
+          </IconButton>
+        </Box>
+
+        <Stack spacing={4} sx={{ marginTop: "1rem" }}>
+          <div>
             <Typography {...titleTypographyProps}>⭐ Wish</Typography>
             <Typography variant="body1">{data.wish}</Typography>
-          </Box>
+          </div>
           <div>
             <Typography {...titleTypographyProps}>🎁 Outcome</Typography>
-            {data.outcome.map((item, index) => (
+            {data.outcome.map((item) => (
               <WoopMemberStatement
                 text={item.text}
                 name={item.name}
-                key={index}
+                key={item.text}
               />
             ))}
           </div>
           <div>
             <Typography {...titleTypographyProps}>🗻 Obstacle</Typography>
-            {data.obstacle.map((item, index) => (
+            {data.obstacle.map((item) => (
               <WoopMemberStatement
                 text={item.text}
                 name={item.name}
-                key={index}
+                key={item.text}
               />
             ))}
           </div>
           <div>
             <Typography {...titleTypographyProps}>📒 Plan</Typography>
-            {data.plan.map((item, index) => (
+            {data.plan.map((item) => (
               <WoopMemberStatement
                 text={item.text}
                 name={item.name}
-                key={index}
+                key={item.text}
               />
             ))}
           </div>
@@ -149,9 +151,9 @@ export default function Overview({ data }) {
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
-            <Paper sx={{ paddingX: "1rem", paddingY: "0.5rem" }}>
+            <StyledPaper sx={{ paddingX: "1rem", paddingY: "0.5rem" }}>
               <Typography>Edit</Typography>
-            </Paper>
+            </StyledPaper>
           </Fade>
         )}
       </Popper>
@@ -163,9 +165,9 @@ export default function Overview({ data }) {
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
-            <Paper sx={{ paddingX: "1rem", paddingY: "0.5rem" }}>
+            <StyledPaper sx={{ paddingX: "1rem", paddingY: "0.5rem" }}>
               <Typography>Edit</Typography>
-            </Paper>
+            </StyledPaper>
           </Fade>
         )}
       </Popper>
@@ -180,7 +182,7 @@ export async function getServerSideProps() {
     obstacle: [],
     plan: [],
   };
-  for (var i = 0; i < 4; i++) {
+  for (let i = 0; i < 4; i++) {
     const name = faker.name.firstName();
     data.outcome.push({
       text: faker.lorem.lines(1),

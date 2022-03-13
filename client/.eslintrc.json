@@ -1,6 +1,17 @@
 {
-  "extends": ["eslint:recommended", "next/core-web-vitals", "prettier"],
+  "extends": [
+    "eslint:recommended",
+    "airbnb",
+    "next/core-web-vitals",
+    "prettier"
+  ],
   "rules": {
-    "@next/next/no-img-element": 0
+    "@next/next/no-img-element": 0,
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/jsx-props-no-spreading": "off",
+    "react/function-component-definition": "off",
+    "arrow-body-style": "off",
+    "no-plusplus": "off",
+    "no-console": "off"
   }
 }

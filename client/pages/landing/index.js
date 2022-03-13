@@ -1,85 +1,58 @@
-import * as React from "react";
-import CssBaseline from "@mui/material/CssBaseline";
-import Box from "@mui/material/Box";
-import Link from "@mui/material/Link";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import Footer from "../../components/Landing/Footer";
-import Header from "../../components/Landing/Header";
-import Button from "@mui/material/Button";
 import Image from "next/image";
+import Link from "next/link";
+import { Typography, Button, Box, Grid } from "@mui/material";
+import LandingLayout from "../../components/Layouts/LandingLayout";
 
 export default function Index() {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        minHeight: "100vh",
-      }}
-    >
-      <Header />
-      <CssBaseline />
-      <Box
-        sx={{
-          mt: 5,
-          ml: 21,
-          display: "flex",
-          flexDirection: "row",
-        }}
-      >
-        <Container component="main" maxWidth="sm">
-          <Typography
-            variant="h3"
-            sx={{
-              textAlign: "left",
-              mt: 3,
-              justifyContent: "flex-center",
-            }}
-          >
-            We help individuals achieve their goals.
-          </Typography>
-          <Typography
-            variant="h6"
-            sx={{
-              textAlign: "left",
-              mt: 5,
-            }}
-          >
-            Lorem ipsum dolor sit amet, consectetur abdipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </Typography>
+    <LandingLayout>
+      <Grid container alignItems="center" rowSpacing={6}>
+        <Grid item xs={12} md={6}>
           <Box
             sx={{
-              mt: 5,
-              mb: 3,
+              paddingX: 4,
               display: "flex",
-              flexDirection: "row",
-              justifyContent: "flex-start",
+              justifyContent: "center",
+              flexDirection: "column",
             }}
           >
-            <Button variant="contained">
-              <Link color="inherit" href="/landing/terms-of-service">
-                Be a Mentor
+            <Typography variant="h4">
+              We help individuals achieve their goals through socialization and
+              chu.
+            </Typography>
+            <Typography variant="body1" sx={{ marginTop: 6, marginBottom: 4 }}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: ["column", null, "row"],
+                gap: 2,
+              }}
+            >
+              <Link href="/auth/register/member" passHref>
+                <Button variant="contained">Join as Member</Button>
               </Link>
-            </Button>
-            <Button variant="contained" sx={{ ml: 3 }}>
-              <Link color="inherit" href="/landing/privacy-policy">
-                Be a Mentee
+              <Link href="/auth/register/mentor" passHref>
+                <Button variant="contained">Join as Mentor</Button>
               </Link>
-            </Button>
+            </Box>
           </Box>
-        </Container>
-        <Container component="main" sx={{ mt: 3 }} maxWidth="sm">
-          <Image
-            src="/landing/LandingImage.png"
-            alt="Landing Image"
-            width={400}
-            height={300}
-          ></Image>
-        </Container>
-      </Box>
-      <Footer />
-    </Box>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Box>
+            {/* https://undraw.co/search */}
+            <Image
+              layout="responsive"
+              src="/landing/social_friends.svg"
+              alt="social_friends"
+              height="180"
+              width="300"
+            />
+          </Box>
+        </Grid>
+      </Grid>
+    </LandingLayout>
   );
 }

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import AppLayout from "../../components/Layouts/AppLayout";
 import {
   Box,
   IconButton,
@@ -10,6 +9,7 @@ import {
 } from "@mui/material";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import { styled } from "@mui/material/styles";
+import AppLayout from "../../components/Layouts/AppLayout";
 import QuestsList from "../../components/Quest/QuestsList";
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({

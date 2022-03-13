@@ -103,7 +103,7 @@ const partyList = () => {
                   <TableCell sx={{ paddingLeft: "5.3em" }}>User</TableCell>
 
                   <TableCell align="center">Points</TableCell>
-                  <TableCell></TableCell>
+                  <TableCell />
                 </TableRow>
               </TableHead>
               <TableBody>

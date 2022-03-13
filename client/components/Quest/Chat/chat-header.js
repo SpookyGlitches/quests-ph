@@ -2,6 +2,7 @@ import React from "react";
 import { Avatar, Grid, Paper, Typography, IconButton } from "@mui/material";
 
 import VideocamRoundedIcon from "@mui/icons-material/VideocamRounded";
+
 const ChatHeader = () => {
   return (
     <div>

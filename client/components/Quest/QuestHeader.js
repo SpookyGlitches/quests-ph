@@ -1,18 +1,25 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Link as MuiLink } from "@mui/material";
 import Link from "next/link";
-import { Link as MuiLink } from "@mui/material";
+import { useRouter } from "next/router";
 
 const muiLinkProps = {
   component: "button",
   variant: "body2",
+  color: "black",
 };
-import { useRouter } from "next/router";
 
 const getLinkStyles = (routerAsPath, basePath, tab) => {
+  const isActive = routerAsPath.startsWith(`${basePath}/${tab}`);
   return {
-    fontWeight: routerAsPath.startsWith(`${basePath}/${tab}`) ? "bold" : "",
+    fontWeight: isActive ? "bold" : "",
+    color: isActive ? "primary.main" : "",
+    "&:hover": {
+      color: "primary.main",
+    },
   };
 };
+
+const tabs = ["Overview", "Posts", "Tasks", "Party", "Wiki", "Chat"];
 
 export default function QuestHeader() {
   const router = useRouter();
@@ -28,7 +35,6 @@ export default function QuestHeader() {
         flexDirection: "column",
         paddingTop: "2rem",
         paddingBottom: "1rem",
-        flex: 1,
         maxHeight: "20rem",
         gap: 2,
         borderRadius: 2,
@@ -47,7 +53,7 @@ export default function QuestHeader() {
           Health
         </Typography>
         <Box sx={{ marginTop: "0.2rem" }}>
-          <Typography variant="h4" align="center">
+          <Typography variant="h4" align="center" color="primary">
             Run 5 km daily for 3 months
           </Typography>
         </Box>
@@ -61,54 +67,19 @@ export default function QuestHeader() {
           rowGap: 1,
         }}
       >
-        <Link href={`${basePath}/overview`} passHref>
-          <MuiLink
-            {...muiLinkProps}
-            sx={getLinkStyles(router.asPath, basePath, "overview")}
-          >
-            Overview
-          </MuiLink>
-        </Link>
-        <Link href={`${basePath}/posts`} passHref>
-          <MuiLink
-            {...muiLinkProps}
-            sx={getLinkStyles(router.asPath, basePath, "posts")}
-          >
-            Posts
-          </MuiLink>
-        </Link>
-        <Link href={`${basePath}/tasks`} passHref>
-          <MuiLink
-            {...muiLinkProps}
-            sx={getLinkStyles(router.asPath, basePath, "tasks")}
-          >
-            Tasks
-          </MuiLink>
-        </Link>
-        <Link href={`${basePath}/party`} passHref>
-          <MuiLink
-            {...muiLinkProps}
-            sx={getLinkStyles(router.asPath, basePath, "party")}
-          >
-            Party
-          </MuiLink>
-        </Link>
-        <Link href={`${basePath}/wiki`} passHref>
-          <MuiLink
-            {...muiLinkProps}
-            sx={getLinkStyles(router.asPath, basePath, "wiki")}
-          >
-            Wiki
-          </MuiLink>
-        </Link>
-        <Link href={`${basePath}/chat`} passHref>
-          <MuiLink
-            {...muiLinkProps}
-            sx={getLinkStyles(router.asPath, basePath, "chat")}
-          >
-            Chat
-          </MuiLink>
-        </Link>
+        {tabs.map((item) => {
+          const lower = item.toLowerCase();
+          return (
+            <Link href={`${basePath}/${lower}`} passHref key={item}>
+              <MuiLink
+                {...muiLinkProps}
+                sx={getLinkStyles(router.asPath, basePath, lower)}
+              >
+                {item}
+              </MuiLink>
+            </Link>
+          );
+        })}
       </Box>
     </Box>
   );
