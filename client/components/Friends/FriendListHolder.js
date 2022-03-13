@@ -1,7 +1,7 @@
 import { Typography, Box } from "@mui/material";
 import FriendField from "./FriendField";
 
-const ListHolder = ({ requestName, fullName, username }) => {
+const ListHolder = ({ requestName }) => {
   return (
     <Box
       sx={{
@@ -19,8 +19,28 @@ const ListHolder = ({ requestName, fullName, username }) => {
 
       <FriendField
         fieldType={requestName}
-        fullname={fullName}
-        username={username}
+        fullname="Pretty Boy"
+        username="prettyboy912"
+      />
+      <FriendField
+        fieldType={requestName}
+        fullname="Pretty Boy"
+        username="prettyboy912"
+      />
+      <FriendField
+        fieldType={requestName}
+        fullname="Pretty Boy"
+        username="prettyboy912"
+      />
+      <FriendField
+        fieldType={requestName}
+        fullname="Pretty Boy"
+        username="prettyboy912"
+      />
+      <FriendField
+        fieldType={requestName}
+        fullname="Pretty Boy"
+        username="prettyboy912"
       />
     </Box>
   );

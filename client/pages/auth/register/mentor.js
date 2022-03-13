@@ -13,6 +13,8 @@ import {
   Stack,
   MenuItem,
   Select,
+  InputLabel,
+  FormControl,
   Link as MuiLink,
 } from "@mui/material";
 import Link from "next/link";
@@ -25,8 +27,8 @@ import { useState } from "react";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import { useDropzone } from "react-dropzone";
 import CloudUploadRoundedIcon from "@mui/icons-material/CloudUploadRounded";
-import AuthHeader from "../../../components/Auth/AuthHeader";
 import AuthLayout from "../../../components/Layouts/AuthLayout";
+import AuthHeader from "../../../components/Auth/AuthHeader";
 
 const stepOneValidations = yup.object().shape({
   displayName: yup.string().required("Please enter a display name"),
@@ -84,6 +86,7 @@ export default function Register() {
   };
   const {
     register,
+    setValue,
     handleSubmit,
     watch,
     control,
@@ -91,6 +94,7 @@ export default function Register() {
     // eslint-disable-next-line
     formState: { errors },
   } = useForm(stateSchema);
+
   const watchdisplayName = watch("displayName", "");
   const watchFullName = watch("fullName", "");
   const watchDateofBirth = watch("dateOfBirth", "");
@@ -135,8 +139,7 @@ export default function Register() {
             experience: watchExperience,
             detailedExperience: watchdetailedExperience,
           })
-          // eslint-disable-next-line
-          .then((value) => {
+          .then(() => {
             setActiveStep((prevActiveStep) => prevActiveStep + 1);
             handleSubmit(onSubmit)();
           });
@@ -402,26 +405,26 @@ export default function Register() {
               />
               &nbsp; Back
             </Button>
+            <FormControl fullWidth variant="filled">
+              <InputLabel
+                id="demo-simple-select-label"
+                style={{ fontSize: "13px" }}
+              >
+                Do you have any experience in mentoring?
+              </InputLabel>
+              <Select
+                {...register("experience")}
+                onChange={(e) =>
+                  setValue("experience", e.target.value, {
+                    shouldValidate: true,
+                  })
+                }
+              >
+                <MenuItem value={1}>Yes</MenuItem>
+                <MenuItem value={2}>No</MenuItem>
+              </Select>
+            </FormControl>
 
-            <Controller
-              name="experience"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  // defaultValue={options[0]}
-                  {...field}
-                  variant="filled"
-                  isClearable
-                  isSearchable={false}
-                  className="react-dropdown"
-                  classNamePrefix="dropdown"
-                  // options={options}
-                >
-                  <MenuItem value={10}>Yes</MenuItem>
-                  <MenuItem value={20}>No</MenuItem>
-                </Select>
-              )}
-            />
             <TextField
               name="detailedExperience"
               label="If yes, what kind of mentoring?"
