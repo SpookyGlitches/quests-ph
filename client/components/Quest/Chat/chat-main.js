@@ -1,7 +1,7 @@
 import React from "react";
+import { Box } from "@mui/material";
 import ChatHeader from "./chat-header";
 import SendMessage from "./send-message";
-import { Box } from "@mui/material";
 
 import ChatContent from "./chat-content";
 

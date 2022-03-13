@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 export const VALUE = "value";
 export const ERROR = "error";
 export const REQUIRED_FIELD_ERROR = "Field can't be empty";
@@ -27,6 +28,7 @@ export function is_required(value, isRequired) {
 
 export function get_prop_values(stateSchema, prop) {
   return Object.keys(stateSchema).reduce((field, key) => {
+    // eslint-disable-next-line no-param-reassign
     field[key] = is_bool(prop) ? prop : stateSchema[key][prop];
     return field;
   }, {});

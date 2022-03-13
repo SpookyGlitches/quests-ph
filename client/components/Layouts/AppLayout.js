@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { CssBaseline, Box, Toolbar } from "@mui/material";
+import { CssBaseline, Box, Toolbar, Container } from "@mui/material";
 import Navbar from "../Common/Navbar";
 import Sidebar from "../Common/Sidebar";
+
 const drawerWidth = 240;
 
 const AppLayout = ({ children }) => {
@@ -23,27 +24,31 @@ const AppLayout = ({ children }) => {
         mobileOpen={mobileOpen}
         handleDrawerToggle={handleDrawerToggle}
       />
-      <Box component="main" sx={{ p: 3, flexGrow: 1 }}>
+      <Box
+        component="main"
+        sx={{
+          p: {
+            sm: 2,
+            md: 3,
+          },
+          flexGrow: 1,
+        }}
+      >
         <Toolbar />
-        <Box
+        <Container
           sx={{
-            display: "flex",
-            width: "100%",
-            justifyContent: "center",
+            width: {
+              xs: "100%",
+              md: "90%",
+              lg: "80%",
+            },
+            marginTop: "0.5rem",
+            marginBottom: "1rem",
           }}
+          maxWidth="lg"
         >
-          <Box
-            sx={{
-              width: {
-                xs: "100%",
-                md: "85%",
-                lg: "80%",
-              },
-            }}
-          >
-            {children}
-          </Box>
-        </Box>
+          {children}
+        </Container>
       </Box>
     </Box>
   );

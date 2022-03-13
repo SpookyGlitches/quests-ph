@@ -10,10 +10,10 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import Link from "next/link";
-import AuthLayout from "../../components/Layouts/AuthLayout";
-import AuthHeader from "../../components/Auth/AuthHeader";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import AuthLayout from "../../components/Layouts/AuthLayout";
+import AuthHeader from "../../components/Auth/AuthHeader";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -35,7 +35,7 @@ export default function Login() {
           variant="contained"
         >
           <img
-            src="/assets/google.png"
+            src="/auth/google.png"
             width="15"
             height="15"
             alt="questsgoogle"

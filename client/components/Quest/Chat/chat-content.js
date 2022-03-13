@@ -11,6 +11,7 @@ import {
   Grid,
   Divider,
 } from "@mui/material";
+
 const ChatContent = () => {
   return (
     <Box
@@ -50,16 +51,14 @@ const ChatContent = () => {
               </Grid>
             }
             secondary={
-              <React.Fragment>
-                <Typography
-                  sx={{ display: "inline", fontSize: "15px" }}
-                  component="span"
-                  variant="body2"
-                  color="text.primary"
-                >
-                  Hi, any idea how can i do x?
-                </Typography>
-              </React.Fragment>
+              <Typography
+                sx={{ display: "inline", fontSize: "15px" }}
+                component="span"
+                variant="body2"
+                color="text.primary"
+              >
+                Hi, any idea how can i do x?
+              </Typography>
             }
           />
         </ListItem>
@@ -83,16 +82,14 @@ const ChatContent = () => {
               </Grid>
             }
             secondary={
-              <React.Fragment>
-                <Typography
-                  sx={{ display: "inline", fontSize: "15px" }}
-                  component="span"
-                  variant="body2"
-                  color="text.primary"
-                >
-                  Hi, any idea how can i do x?
-                </Typography>
-              </React.Fragment>
+              <Typography
+                sx={{ display: "inline", fontSize: "15px" }}
+                component="span"
+                variant="body2"
+                color="text.primary"
+              >
+                Hi, any idea how can i do x?
+              </Typography>
             }
           />
         </ListItem>
@@ -116,16 +113,14 @@ const ChatContent = () => {
               </Grid>
             }
             secondary={
-              <React.Fragment>
-                <Typography
-                  sx={{ display: "inline", fontSize: "15px" }}
-                  component="span"
-                  variant="body2"
-                  color="text.primary"
-                >
-                  Hi, any idea how can i do x?
-                </Typography>
-              </React.Fragment>
+              <Typography
+                sx={{ display: "inline", fontSize: "15px" }}
+                component="span"
+                variant="body2"
+                color="text.primary"
+              >
+                Hi, any idea how can i do x?
+              </Typography>
             }
           />
         </ListItem>
@@ -149,16 +144,14 @@ const ChatContent = () => {
               </Grid>
             }
             secondary={
-              <React.Fragment>
-                <Typography
-                  sx={{ display: "inline", fontSize: "15px" }}
-                  component="span"
-                  variant="body2"
-                  color="text.primary"
-                >
-                  Hi, any idea how can i do x?
-                </Typography>
-              </React.Fragment>
+              <Typography
+                sx={{ display: "inline", fontSize: "15px" }}
+                component="span"
+                variant="body2"
+                color="text.primary"
+              >
+                Hi, any idea how can i do x?
+              </Typography>
             }
           />
         </ListItem>

@@ -15,7 +15,7 @@ export default Index;
 export async function getServerSideProps() {
   // should be getstatic pero noo
   const data = [];
-  for (var i = 0; i < 5; i++) {
+  for (let i = 0; i < 5; i++) {
     const rand = Math.floor(Math.random() * 3);
     const images = [...Array(rand)].map(() =>
       faker.image.people(null, null, true),
@@ -25,7 +25,7 @@ export async function getServerSideProps() {
       title: faker.lorem.lines(2),
       createdAt: JSON.stringify(faker.date.recent()),
       body: faker.lorem.lines(30),
-      images: images,
+      images,
     });
   }
   return {

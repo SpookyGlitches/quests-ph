@@ -4,9 +4,10 @@ import GroupAddRoundedIcon from "@mui/icons-material/GroupAddRounded";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
 
-const FriendField = (props) => {
-  let firstIcon, secondIcon;
-  if (props.fieldType === "Incoming Requests") {
+const FriendField = ({ fieldType, fullName, username }) => {
+  let firstIcon;
+  let secondIcon;
+  if (fieldType === "Incoming Requests") {
     firstIcon = (
       <IconButton>
         <DeleteRoundedIcon />
@@ -17,7 +18,7 @@ const FriendField = (props) => {
         <GroupAddRoundedIcon />
       </IconButton>
     );
-  } else if (props.fieldType === "Outgoing Requests") {
+  } else if (fieldType === "Outgoing Requests") {
     secondIcon = (
       <IconButton>
         <DeleteRoundedIcon />
@@ -56,7 +57,7 @@ const FriendField = (props) => {
           sx={{
             backgroundColor: "primary.main",
           }}
-        ></Avatar>
+        />
         <Box
           sx={{ display: "flex", flexDirection: "column", marginLeft: "1rem" }}
         >
@@ -68,7 +69,7 @@ const FriendField = (props) => {
               marginTop: "-.25rem",
             }}
           >
-            {props.fullname}
+            {fullName}
           </Typography>
           <Typography
             variant="body2"
@@ -78,7 +79,7 @@ const FriendField = (props) => {
               marginTop: "-.4rem",
             }}
           >
-            {props.username}
+            {username}
           </Typography>
         </Box>
       </Box>

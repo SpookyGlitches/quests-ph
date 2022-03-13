@@ -1,39 +1,23 @@
-import * as React from "react";
-import CssBaseline from "@mui/material/CssBaseline";
-import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import Footer from "../../components/Landing/Footer";
-import Header from "../../components/Landing/Header";
+import LandingLayout from "../../components/Layouts/LandingLayout";
 
 export default function TermsOfService() {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        minHeight: "100vh",
-      }}
-    >
-      <Header />
-      <CssBaseline />
-      <Container component="main" sx={{ mt: 8, mb: 2 }} maxWidth="sm">
+    <LandingLayout>
+      <Container component="main" sx={{ mt: 4, mb: 8 }}>
         <Typography
-          variant="h3"
+          variant="h5"
           sx={{
-            textAlign: "left",
-            fontWeight: "bold",
-            color: "ffffff",
             mb: 5,
           }}
         >
           Terms of Service
         </Typography>
         <Typography
-          variant="h6"
+          variant="subtitle2"
           sx={{
             textAlign: "left",
-            color: "ffffff",
             mt: 3,
           }}
         >
@@ -80,11 +64,9 @@ export default function TermsOfService() {
         </Typography>
 
         <Typography
-          variant="h4"
+          variant="h6"
           sx={{
             textAlign: "left",
-            fontWeight: "bold",
-            color: "ffffff",
             mt: 5,
           }}
         >
@@ -106,11 +88,8 @@ export default function TermsOfService() {
         </Typography>
 
         <Typography
-          variant="h4"
+          variant="h6"
           sx={{
-            textAlign: "left",
-            fontWeight: "bold",
-            color: "ffffff",
             mt: 2,
           }}
         >
@@ -129,7 +108,6 @@ export default function TermsOfService() {
           lorem donec.
         </Typography>
       </Container>
-      <Footer />
-    </Box>
+    </LandingLayout>
   );
 }
