@@ -3,8 +3,13 @@ import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import GroupAddRoundedIcon from "@mui/icons-material/GroupAddRounded";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
+import { useRouter } from "next/router";
 
 const FriendField = ({ fieldType, fullName, username }) => {
+  const router = useRouter();
+  const handleProfileClick = (name) => () => {
+    router.push(`/profile/${name}`); // profile page url here
+  };
   let firstIcon;
   let secondIcon;
   if (fieldType === "Incoming Requests") {
@@ -47,6 +52,7 @@ const FriendField = ({ fieldType, fullName, username }) => {
       }}
     >
       <Box
+        onClick={fieldType === "Friends" ? handleProfileClick(username) : null}
         sx={{
           display: "flex",
           justifyContent: "space-between",

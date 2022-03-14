@@ -1,8 +1,9 @@
 import { Box } from "@mui/material";
-import AppLayout from "../../components/Layouts/AppLayout";
-import BadgesList from "../../components/Profile/BadgesList";
-import BasicInfo from "../../components/Profile/BasicInfo";
-import QuestChart from "../../components/Profile/QuestChart";
+import AppLayout from "../../../components/Layouts/AppLayout";
+import BadgesList from "../../../components/Profile/BadgesList";
+import BasicInfo from "../../../components/Profile/BasicInfo";
+import QuestChart from "../../../components/Profile/QuestChart";
+import OptionsBar from "../../../components/Profile/Friends/OptionsBar";
 
 export default function Profile() {
   return (
@@ -25,7 +26,8 @@ export default function Profile() {
             gap: 2,
           }}
         >
-          <BasicInfo fullName="Ninomae Desu" displayName="inainaDesu" />
+          <BasicInfo />
+          <OptionsBar />
           <BadgesList />
           <QuestChart />
         </Box>
