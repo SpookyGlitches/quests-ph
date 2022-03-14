@@ -1,48 +1,44 @@
-import { Avatar, Typography, Box } from "@mui/material";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import { Avatar, Typography, Box, IconButton } from "@mui/material";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import GroupAddRoundedIcon from "@mui/icons-material/GroupAddRounded";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
-import ChatIcon from "@mui/icons-material/Chat";
+import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
+import { useRouter } from "next/router";
 
-const FriendField = (props) => {
-  console.log(props.fieldType);
-  if (props.fieldType === "Incoming Requests") {
-    var firstIcon = (
-      <DeleteOutlineIcon
-        sx={{
-          marginRight: "0.5rem",
-        }}
-      />
+const FriendField = ({ fieldType, fullName, username }) => {
+  const router = useRouter();
+  const handleProfileClick = (name) => () => {
+    router.push(`/profile/${name}`); // profile page url here
+  };
+  let firstIcon;
+  let secondIcon;
+  if (fieldType === "Incoming Requests") {
+    firstIcon = (
+      <IconButton>
+        <DeleteRoundedIcon />
+      </IconButton>
     );
-    var secondIcon = (
-      <GroupAddIcon
-        sx={{
-          marginLeft: "0.5rem",
-        }}
-      />
-    );
-  } else if (props.fieldType === "Outgoing Requests") {
     secondIcon = (
-      <DeleteOutlineIcon
-        sx={{
-          marginLeft: "0.5rem",
-        }}
-      />
+      <IconButton>
+        <GroupAddRoundedIcon />
+      </IconButton>
+    );
+  } else if (fieldType === "Outgoing Requests") {
+    secondIcon = (
+      <IconButton>
+        <DeleteRoundedIcon />
+      </IconButton>
     );
   } else {
     firstIcon = (
-      <PersonRemoveIcon
-        sx={{
-          marginRight: "0.5rem",
-        }}
-      />
+      <IconButton>
+        <PersonRemoveIcon />
+      </IconButton>
     );
     secondIcon = (
-      <ChatIcon
-        sx={{
-          marginLeft: "0.5rem",
-        }}
-      />
+      <IconButton>
+        <ChatRoundedIcon />
+      </IconButton>
     );
   }
   return (
@@ -56,6 +52,7 @@ const FriendField = (props) => {
       }}
     >
       <Box
+        onClick={fieldType === "Friends" ? handleProfileClick(username) : null}
         sx={{
           display: "flex",
           justifyContent: "space-between",
@@ -65,32 +62,30 @@ const FriendField = (props) => {
         <Avatar
           sx={{
             backgroundColor: "primary.main",
-            height: "3.75rem",
-            width: "3.75rem",
           }}
-        ></Avatar>
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
+        />
+        <Box
+          sx={{ display: "flex", flexDirection: "column", marginLeft: "1rem" }}
+        >
           <Typography
-            variant="h5"
+            variant="h6"
             sx={{
               display: "flex",
               alignItems: "center",
-              marginLeft: "1rem",
-              marginTop: ".25rem",
+              marginTop: "-.25rem",
             }}
           >
-            {props.fullname}
+            {fullName}
           </Typography>
           <Typography
-            variant="body1"
+            variant="body2"
             sx={{
               display: "flex",
               alignItems: "center",
-              marginLeft: "1rem",
-              marginTop: "-.35rem",
+              marginTop: "-.4rem",
             }}
           >
-            {props.username}
+            {username}
           </Typography>
         </Box>
       </Box>
@@ -101,7 +96,7 @@ const FriendField = (props) => {
           flexDirection: "row",
           justifyContent: "space-around",
           alignItems: "center",
-          marginRight: "2rem",
+          marginRight: "1rem",
         }}
       >
         {firstIcon}

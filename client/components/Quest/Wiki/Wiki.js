@@ -1,8 +1,8 @@
 import { Box, Button, Typography } from "@mui/material";
 import { useState } from "react";
+import { Plate } from "@udecode/plate-core";
 import { plugins } from "../../../config/plate/plugins";
 import Toolbar from "./Toolbar";
-import { Plate } from "@udecode/plate-core";
 
 const initialValue = [
   {
@@ -42,9 +42,8 @@ const Wiki = () => {
         backgroundColor: "background.paper",
         borderRadius: 2,
         overflow: "hidden",
-        padding: "1rem",
         minHeight: "30rem",
-        marginBottom: "2rem",
+        padding: "2rem",
       }}
     >
       <Box

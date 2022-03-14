@@ -1,25 +1,20 @@
-import * as React from "react";
-import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import Footer from "../../components/Landing/Footer";
-import Header from "../../components/Landing/Header";
+import LandingLayout from "../../components/Layouts/LandingLayout";
 
 export default function PrivacyPolicy() {
   return (
-    <Box
+    <LandingLayout
       sx={{
         display: "flex",
         flexDirection: "column",
         minHeight: "100vh",
       }}
     >
-      <Header />
-      <CssBaseline />
-      <Container component="main" sx={{ mt: 8, mb: 2 }} maxWidth="sm">
+      <Container component="main" sx={{ marginTop: 4, marginBottom: 8 }}>
         <Typography
-          variant="h3"
+          variant="h5"
           sx={{
             textAlign: "left",
             mb: 5,
@@ -28,10 +23,9 @@ export default function PrivacyPolicy() {
           Privacy Policy
         </Typography>
         <Typography
-          variant="h6"
+          variant="subtitle2"
           sx={{
             textAlign: "left",
-            mt: 3,
           }}
         >
           Effective Date: December 10, 2021
@@ -72,7 +66,7 @@ export default function PrivacyPolicy() {
         </Typography>
 
         <Typography
-          variant="h4"
+          variant="h5"
           sx={{
             textAlign: "left",
             mt: 5,
@@ -97,7 +91,7 @@ export default function PrivacyPolicy() {
           <li>Dolore eu fugiat Nulla</li>
         </Box>
         <Typography
-          variant="h4"
+          variant="h5"
           sx={{
             textAlign: "left",
 
@@ -119,7 +113,7 @@ export default function PrivacyPolicy() {
           lorem donec.
         </Typography>
         <Typography
-          variant="h4"
+          variant="h5"
           sx={{
             textAlign: "left",
 
@@ -140,7 +134,7 @@ export default function PrivacyPolicy() {
           id semper risus in.
         </Typography>
         <Typography
-          variant="h4"
+          variant="h5"
           sx={{
             textAlign: "left",
 
@@ -162,7 +156,7 @@ export default function PrivacyPolicy() {
           Lectus sit amet est placerat in egestas.
         </Typography>
         <Typography
-          variant="h4"
+          variant="h5"
           sx={{
             textAlign: "left",
 
@@ -185,7 +179,7 @@ export default function PrivacyPolicy() {
           tortor at auctor urna nunc id cursus metus.
         </Typography>
         <Typography
-          variant="h4"
+          variant="h5"
           sx={{
             textAlign: "left",
 
@@ -206,7 +200,7 @@ export default function PrivacyPolicy() {
           ipsum consequat nisl.
         </Typography>
         <Typography
-          variant="h4"
+          variant="h5"
           sx={{
             textAlign: "left",
 
@@ -229,7 +223,7 @@ export default function PrivacyPolicy() {
           tortor at auctor urna nunc id cursus metus.
         </Typography>
         <Typography
-          variant="h4"
+          variant="h5"
           sx={{
             textAlign: "left",
 
@@ -263,7 +257,7 @@ export default function PrivacyPolicy() {
           amet est.
         </Typography>
         <Typography
-          variant="h4"
+          variant="h5"
           sx={{
             textAlign: "left",
 
@@ -288,7 +282,6 @@ export default function PrivacyPolicy() {
           penatibus et magnis dis.
         </Typography>
       </Container>
-      <Footer />
-    </Box>
+    </LandingLayout>
   );
 }

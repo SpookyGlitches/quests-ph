@@ -1,6 +1,6 @@
 import { Typography, Box } from "@mui/material";
 
-const DataFieldHolder = (props) => {
+const DataFieldHolder = ({ field, value }) => {
   return (
     <Box
       sx={{ display: "flex", flexDirection: "column", paddingTop: "1.5rem" }}
@@ -13,7 +13,7 @@ const DataFieldHolder = (props) => {
           fontWeight: "600",
         }}
       >
-        {props.field}
+        {field}
       </Typography>
 
       <Typography
@@ -24,7 +24,7 @@ const DataFieldHolder = (props) => {
           fontWeight: "normal",
         }}
       >
-        {props.value}
+        {value}
       </Typography>
     </Box>
   );

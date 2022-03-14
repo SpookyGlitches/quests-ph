@@ -7,8 +7,8 @@ import {
   Button,
   DialogActions,
 } from "@mui/material";
-import QuestItem from "./QuestItem";
 import { useState } from "react";
+import QuestItem from "./QuestItem";
 
 // remove ra ning hasJoined inig nanay backend
 const DialogItem = ({ handleOk, handleCancel, open }) => {
@@ -57,7 +57,8 @@ export default function QuestsList({ hasJoined }) {
     >
       {[...Array(4)].map((item, index) => (
         <QuestItem
-          key={item + index}
+          // eslint-disable-next-line react/no-array-index-key
+          key={index}
           hasJoined={hasJoined}
           onJoinClick={onJoinClick}
         />

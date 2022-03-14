@@ -1,9 +1,10 @@
-import { Stack, Popper, Fade, Typography, Paper } from "@mui/material";
-import Post from "./Post";
+import { Stack, Popper, Fade, Typography } from "@mui/material";
 import { useState } from "react";
+import Post from "./Post";
 import Emoji1 from "../../Icons/Emoji1";
 import Emoji2 from "../../Icons/Emoji2";
 import Emoji3 from "../../Icons/Emoji3";
+import StyledPaper from "../../Common/StyledPaper";
 
 const PostsList = ({ posts }) => {
   // should i add the state here? or sa post jud? idk :|
@@ -33,9 +34,9 @@ const PostsList = ({ posts }) => {
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
-            <Paper sx={{ p: 2 }}>
+            <StyledPaper sx={{ padding: 1.5 }}>
               <Typography>Edit Post</Typography>
-            </Paper>
+            </StyledPaper>
           </Fade>
         )}
       </Popper>
@@ -47,19 +48,19 @@ const PostsList = ({ posts }) => {
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
-            <Paper sx={{ p: 1 }}>
-              <Emoji1 width="45" height="45" />
-              <Emoji2 width="45" height="45" />
-              <Emoji3 width="45" height="45" />
-            </Paper>
+            <StyledPaper>
+              <Emoji1 width="40" height="40" />
+              <Emoji2 width="40" height="40" />
+              <Emoji3 width="40" height="40" />
+            </StyledPaper>
           </Fade>
         )}
       </Popper>
       <Stack spacing={5}>
-        {posts.map((data, index) => {
+        {posts.map((data) => {
           return (
             <Post
-              key={index}
+              key={`${data.username}/${data.title}`}
               username={data.username}
               title={data.title}
               createdAt={data.createdAt}

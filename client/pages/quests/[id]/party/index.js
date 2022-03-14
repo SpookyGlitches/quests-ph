@@ -1,6 +1,6 @@
+import { Box, Grid } from "@mui/material";
 import PartyList from "../../../../components/Quest/Party/PartyList";
 import BanList from "../../../../components/Quest/Party/BanList";
-import { Box, Grid } from "@mui/material";
 import QuestLayout from "../../../../components/Layouts/QuestLayout";
 
 const index = () => {
