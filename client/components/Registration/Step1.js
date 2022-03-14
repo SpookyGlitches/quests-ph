@@ -3,8 +3,7 @@ import DatePicker from "@mui/lab/DatePicker";
 import { Controller, useFormContext } from "react-hook-form";
 import moment from "moment";
 
-export default function Step1({ memberType }) {
-  console.log(memberType);
+export default function Step1() {
   const {
     control,
     formState: { errors },
