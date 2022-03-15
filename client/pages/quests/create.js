@@ -8,7 +8,8 @@ import {
   Step,
 } from "@mui/material";
 import { add } from "date-fns";
-
+import axios from "axios";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -21,9 +22,9 @@ const steps = ["Set the WOOP", "Configure the settings"];
 
 const Create = () => {
   const [activeStep, setActiveStep] = useState(0);
-  // eslint-disable-next-line no-undef
+  const [loading, setLoading] = useState(false);
   const currentValidationSchema = validationSchema[activeStep];
-
+  const router = useRouter();
   const methods = useForm({
     resolver: yupResolver(currentValidationSchema),
     mode: "onChange",
@@ -41,9 +42,15 @@ const Create = () => {
   });
   const { trigger, handleSubmit, control } = methods;
 
-  const here = (values) => {
-    console.log(values);
-    // alert(JSON.stringify(values));
+  const postData = async (values) => {
+    setLoading(true);
+    try {
+      const { data } = await axios.post("/api/quests/", values);
+      router.push(`/quests/${data.quest.id}/overview`);
+    } catch (err) {
+      console.log("Error", err);
+    }
+    setLoading(false);
   };
   const handleNext = async () => {
     if (activeStep >= steps.length) return;
@@ -52,7 +59,7 @@ const Create = () => {
     if (activeStep < steps.length - 1)
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     if (activeStep === steps.length - 1) {
-      handleSubmit(here)();
+      handleSubmit(postData)();
     }
   };
 
@@ -105,7 +112,6 @@ const Create = () => {
             })}
           </Stepper>
           <FormProvider {...methods}>
-            {activeStep}
             <form>
               <Stack spacing={4}>
                 {activeStep === 0 ? <Step1 control={control} /> : <Step2 />}
@@ -115,7 +121,9 @@ const Create = () => {
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Button
               color="inherit"
-              disabled={activeStep === 0 || activeStep === steps.length}
+              disabled={
+                activeStep === 0 || activeStep === steps.length || loading
+              }
               onClick={handleBack}
               sx={{ mr: 1 }}
             >
@@ -123,7 +131,7 @@ const Create = () => {
             </Button>
             <Box sx={{ flex: "1 1 auto" }} />
 
-            <Button onClick={handleNext}>
+            <Button onClick={handleNext} disabled={loading}>
               {activeStep === steps.length - 1 ? "Finish" : "Next"}
             </Button>
           </Box>

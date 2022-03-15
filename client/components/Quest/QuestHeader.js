@@ -1,6 +1,8 @@
 import { Box, Typography, Link as MuiLink } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useContext } from "react";
+import { QuestContext } from "../../context/QuestContext";
 
 const muiLinkProps = {
   component: "button",
@@ -23,7 +25,8 @@ const tabs = ["Overview", "Posts", "Tasks", "Party", "Wiki", "Chat"];
 
 export default function QuestHeader() {
   const router = useRouter();
-  const basePath = `/quests/${router.query.id}`;
+  const basePath = `/quests/${router.query.questId}`;
+  const quest = useContext(QuestContext);
 
   return (
     <Box
@@ -50,11 +53,11 @@ export default function QuestHeader() {
         }}
       >
         <Typography component="div" variant="body2">
-          Health
+          {quest.category}
         </Typography>
         <Box sx={{ marginTop: "0.2rem" }}>
           <Typography variant="h4" align="center" color="primary">
-            Run 5 km daily for 3 months
+            {quest.wish}
           </Typography>
         </Box>
       </Box>

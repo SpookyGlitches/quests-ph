@@ -74,22 +74,23 @@ export default function Step2() {
       />
 
       <div>
-        <Grid container spacing={2}>
-          <Grid item md={6} xs={12}>
+        <Grid container spacing={5}>
+          <Grid item md={6} xs={12} sx={{}}>
             <Controller
               name="startDate"
               render={({ field: { onChange, value } }) => (
-                <FormControl
-                  variant="filled"
-                  error={errors.startDate}
-                  sx={{ width: "100%" }}
-                >
+                <FormControl variant="filled" sx={{ width: "100%" }}>
                   <DatePicker
                     label="Start date"
                     minDate={new Date()}
                     value={value}
                     onChange={onChange}
-                    renderInput={(params) => <TextField {...params} />}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        error={Boolean(errors.startDate)}
+                      />
+                    )}
                   />
                   <FormHelperText>
                     {errors.startDate
@@ -99,17 +100,6 @@ export default function Step2() {
                 </FormControl>
               )}
             />
-            {/* <FormControl variant="filled" sx={{ width: "100%" }}>
-              <DatePicker
-                label="Start date"
-                minDate={new Date()}
-                onChange={() => {}}
-                renderInput={(params) => <TextField {...params} />}
-              />
-              <FormHelperText>
-                Set it to a later time to have potential party members.
-              </FormHelperText>
-            </FormControl> */}
           </Grid>
           <Grid item md={6} xs={12}>
             <Controller
@@ -126,7 +116,12 @@ export default function Step2() {
                     value={value}
                     onChange={onChange}
                     renderInput={(params) => {
-                      return <TextField {...params} />;
+                      return (
+                        <TextField
+                          {...params}
+                          error={Boolean(errors.endDate)}
+                        />
+                      );
                     }}
                   />
                   <FormHelperText>

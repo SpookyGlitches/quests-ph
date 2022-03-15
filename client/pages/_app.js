@@ -11,11 +11,13 @@ import { SessionProvider } from "next-auth/react";
 import theme from "../config/theme";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
+  const getLayout = Component.getLayout || ((page) => page);
+
   return (
     <ThemeProvider theme={theme}>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <SessionProvider session={session}>
-          <Component {...pageProps} />
+          {getLayout(<Component {...pageProps} />)}
         </SessionProvider>
       </LocalizationProvider>
     </ThemeProvider>
