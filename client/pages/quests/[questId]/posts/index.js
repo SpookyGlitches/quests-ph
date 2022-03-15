@@ -4,11 +4,9 @@ import QuestLayout from "../../../../components/Layouts/QuestLayout";
 
 const Index = ({ data }) => {
   return (
-    <QuestLayout>
-      <div>
-        <PostsList posts={data} />
-      </div>
-    </QuestLayout>
+    <div>
+      <PostsList posts={data} />
+    </div>
   );
 };
 export default Index;
@@ -34,3 +32,6 @@ export async function getServerSideProps() {
     },
   };
 }
+Index.getLayout = function getLayout(page) {
+  return <QuestLayout>{page}</QuestLayout>;
+};
