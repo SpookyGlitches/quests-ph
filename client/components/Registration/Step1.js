@@ -48,6 +48,8 @@ export default function Step1() {
             label="Full Name"
             onChange={onChange}
             value={value}
+            error={errors.fullName && errors.fullName.message}
+            helperText={errors.fullName ? errors.fullName.message : ""}
           />
         )}
       />

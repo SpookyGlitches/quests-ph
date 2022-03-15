@@ -1,4 +1,4 @@
-import { object, string, ref } from "yup";
+import { object, string, ref, mixed } from "yup";
 import moment from "moment";
 
 const requiredMsg = "This field is required";
@@ -39,13 +39,13 @@ export const stepTwoMentorValidations = object({
     .oneOf([ref("password"), null], "Confirm Password does not match"),
 });
 
-// export const stepThreeMentorValidations = object({
-//   experience: mixed().oneOf(["yes", "no"]).required(requiredMsg),
-//   detailedExperience: string().required(requiredMsg),
-// });
+export const stepThreeMentorValidations = object({
+  experience: mixed().oneOf(["yes", "no"]).required(requiredMsg),
+  detailedExperience: string().required(requiredMsg),
+});
 
 export const MentorRegistration = [
   stepOneMentorValidations,
   stepTwoMentorValidations,
-  //   stepThreeMentorValidations,
+  stepThreeMentorValidations,
 ];
