@@ -8,18 +8,18 @@ generator client {
 }
 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text @map("refreshToken")
-  access_token       String?  @db.Text @map("accessToken")
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text @map("idToken")
-  session_state      String?
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @map("refreshToken") @db.Text
+  access_token      String? @map("accessToken") @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @map("idToken") @db.Text
+  session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -42,6 +42,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  associatedQuests PartyMember[]
 }
 
 model VerificationToken {
@@ -51,3 +52,44 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model Quest {
+  id                 Int      @id @default(autoincrement())
+  wish               String
+  difficulty         String
+  visibility         String
+  category           String
+  wiki               String @default("[{\"type\":\"p\",\"children\":[{\"text\":\"\"}]}]")
+  mentorMessage      String?
+  estimatedStartDate DateTime @db.Date
+  estimatedEndDate   DateTime @db.Date
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  completedAt        DateTime?
+  deletedAt          DateTime?
+  partyMembers PartyMember[]
+}
+
+
+model PartyMember{
+  id                 Int      @id @default(autoincrement())
+  quest Quest @relation(fields:[questId], references: [id])
+  partyMember User @relation(fields:[memberId], references: [id])
+  role QuestRole @default(MENTEE)
+  outcome String
+  obstacle String
+  plan String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  deletedAt DateTime?
+  memberId String
+  questId Int
+}
+
+
+enum QuestRole {
+  MENTOR
+  MENTEE
+  PARTY_LEADER
+}
+
