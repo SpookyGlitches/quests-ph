@@ -7,6 +7,7 @@ import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import { registerUserValidation } from "../../validations/UserRegistration";
+import SignUpDisclaimer from "./SignUpDisclaimer";
 
 const steps = ["", ""];
 
@@ -103,15 +104,18 @@ const RegistrationForm = () => {
         </form>
       </FormProvider>
       <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          onClick={handleNext}
-          fullWidth
-        >
-          {activeStep === steps.length - 1 ? "Finish" : "Next"}
-        </Button>
+        <Stack style={{ width: "100%" }}>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            onClick={handleNext}
+            fullWidth
+          >
+            {activeStep === steps.length - 1 ? "Finish" : "Next"}
+          </Button>
+          {activeStep === steps.length - 1 ? <SignUpDisclaimer /> : ""}
+        </Stack>
       </Box>
     </>
   );
