@@ -13,4 +13,11 @@ export default NextAuth({
     }),
     // ...add more providers here
   ],
+  callbacks: {
+    async session({ session, user }) {
+      // eslint-disable-next-line no-param-reassign
+      session.userId = user.id;
+      return session;
+    },
+  },
 });
