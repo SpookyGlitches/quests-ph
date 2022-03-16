@@ -83,7 +83,7 @@ export default function Login() {
             onChange={(e) => setEmail(e.target.value)}
             sx={{ mb: 3 }}
             error={loginError && loginError}
-            helperText={loginError ? loginError : ""}
+            helperText={loginError || ""}
           />
 
           <TextField

@@ -26,7 +26,6 @@ const RegistrationForm = () => {
       email: "",
       password: "",
       confirmPassword: "",
-      role: "member",
     },
   });
 
