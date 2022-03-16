@@ -74,7 +74,6 @@ export default function Login() {
         <Typography align="center">or</Typography>
 
         <form onSubmit={handleLogin}>
-          {loginError}
           <TextField
             fullWidth
             required
@@ -83,7 +82,10 @@ export default function Login() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             sx={{ mb: 3 }}
+            error={loginError && loginError}
+            helperText={loginError ? loginError : ""}
           />
+
           <TextField
             fullWidth
             id="filled-password-input"
