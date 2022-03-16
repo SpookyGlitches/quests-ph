@@ -12,7 +12,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { signIn } from "next-auth/react";
+import { signIn, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import AuthHeader from "../../components/Auth/AuthHeader";
 import AuthLayout from "../../components/Layouts/AuthLayout";
@@ -48,6 +48,7 @@ export default function Login() {
       }
     });
   };
+
   return (
     <AuthLayout>
       <AuthHeader subtitle="Sign in to your account" />
@@ -137,4 +138,20 @@ export default function Login() {
       </Box>
     </AuthLayout>
   );
+}
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  if (session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: { session },
+  };
 }

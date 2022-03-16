@@ -1,8 +1,10 @@
 import { Button } from "@mui/material";
 import { useSession, signOut } from "next-auth/react";
+import { useRouter } from "next/router";
 import AppLayout from "../components/Layouts/AppLayout";
 
 export default function Home() {
+  const router = useRouter();
   const { data: session } = useSession();
   if (session) {
     return (
@@ -16,8 +18,8 @@ export default function Home() {
   }
   return (
     <>
-      landing page not signed in <br />
-      <Button onClick={() => signOut()}>Sign out</Button>
+      landing page ~ not signed in <br />
+      <Button onClick={() => router.push("/auth/login")}>Sign In</Button>
     </>
   );
 }

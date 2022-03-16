@@ -44,7 +44,6 @@ export default NextAuth({
     async signIn(user, account, profile) {
       if (typeof user.user.id !== typeof undefined) {
         if (user.user.isActive === "1") {
-          console.log("here");
           return user;
         }
         return false;
