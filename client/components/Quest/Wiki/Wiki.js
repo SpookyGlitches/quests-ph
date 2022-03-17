@@ -21,9 +21,6 @@ const Wiki = () => {
   useEffect(() => {
     if (quest && quest.wiki) {
       setPlateValue(JSON.parse(quest.wiki));
-      console.log("quest now", quest);
-    } else {
-      console.log(quest);
     }
   }, [quest]);
 
