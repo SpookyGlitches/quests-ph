@@ -7,9 +7,7 @@ import Step1 from "./Step1";
 import Step2 from "./Step2";
 import { registerUserValidation } from "../../validations/UserRegistration";
 import SignUpDisclaimer from "./SignUpDisclaimer";
-// import { PrismaClient } from "@prisma/client";
 
-// const prisma = new PrismaClient();
 const steps = ["", ""];
 
 const RegistrationForm = () => {
@@ -33,7 +31,6 @@ const RegistrationForm = () => {
   const { trigger, handleSubmit, control } = methods;
 
   const here = (values) => {
-    // async function here(values) {
     // console.log(values);
     try {
       const userDeets = {
@@ -43,8 +40,7 @@ const RegistrationForm = () => {
         fullName: values.fullName,
         password: values.password,
       };
-      // console.log("ezez");
-      // console.log(userDeets);
+
       const res = fetch("../../pages/api/accounts", {
         method: "POST",
         body: JSON.stringify(userDeets),

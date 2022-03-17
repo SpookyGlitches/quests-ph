@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
+import Router from "next/router";
 import AuthHeader from "../../../components/Auth/AuthHeader";
 import AuthLayout from "../../../components/Layouts/AuthLayout";
 import Step1 from "../../../components/Registration/Step1";
@@ -56,7 +57,10 @@ export default function Register() {
         body: JSON.stringify(userDeets),
       });
       if (res.status === 200) {
-        console.log("yes");
+        Router.push({
+          pathname: "/auth/verify-email/[emailAddress]",
+          query: { emailAddress: userDeets.email },
+        });
       } else {
         console.log("no");
         //   //   //throw new Error(res.text());
@@ -65,7 +69,9 @@ export default function Register() {
       console.log("Error!");
     }
   };
-
+  // const redirectToVerify = () => {
+  //   Router.push("/auth/verify-email");
+  // };
   const handleNext = async () => {
     if (activeStep >= steps.length) return;
     const valid = await trigger();
@@ -83,6 +89,7 @@ export default function Register() {
   return (
     <AuthLayout>
       <AuthHeader subtitle="Create an account" />
+      {/* <Button onClick={redirectToVerify}>haha</Button> */}
       {/* <MemberRegistrationForm /> */}
       <Stepper activeStep={activeStep}>
         {steps.map((label) => {
