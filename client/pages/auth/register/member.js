@@ -69,9 +69,7 @@ export default function Register() {
       console.log("Error!");
     }
   };
-  // const redirectToVerify = () => {
-  //   Router.push("/auth/verify-email");
-  // };
+
   const handleNext = async () => {
     if (activeStep >= steps.length) return;
     const valid = await trigger();
