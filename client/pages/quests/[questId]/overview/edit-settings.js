@@ -54,11 +54,12 @@ const DialogItem = ({ handleOk, handleCancel, open, loading }) => {
 export default function Edit() {
   const router = useRouter();
   const quest = useContext(QuestContext);
+
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const methods = useForm({
     shouldUnregister: false,
-    resolver: yupResolver([wishValidation, step2Validations]),
+    resolver: yupResolver(step2Validations.concat(wishValidation)),
     defaultValues: {
       wish: "",
       difficulty: "EASY",

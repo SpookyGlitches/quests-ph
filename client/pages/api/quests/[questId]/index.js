@@ -15,7 +15,8 @@ async function getQuest(req, res) {
 }
 async function updateQuest(req, res) {
   try {
-    const { startDate, endDate, difficulty, visibility, category } = req.body;
+    const { startDate, endDate, difficulty, visibility, category, wish } =
+      req.body;
     const quest = await prisma.quest.update({
       where: {
         id: Number(req.query.questId),
@@ -26,6 +27,7 @@ async function updateQuest(req, res) {
         difficulty,
         visibility,
         category,
+        wish,
       },
     });
     res.status(200).send({ quest });
