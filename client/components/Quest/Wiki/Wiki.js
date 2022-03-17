@@ -1,8 +1,10 @@
+import axios from "axios";
 import { Box, Button, Typography } from "@mui/material";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Plate } from "@udecode/plate-core";
 import { plugins } from "../../../config/plate/plugins";
 import Toolbar from "./Toolbar";
+import { QuestContext } from "../../../context/QuestContext";
 
 const initialValue = [
   {
@@ -12,14 +14,33 @@ const initialValue = [
 ];
 
 const Wiki = () => {
+  const quest = useContext(QuestContext);
   const [plateValue, setPlateValue] = useState(initialValue);
   const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    if (quest && quest.wiki) {
+      setPlateValue(JSON.parse(quest.wiki));
+      console.log("quest now", quest);
+    } else {
+      console.log(quest);
+    }
+  }, [quest]);
 
   const onChangeDebug = (newPlateValue) => {
     setPlateValue(newPlateValue);
   };
-  const toggleEditButton = (event) => {
+  const toggleEditButton = async (event) => {
     event.preventDefault();
+    if (isEditing) {
+      try {
+        await axios.put(`/api/quests/${quest.id}/wiki`, {
+          wiki: JSON.stringify(plateValue),
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    }
     setIsEditing((prev) => !prev);
   };
 
