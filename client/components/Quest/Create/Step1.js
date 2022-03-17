@@ -2,30 +2,15 @@ import { TextField } from "@mui/material";
 
 import { Controller, useFormContext } from "react-hook-form";
 
-export default function Step1() {
+export default function Step1({ wishItem }) {
   const {
     formState: { errors },
-  } = useFormContext(); //
+  } = useFormContext();
+
   return (
     <>
-      <Controller
-        name="wish"
-        render={({ field: { onChange, value } }) => (
-          <TextField
-            fullWidth
-            id="filled-basic"
-            label="Wish"
-            onChange={onChange}
-            value={value}
-            error={errors.wish && errors.wish.message}
-            helperText={
-              errors.wish
-                ? errors.wish.message
-                : "What is something that you want to achieve?"
-            }
-          />
-        )}
-      />
+      {wishItem}
+
       <Controller
         name="outcome"
         render={({ field: { onChange, value } }) => (
@@ -35,7 +20,7 @@ export default function Step1() {
             label="Outcome"
             onChange={onChange}
             value={value}
-            error={errors.outcome}
+            error={Boolean(errors.outcome)}
             helperText={
               errors.outcome
                 ? errors.outcome.message
@@ -56,7 +41,7 @@ export default function Step1() {
             minRows={3}
             maxRows={7}
             value={value}
-            error={errors.obstacle}
+            error={Boolean(errors.obstacle)}
             multiline
             helperText={
               errors.obstacle

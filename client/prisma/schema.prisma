@@ -42,6 +42,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  createdQuests Quest[]
   associatedQuests PartyMember[]
 }
 
@@ -59,6 +60,7 @@ model Quest {
   difficulty         String
   visibility         String
   category           String
+  creator            User @relation(fields:[creatorId], references: [id])
   wiki               String @default("[{\"type\":\"p\",\"children\":[{\"text\":\"\"}]}]")
   mentorMessage      String?
   estimatedStartDate DateTime @db.Date
@@ -68,6 +70,7 @@ model Quest {
   completedAt        DateTime?
   deletedAt          DateTime?
   partyMembers PartyMember[]
+  creatorId          String
 }
 
 
@@ -84,6 +87,7 @@ model PartyMember{
   deletedAt DateTime?
   memberId String
   questId Int
+  @@unique([questId, memberId])
 }
 
 

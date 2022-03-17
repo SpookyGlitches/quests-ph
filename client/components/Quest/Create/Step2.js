@@ -11,13 +11,15 @@ import DatePicker from "@mui/lab/DatePicker";
 import { Controller, useFormContext } from "react-hook-form";
 import { add } from "date-fns";
 
-export default function Step2() {
+export default function Step2({ wishItem }) {
   const {
     formState: { errors },
   } = useFormContext();
 
   return (
     <>
+      {wishItem}
+
       <Controller
         name="category"
         render={({ field: { onChange, value } }) => (

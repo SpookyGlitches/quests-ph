@@ -16,23 +16,27 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import AppLayout from "../../components/Layouts/AppLayout";
 import Step1 from "../../components/Quest/Create/Step1";
 import Step2 from "../../components/Quest/Create/Step2";
-import { validationSchema } from "../../validations/createQuest";
+import { createQuestValidation } from "../../validations/quest";
+import WishInput from "../../components/Quest/Create/WishInput";
 
 const steps = ["Set the WOOP", "Configure the settings"];
+
+const wishItem = <WishInput />;
 
 const Create = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [loading, setLoading] = useState(false);
-  const currentValidationSchema = validationSchema[activeStep];
+  const currentValidationSchema = createQuestValidation[activeStep];
   const router = useRouter();
   const methods = useForm({
     resolver: yupResolver(currentValidationSchema),
-    mode: "onChange",
+    mode: "onSubmit",
+    // ideally onChange but something wrong with mui date picker
     defaultValues: {
-      wish: "hello",
-      outcome: "hello",
-      obstacle: "hello",
-      plan: "hello",
+      wish: "",
+      outcome: "",
+      obstacle: "",
+      plan: "",
       category: "SOCIAL",
       difficulty: "EASY",
       visibility: "PUBLIC",
@@ -40,7 +44,7 @@ const Create = () => {
       endDate: add(new Date(), { days: 1 }),
     },
   });
-  const { trigger, handleSubmit, control } = methods;
+  const { trigger, handleSubmit } = methods;
 
   const postData = async (values) => {
     setLoading(true);
@@ -54,8 +58,10 @@ const Create = () => {
   };
   const handleNext = async () => {
     if (activeStep >= steps.length) return;
+
     const valid = await trigger();
     if (!valid) return;
+
     if (activeStep < steps.length - 1)
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     if (activeStep === steps.length - 1) {
@@ -114,7 +120,7 @@ const Create = () => {
           <FormProvider {...methods}>
             <form>
               <Stack spacing={4}>
-                {activeStep === 0 ? <Step1 control={control} /> : <Step2 />}
+                {activeStep === 0 ? <Step1 wishItem={wishItem} /> : <Step2 />}
               </Stack>
             </form>
           </FormProvider>

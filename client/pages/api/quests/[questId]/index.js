@@ -1,7 +1,4 @@
-import prisma from "../../../lib/prisma";
-// import { PrismaClient } from "@prisma/client";
-
-// const prisma = new PrismaClient();
+import prisma from "../../../../lib/prisma";
 
 async function getQuest(req, res) {
   try {
@@ -67,7 +64,5 @@ export default async function handler(req, res) {
     await updateQuest(req, res);
   } else if (req.method === "DELETE") {
     await deleteQuest(req, res);
-  } else {
-    res.status(404).send();
   }
 }

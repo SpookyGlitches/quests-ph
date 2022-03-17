@@ -1,18 +1,58 @@
 import { useRouter } from "next/router";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { add } from "date-fns";
-import { Box, Button, Stack, Typography } from "@mui/material";
-import { useContext, useEffect } from "react";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { useContext, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import axios from "axios";
 import QuestLayout from "../../../../components/Layouts/QuestLayout";
 import Step2 from "../../../../components/Quest/Create/Step2";
-import { step2Validations } from "../../../../validations/createQuest";
+import { step2Validations } from "../../../../validations/quest";
 import { QuestContext } from "../../../../context/QuestContext";
+import WishInput from "../../../../components/Quest/Create/WishInput";
+
+const wishItem = <WishInput />;
+
+const DialogItem = ({ handleOk, handleCancel, open, loading }) => {
+  return (
+    <Dialog
+      sx={{ "& .MuiDialog-paper": { width: "100%", maxHeight: 435 } }}
+      maxWidth="xs"
+      open={open}
+    >
+      <DialogTitle>Delete Quest</DialogTitle>
+      <DialogContent>
+        <Typography variant="body1">
+          Are you sure you want to delete this Quest? All associated data will
+          be lost
+        </Typography>
+      </DialogContent>
+      <DialogActions>
+        <Button autoFocus onClick={handleCancel} disabled={loading}>
+          No
+        </Button>
+        <Button onClick={handleOk} disabled={loading}>
+          Yes
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
 
 export default function Edit() {
   const router = useRouter();
   const quest = useContext(QuestContext);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const methods = useForm({
     shouldUnregister: false,
     resolver: yupResolver(step2Validations),
@@ -45,13 +85,23 @@ export default function Edit() {
     }
   };
 
-  const toggleDeleteModal = async () => {
+  const toggleDeleteModal = () => {
+    setOpenDeleteModal((prev) => !prev);
+  };
+
+  const deleteQuest = async () => {
     try {
+      setLoading(true);
       await axios.delete(`/api/quests/${quest.id}`);
-    } catch (err) {
-      console.log("error delete");
+      router.replace("/quests");
+      setOpenDeleteModal(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
     <Box
       sx={{
@@ -74,7 +124,7 @@ export default function Edit() {
               },
             }}
           >
-            <Step2 />
+            <Step2 wishItem={wishItem} />
           </Stack>
           <Box
             sx={{
@@ -96,6 +146,12 @@ export default function Edit() {
           </Box>
         </form>
       </FormProvider>
+      <DialogItem
+        open={openDeleteModal}
+        handleOk={deleteQuest}
+        handleCancel={toggleDeleteModal}
+        loading={loading}
+      />
     </Box>
   );
 }

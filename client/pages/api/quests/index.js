@@ -1,11 +1,8 @@
-// import prisma from "../../../lib/prisma";
-import { PrismaClient, QuestRole } from "@prisma/client";
+import { QuestRole } from "@prisma/client";
 import { getSession } from "next-auth/react";
-
-const prisma = new PrismaClient();
+import prisma from "../../../lib/prisma";
 
 async function createQuest(req, res) {
-  const user = await getSession({ req });
   const {
     wish,
     difficulty,
@@ -18,7 +15,8 @@ async function createQuest(req, res) {
     plan,
     outcome,
   } = req.body;
-  console.log(req.body);
+  const user = await getSession({ req });
+
   const quest = await prisma.quest.create({
     data: {
       wish,
@@ -28,6 +26,7 @@ async function createQuest(req, res) {
       wiki,
       estimatedStartDate: startDate,
       estimatedEndDate: endDate,
+      creatorId: user.userId,
       partyMembers: {
         create: {
           outcome,

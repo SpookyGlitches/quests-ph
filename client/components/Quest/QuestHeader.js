@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext } from "react";
 import { QuestContext } from "../../context/QuestContext";
+import capitalizeFirstLetterOnly from "../../helpers/strings";
 
 const muiLinkProps = {
   component: "button",
@@ -53,7 +54,7 @@ export default function QuestHeader() {
         }}
       >
         <Typography component="div" variant="body2">
-          {quest.category}
+          {capitalizeFirstLetterOnly(quest.category)}
         </Typography>
         <Box sx={{ marginTop: "0.2rem" }}>
           <Typography variant="h4" align="center" color="primary">
