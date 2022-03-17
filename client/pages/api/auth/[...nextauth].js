@@ -41,7 +41,7 @@ export default NextAuth({
   ],
   callbacks: {
     // eslint-disable-next-line
-    async signIn(user, account, profile) {
+    signIn(user, account, profile) {
       if (typeof user.user.id !== typeof undefined) {
         if (user.user.isActive === "1") {
           return user;
@@ -50,35 +50,23 @@ export default NextAuth({
       }
       return false;
     },
-
-    async session(session, token) {
-      if (userAccount !== null) {
-        // eslint-disable-next-line
-        session.user = userAccount;
-      } else if (
-        typeof token.user !== typeof undefined &&
-        (typeof session.user === typeof undefined ||
-          (typeof session.user !== typeof undefined &&
-            typeof session.user.userId === typeof undefined))
-        // eslint-disable-next-line
-      ) {
-        // eslint-disable-next-line
-        session.user = token.user;
-        // eslint-disable-next-line
-      } else if (typeof token !== typeof undefined) {
-        // eslint-disable-next-line
-        session.token = token;
-      }
-      return session;
-    },
-    // eslint-disable-next-line
-    async jwt(token, user, account, profile, isNewUser) {
-      if (typeof user !== typeof undefined) {
+    jwt: ({ token, user }) => {
+      // first time jwt callback is run, user object is available
+      if (user) {
+        // token.id = user.id;
         // eslint-disable-next-line
         token.user = user;
       }
 
       return token;
+    },
+    // eslint-disable-next-line
+    session: ({ session }) => {
+      if (userAccount !== null) {
+        // eslint-disable-next-line
+        session.user = userAccount;
+      }
+      return session;
     },
   },
 });

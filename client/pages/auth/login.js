@@ -32,7 +32,7 @@ export default function Login() {
     signIn("credentials", {
       email,
       password,
-      callbackUrl: `localhost:3000/`,
+      callbackUrl: `/`,
       redirect: false,
     }).then((result) => {
       if (result.error !== null) {
@@ -84,7 +84,6 @@ export default function Login() {
             onChange={(e) => setEmail(e.target.value)}
             sx={{ mb: 3 }}
             error={loginError && loginError}
-            helperText={loginError || ""}
           />
 
           <TextField
@@ -93,6 +92,8 @@ export default function Login() {
             label="Password"
             name="password"
             value={password}
+            error={loginError && loginError}
+            helperText={loginError || ""}
             onChange={(e) => setPassword(e.target.value)}
             type={showPassword ? "text" : "password"}
             autoComplete="current-password"
