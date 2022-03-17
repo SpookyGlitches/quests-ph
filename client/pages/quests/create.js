@@ -28,10 +28,10 @@ const Create = () => {
   const [loading, setLoading] = useState(false);
   const currentValidationSchema = createQuestValidation[activeStep];
   const router = useRouter();
+
   const methods = useForm({
     resolver: yupResolver(currentValidationSchema),
-    mode: "onSubmit",
-    // ideally onChange but something wrong with mui date picker
+    mode: "onChange",
     defaultValues: {
       wish: "",
       outcome: "",
@@ -47,14 +47,17 @@ const Create = () => {
   const { trigger, handleSubmit } = methods;
 
   const postData = async (values) => {
-    setLoading(true);
     try {
-      const { data } = await axios.post("/api/quests/", values);
-      router.push(`/quests/${data.quest.id}/overview`);
+      setLoading(true);
+      const {
+        data: { quest },
+      } = await axios.post("/api/quests/", values);
+      router.push(`/quests/${quest.id}/overview`);
     } catch (err) {
-      console.log("Error", err);
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
   const handleNext = async () => {
     if (activeStep >= steps.length) return;

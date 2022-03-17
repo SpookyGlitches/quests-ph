@@ -84,7 +84,7 @@ export default function Step2({ wishItem }) {
                 <FormControl variant="filled" sx={{ width: "100%" }}>
                   <DatePicker
                     label="Start date"
-                    minDate={new Date()}
+                    disablePast
                     value={value}
                     onChange={onChange}
                     renderInput={(params) => (
@@ -116,6 +116,7 @@ export default function Step2({ wishItem }) {
                     label="End date"
                     minDate={add(new Date(), { days: 1 })}
                     value={value}
+                    disablePast
                     onChange={onChange}
                     renderInput={(params) => {
                       return (

@@ -1,3 +1,4 @@
+import { add } from "date-fns";
 import { object, string, mixed, date } from "yup";
 import { oopValidations } from "./partyMember";
 
@@ -17,8 +18,13 @@ export const step2Validations = object({
   endDate: date()
     .when(
       "startDate",
-      (startDate, schema) => startDate && schema.min(startDate),
-      // idk how to customize the message here, help 😭
+      (startDate, schema) =>
+        startDate &&
+        schema.min(
+          // cheats :)
+          add(startDate, { days: 1 }),
+          "End date must be later than the start date",
+        ),
     )
     .required(requiredMsg),
 });
