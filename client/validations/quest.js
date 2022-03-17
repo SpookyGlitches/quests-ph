@@ -4,7 +4,7 @@ import { oopValidations } from "./partyMember";
 
 const requiredMsg = "This field is required";
 
-const wishValidation = object({
+export const wishValidation = object({
   wish: string()
     .max(32, "Maximum length of 32 characters")
     .required(requiredMsg),

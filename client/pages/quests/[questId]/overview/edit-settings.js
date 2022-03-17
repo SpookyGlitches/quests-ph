@@ -16,7 +16,10 @@ import { FormProvider, useForm } from "react-hook-form";
 import axios from "axios";
 import QuestLayout from "../../../../components/Layouts/QuestLayout";
 import Step2 from "../../../../components/Quest/Create/Step2";
-import { step2Validations } from "../../../../validations/quest";
+import {
+  step2Validations,
+  wishValidation,
+} from "../../../../validations/quest";
 import { QuestContext } from "../../../../context/QuestContext";
 import WishInput from "../../../../components/Quest/Create/WishInput";
 
@@ -55,8 +58,9 @@ export default function Edit() {
   const [loading, setLoading] = useState(false);
   const methods = useForm({
     shouldUnregister: false,
-    resolver: yupResolver(step2Validations),
+    resolver: yupResolver([wishValidation, step2Validations]),
     defaultValues: {
+      wish: "",
       difficulty: "EASY",
       visibility: "PUBLIC",
       category: "HEALTH",
@@ -68,12 +72,12 @@ export default function Edit() {
   const { setValue, handleSubmit } = methods;
 
   useEffect(() => {
+    setValue("wish", quest.wish);
     setValue("startDate", quest.estimatedStartDate);
     setValue("endDate", quest.estimatedEndDate);
     setValue("difficulty", quest.difficulty);
     setValue("visibility", quest.visibility);
     setValue("category", quest.category);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quest]);
 
   const updateSettings = async (values) => {
@@ -133,11 +137,7 @@ export default function Edit() {
               marginTop: 4,
             }}
           >
-            <Button
-              type="button"
-              variant="outlined"
-              onClick={toggleDeleteModal}
-            >
+            <Button type="button" onClick={toggleDeleteModal}>
               Delete
             </Button>
             <Button type="submit" variant="contained">
