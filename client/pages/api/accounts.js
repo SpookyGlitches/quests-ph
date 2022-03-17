@@ -3,7 +3,7 @@
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
-
+// eslint-disable-next-line
 export default async function (req, res) {
   try {
     if (req.method === "POST") {
