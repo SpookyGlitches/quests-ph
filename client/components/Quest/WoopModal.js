@@ -31,6 +31,7 @@ export default function WoopModal({ handleOk, handleCancel, okText, details }) {
     setValue("outcome", outcome);
     setValue("obstacle", obstacle);
     setValue("plan", plan);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [details]);
 
   return (
@@ -51,11 +52,19 @@ export default function WoopModal({ handleOk, handleCancel, okText, details }) {
               <Step1 />
             </Stack>
           </DialogContent>
-          <DialogActions>
-            <Button autoFocus onClick={handleCancel} disabled={details.loading}>
-              Cancel
-            </Button>
-            <Button type="submit">{okText || "Ok"}</Button>
+          <DialogActions sx={{}}>
+            <Box sx={{ marginX: 1, display: "flex", gap: 2, marginBottom: 1 }}>
+              <Button
+                autoFocus
+                onClick={handleCancel}
+                disabled={details.loading}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" variant="contained">
+                {okText || "Ok"}
+              </Button>
+            </Box>
           </DialogActions>
         </form>
       </FormProvider>

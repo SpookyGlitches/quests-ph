@@ -11,7 +11,6 @@ export default function WishInput() {
       render={({ field: { onChange, value } }) => (
         <TextField
           fullWidth
-          id="filled-basic"
           label="Wish"
           onChange={onChange}
           value={value}

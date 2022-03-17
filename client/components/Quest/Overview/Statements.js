@@ -98,7 +98,7 @@ export default function Statements() {
   }, [partyMembers, session]);
 
   useEffect(() => {
-    if (quest.id) fetchPartyMembers();
+    if (quest && quest.id) fetchPartyMembers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quest]);
 
