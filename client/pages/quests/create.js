@@ -13,6 +13,11 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import {
+  QuestDifficulty,
+  QuestVisibility,
+  QuestCategory,
+} from "@prisma/client";
 import AppLayout from "../../components/Layouts/AppLayout";
 import Step1 from "../../components/Quest/Create/Step1";
 import Step2 from "../../components/Quest/Create/Step2";
@@ -37,9 +42,9 @@ const Create = () => {
       outcome: "",
       obstacle: "",
       plan: "",
-      category: "SOCIAL",
-      difficulty: "EASY",
-      visibility: "PUBLIC",
+      category: QuestCategory.SOCIAL,
+      difficulty: QuestDifficulty.EASY,
+      visibility: QuestVisibility.PRIVATE,
       startDate: new Date(),
       endDate: add(new Date(), { days: 1 }),
     },

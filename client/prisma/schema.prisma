@@ -35,14 +35,14 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  createdQuests Quest[]
+  id               String        @id @default(cuid())
+  name             String?
+  email            String?       @unique
+  emailVerified    DateTime?
+  image            String?
+  accounts         Account[]
+  sessions         Session[]
+  createdQuests    Quest[]
   associatedQuests PartyMember[]
 }
 
@@ -55,41 +55,40 @@ model VerificationToken {
 }
 
 model Quest {
-  id                 Int      @id @default(autoincrement())
+  id                 Int             @id @default(autoincrement())
   wish               String
-  difficulty         String
-  visibility         String
-  category           String
-  creator            User @relation(fields:[creatorId], references: [id])
-  wiki               String @default("[{\"type\":\"p\",\"children\":[{\"text\":\"\"}]}]")
+  difficulty         QuestDifficulty @default(EASY)
+  visibility         QuestVisibility @default(PRIVATE)
+  category           QuestCategory   @default(SOCIAL)
+  creator            User            @relation(fields: [creatorId], references: [id])
+  wiki               String?         
   mentorMessage      String?
-  estimatedStartDate DateTime @db.Date
-  estimatedEndDate   DateTime @db.Date
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  estimatedStartDate DateTime        @db.Date
+  estimatedEndDate   DateTime        @db.Date
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
   completedAt        DateTime?
   deletedAt          DateTime?
-  partyMembers PartyMember[]
+  partyMembers       PartyMember[]
   creatorId          String
 }
 
+model PartyMember {
+  id          Int       @id @default(autoincrement())
+  quest       Quest     @relation(fields: [questId], references: [id])
+  partyMember User      @relation(fields: [memberId], references: [id])
+  role        QuestRole @default(MENTEE)
+  outcome     String
+  obstacle    String
+  plan        String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
+  deletedAt   DateTime?
+  memberId    String
+  questId     Int
 
-model PartyMember{
-  id                 Int      @id @default(autoincrement())
-  quest Quest @relation(fields:[questId], references: [id])
-  partyMember User @relation(fields:[memberId], references: [id])
-  role QuestRole @default(MENTEE)
-  outcome String
-  obstacle String
-  plan String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  deletedAt DateTime?
-  memberId String
-  questId Int
   @@unique([questId, memberId])
 }
-
 
 enum QuestRole {
   MENTOR
@@ -97,3 +96,19 @@ enum QuestRole {
   PARTY_LEADER
 }
 
+enum QuestDifficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum QuestVisibility {
+  PUBLIC
+  PRIVATE
+}
+
+enum QuestCategory {
+  SOCIAL
+  CAREER
+  HEALTH
+}

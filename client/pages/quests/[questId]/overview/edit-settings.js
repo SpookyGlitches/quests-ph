@@ -11,6 +11,11 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import {
+  QuestDifficulty,
+  QuestVisibility,
+  QuestCategory,
+} from "@prisma/client";
 import { useContext, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import axios from "axios";
@@ -58,13 +63,13 @@ export default function Edit() {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const methods = useForm({
-    shouldUnregister: false,
+    shouldUnregister: true,
     resolver: yupResolver(step2Validations.concat(wishValidation)),
     defaultValues: {
       wish: "",
-      difficulty: "EASY",
-      visibility: "PUBLIC",
-      category: "HEALTH",
+      difficulty: QuestDifficulty.EASY,
+      visibility: QuestVisibility.PRIVATE,
+      category: QuestCategory.SOCIAL,
       startDate: new Date(),
       endDate: add(new Date(), { days: 1 }),
     },
