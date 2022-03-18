@@ -13,7 +13,7 @@ const TaskItem = ({ value }) => {
         overflow: "hidden",
       }}
     >
-      <Checkbox edge="start" disableRipple />
+      <Checkbox edge="start" size="small" disableRipple />
       <Box component="div">
         <Typography
           variant="body2"
@@ -43,8 +43,8 @@ export default function ToDo() {
   return (
     <Box
       sx={{
-        paddingX: "2rem",
-        paddingY: "1.5rem",
+        paddingX: 3,
+        paddingY: 3,
         backgroundColor: "background.paper",
         borderRadius: 2,
       }}

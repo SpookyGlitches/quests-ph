@@ -9,7 +9,7 @@ import { QuestContext } from "../../../context/QuestContext";
 const initialValue = [
   {
     type: "p",
-    children: [{ text: "wtf" }],
+    children: [{ text: "" }],
   },
 ];
 
@@ -20,7 +20,6 @@ const Wiki = () => {
 
   useEffect(() => {
     if (quest && quest.wiki) {
-      console.log("i set it up");
       setPlateValue(JSON.parse(quest.wiki));
     }
   }, [quest]);
@@ -36,7 +35,7 @@ const Wiki = () => {
           wiki: JSON.stringify(plateValue),
         });
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     }
     setIsEditing((prev) => !prev);
