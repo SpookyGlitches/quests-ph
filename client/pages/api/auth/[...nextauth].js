@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
 import prisma from "../../../lib/prisma";
 
 let userAccount = null;
@@ -24,17 +25,39 @@ export default NextAuth({
       },
       // eslint-disable-next-line
       async authorize(credentials, req) {
-        const user = await prisma.user.findFirst({
+        const findUser = await prisma.user.findFirst({
           where: {
             email: credentials.email,
-            password: credentials.password,
           },
         });
-
-        if (user) {
-          userAccount = user;
-          return user;
+        if (findUser) {
+          const checkPass = await bcrypt.compare(
+            credentials.password,
+            findUser.password,
+          );
+          if (checkPass) {
+            const user = await prisma.user.findFirst({
+              where: {
+                email: credentials.email,
+              },
+            });
+            if (user) {
+              userAccount = user;
+              return user;
+            }
+          }
         }
+        // const user = await prisma.user.findFirst({
+        //   where: {
+        //     email: credentials.email,
+        //     password: credentials.password,
+        //   },
+        // });
+
+        // if (user) {
+        //   userAccount = user;
+        //   return user;
+        // }
         return null;
       },
     }),
