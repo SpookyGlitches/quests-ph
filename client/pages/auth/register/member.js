@@ -1,8 +1,8 @@
-// import MemberRegistrationForm from "../../../components/Registration/MemberRegistrationForm";
+import * as React from "react";
 import { Box, StepLabel, Stack, Stepper, Button, Step } from "@mui/material";
+import Alert from "@mui/material/Alert";
 import { useState } from "react";
-// eslint-disable-next-line
-import { Controller, FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import Router from "next/router";
@@ -16,6 +16,9 @@ import SignUpDisclaimer from "../../../components/Registration/SignUpDisclaimer"
 const steps = ["", ""];
 export default function Register() {
   const [activeStep, setActiveStep] = useState(0);
+  const [message, setMessage] = useState("");
+  const [show, setShow] = useState(false);
+
   // eslint-disable-next-line no-undef
   const currentValidationSchema = registerUserValidation[activeStep];
 
@@ -34,15 +37,13 @@ export default function Register() {
 
   const { trigger, handleSubmit, control } = methods;
 
-  // const here = (values) => {
   const here = async (values) => {
-    // console.log(values);
-
+    // eslint-disable-next-line
     try {
       const rawDate = values.dateOfBirth;
       const dateObj = new Date(rawDate);
       const bdate = dateObj.toISOString();
-      const userDeets = {
+      const userInfo = {
         email: values.email,
         dateOfBirth: bdate,
         displayName: values.displayName,
@@ -50,23 +51,26 @@ export default function Register() {
         password: values.password,
         role: "member",
       };
-      // console.log("ezez");
-      // console.log(userDeets);
       const res = await fetch("/api/accounts", {
         method: "POST",
-        body: JSON.stringify(userDeets),
+        body: JSON.stringify(userInfo),
       });
+
       if (res.status === 200) {
         Router.push({
           pathname: "/auth/verify-email/[emailAddress]",
-          query: { emailAddress: userDeets.email },
+          query: { emailAddress: userInfo.email },
         });
-      } else {
-        console.log("no");
-        //   //   //throw new Error(res.text());
+      } else if (res.status === 500) {
+        setMessage("Username is already in use.");
+        setShow(true);
+      } else if (res.status === 400) {
+        console.log("email");
+        setMessage("Email address is already in use.");
+        setShow(true);
       }
     } catch (err) {
-      console.log("Error!");
+      throw err;
     }
   };
 
@@ -84,11 +88,18 @@ export default function Register() {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
+
   return (
     <AuthLayout>
       <AuthHeader subtitle="Create an account" />
-      {/* <Button onClick={redirectToVerify}>haha</Button> */}
-      {/* <MemberRegistrationForm /> */}
+      {!show ? (
+        ""
+      ) : (
+        <Alert variant="outlined" severity="error">
+          {message}
+        </Alert>
+      )}
+
       <Stepper activeStep={activeStep}>
         {steps.map((label) => {
           const stepProps = {};
@@ -101,8 +112,9 @@ export default function Register() {
           );
         })}
       </Stepper>
+
       {activeStep === 0 || activeStep === steps.length ? (
-        <>{console.log("no prev button")}</>
+        <>{console.log("")}</>
       ) : (
         <Button
           color="primary"

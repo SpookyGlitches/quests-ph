@@ -12,7 +12,7 @@ export default function VerifyEmail() {
   return (
     <AuthLayout>
       <AuthHeader subtitle="Verify your email address" />
-      <Stack spacing={4} sx={{ my: 2 }}>
+      <Stack spacing={4} sx={{ my: 1 }}>
         <Typography variant="h6">
           We have sent an email to {emailAddress}.
         </Typography>
@@ -22,7 +22,7 @@ export default function VerifyEmail() {
           resend the email, please click the button below.
         </Typography>
       </Stack>
-      <Button variant="contained" sx={{ marginTop: 2 }}>
+      <Button variant="contained" sx={{}}>
         Resend Verification Email
       </Button>
     </AuthLayout>
