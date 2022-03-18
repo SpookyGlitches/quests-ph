@@ -6,7 +6,9 @@ import {
   DialogActions,
   DialogContent,
 } from "@mui/material";
+import { useRouter } from "next/router";
 import { useState } from "react";
+import axios from "axios";
 
 const DialogItem = ({ handleOk, handleCancel, open }) => {
   return (
@@ -34,16 +36,23 @@ const DialogItem = ({ handleOk, handleCancel, open }) => {
 
 export default function EndQuest() {
   const [open, setOpen] = useState(false);
-
+  const router = useRouter();
   const handleCancelClick = () => {
     setOpen(false);
   };
-  const handleOk = () => {
-    setOpen(false);
+  const handleOk = async () => {
+    try {
+      await axios.put(`/api/quests/${router.query.questId}/complete`);
+      router.replace("/quests");
+      setOpen(false);
+    } catch (err) {
+      console.error(err);
+    }
   };
   const handleButtonClick = () => {
     setOpen(true);
   };
+
   return (
     <>
       <Button variant="contained" color="primary" onClick={handleButtonClick}>

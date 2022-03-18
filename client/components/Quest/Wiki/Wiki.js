@@ -9,7 +9,7 @@ import { QuestContext } from "../../../context/QuestContext";
 const initialValue = [
   {
     type: "p",
-    children: [{ text: "" }],
+    children: [{ text: "wtf" }],
   },
 ];
 
@@ -20,6 +20,7 @@ const Wiki = () => {
 
   useEffect(() => {
     if (quest && quest.wiki) {
+      console.log("i set it up");
       setPlateValue(JSON.parse(quest.wiki));
     }
   }, [quest]);
