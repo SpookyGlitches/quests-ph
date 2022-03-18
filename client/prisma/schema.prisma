@@ -7,41 +7,20 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text @map("refreshToken")
-  access_token       String?  @db.Text @map("accessToken")
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text @map("idToken")
-  session_state      String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-}
-
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
+  id            Int    @id @default(autoincrement())
+  displayName   String    @unique
+  fullName      String?
+  email         String   @unique
+  password      String
+  dateOfBirth   DateTime
+  role          String
   image         String?
-  accounts      Account[]
-  sessions      Session[]
+  verificationStatus  Boolean @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime?
+  deletedAt     DateTime?
+  isActive      String    @default("1")@db.Char(1)
 }
 
 model VerificationToken {
