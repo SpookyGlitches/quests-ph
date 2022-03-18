@@ -29,14 +29,14 @@ async function createQuest(req, res) {
         category,
         estimatedStartDate: startDate,
         estimatedEndDate: endDate,
-        creatorId: user.userId,
+        userId: user.userId,
         partyMembers: {
           create: {
             outcome,
             obstacle,
             plan,
             role: QuestRole.PARTY_LEADER,
-            memberId: user.userId,
+            userId: user.userId,
           },
         },
       },

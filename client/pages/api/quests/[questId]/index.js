@@ -10,7 +10,7 @@ async function getQuest(req, res) {
   try {
     const quest = await prisma.quest.findUnique({
       where: {
-        id: Number(req.query.questId),
+        questId: Number(req.query.questId),
       },
     });
     res.status(200).json({ quest });
@@ -26,7 +26,7 @@ async function updateQuest(req, res) {
     await step2Validations.concat(wishValidation).validate({ ...req.body });
     const quest = await prisma.quest.update({
       where: {
-        id: null,
+        questId: req.query.questId,
       },
       data: {
         estimatedEndDate: endDate,
@@ -56,7 +56,7 @@ async function deleteQuest(req, res) {
     const { questId } = req.query;
     const questDelete = prisma.quest.delete({
       where: {
-        id: Number(questId),
+        questId: Number(questId),
       },
     });
     const memberDelete = prisma.partyMember.deleteMany({

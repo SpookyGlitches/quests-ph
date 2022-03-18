@@ -5,7 +5,7 @@ async function editWoopStatement(req, res) {
     const { outcome, obstacle, plan } = req.body;
     const partyMemberWoop = await prisma.partyMember.update({
       where: {
-        id: Number(req.query.memberId),
+        partyMemberId: Number(req.query.memberId),
       },
       data: {
         outcome,

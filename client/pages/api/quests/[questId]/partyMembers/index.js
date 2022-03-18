@@ -6,7 +6,7 @@ async function fetchPartyMembers(req, res) {
     questId: Number(req.query.questId),
   };
 
-  if (req.query.memberId) searchObj.memberId = req.query.memberId;
+  if (req.query.memberId) searchObj.userId = req.query.memberId;
   if (req.query.excludeMentor)
     searchObj.OR = [
       {
@@ -21,7 +21,7 @@ async function fetchPartyMembers(req, res) {
     const partyMembers = await prisma.partyMember.findMany({
       where: searchObj,
       include: {
-        partyMember: {
+        user: {
           select: {
             name: true,
             id: true,

@@ -6,7 +6,7 @@ export default async function handler(req, res) {
     try {
       await prisma.quest.update({
         where: {
-          id: Number(req.query.questId),
+          questId: Number(req.query.questId),
         },
         data: {
           completedAt: new Date(),
