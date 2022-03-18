@@ -42,7 +42,7 @@ export default function Statements() {
       plan: "",
       wish: quest.wish,
     },
-    memberId: null,
+    partyMemberId: null,
   });
 
   const handleWoopPopperClick = (event) => {
@@ -55,10 +55,11 @@ export default function Statements() {
       const {
         data: { partyMembers: results },
       } = await axios.get(
-        `/api/quests/${quest.id}/partyMembers?excludeMentor=true`,
+        `/api/quests/${quest.questId}/partyMembers?excludeMentor=true`,
       );
       setPartyMembers(results);
     } catch (error) {
+      alert("error");
       console.error(error);
     }
   };
@@ -66,7 +67,7 @@ export default function Statements() {
   const editWoop = async (values) => {
     try {
       await axios.put(
-        `/api/quests/${quest.id}/partyMembers/${woopModalDetails.partyMemberId}`,
+        `/api/quests/${quest.questId}/partyMembers/${woopModalDetails.partyMemberId}`,
         values,
       );
       // temporary
@@ -80,8 +81,9 @@ export default function Statements() {
   useEffect(() => {
     if (partyMembers.length === 0 || !session) return;
     // is this badd? 🙂
+    console.log(partyMembers);
     const currentMember = partyMembers.find(
-      (item) => item.memberId === session.userId,
+      (item) => item.userId === session.userId,
     );
     if (!currentMember) return;
     setWoopModalDetails((prev) => ({
@@ -92,13 +94,13 @@ export default function Statements() {
         obstacle: currentMember.obstacle,
         plan: currentMember.plan,
       },
-      partyMemberId: currentMember.id,
+      partyMemberId: currentMember.partyMemberId,
     }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [partyMembers, session]);
+  }, [partyMembers]);
 
   useEffect(() => {
-    if (quest && quest.id) fetchPartyMembers();
+    if (quest && quest.questId) fetchPartyMembers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quest]);
 
@@ -137,8 +139,8 @@ export default function Statements() {
           {partyMembers.map((item) => (
             <MemberStatement
               text={item.outcome}
-              name={item.partyMember.name}
-              key={item.id}
+              name={item.user.name}
+              key={item.partyMemberId}
             />
           ))}
         </div>
@@ -147,8 +149,8 @@ export default function Statements() {
           {partyMembers.map((item) => (
             <MemberStatement
               text={item.obstacle}
-              name={item.partyMember.name}
-              key={item.id}
+              name={item.user.name}
+              key={item.partyMemberId}
             />
           ))}
         </div>
@@ -157,8 +159,8 @@ export default function Statements() {
           {partyMembers.map((item) => (
             <MemberStatement
               text={item.plan}
-              name={item.partyMember.name}
-              key={item.id}
+              name={item.user.name}
+              key={item.partyMemberId}
             />
           ))}
         </div>

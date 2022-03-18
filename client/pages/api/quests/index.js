@@ -3,9 +3,8 @@ import { ValidationError } from "yup";
 import { QuestRole } from "@prisma/client";
 import { getSession } from "next-auth/react";
 import prisma from "../../../lib/prisma";
-import { createQuestValidation } from "../../../validations/quest";
+import { step1Validations, step2Validations } from "../../../validations/quest";
 
-// eslint-disable-next-line consistent-return
 async function createQuest(req, res) {
   try {
     const {
@@ -20,7 +19,7 @@ async function createQuest(req, res) {
       outcome,
     } = req.body;
     const user = await getSession({ req });
-    await createQuestValidation.validate({ ...req.body });
+    await step1Validations.concat(step2Validations).validate({ ...req.body });
     const quest = await prisma.quest.create({
       data: {
         wish,
@@ -46,10 +45,9 @@ async function createQuest(req, res) {
     switch (err.constructor) {
       case ValidationError:
       case PrismaClientValidationError:
-        res.status(400).send();
-        break;
+        return res.status(400).send();
       default:
-        res.status(500).send();
+        return res.status(500).send();
     }
   }
 }

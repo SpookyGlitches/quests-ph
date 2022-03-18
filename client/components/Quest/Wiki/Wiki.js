@@ -31,7 +31,7 @@ const Wiki = () => {
     event.preventDefault();
     if (isEditing) {
       try {
-        await axios.put(`/api/quests/${quest.id}/wiki`, {
+        await axios.put(`/api/quests/${quest.questId}/wiki`, {
           wiki: JSON.stringify(plateValue),
         });
       } catch (err) {

@@ -88,10 +88,10 @@ export default function Edit() {
 
   const updateSettings = async (values) => {
     try {
-      await axios.put(`/api/quests/${quest.id}`, values);
-      router.push(`/quests/${quest.id}/overview`);
+      await axios.put(`/api/quests/${quest.questId}`, values);
+      router.push(`/quests/${quest.questId}/overview`);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -102,7 +102,7 @@ export default function Edit() {
   const deleteQuest = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/quests/${quest.id}`);
+      await axios.delete(`/api/quests/${quest.questId}`);
       router.replace("/quests");
       setOpenDeleteModal(false);
     } catch (error) {

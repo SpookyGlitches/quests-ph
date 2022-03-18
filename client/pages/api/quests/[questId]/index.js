@@ -15,6 +15,7 @@ async function getQuest(req, res) {
     });
     res.status(200).json({ quest });
   } catch (err) {
+    console.error(err);
     res.status(404).send();
   }
 }
@@ -26,7 +27,7 @@ async function updateQuest(req, res) {
     await step2Validations.concat(wishValidation).validate({ ...req.body });
     const quest = await prisma.quest.update({
       where: {
-        questId: req.query.questId,
+        questId: Number(req.query.questId),
       },
       data: {
         estimatedEndDate: endDate,

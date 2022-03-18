@@ -57,7 +57,7 @@ const Create = () => {
       const {
         data: { quest },
       } = await axios.post("/api/quests/", values);
-      router.push(`/quests/${quest.id}/overview`);
+      router.push(`/quests/${quest.questId}/overview`);
     } catch (err) {
       console.error(err);
     } finally {
