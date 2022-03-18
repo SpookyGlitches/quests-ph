@@ -43,7 +43,6 @@ export default function EndQuest() {
   const handleOk = async () => {
     try {
       await axios.put(`/api/quests/${router.query.questId}/complete`);
-      router.replace("/quests");
       setOpen(false);
     } catch (err) {
       console.error(err);
