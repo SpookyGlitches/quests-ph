@@ -1,4 +1,10 @@
+import { PrismaClientValidationError } from "@prisma/client/runtime";
+import { ValidationError } from "yup";
 import prisma from "../../../../lib/prisma";
+import {
+  step2Validations,
+  wishValidation,
+} from "../../../../validations/quest";
 
 async function getQuest(req, res) {
   try {
@@ -9,17 +15,18 @@ async function getQuest(req, res) {
     });
     res.status(200).json({ quest });
   } catch (err) {
-    console.log(err);
-    res.status(404).json({});
+    res.status(404).send();
   }
 }
 async function updateQuest(req, res) {
   try {
     const { startDate, endDate, difficulty, visibility, category, wish } =
       req.body;
+
+    await step2Validations.concat(wishValidation).validate({ ...req.body });
     const quest = await prisma.quest.update({
       where: {
-        id: Number(req.query.questId),
+        id: null,
       },
       data: {
         estimatedEndDate: endDate,
@@ -32,8 +39,14 @@ async function updateQuest(req, res) {
     });
     res.status(200).send({ quest });
   } catch (err) {
-    res.status(500).send();
-    console.log(err);
+    switch (err.constructor) {
+      case ValidationError:
+      case PrismaClientValidationError:
+        res.status(400).send();
+        break;
+      default:
+        res.status(500).send();
+    }
   }
 }
 
@@ -54,8 +67,13 @@ async function deleteQuest(req, res) {
     await prisma.$transaction([questDelete, memberDelete]);
     res.status(200).send();
   } catch (err) {
-    res.status(500).send();
-    console.log(err);
+    switch (err.constructor) {
+      case PrismaClientValidationError:
+        res.status(400).send();
+        break;
+      default:
+        res.status(500).send();
+    }
   }
 }
 
@@ -66,5 +84,7 @@ export default async function handler(req, res) {
     await updateQuest(req, res);
   } else if (req.method === "DELETE") {
     await deleteQuest(req, res);
+  } else {
+    res.status(405).send();
   }
 }

@@ -1,44 +1,57 @@
+import { PrismaClientValidationError } from "@prisma/client/runtime";
+import { ValidationError } from "yup";
 import { QuestRole } from "@prisma/client";
 import { getSession } from "next-auth/react";
 import prisma from "../../../lib/prisma";
+import { createQuestValidation } from "../../../validations/quest";
 
+// eslint-disable-next-line consistent-return
 async function createQuest(req, res) {
-  const {
-    wish,
-    difficulty,
-    visibility,
-    category,
-    wiki,
-    startDate,
-    endDate,
-    obstacle,
-    plan,
-    outcome,
-  } = req.body;
-  const user = await getSession({ req });
-
-  const quest = await prisma.quest.create({
-    data: {
+  try {
+    const {
       wish,
       difficulty,
       visibility,
       category,
-      wiki,
-      estimatedStartDate: startDate,
-      estimatedEndDate: endDate,
-      creatorId: user.userId,
-      partyMembers: {
-        create: {
-          outcome,
-          obstacle,
-          plan,
-          role: QuestRole.PARTY_LEADER,
-          memberId: user.userId,
+      startDate,
+      endDate,
+      obstacle,
+      plan,
+      outcome,
+    } = req.body;
+    const user = await getSession({ req });
+    await createQuestValidation.validate({ ...req.body });
+    const quest = await prisma.quest.create({
+      data: {
+        wish,
+        difficulty,
+        visibility,
+        category,
+        estimatedStartDate: startDate,
+        estimatedEndDate: endDate,
+        creatorId: user.userId,
+        partyMembers: {
+          create: {
+            outcome,
+            obstacle,
+            plan,
+            role: QuestRole.PARTY_LEADER,
+            memberId: user.userId,
+          },
         },
       },
-    },
-  });
-  return res.status(200).json({ quest });
+    });
+    return res.status(200).json({ quest });
+  } catch (err) {
+    switch (err.constructor) {
+      case ValidationError:
+      case PrismaClientValidationError:
+        res.status(400).send();
+        break;
+      default:
+        res.status(500).send();
+    }
+  }
 }
 
 export default async function handler(req, res) {
