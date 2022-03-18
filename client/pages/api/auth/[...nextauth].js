@@ -47,17 +47,7 @@ export default NextAuth({
             }
           }
         }
-        // const user = await prisma.user.findFirst({
-        //   where: {
-        //     email: credentials.email,
-        //     password: credentials.password,
-        //   },
-        // });
 
-        // if (user) {
-        //   userAccount = user;
-        //   return user;
-        // }
         return null;
       },
     }),
