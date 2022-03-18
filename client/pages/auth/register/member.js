@@ -12,7 +12,7 @@ import Step1 from "../../../components/Registration/Step1";
 import Step2 from "../../../components/Registration/Step2";
 import { registerUserValidation } from "../../../validations/UserRegistration";
 import SignUpDisclaimer from "../../../components/Registration/SignUpDisclaimer";
-
+import bcrypt from "bcryptjs";
 const steps = ["", ""];
 export default function Register() {
   const [activeStep, setActiveStep] = useState(0);
@@ -40,15 +40,16 @@ export default function Register() {
   const here = async (values) => {
     // eslint-disable-next-line
     try {
-      const rawDate = values.dateOfBirth;
-      const dateObj = new Date(rawDate);
-      const bdate = dateObj.toISOString();
-      const userInfo = {
+      let rawDate = values.dateOfBirth;
+      let dateObj = new Date(rawDate);
+      let bdate = dateObj.toISOString();
+      let salt = bcrypt.genSaltSync(10);
+      let userInfo = {
         email: values.email,
         dateOfBirth: bdate,
         displayName: values.displayName,
         fullName: values.fullName,
-        password: values.password,
+        password: bcrypt.hashSync(values.password, salt),
         role: "member",
       };
       const res = await fetch("/api/accounts", {
