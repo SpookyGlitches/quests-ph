@@ -59,7 +59,6 @@ export default function Statements() {
       );
       setPartyMembers(results);
     } catch (error) {
-      alert("error");
       console.error(error);
     }
   };
