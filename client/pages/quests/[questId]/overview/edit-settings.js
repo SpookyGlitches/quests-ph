@@ -63,9 +63,7 @@ export default function Edit() {
   const {
     query: { questId },
   } = router;
-  const { data: quest, isValidating } = useSWR(
-    questId ? `/quests/${questId}` : null,
-  );
+  const { data: quest } = useSWR(questId ? `/quests/${questId}` : null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const methods = useForm({
@@ -122,11 +120,11 @@ export default function Edit() {
       setLoading(false);
     }
   };
-  console.log(isValidating);
 
   if (!quest) {
-    return <div>loading</div>;
+    return <div>Loading</div>;
   }
+
   return (
     <Box
       sx={{

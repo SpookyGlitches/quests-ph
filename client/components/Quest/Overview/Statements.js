@@ -60,7 +60,6 @@ export default function Statements() {
     if (filteredPartyMembers && filteredPartyMembers.length !== 0) {
       const member = filteredPartyMembers[0];
       const { outcome, obstacle, plan, partyMemberId } = member;
-      console.log("here rerun", member);
       setWoopModalDetails((prev) => ({
         ...prev,
         statement: {
