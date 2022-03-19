@@ -1,8 +1,7 @@
 import { Box, Typography, Link as MuiLink } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useContext } from "react";
-import { QuestContext } from "../../context/QuestContext";
+import useSWR from "swr";
 import capitalizeFirstLetterOnly from "../../helpers/strings";
 
 const muiLinkProps = {
@@ -26,8 +25,13 @@ const tabs = ["Overview", "Posts", "Tasks", "Party", "Wiki", "Chat"];
 
 export default function QuestHeader() {
   const router = useRouter();
-  const basePath = `/quests/${router.query.questId}`;
-  const quest = useContext(QuestContext);
+  const { questId } = router.query;
+  const { data: quest } = useSWR(questId ? `/quests/${questId}` : null);
+  const basePath = `/quests/${questId}`;
+
+  if (!quest) {
+    return <div>Loading</div>;
+  }
 
   return (
     <Box

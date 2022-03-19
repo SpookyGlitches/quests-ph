@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { add } from "date-fns";
+import useSWR from "swr";
+
 import {
   Box,
   Button,
@@ -16,7 +18,7 @@ import {
   QuestVisibility,
   QuestCategory,
 } from "@prisma/client";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import axios from "axios";
 import QuestLayout from "../../../../components/Layouts/QuestLayout";
@@ -25,7 +27,6 @@ import {
   step2Validations,
   wishValidation,
 } from "../../../../validations/quest";
-import { QuestContext } from "../../../../context/QuestContext";
 import WishInput from "../../../../components/Quest/Create/WishInput";
 
 const wishItem = <WishInput />;
@@ -58,8 +59,12 @@ const DialogItem = ({ handleOk, handleCancel, open, loading }) => {
 
 export default function Edit() {
   const router = useRouter();
-  const quest = useContext(QuestContext);
-
+  const {
+    query: { questId },
+  } = router;
+  const { data: quest, isValidating } = useSWR(
+    questId ? `/quests/${questId}` : null,
+  );
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const methods = useForm({
@@ -78,12 +83,14 @@ export default function Edit() {
   const { setValue, handleSubmit } = methods;
 
   useEffect(() => {
+    if (!quest) return;
     setValue("wish", quest.wish);
     setValue("startDate", quest.estimatedStartDate);
     setValue("endDate", quest.estimatedEndDate);
     setValue("difficulty", quest.difficulty);
     setValue("visibility", quest.visibility);
     setValue("category", quest.category);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quest]);
 
   const updateSettings = async (values) => {
@@ -111,7 +118,11 @@ export default function Edit() {
       setLoading(false);
     }
   };
+  console.log(isValidating);
 
+  if (!quest) {
+    return <div>loading</div>;
+  }
   return (
     <Box
       sx={{

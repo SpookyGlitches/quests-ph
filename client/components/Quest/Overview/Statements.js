@@ -8,12 +8,13 @@ import {
   Button,
   Paper,
 } from "@mui/material";
+import useSWR from "swr";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import MemberStatement from "./MemberStatement";
-import { QuestContext } from "../../../context/QuestContext";
 import WoopModal from "../WoopModal";
 
 const titleTypographyProps = {
@@ -25,11 +26,21 @@ const titleTypographyProps = {
 };
 
 export default function Statements() {
+  const router = useRouter();
+  const { query } = router;
   const { data: session } = useSession();
+  const { data: quest } = useSWR(
+    query?.questId ? `/quests/${router.query.questId}` : null,
+  );
+  const { data: partyMembers, mutate: mutateStatement } = useSWR(
+    quest ? `/quests/${query.questId}/partyMembers?excludeMentor=true` : null,
+  );
+  const { data: filteredPartyMembers } = useSWR(
+    quest && session?.userId && partyMembers
+      ? `/quests/${query.questId}/partyMembers?excludeMentor=true&memberId=${session.userId}`
+      : null,
+  );
 
-  const quest = useContext(QuestContext);
-
-  const [partyMembers, setPartyMembers] = useState([]);
   const [anchorWoop, setAnchorWoop] = useState(null);
   const [openWoopPopper, setOpenWoopPopper] = useState(false);
   const [woopModalDetails, setWoopModalDetails] = useState({
@@ -40,27 +51,42 @@ export default function Statements() {
       outcome: "",
       obstacle: "",
       plan: "",
-      wish: quest.wish,
+      wish: "",
     },
     partyMemberId: null,
   });
 
+  useEffect(() => {
+    if (filteredPartyMembers && filteredPartyMembers.length !== 0) {
+      const member = filteredPartyMembers[0];
+      const { outcome, obstacle, plan, partyMemberId } = member;
+      setWoopModalDetails((prev) => ({
+        ...prev,
+        statement: {
+          ...prev.statement,
+          outcome,
+          obstacle,
+          plan,
+        },
+        partyMemberId,
+      }));
+    }
+  }, [filteredPartyMembers]);
+
+  useEffect(() => {
+    if (!quest) return;
+    setWoopModalDetails((prev) => ({
+      ...prev,
+      statement: {
+        ...prev.statement,
+        wish: quest.wish,
+      },
+    }));
+  }, [quest]);
+
   const handleWoopPopperClick = (event) => {
     setAnchorWoop(event.currentTarget);
     setOpenWoopPopper(!openWoopPopper);
-  };
-
-  const fetchPartyMembers = async () => {
-    try {
-      const {
-        data: { partyMembers: results },
-      } = await axios.get(
-        `/api/quests/${quest.questId}/partyMembers?excludeMentor=true`,
-      );
-      setPartyMembers(results);
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   const editWoop = async (values) => {
@@ -69,39 +95,12 @@ export default function Statements() {
         `/api/quests/${quest.questId}/partyMembers/${woopModalDetails.partyMemberId}`,
         values,
       );
-      // temporary
-      await fetchPartyMembers();
+      mutateStatement();
       setWoopModalDetails((prev) => ({ ...prev, open: false }));
     } catch (error) {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    if (partyMembers.length === 0 || !session) return;
-    // is this badd? 🙂
-    console.log(partyMembers);
-    const currentMember = partyMembers.find(
-      (item) => item.userId === session.userId,
-    );
-    if (!currentMember) return;
-    setWoopModalDetails((prev) => ({
-      ...prev,
-      statement: {
-        wish: quest.wish,
-        outcome: currentMember.outcome,
-        obstacle: currentMember.obstacle,
-        plan: currentMember.plan,
-      },
-      partyMemberId: currentMember.partyMemberId,
-    }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [partyMembers]);
-
-  useEffect(() => {
-    if (quest && quest.questId) fetchPartyMembers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [quest]);
 
   const toggleWoopModal = () => {
     setWoopModalDetails((prev) => ({
@@ -109,6 +108,10 @@ export default function Statements() {
       open: !prev.open,
     }));
   };
+
+  if (!quest || !partyMembers || !filteredPartyMembers) {
+    return <div>Loading</div>;
+  }
 
   return (
     <Box
@@ -135,6 +138,7 @@ export default function Statements() {
         </div>
         <div>
           <Typography {...titleTypographyProps}>🎁 Outcome</Typography>
+          {partyMembers.length}
           {partyMembers.map((item) => (
             <MemberStatement
               text={item.outcome}

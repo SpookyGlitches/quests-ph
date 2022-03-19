@@ -13,7 +13,7 @@ async function editWoopStatement(req, res) {
         plan,
       },
     });
-    return res.status(200).json({ partyMemberWoop });
+    return res.status(200).json(partyMemberWoop);
   } catch (error) {
     console.log(error);
     return res.status(500).send();

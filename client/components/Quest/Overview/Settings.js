@@ -8,18 +8,18 @@ import {
   Button,
   Paper,
 } from "@mui/material";
+import useSWR from "swr";
+
 import { format } from "date-fns";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
-import { QuestContext } from "../../../context/QuestContext";
 import capitalizeFirstLetterOnly from "../../../helpers/strings";
 
 export default function Settings() {
-  const quest = useContext(QuestContext);
   const router = useRouter();
-
+  const { questId } = router.query;
   const [anchorSettings, setAnchorSettings] = useState(null);
   const [openSettingsPopper, setOpenSettingsPopper] = useState(false);
 
@@ -27,6 +27,11 @@ export default function Settings() {
     setAnchorSettings(event.currentTarget);
     setOpenSettingsPopper(!openSettingsPopper);
   };
+  const { data: quest } = useSWR(questId ? `/quests/${questId}` : null);
+
+  if (!quest) {
+    return <div>Loading</div>;
+  }
 
   return (
     <Box
@@ -85,7 +90,7 @@ export default function Settings() {
             <Paper>
               <Typography variant="body1" color="black">
                 <Link
-                  href={`/quests/${router.query.questId}/overview/edit-settings`}
+                  href={`/quests/${questId}/overview/edit-settings`}
                   passHref
                 >
                   <Button>Edit</Button>

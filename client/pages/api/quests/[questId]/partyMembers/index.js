@@ -31,7 +31,7 @@ async function fetchPartyMembers(req, res) {
       },
     });
     console.log(partyMembers);
-    return res.status(200).json({ partyMembers });
+    return res.status(200).json(partyMembers);
   } catch (error) {
     console.log(error);
     return res.status(500).send();
