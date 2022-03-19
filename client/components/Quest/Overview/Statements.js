@@ -60,6 +60,7 @@ export default function Statements() {
     if (filteredPartyMembers && filteredPartyMembers.length !== 0) {
       const member = filteredPartyMembers[0];
       const { outcome, obstacle, plan, partyMemberId } = member;
+      console.log("here rerun", member);
       setWoopModalDetails((prev) => ({
         ...prev,
         statement: {
@@ -89,14 +90,17 @@ export default function Statements() {
     setOpenWoopPopper(!openWoopPopper);
   };
 
-  const editWoop = async (values) => {
+  const updateUserStament = async (values) => {
+    await axios.put(
+      `/api/quests/${quest.questId}/partyMembers/${woopModalDetails.partyMemberId}`,
+      values,
+    );
+    setWoopModalDetails((prev) => ({ ...prev, open: false }));
+  };
+
+  const submitForm = async (values) => {
     try {
-      await axios.put(
-        `/api/quests/${quest.questId}/partyMembers/${woopModalDetails.partyMemberId}`,
-        values,
-      );
-      mutateStatement();
-      setWoopModalDetails((prev) => ({ ...prev, open: false }));
+      await mutateStatement(updateUserStament(values));
     } catch (error) {
       console.error(error);
     }
@@ -169,7 +173,7 @@ export default function Statements() {
         </div>
       </Stack>
       <WoopModal
-        handleOk={editWoop}
+        handleOk={submitForm}
         handleCancel={toggleWoopModal}
         okText="Edit"
         details={woopModalDetails}

@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { add } from "date-fns";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 
 import {
   Box,
@@ -59,6 +59,7 @@ const DialogItem = ({ handleOk, handleCancel, open, loading }) => {
 
 export default function Edit() {
   const router = useRouter();
+  const { mutate } = useSWRConfig();
   const {
     query: { questId },
   } = router;
@@ -94,9 +95,12 @@ export default function Edit() {
   }, [quest]);
 
   const updateSettings = async (values) => {
+    await axios.put(`/api/quests/${quest.questId}`, values);
+  };
+
+  const submitForm = async (values) => {
     try {
-      await axios.put(`/api/quests/${quest.questId}`, values);
-      router.push(`/quests/${quest.questId}/overview`);
+      await mutate(`/quests/${quest.questId}`, updateSettings(values));
     } catch (err) {
       console.error(err);
     }
@@ -132,7 +136,7 @@ export default function Edit() {
       }}
     >
       <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(updateSettings)}>
+        <form onSubmit={handleSubmit(submitForm)}>
           <Typography variant="h5" color="primary" marginBottom={4}>
             Edit Quest
           </Typography>
