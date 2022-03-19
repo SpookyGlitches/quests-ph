@@ -76,6 +76,7 @@ export default NextAuth({
     // eslint-disable-next-line
     session: ({ session }) => {
       if (userAccount !== null) {
+        console.log(userAccount);
         // eslint-disable-next-line
         session.user = userAccount;
       }
