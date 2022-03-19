@@ -49,7 +49,7 @@ export default function Settings() {
           <MoreHorizRoundedIcon />
         </IconButton>
         <Grid container spacing={2}>
-          <Grid item xs={12} lg={6}>
+          <Grid item xs={12} lg={5}>
             <Box>
               <Typography variant="body2">
                 Category: {capitalizeFirstLetterOnly(quest.category)}
@@ -62,16 +62,20 @@ export default function Settings() {
               </Typography>
             </Box>
           </Grid>
-          <Grid item xs={12} lg={6}>
+          <Grid item xs={12} lg={7}>
             {quest && quest.estimatedStartDate && (
               <Box>
                 <Typography variant="body2">
-                  Start Date:{" "}
+                  Estimated Start:{" "}
                   {format(new Date(quest.estimatedStartDate), "MMMM d, yyyy  ")}
                 </Typography>
                 <Typography variant="body2">
-                  End Date:{" "}
+                  Estimated End:{" "}
                   {format(new Date(quest.estimatedEndDate), "MMMM d, yyyy  ")}
+                </Typography>
+                <Typography variant="body2">
+                  Completed At:{" "}
+                  {format(new Date(quest.completedAt), "MMMM d, yyyy  ")}
                 </Typography>
               </Box>
             )}
