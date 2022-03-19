@@ -6,6 +6,7 @@ import AppLayout from "../components/Layouts/AppLayout";
 export default function Home() {
   const router = useRouter();
   const { data: session } = useSession();
+  console.log("session", session);
   if (session) {
     return (
       <AppLayout>

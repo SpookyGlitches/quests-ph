@@ -4,16 +4,16 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import prisma from "../../../lib/prisma";
 
-let userAccount = null;
+var userAccount = null;
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
   cookie: {
     secure: process.env.NODE_ENV && process.env.NODE_ENV === "production",
   },
-
+  secret: "test",
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60,
+    // maxAge: 30 * 24 * 60 * 60,
   },
   providers: [
     CredentialsProvider({
@@ -47,7 +47,6 @@ export default NextAuth({
             }
           }
         }
-
         return null;
       },
     }),
@@ -59,27 +58,30 @@ export default NextAuth({
         if (user.user.isActive === "1") {
           return user;
         }
-        return false;
       }
       return false;
     },
     jwt: ({ token, user }) => {
       // first time jwt callback is run, user object is available
       if (user) {
-        // token.id = user.id;
+        //token.id = user.id;
         // eslint-disable-next-line
         token.user = user;
       }
 
       return token;
     },
+
     // eslint-disable-next-line
-    session: ({ session }) => {
+    session: ({ session, token, user }) => {
+      // if (token) {
+      //   session.id = token.id;
+      // }
       if (userAccount !== null) {
-        console.log(userAccount);
         // eslint-disable-next-line
         session.user = userAccount;
       }
+      console.log(token.sub);
       return session;
     },
   },
