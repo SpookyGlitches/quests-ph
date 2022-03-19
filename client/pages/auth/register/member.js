@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import Router from "next/router";
 import bcrypt from "bcryptjs";
+import { v4 as uuidv4 } from "uuid";
 import AuthHeader from "../../../components/Auth/AuthHeader";
 import AuthLayout from "../../../components/Layouts/AuthLayout";
 import Step1 from "../../../components/Registration/Step1";
@@ -45,6 +46,7 @@ export default function Register() {
       const dateObj = new Date(rawDate);
       const bdate = dateObj.toISOString();
       const salt = bcrypt.genSaltSync(10);
+      const tok = uuidv4();
       const userInfo = {
         email: values.email,
         dateOfBirth: bdate,
@@ -52,6 +54,7 @@ export default function Register() {
         fullName: values.fullName,
         password: bcrypt.hashSync(values.password, salt),
         role: "member",
+        token: tok,
       };
       const res = await fetch("/api/accounts", {
         method: "POST",

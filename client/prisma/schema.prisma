@@ -21,5 +21,6 @@ model User {
   updatedAt     DateTime?
   deletedAt     DateTime?
   isActive      String      @default("1") @db.Char(1)
+  token         String
 }
 
