@@ -43,6 +43,8 @@ const MentorRegistrationForm = () => {
 
   const { trigger, handleSubmit, control } = methods;
   const here = async (values) => {
+    // const file = values.fileUpload;
+    // console.log(file[0].type);
     // eslint-disable-next-line
     try {
       const rawDate = values.dateOfBirth;
@@ -60,12 +62,12 @@ const MentorRegistrationForm = () => {
         token: tok,
         experience: values.experience,
         detailedExperience: values.detailedExperience,
+        fileUpload: values.fileUpload,
       };
       const res = await fetch("/api/auth/mentoraccounts", {
         method: "POST",
         body: JSON.stringify(userInfo),
       });
-
       if (res.status === 200) {
         Router.push({
           pathname: "/auth/verify-email/[emailAddress]",

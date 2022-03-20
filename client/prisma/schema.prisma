@@ -23,6 +23,7 @@ model User {
   isActive           String              @default("1") @db.Char(1)
   token              String
   mentorApplication  mentorApplication[]
+  mentorFiles        mentorFiles[]
 }
 
 model mentorApplication {
@@ -31,4 +32,13 @@ model mentorApplication {
   experience         String
   detailedExperience String
   user               User   @relation(fields: [userId], references: [id])
+}
+
+model mentorFiles {
+  id                 Int    @id @default(autoincrement())
+  uploadId           Int
+  path               String
+  createdAt          DateTime?            @default(now())
+  deletedAt          DateTime?            
+  user               User   @relation(fields: [uploadId], references: [id])
 }
