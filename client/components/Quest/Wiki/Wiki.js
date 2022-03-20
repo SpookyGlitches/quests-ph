@@ -1,10 +1,11 @@
-import axios from "axios";
 import { Box, Button, Typography } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import useSWR from "swr";
 import { Plate } from "@udecode/plate-core";
 import { plugins } from "../../../config/plate/plugins";
 import Toolbar from "./Toolbar";
-import { QuestContext } from "../../../context/QuestContext";
 
 const initialValue = [
   {
@@ -14,9 +15,11 @@ const initialValue = [
 ];
 
 const Wiki = () => {
-  const quest = useContext(QuestContext);
+  const router = useRouter();
+  const { questId } = router.query;
   const [plateValue, setPlateValue] = useState(initialValue);
   const [isEditing, setIsEditing] = useState(false);
+  const { data: quest } = useSWR(questId ? `/quests/${questId}` : null);
 
   useEffect(() => {
     if (quest && quest.wiki) {
