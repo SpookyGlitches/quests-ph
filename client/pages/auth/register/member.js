@@ -56,7 +56,7 @@ export default function Register() {
         role: "member",
         token: tok,
       };
-      const res = await fetch("/api/accounts", {
+      const res = await fetch("/api/auth/memberaccounts", {
         method: "POST",
         body: JSON.stringify(userInfo),
       });
