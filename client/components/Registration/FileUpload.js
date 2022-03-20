@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useFormContext } from "react-hook-form";
 import { Box, Typography } from "@mui/material";
@@ -6,15 +6,34 @@ import CloudUploadRoundedIcon from "@mui/icons-material/CloudUploadRounded";
 
 const FileUpload = (props) => {
   const { name } = props;
+  const [count, setCount] = useState(0);
   const { register, unregister, setValue } = useFormContext();
-  const onDrop = useCallback(
-    (droppedFiles) => {
-      setValue(name, droppedFiles, { shouldValidate: true });
-    },
-    [setValue, name],
-  );
   const { getRootProps, getInputProps } = useDropzone({
-    onDrop,
+    onDrop: (acceptedFiles) => {
+      setValue(name, acceptedFiles, { shouldValidate: true });
+      const formData = new FormData();
+      // eslint-disable-next-line
+      for (const file of acceptedFiles) formData.append("file", file);
+
+      const xhr = new XMLHttpRequest();
+      // eslint-disable-next-line
+      xhr.upload.onprogress = (event) => {
+        // eslint-disable-next-line
+        const percentage = parseInt((event.loaded / event.total) * 100);
+        console.log(percentage); // Update progress here
+        setCount(percentage);
+      };
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState !== 4) return;
+        if (xhr.status !== 200) {
+          console.log("error"); // Handle error here
+        }
+        console.log("success"); // Handle success here
+      };
+      xhr.open("POST", "https://httpbin.org/post", true);
+      xhr.send(formData);
+    },
+
     accept:
       "image/*, application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/msword",
     onDropAccepted: () => {
@@ -66,6 +85,9 @@ const FileUpload = (props) => {
         />
         <Typography sx={{ color: "#625e5c", fontSize: "10px" }}>
           Drag and drop some images/video here, or click to add.
+        </Typography>
+        <Typography sx={{ color: "#625e5c", fontSize: "10px" }}>
+          {count === 0 ? "" : count}
         </Typography>
       </Box>
     </Box>

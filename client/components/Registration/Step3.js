@@ -53,6 +53,7 @@ export default function Step2() {
           />
         )}
       />
+
       <FileUpload name="fileUpload" label="File Upload" />
     </Stack>
   );
