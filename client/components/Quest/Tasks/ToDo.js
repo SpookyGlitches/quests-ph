@@ -1,71 +1,82 @@
-import { Box, Checkbox, Typography, Stack } from "@mui/material";
-import faker from "@faker-js/faker";
-import { useState } from "react";
+import * as React from "react";
+import {
+  List,
+  Box,
+  ListItem,
+  ListItemText,
+  Typography,
+  CircularProgress,
+} from "@mui/material";
 
-const TaskItem = ({ value }) => {
+import { format } from "date-fns";
+import { useRouter } from "next/router";
+import useSWR from "swr";
+
+export default function CheckboxListSecondary() {
+  const router = useRouter();
+
+  const { data, error } = useSWR(`/api/quests/${router.query.id}/tasks`);
+
+  if (error) return <div>failed to load</div>;
+  if (!data) return <CircularProgress />;
+
+  console.log(data);
   return (
     <Box
       sx={{
-        display: "flex",
-        gap: 1,
-        alignItems: "center",
-        textOverflow: "ellipsis",
-        overflow: "hidden",
-      }}
-    >
-      <Checkbox edge="start" disableRipple />
-      <Box component="div">
-        <Typography
-          variant="body2"
-          sx={{
-            width: "100%",
-            display: "-webkit-box",
-            WebkitBoxOrient: "vertical",
-            WebkitLineClamp: 2,
-            overflow: "hidden",
-          }}
-        >
-          {value}
-        </Typography>
-        <Typography variant="caption">3 days left, 30 points</Typography>
-      </Box>
-    </Box>
-  );
-};
-
-export default function ToDo() {
-  const [items] = useState([
-    faker.lorem.lines(3),
-    faker.lorem.lines(4),
-    faker.lorem.lines(1),
-  ]);
-
-  return (
-    <Box
-      sx={{
-        paddingX: "2rem",
-        paddingY: "1.5rem",
         backgroundColor: "background.paper",
+        height: "100%",
+
         borderRadius: 2,
       }}
     >
-      <Stack spacing={1}>
-        <Typography variant="h5" color="primary" sx={{}}>
-          To Do
-        </Typography>
-        <Box
-          sx={{ maxHeight: "10rem", overflowY: "scroll", overflowX: "hidden" }}
+      {!data && <CircularProgress />}
+      <Typography variant="h6" color="primary" sx={{ m: 1, p: 1 }}>
+        To Do
+      </Typography>
+      {data.map((task) => (
+        <List
+          key={task.id}
+          sx={{
+            bgcolor: "background.paper",
+          }}
         >
-          {items.map((value, index) => {
-            // eslint-disable-next-line react/no-array-index-key
-            return <TaskItem key={index} value={value} />;
-          })}
-        </Box>
-
-        {items.length === 0 && (
-          <Typography>There&apos;s nothing to do. Hooray! </Typography>
-        )}
-      </Stack>
+          <ListItem
+            button
+            alignItems="flex-start"
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              "& .MuiListItem-root": {
+                paddingTop: "2px",
+                paddingBottom: "2px",
+              },
+            }}
+          >
+            <ListItemText
+              sx={{ color: "#755cde" }}
+              primary={task.title}
+              secondary={
+                <>
+                  <Typography
+                    sx={{ display: "inline" }}
+                    component="span"
+                    variant="body2"
+                    color="text.primary"
+                  >
+                    {format(new Date(task.dueAt), "MMMM dd")}
+                  </Typography>
+                  {"  -  "}
+                  {task.description}
+                </>
+              }
+            />
+          </ListItem>
+        </List>
+      ))}
+      <ListItem button sx={{ color: "#755cde", borderRadius: 1 }}>
+        Show More
+      </ListItem>
     </Box>
   );
 }

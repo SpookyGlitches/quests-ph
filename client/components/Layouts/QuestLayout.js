@@ -3,6 +3,8 @@ import AppLayout from "./AppLayout";
 import QuestHeader from "../Quest/QuestHeader";
 import Todo from "../Quest/Tasks/ToDo";
 import EndQuest from "../Quest/EndQuest";
+import DateCard from "../Quest/Tasks/DateCard";
+import Suggestions from "../Common/Suggestions";
 
 export default function QuestLayout({ children }) {
   return (
@@ -15,7 +17,9 @@ export default function QuestLayout({ children }) {
         <Grid item xs={12} lg={4}>
           <Box sx={{}}>
             <Stack spacing={4}>
+              <DateCard />
               <Todo />
+              <Suggestions />
               <EndQuest />
             </Stack>
           </Box>

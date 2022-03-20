@@ -8,21 +8,24 @@ generator client {
 }
 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text @map("refreshToken")
-  access_token       String?  @db.Text @map("accessToken")
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text @map("idToken")
-  session_state      String?
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @map("refreshToken") @db.Text
+  access_token      String? @map("accessToken") @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @map("idToken") @db.Text
+  session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+
+  Mentor   Mentor? @relation(fields: [mentorId], references: [id])
+  mentorId Int?
   @@unique([provider, providerAccountId])
 }
 
@@ -31,7 +34,10 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user     User    @relation(fields: [userId], references: [id])
+  Mentor   Mentor? @relation(fields: [mentorId], references: [id])
+  mentorId Int?
 }
 
 model User {
@@ -42,6 +48,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+
 }
 
 model VerificationToken {
@@ -50,4 +57,58 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Mentor {
+  id            Int       @id @default(autoincrement())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+
+}
+
+model Quest {
+  id                 Int       @id @default(autoincrement())
+  wish               String
+  difficulty         String
+  visibility         String
+  category           String
+  wiki               String    @default("[{\"type\":\"p\",\"children\":[{\"text\":\"\"}]}]")
+  mentorMessage      String?
+  estimatedStartDate DateTime  @db.Date
+  estimatedEndDate   DateTime  @db.Date
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  completedAt        DateTime?
+  deletedAt          DateTime?
+
+
+
+}
+
+model QuestTasks {
+  id Int @id @default(autoincrement())
+
+  questId Int
+
+  mentorId    Int
+  title       String
+  description String
+  points      Int
+  dueAt       DateTime
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+}
+
+model QuestTasksFinishers {
+  id           Int      @id @default(autoincrement())
+  questId      Int
+  userId       Int
+  gainedPoints Int
+  createdAt    DateTime @default(now())
 }
