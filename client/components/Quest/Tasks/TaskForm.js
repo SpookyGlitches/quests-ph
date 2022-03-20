@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import moment from "moment";
 
 import axios from "axios";
@@ -14,14 +13,7 @@ import TitleRoundedIcon from "@mui/icons-material/TitleRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import SportsScoreRoundedIcon from "@mui/icons-material/SportsScoreRounded";
 
-const createTaskSchema = yup
-  .object({
-    title: yup.string().max(20).required(),
-    description: yup.string().required(),
-    points: yup.number().positive().integer().required(),
-    dueDate: yup.date().required(),
-  })
-  .required();
+import { createTaskSchema } from "../../../validations/TasksCreate";
 
 const TaskForm = () => {
   const router = useRouter();

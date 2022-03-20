@@ -6,7 +6,7 @@ import {
   Grid,
   Button,
 } from "@mui/material";
-
+import { useEffect } from "react";
 import Link from "next/link";
 
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
@@ -18,6 +18,20 @@ import { useRouter } from "next/router";
 import useSWR, { mutate } from "swr";
 import axios from "axios";
 import StyledPaper from "../../Common/StyledPaper";
+
+export const deleteHandler = async (id) => {
+  if (window.confirm("Delete item?")) {
+    const deleteUrl = `/api/quests/${router.query.id}/tasks/${id}`;
+    const url = `http://localhost:3000/quests/${router.query.id}/tasks`;
+    mutate(
+      url,
+      data.filter((c) => c.id !== task.id),
+      false,
+    ),
+      await axios.delete(deleteUrl);
+    // put trigger here
+  }
+};
 
 const TasksLists = () => {
   const router = useRouter();
@@ -114,22 +128,7 @@ const TasksLists = () => {
                       {format(new Date(task.dueAt), "MMMM dd")}
                     </Typography>
 
-                    <IconButton
-                      onClick={async () => {
-                        if (window.confirm("Delete item?")) {
-                          const deleteUrl = `/api/quests/${router.query.id}/tasks/${task.id}`;
-                          const url = `http://localhost:3000/quests/${router.query.id}/tasks`;
-                          mutate(
-                            url,
-                            data.filter((c) => c.id !== task.id),
-                            false,
-                          ),
-                            await axios.delete(deleteUrl);
-                          // put trigger here
-                        }
-                      }}
-                      size="small"
-                    >
+                    <IconButton onClick={deleteHandler(task.id)} size="small">
                       <DeleteRoundedIcon />
                     </IconButton>
                   </Box>
