@@ -4,7 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import prisma from "../../../lib/prisma";
 
-var userAccount = null;
+let userAccount = null;
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
   cookie: {
@@ -64,7 +64,7 @@ export default NextAuth({
     jwt: ({ token, user }) => {
       // first time jwt callback is run, user object is available
       if (user) {
-        //token.id = user.id;
+        // token.id = user.id;
         // eslint-disable-next-line
         token.user = user;
       }
