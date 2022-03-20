@@ -4,8 +4,7 @@ export default function Index() {
 }
 
 export async function getServerSideProps(context) {
-  const { questId } = context.params;
-  console.log(questId);
+  const { questId } = context.query;
   return {
     redirect: {
       permanent: true,

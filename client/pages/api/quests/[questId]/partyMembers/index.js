@@ -1,5 +1,10 @@
-import { QuestRole } from "@prisma/client";
+import { PartyMemberRole } from "@prisma/client";
+import { getSession } from "next-auth/react";
 import prisma from "../../../../../lib/prisma";
+import {
+  oopValidations,
+  roleValidation,
+} from "../../../../../validations/partyMember";
 
 async function fetchPartyMembers(req, res) {
   const searchObj = {
@@ -10,10 +15,10 @@ async function fetchPartyMembers(req, res) {
   if (req.query.excludeMentor)
     searchObj.OR = [
       {
-        role: QuestRole.MENTEE,
+        role: PartyMemberRole.MENTEE,
       },
       {
-        role: QuestRole.PARTY_LEADER,
+        role: PartyMemberRole.PARTY_LEADER,
       },
     ];
 
@@ -30,7 +35,6 @@ async function fetchPartyMembers(req, res) {
         },
       },
     });
-    console.log(partyMembers);
     return res.status(200).json(partyMembers);
   } catch (error) {
     console.log(error);
@@ -38,10 +42,35 @@ async function fetchPartyMembers(req, res) {
   }
 }
 
+async function addPartyMember(req, res) {
+  try {
+    const user = await getSession({ req });
+    const { outcome, obstacle, plan, role } = req.body;
+    console.log(req.body);
+    await oopValidations.concat(roleValidation).validate({ ...req.body });
+    const partyMember = await prisma.partyMember.create({
+      data: {
+        userId: user.userId,
+        outcome,
+        obstacle,
+        plan,
+        questId: Number(req.query.questId),
+        role,
+      },
+    });
+    res.status(200).json(partyMember);
+  } catch (error) {
+    res.status(500).send();
+    console.error(error);
+  }
+}
+
 export default async function handler(req, res) {
   switch (req.method) {
     case "GET":
       return fetchPartyMembers(req, res);
+    case "POST":
+      return addPartyMember(req, res);
     default:
       return res.sendStatus(404);
   }

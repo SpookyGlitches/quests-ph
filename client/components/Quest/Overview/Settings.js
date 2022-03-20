@@ -63,19 +63,23 @@ export default function Settings() {
             </Box>
           </Grid>
           <Grid item xs={12} lg={7}>
-            {quest && quest.estimatedStartDate && (
+            {quest && (
               <Box>
                 <Typography variant="body2">
                   Estimated Start:{" "}
-                  {format(new Date(quest.estimatedStartDate), "MMMM d, yyyy  ")}
+                  {format(new Date(quest.estimatedStartDate), "MMMM d, yyyy")}
                 </Typography>
                 <Typography variant="body2">
                   Estimated End:{" "}
-                  {format(new Date(quest.estimatedEndDate), "MMMM d, yyyy  ")}
+                  {format(new Date(quest.estimatedEndDate), "MMMM d, yyyy")}
                 </Typography>
                 <Typography variant="body2">
-                  Completed At:{" "}
-                  {format(new Date(quest.completedAt), "MMMM d, yyyy  ")}
+                  {quest.completedAt
+                    ? `Completed At: ${format(
+                        new Date(quest.completedAt),
+                        "MMMM d, yyyy",
+                      )}`
+                    : ""}
                 </Typography>
               </Box>
             )}

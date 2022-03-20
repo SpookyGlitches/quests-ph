@@ -35,7 +35,7 @@ export default function WoopModal({ handleOk, handleCancel, okText, details }) {
   }, [details]);
 
   return (
-    <Dialog minWidth="md" fullWidth open={details.open}>
+    <Dialog fullWidth open={details.open}>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(handleOk)}>
           <DialogTitle color="primary">

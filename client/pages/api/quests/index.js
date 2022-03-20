@@ -1,9 +1,48 @@
 import { PrismaClientValidationError } from "@prisma/client/runtime";
 import { ValidationError } from "yup";
-import { QuestRole } from "@prisma/client";
+import { PartyMemberRole } from "@prisma/client";
 import { getSession } from "next-auth/react";
 import prisma from "../../../lib/prisma";
 import { step1Validations, step2Validations } from "../../../validations/quest";
+
+function computeIfJoined(quests) {
+  const computed = quests.map((item) => {
+    return {
+      ...item,
+      isJoined: item.partyMembers && item.partyMembers.length !== 0,
+    };
+  });
+  return computed;
+}
+
+async function getQuests(req, res) {
+  const user = await getSession({ req });
+  try {
+    const quests = await prisma.quest.findMany({
+      where: {
+        deletedAt: null,
+      },
+      include: {
+        partyMembers: {
+          where: {
+            userId: user.userId,
+          },
+        },
+      },
+    });
+
+    const computed = computeIfJoined(quests);
+    return res.status(200).json(computed);
+  } catch (error) {
+    switch (error.constructor) {
+      case ValidationError:
+      case PrismaClientValidationError:
+        return res.status(400).send();
+      default:
+        return res.status(500).send();
+    }
+  }
+}
 
 async function createQuest(req, res) {
   try {
@@ -34,7 +73,7 @@ async function createQuest(req, res) {
             outcome,
             obstacle,
             plan,
-            role: QuestRole.PARTY_LEADER,
+            role: PartyMemberRole.PARTY_LEADER,
             userId: user.userId,
           },
         },
@@ -54,6 +93,8 @@ async function createQuest(req, res) {
 
 export default async function handler(req, res) {
   switch (req.method) {
+    case "GET":
+      return getQuests(req, res);
     case "POST":
       return createQuest(req, res);
     default:

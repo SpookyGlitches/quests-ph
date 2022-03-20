@@ -1,6 +1,17 @@
-import { object, string } from "yup";
+import { object, string, mixed } from "yup";
+import { PartyMemberRole } from "@prisma/client";
 
 const requiredMsg = "This field is required";
+
+export const roleValidation = object({
+  role: mixed()
+    .oneOf([
+      PartyMemberRole.MENTOR,
+      PartyMemberRole.MENTEE,
+      PartyMemberRole.PARTY_LEADER,
+    ])
+    .required(requiredMsg),
+});
 
 export const oopValidations = object({
   outcome: string()
@@ -9,5 +20,3 @@ export const oopValidations = object({
   obstacle: string().max(128).required(requiredMsg),
   plan: string().max(128).required(requiredMsg),
 });
-
-export const joinQuestValidation = [oopValidations];

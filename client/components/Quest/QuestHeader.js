@@ -43,6 +43,7 @@ export default function QuestHeader() {
         flexDirection: "column",
         paddingTop: "2rem",
         paddingBottom: "1rem",
+        paddingX: 2,
         maxHeight: "20rem",
         gap: 2,
         borderRadius: 2,

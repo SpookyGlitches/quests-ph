@@ -13,10 +13,8 @@ async function getQuest(req, res) {
         questId: Number(req.query.questId),
       },
     });
-    console.log(quest);
     res.status(200).json(quest);
   } catch (err) {
-    console.error(err);
     res.status(404).send();
   }
 }

@@ -78,7 +78,7 @@ model PartyMember {
   partyMemberId Int       @id @default(autoincrement())
   userId        String
   questId       Int
-  role          QuestRole @default(MENTEE)
+  role          PartyMemberRole @default(MENTEE)
   outcome       String
   obstacle      String
   plan          String
@@ -89,12 +89,6 @@ model PartyMember {
   user          User      @relation(fields: [userId], references: [id])
 
   @@unique([questId, userId])
-}
-
-enum QuestRole {
-  MENTOR
-  MENTEE
-  PARTY_LEADER
 }
 
 enum QuestDifficulty {
@@ -112,4 +106,10 @@ enum QuestCategory {
   SOCIAL
   CAREER
   HEALTH
+}
+
+enum PartyMemberRole {
+  MENTOR
+  MENTEE
+  PARTY_LEADER
 }

@@ -125,7 +125,13 @@ export default function Statements() {
         marginBottom: "1.3rem",
       }}
     >
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
         <Typography variant="h4" color="primary">
           Overview
         </Typography>

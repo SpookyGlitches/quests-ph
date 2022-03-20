@@ -9,6 +9,7 @@ import {
 import { useRouter } from "next/router";
 import { useState } from "react";
 import axios from "axios";
+import { mutate } from "swr";
 
 const DialogItem = ({ handleOk, handleCancel, open }) => {
   return (
@@ -37,12 +38,14 @@ const DialogItem = ({ handleOk, handleCancel, open }) => {
 export default function EndQuest() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const { questId } = router.query;
   const handleCancelClick = () => {
     setOpen(false);
   };
   const handleOk = async () => {
     try {
-      await axios.put(`/api/quests/${router.query.questId}/complete`);
+      await axios.put(`/api/quests/${questId}/complete`);
+      mutate(`/quests/${questId}`);
       setOpen(false);
     } catch (err) {
       console.error(err);
