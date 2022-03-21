@@ -37,10 +37,21 @@ model Session {
 
 model User {
   userId        String     @id @default(cuid())
-  name          String?
-  email         String?    @unique
-  emailVerified DateTime?
+  displayName   String              @unique
+  fullName      String?
+  email         String              @unique
+  password      String
+  dateOfBirth   DateTime
+  role          String
   image         String?
+  verificationStatus Boolean             @default(false)
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime?
+  deletedAt     DateTime?
+  isActive      String              @default("1") @db.Char(1)
+  token         String
+  mentorApplication  MentorApplication[]
+  mentorFile         MentorFile[]
   accounts      Account[]
   sessions      Session[]
   PointLog      PointLog[]
@@ -48,7 +59,7 @@ model User {
 
 model MentorApplication {
   mentorApplicationid Int    @id @default(autoincrement())
-  mentorId            Int
+  mentorId            String
   experience          String
   detailedExperience  String
   user                User   @relation(fields: [mentorId], references: [userId])
@@ -56,7 +67,7 @@ model MentorApplication {
 
 model MentorFile {
   id             Int       @id @default(autoincrement())
-  mentorUploadId Int
+  mentorUploadId String
   path           String
   createdAt      DateTime? @default(now())
   deletedAt      DateTime?
@@ -123,7 +134,7 @@ model PointLog {
 model Message {
   id              Int          @id @default(autoincrement())
   conversation    Conversation @relation(fields: [conversationId], references: [conversationId])
-  converstationId Int
+  conversationId  Int
   user            User         @relation(fields: [userId], references: [userId])
   userId          String
   text            String
@@ -137,7 +148,8 @@ model Conversation {
   questId        Int
   name           String
   createdAt      DateTime  @default(now())
-  Message        Message[]
+  message        Message[]
+  conversationMember ConversationMember[]
 }
 
 model Notification {
@@ -152,7 +164,7 @@ model Notification {
 model ConversationMember {
   conversationMemberId Int          @id @default(autoincrement())
   conversation         Conversation @relation(fields: [conversationId], references: [conversationId])
-  converstatiosId      Int
+  conversationId       Int
   user                 User         @relation(fields: [userId], references: [userId])
   userId               Int
   createdAt            DateTime     @default(now())
