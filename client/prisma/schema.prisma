@@ -8,7 +8,7 @@ generator client {
 }
 
 model User {
-  userId             Int      @id @default(autoincrement())
+  userId             String      @id @default(cuid())
   displayName        String              @unique
   fullName           String?
   email              String              @unique
@@ -28,7 +28,7 @@ model User {
 
 model MentorApplication {
   mentorApplicationid Int    @id @default(autoincrement())
-  mentorId           Int
+  mentorId           String
   experience         String
   detailedExperience String
   user               User   @relation(fields: [mentorId], references: [userId])
@@ -36,7 +36,7 @@ model MentorApplication {
 
 model MentorFile {
   id                 Int    @id @default(autoincrement())
-  mentorUploadId     Int
+  mentorUploadId     String
   path               String
   createdAt          DateTime?            @default(now())
   deletedAt          DateTime?            
