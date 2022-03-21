@@ -6,8 +6,6 @@ import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import Router from "next/router";
-import bcrypt from "bcryptjs";
-import { v4 as uuidv4 } from "uuid";
 import AuthHeader from "../../../components/Auth/AuthHeader";
 import AuthLayout from "../../../components/Layouts/AuthLayout";
 import Step1 from "../../../components/Registration/Step1";
@@ -45,32 +43,15 @@ const MentorRegistrationForm = () => {
   const here = async (values) => {
     // eslint-disable-next-line
     try {
-      const rawDate = values.dateOfBirth;
-      const dateObj = new Date(rawDate);
-      const bdate = dateObj.toISOString();
-      const salt = bcrypt.genSaltSync(10);
-      const tok = uuidv4();
-      const userInfo = {
-        email: values.email,
-        dateOfBirth: bdate,
-        displayName: values.displayName,
-        fullName: values.fullName,
-        password: bcrypt.hashSync(values.password, salt),
-        role: "mentor",
-        token: tok,
-        experience: values.experience,
-        detailedExperience: values.detailedExperience,
-        fileUpload: values.fileUpload,
-      };
       const res = await fetch("/api/auth/mentoraccounts", {
         method: "POST",
-        body: JSON.stringify(userInfo),
+        body: JSON.stringify(values),
       });
       console.log(res.status);
       if (res.status === 200) {
         Router.push({
           pathname: "/auth/verify-email/[emailAddress]",
-          query: { emailAddress: userInfo.email },
+          query: { emailAddress: values.email },
         });
       } else if (res.status === 513) {
         setMessage("Display Name is already in use.");

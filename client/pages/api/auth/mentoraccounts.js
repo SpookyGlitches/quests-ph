@@ -1,25 +1,39 @@
+import bcrypt from "bcryptjs";
+import { v4 as uuidv4 } from "uuid";
+import nodemailer from "nodemailer";
 import prisma from "../../../lib/prisma";
 // eslint-disable-next-line
 export default async function (req, res) {
-  // eslint-disable-next-line
-  require("dotenv").config();
-
   if (req.method === "POST") {
-    const userDetails = JSON.parse(req.body);
+    const userInfo = JSON.parse(req.body);
+    const rawDate = userInfo.dateOfBirth;
+    const dateObj = new Date(rawDate);
+    const bdate = dateObj.toISOString();
+    const salt = bcrypt.genSaltSync(10);
+    const tok = uuidv4();
+    const userDetails = {
+      email: userInfo.email,
+      dateOfBirth: bdate,
+      displayName: userInfo.displayName,
+      fullName: userInfo.fullName,
+      password: bcrypt.hashSync(userInfo.password, salt),
+      role: "mentor",
+      token: tok,
+      experience: userInfo.experience,
+      detailedExperience: userInfo.detailedExperience,
+      fileUpload: userInfo.fileUpload,
+    };
     let fileLength;
-
     if (userDetails.fileUpload === undefined) {
       userDetails.fileUpload = 0;
     } else {
       fileLength = userDetails.fileUpload.length;
     }
-    // console.log(userDetails.fileUpload);
-    // eslint-disable-next-line
-    const nodemailer = require("nodemailer");
+
     // eslint-disable-next-line
     const transporter = nodemailer.createTransport({
-      port: 465,
-      host: "smtp.gmail.com",
+      port: process.env.MAIL_PORT,
+      host: process.env.MAIL_HOST,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD,
