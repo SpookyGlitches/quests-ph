@@ -67,7 +67,7 @@ export default function Register() {
           query: { emailAddress: userInfo.email },
         });
       } else if (res.status === 500) {
-        setMessage("Username is already in use.");
+        setMessage("Display Name is already in use.");
         setShow(true);
       } else if (res.status === 400) {
         console.log("email");
