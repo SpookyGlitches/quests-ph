@@ -8,7 +8,7 @@ generator client {
 }
 
 model User {
-  id                 Int                 @id @default(autoincrement())
+  userId             Int      @id @default(autoincrement())
   displayName        String              @unique
   fullName           String?
   email              String              @unique
@@ -22,23 +22,23 @@ model User {
   deletedAt          DateTime?
   isActive           String              @default("1") @db.Char(1)
   token              String
-  mentorApplication  mentorApplication[]
-  mentorFiles        mentorFiles[]
+  mentorApplication  MentorApplication[]
+  mentorFile         MentorFile[]
 }
 
-model mentorApplication {
-  id                 Int    @id @default(autoincrement())
-  userId             Int
+model MentorApplication {
+  mentorApplicationid Int    @id @default(autoincrement())
+  mentorId           Int
   experience         String
   detailedExperience String
-  user               User   @relation(fields: [userId], references: [id])
+  user               User   @relation(fields: [mentorId], references: [userId])
 }
 
-model mentorFiles {
+model MentorFile {
   id                 Int    @id @default(autoincrement())
-  uploadId           Int
+  mentorUploadId     Int
   path               String
   createdAt          DateTime?            @default(now())
   deletedAt          DateTime?            
-  user               User   @relation(fields: [uploadId], references: [id])
+  user               User   @relation(fields: [mentorUploadId], references: [userId])
 }

@@ -68,20 +68,20 @@ export default async function (req, res) {
           console.log("user found");
           const mentorCreation = await prisma.mentorApplication.create({
             data: {
-              userId: findUser.id,
+              mentorId: findUser.userId,
               experience: userDetails.experience,
               detailedExperience: userDetails.detailedExperience,
             },
           });
           if (mentorCreation) {
             console.log("mentor created");
-            console.log(findUser.id);
+            console.log(findUser.userId);
             for (let i = 0; i < fileLength; i++) {
               console.log(i);
               // eslint-disable-next-line
-              const fileCreation = await prisma.mentorFiles.create({
+              const fileCreation = await prisma.mentorFile.create({
                 data: {
-                  uploadId: findUser.id,
+                  mentorUploadId: findUser.userId,
                   path: userDetails.fileUpload[i].path,
                 },
               });
