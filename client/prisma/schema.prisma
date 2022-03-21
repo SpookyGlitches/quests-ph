@@ -51,25 +51,25 @@ model User {
   isActive           String              @default("1") @db.Char(1)
   token              String
   mentorApplication  MentorApplication[]
-  mentorFiles        MentorFiles[]
-  PointsLog     PointsLog[]
+  mentorFile         MentorFile[]
+  PointsLog          PointsLog[]
 }
 
 model MentorApplication {
   mentorApplicationid Int    @id @default(autoincrement())
-  userId             Int
+  mentorId           Int
   experience         String
   detailedExperience String
-  user               User   @relation(fields: [mentorApplicationid], references: [userId])
+  user               User   @relation(fields: [mentorId], references: [userId])
 }
 
-model MentorFiles {
+model MentorFile {
   id                 Int    @id @default(autoincrement())
-  mentorFileId       Int
+  mentorUploadId     Int
   path               String
   createdAt          DateTime?            @default(now())
   deletedAt          DateTime?            
-  user               User   @relation(fields: [mentorFileId], references: [userId])
+  user               User   @relation(fields: [mentorUploadId], references: [userId])
 }
 
 model QuestTasks {
