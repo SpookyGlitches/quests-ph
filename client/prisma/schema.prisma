@@ -141,3 +141,158 @@ model ConversationMembers {
   createdAt       DateTime     @default(now())
   deletedAt       DateTime?
 }
+
+
+model Quest {
+  questId            Int             @id @default(autoincrement())
+  userId             String
+  wish               String
+  difficulty         QuestDifficulty @default(EASY)
+  visibility         QuestVisibility @default(PRIVATE)
+  category           QuestCategory   @default(SOCIAL)
+  wiki               String          @default("[{\"type\":\"h1\",\"children\":[{\"text\":\"Welcome\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"This is our Wiki where you can find tips, resources, and strategies to increase the success of us achieving our wishes. If you want to add here, just send me a message in our chat and I'll do it for you!\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"},{\"type\":\"a\",\"url\":\"https://www.youtube.com/watch?v=dQw4w9WgXcQ\",\"children\":[{\"text\":\"watch this awesome tip!\"}]},{\"text\":\"\"}]},{\"type\":\"p\",\"children\":[{\"text\":\" \"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"}]}]") @db.LongText
+  mentorMessage      String?
+  estimatedStartDate DateTime        @db.Date
+  estimatedEndDate   DateTime        @db.Date
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+  completedAt        DateTime?
+  deletedAt          DateTime?
+  partyMembers       PartyMember[]
+  user               User            @relation(fields: [userId], references: [userId])
+  posts              Post[]
+}
+
+model PartyMember {
+  partyMemberId Int             @id @default(autoincrement())
+  userId        String
+  questId       Int
+  role          PartyMemberRole @default(MENTEE)
+  outcome       String
+  obstacle      String
+  plan          String
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @default(now())
+  deletedAt     DateTime?
+  quest         Quest           @relation(fields: [questId], references: [questId])
+  user          User            @relation(fields: [userId], references: [userId])
+  @@unique([questId, userId, deletedAt])
+}
+
+enum QuestDifficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum QuestVisibility {
+  PUBLIC
+  PRIVATE
+}
+
+enum QuestCategory {
+  SOCIAL
+  CAREER
+  HEALTH
+}
+
+enum PartyMemberRole {
+  MENTOR
+  MENTEE
+  PARTY_LEADER
+}
+
+// NEW START, basically before nag ingani ta post -> quest Post, post -> comment Post, pero karon separate jud
+// did a workaround tungod ani https://github.com/prisma/prisma/issues/1644 kay ato react2 thingy
+
+model Post {
+  postId    Int       @id @default(autoincrement())
+  userId    String
+  questId   Int
+  title     String
+  body      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
+  deletedAt DateTime?
+  postFiles     PostFile[]
+  comments  Comment[]
+  user      User      @relation(fields: [userId], references: [userId])
+  quest     Quest     @relation(fields: [questId], references: [questId])
+}
+
+model Comment {
+  commentId Int       @id @default(autoincrement())
+  postId    Int
+  userId    String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
+  deletedAt DateTime?
+  post      Post      @relation(fields: [postId], references: [postId])
+  user      User      @relation(fields: [userId], references: [userId])
+}
+
+model PostReact {
+  postReactId Int       @id @default(autoincrement())
+  postId      Int
+  userId      String
+  type        ReactType
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
+  user        User      @relation(fields: [userId], references: [userId])
+}
+
+model CommentReact {
+  postReactId Int       @id @default(autoincrement())
+  postId      Int
+  userId      String
+  type        ReactType // didnt follow convention since this will be used by 2 tables
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
+  user        User      @relation(fields: [userId], references: [userId])
+}
+
+//  before kay positive emotions ra and not these, kani lang kay nice ang emojis and i think it's necessary sad ang negative emotions (Inside Out) :),
+// let users freely express their emotions basically
+// didnt follow convention since this will be used by 2 tables
+enum ReactType {
+  LAUGH
+  SAD
+  CRYING
+  SURPRISED
+  PARTY
+}
+
+// NEW END
+
+model PostFile {
+  postFileId    Int       @id @default(autoincrement())
+  userId    String
+  postId    Int
+  path      String
+  createdAt DateTime  @default(now())
+  deletedAt DateTime?
+  user      User      @relation(fields: [userId], references: [userId])
+  post      Post      @relation(fields: [postId], references: [postId])
+}
+
+model Badge {
+  badgeId     Int         @id @default(autoincrement())
+  name        String
+  description String
+  image       String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @default(now())
+  userBadges  UserBadge[] 
+}
+
+model UserBadge {
+  userBadgeId Int       @id @default(autoincrement())
+  userId      String
+  badgeId     Int
+  createdAt   DateTime  @default(now())
+  deletedAt   DateTime? // NEW, the user cant delete pero in case the user wants to delete the account we can delete for them
+  user        User      @relation(fields: [userId], references: [userId])
+  badge       Badge     @relation(fields: [badgeId], references: [badgeId])
+}
+
+
