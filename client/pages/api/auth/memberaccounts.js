@@ -24,7 +24,8 @@ export default async function (req, res) {
       html: `<div> 
         This is an automated reply from Quests App University of San Carlos. Please do not reply.
         You are receiving this email because your email was just registered to an account on Quests.
-        Verify your account through this link. http://localhost:3000/verify/${userDetails.token}
+        Verify your account through this <a href="http://localhost:3000/verify/${userDetails.token}">link</a>.
+        
         
     <div>`,
     };
@@ -46,7 +47,7 @@ export default async function (req, res) {
         if (err) console.log(err);
         else console.log(info);
       });
-      res.status(200).send();
+      res.status(200).send({ message: "Success!" });
     } else if (checkDisplayName) {
       res.status(500).send({ message: "Username" });
     } else if (checkEmail) {
