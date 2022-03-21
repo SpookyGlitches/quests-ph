@@ -59,7 +59,7 @@ const MentorRegistrationForm = () => {
         displayName: values.displayName,
         fullName: values.fullName,
         password: bcrypt.hashSync(values.password, salt),
-        role: "member",
+        role: "mentor",
         token: tok,
         experience: values.experience,
         detailedExperience: values.detailedExperience,
