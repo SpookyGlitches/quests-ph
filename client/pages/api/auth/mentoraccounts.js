@@ -6,8 +6,14 @@ export default async function (req, res) {
 
   if (req.method === "POST") {
     const userDetails = JSON.parse(req.body);
-    const fileLength = userDetails.fileUpload.length;
-    // console.log(fileLength);
+    let fileLength;
+
+    if (userDetails.fileUpload === undefined) {
+      userDetails.fileUpload = 0;
+    } else {
+      fileLength = userDetails.fileUpload.length;
+    }
+    // console.log(userDetails.fileUpload);
     // eslint-disable-next-line
     const nodemailer = require("nodemailer");
     // eslint-disable-next-line
@@ -43,7 +49,13 @@ export default async function (req, res) {
         displayName: userDetails.displayName,
       },
     });
-    if (!checkDisplayName && !checkEmail) {
+    if (checkDisplayName && checkEmail) {
+      res.status(514).send({ message: "Both" });
+    } else if (checkDisplayName) {
+      res.status(513).send({ message: "Display Name Exists" });
+    } else if (checkEmail) {
+      res.status(512).send({ message: "Email Exists" });
+    } else if (!checkDisplayName && !checkEmail) {
       // eslint-disable-next-line
       const userCreation = await prisma.user.create({
         data: {
@@ -56,7 +68,6 @@ export default async function (req, res) {
           token: userDetails.token,
         },
       });
-
       if (userCreation) {
         console.log("user created");
         const findUser = await prisma.user.findFirst({
@@ -75,31 +86,27 @@ export default async function (req, res) {
           });
           if (mentorCreation) {
             console.log("mentor created");
-            console.log(findUser.userId);
-            for (let i = 0; i < fileLength; i++) {
-              console.log(i);
-              // eslint-disable-next-line
-              const fileCreation = await prisma.mentorFile.create({
-                data: {
-                  mentorUploadId: findUser.userId,
-                  path: userDetails.fileUpload[i].path,
-                },
+            if (userDetails.fileUpload !== 0) {
+              for (let i = 0; i < fileLength; i++) {
+                // eslint-disable-next-line
+                const fileCreation = await prisma.mentorFile.create({
+                  data: {
+                    mentorUploadId: findUser.userId,
+                    path: userDetails.fileUpload[i].path,
+                  },
+                });
+              }
+              transporter.sendMail(mailData, (err, info) => {
+                if (err) console.log(err);
+                else console.log(info);
               });
             }
-
-            transporter.sendMail(mailData, (err, info) => {
-              if (err) console.log(err);
-              else console.log(info);
-            });
-            res.status(200).send();
           }
+          res.status(200).send({ message: "Success!" });
         }
       }
-    } else if (checkDisplayName) {
-      res.status(500).send({ message: "Username" });
-    } else if (checkEmail) {
-      res.status(400).send({ message: "Email" });
     }
+
     await prisma.$disconnect();
   }
 }
