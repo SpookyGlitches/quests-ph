@@ -43,6 +43,7 @@ const MentorRegistrationForm = () => {
 
   const { trigger, handleSubmit, control } = methods;
   const here = async (values) => {
+    console.log(values);
     // const file = values.fileUpload;
     // console.log(file[0].type);
     // eslint-disable-next-line
