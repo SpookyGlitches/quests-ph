@@ -22,7 +22,7 @@ model Account {
   id_token          String? @map("idToken") @db.Text
   session_state     String?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -32,18 +32,18 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
 }
 
 model User {
-  id            String      @id @default(cuid())
+  userId        String     @id @default(cuid())
   name          String?
-  email         String?     @unique
+  email         String?    @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
-  PointsLog     PointsLog[]
+  PointLog      PointLog[]
 }
 
 model VerificationToken {
@@ -54,10 +54,12 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model QuestTasks {
-  id          Int       @id @default(autoincrement())
+model QuestTask {
+  questTaskid Int       @id @default(autoincrement())
+  quest       Quest     @relation(fields: [questId], references: [questId])
   questId     Int
-  mentorId    Int
+  user        User      @relation(fields: [userId], references: [userId])
+  userId      String
   title       String
   description String
   points      Int
@@ -67,30 +69,33 @@ model QuestTasks {
   deletedAt   DateTime?
 }
 
-model QuestTasksFinishers {
-  id           Int      @id @default(autoincrement())
-  questId      Int
-  userId       Int
-  gainedPoints Int
-  createdAt    DateTime @default(now())
+model QuestTaskFinisher {
+  questTaskFinisherId Int      @id @default(autoincrement())
+  quest               Quest    @relation(fields: [questId], references: [questId])
+  questId             Int
+  user                User     @relation(fields: [userId], references: [userId])
+  userId              Int
+  gainedPoints        Int
+  createdAt           DateTime @default(now())
 }
 
-model PointsLog {
+model PointLog {
   id          Int      @id @default(autoincrement())
-  user        User     @relation(fields: [userId], references: [id])
+  user        User     @relation(fields: [userId], references: [userId])
   userId      String
   action      String
   rowId       Int
   totalPoints Int
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
 
 }
 
-model Messages {
+model Message {
   id              Int          @id @default(autoincrement())
-  conversation    Conversation @relation(fields: [conversationId], references: [id])
-  converstatiosId Int
-  user            User         @relation(fields: [userId], references: [id])
+  conversation    Conversation @relation(fields: [conversationId], references: [conversationId])
+  converstationId Int
+  user            User         @relation(fields: [userId], references: [userId])
   userId          String
   text            String
   createdAt       DateTime     @default(now())
@@ -98,28 +103,29 @@ model Messages {
 }
 
 model Conversation {
-  id        Int        @id @default(autoincrement())
-  creatorId Int
-  name      String
-  createdAt DateTime   @default(now())
-  Messages  Messages[]
+  conversationId Int       @id @default(autoincrement())
+  quest          Quest     @relation(fields: [questId], references: [questId])
+  questId        Int
+  name           String
+  createdAt      DateTime  @default(now())
+  Message        Message[]
 }
 
-model Notifications {
-  id        Int       @id @default(autoincrement())
-  user      User      @relation(fields: [userId], references: [id])
-  userId    String
-  message   String
-  createdAt DateTime  @default(now())
-  deletedAt DateTime?
+model Notification {
+  notificationId Int       @id @default(autoincrement())
+  user           User      @relation(fields: [userId], references: [userId])
+  userId         String
+  message        String
+  createdAt      DateTime  @default(now())
+  deletedAt      DateTime?
 }
 
-model ConversationMembers {
-  id              Int          @id @default(autoincrement())
-  conversation    Conversation @relation(fields: [conversationId], references: [id])
-  converstatiosId Int
-  user            User         @relation(fields: [userId], references: [id])
-  userId          String
-  createdAt       DateTime     @default(now())
-  deletedAt       DateTime?
+model ConversationMember {
+  conversationMemberId Int          @id @default(autoincrement())
+  conversation         Conversation @relation(fields: [conversationId], references: [conversationId])
+  converstatiosId      Int
+  user                 User         @relation(fields: [userId], references: [userId])
+  userId               Int
+  createdAt            DateTime     @default(now())
+  deletedAt            DateTime?
 }
