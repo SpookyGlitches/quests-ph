@@ -37,21 +37,39 @@ model Session {
 
 model User {
   id            String      @id @default(cuid())
-  name          String?
-  email         String?     @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
+  displayName        String              @unique
+  fullName           String?
+  email              String              @unique
+  password           String
+  dateOfBirth        DateTime
+  role               String
+  image              String?
+  verificationStatus Boolean             @default(false)
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime?
+  deletedAt          DateTime?
+  isActive           String              @default("1") @db.Char(1)
+  token              String
+  mentorApplication  mentorApplication[]
+  mentorFiles        mentorFiles[]
   PointsLog     PointsLog[]
 }
 
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
+model mentorApplication {
+  id                 Int    @id @default(autoincrement())
+  userId             Int
+  experience         String
+  detailedExperience String
+  user               User   @relation(fields: [userId], references: [id])
+}
 
-  @@unique([identifier, token])
+model mentorFiles {
+  id                 Int    @id @default(autoincrement())
+  uploadId           Int
+  path               String
+  createdAt          DateTime?            @default(now())
+  deletedAt          DateTime?            
+  user               User   @relation(fields: [uploadId], references: [id])
 }
 
 model QuestTasks {
