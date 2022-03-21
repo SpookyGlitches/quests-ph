@@ -1,9 +1,28 @@
 import nodemailer from "nodemailer";
+import bcrypt from "bcryptjs";
+import { v4 as uuidv4 } from "uuid";
 import prisma from "../../../lib/prisma";
 // eslint-disable-next-line
 export default async function (req, res) {
+  // eslint-disable-next-line
+
   if (req.method === "POST") {
-    const userDetails = JSON.parse(req.body);
+    const userInfo = JSON.parse(req.body);
+    const rawDate = userInfo.dateOfBirth;
+    const dateObj = new Date(rawDate);
+    const bdate = dateObj.toISOString();
+    const salt = bcrypt.genSaltSync(10);
+    const tok = uuidv4();
+    const userDetails = {
+      email: userInfo.email,
+      dateOfBirth: bdate,
+      displayName: userInfo.displayName,
+      fullName: userInfo.fullName,
+      password: bcrypt.hashSync(userInfo.password, salt),
+      role: "member",
+      token: tok,
+    };
+
     const transporter = nodemailer.createTransport({
       port: process.env.MAIL_PORT,
       host: process.env.MAIL_HOST,
@@ -17,12 +36,11 @@ export default async function (req, res) {
       from: process.env.SMTP_USER,
       to: userDetails.email,
       subject: `Verification`,
-      html: `<div> 
+      html: `<div>
         This is an automated reply from Quests App University of San Carlos. Please do not reply.
         You are receiving this email because your email was just registered to an account on Quests.
         Verify your account through this <a href="http://localhost:3000/verify/${userDetails.token}">link</a>.
-        
-        
+
     <div>`,
     };
 
