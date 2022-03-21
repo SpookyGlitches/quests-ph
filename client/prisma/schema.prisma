@@ -36,7 +36,7 @@ model Session {
 }
 
 model User {
-  id            String      @id @default(cuid())
+  userId            String      @id @default(cuid())
   displayName        String              @unique
   fullName           String?
   email              String              @unique
@@ -50,26 +50,26 @@ model User {
   deletedAt          DateTime?
   isActive           String              @default("1") @db.Char(1)
   token              String
-  mentorApplication  mentorApplication[]
-  mentorFiles        mentorFiles[]
+  mentorApplication  MentorApplication[]
+  mentorFiles        MentorFiles[]
   PointsLog     PointsLog[]
 }
 
-model mentorApplication {
-  id                 Int    @id @default(autoincrement())
+model MentorApplication {
+  mentorApplicationid Int    @id @default(autoincrement())
   userId             Int
   experience         String
   detailedExperience String
-  user               User   @relation(fields: [userId], references: [id])
+  user               User   @relation(fields: [mentorApplicationid], references: [userId])
 }
 
-model mentorFiles {
+model MentorFiles {
   id                 Int    @id @default(autoincrement())
-  uploadId           Int
+  mentorFileId       Int
   path               String
   createdAt          DateTime?            @default(now())
   deletedAt          DateTime?            
-  user               User   @relation(fields: [uploadId], references: [id])
+  user               User   @relation(fields: [mentorFileId], references: [userId])
 }
 
 model QuestTasks {
