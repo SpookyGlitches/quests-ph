@@ -3,7 +3,6 @@ import prisma from "../../../lib/prisma";
 export default async function (req, res) {
   // eslint-disable-next-line
   require("dotenv").config();
-
   if (req.method === "POST") {
     const userDetails = JSON.parse(req.body);
     // eslint-disable-next-line
@@ -40,19 +39,21 @@ export default async function (req, res) {
         displayName: userDetails.displayName,
       },
     });
-    if (!checkDisplayName && !checkEmail) {
-      // eslint-disable-next-line
+    if (checkDisplayName && checkEmail) {
+      res.status(514).send({ message: "Both" });
+    } else if (checkDisplayName) {
+      res.status(513).send({ message: "Display Name Exists" });
+    } else if (checkEmail) {
+      res.status(512).send({ message: "Email Exists" });
+    } else if (!checkDisplayName && !checkEmail) {
       await prisma.user.create({ data: userDetails });
       transporter.sendMail(mailData, (err, info) => {
         if (err) console.log(err);
         else console.log(info);
       });
       res.status(200).send({ message: "Success!" });
-    } else if (checkDisplayName) {
-      res.status(500).send({ message: "Username" });
-    } else if (checkEmail) {
-      res.status(400).send({ message: "Email" });
     }
+
     await prisma.$disconnect();
   }
 }

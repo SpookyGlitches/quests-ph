@@ -60,18 +60,22 @@ export default function Register() {
         method: "POST",
         body: JSON.stringify(userInfo),
       });
-
+      console.log(res.status);
       if (res.status === 200) {
         Router.push({
           pathname: "/auth/verify-email/[emailAddress]",
           query: { emailAddress: userInfo.email },
         });
-      } else if (res.status === 500) {
+      } else if (res.status === 513) {
         setMessage("Display Name is already in use.");
         setShow(true);
-      } else if (res.status === 400) {
+      } else if (res.status === 512) {
         console.log("email");
         setMessage("Email address is already in use.");
+        setShow(true);
+      } else if (res.status === 514) {
+        console.log("both");
+        setMessage("Display Name and Email Address are already in use.");
         setShow(true);
       }
     } catch (err) {
