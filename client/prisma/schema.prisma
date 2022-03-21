@@ -53,6 +53,14 @@ model User {
   mentorApplication  MentorApplication[]
   mentorFile         MentorFile[]
   PointsLog          PointsLog[]
+  createdQuests      Quest[]
+  associatedQuests   PartyMember[]
+  postFiles          PostFile[]
+  badges             UserBadge[]
+  posts              Post[]
+  comments           Comment[]
+  postReacts         PostReact[]
+  commentReacts      CommentReact[]
 }
 
 model MentorApplication {
