@@ -41,7 +41,7 @@ export default function Step2() {
             id="filled-basic"
             label="If yes, what kind of mentoring?"
             multiline
-            rows={3}
+            rows={2}
             onChange={onChange}
             value={value}
             error={

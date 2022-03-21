@@ -53,14 +53,14 @@ const MentorRegistrationForm = () => {
           pathname: "/auth/verify-email/[emailAddress]",
           query: { emailAddress: values.email },
         });
-      } else if (res.status === 513) {
+      } else if (res.status === 403) {
         setMessage("Display Name is already in use.");
         setShow(true);
-      } else if (res.status === 512) {
+      } else if (res.status === 409) {
         console.log("email");
         setMessage("Email address is already in use.");
         setShow(true);
-      } else if (res.status === 514) {
+      } else if (res.status === 400) {
         console.log("both");
         setMessage("Display Name and Email Address are already in use.");
         setShow(true);

@@ -54,7 +54,7 @@ const FileUpload = (props) => {
     <Box
       {...getRootProps()}
       sx={{
-        height: "8rem",
+        height: "5rem",
 
         backgroundColor: "#e7e7e7",
         borderColor: "#cbcbcb",
