@@ -55,11 +55,11 @@ export default async function (req, res) {
       },
     });
     if (checkDisplayName && checkEmail) {
-      res.status(514).send({ message: "Both" });
+      res.status(400).send({ message: "Both" });
     } else if (checkDisplayName) {
-      res.status(513).send({ message: "Display Name Exists" });
+      res.status(403).send({ message: "Display Name Exists" });
     } else if (checkEmail) {
-      res.status(512).send({ message: "Email Exists" });
+      res.status(409).send({ message: "Email Exists" });
     } else if (!checkDisplayName && !checkEmail) {
       await prisma.user.create({ data: userDetails });
       transporter.sendMail(mailData, (err, info) => {
