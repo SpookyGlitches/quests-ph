@@ -13,7 +13,7 @@ export async function getServerSideProps({ res, params }) {
   if (findEmail) {
     await prisma.user.update({
       where: {
-        id: findEmail.id,
+        userId: findEmail.userId,
       },
       data: {
         verificationStatus: true,
