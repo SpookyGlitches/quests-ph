@@ -74,9 +74,11 @@ export default function CheckboxListSecondary() {
           </ListItem>
         </List>
       ))}
-      <ListItem button sx={{ color: "#755cde", borderRadius: 1 }}>
-        Show More
-      </ListItem>
+      {data.length > 0 && (
+        <ListItem button sx={{ color: "#755cde", borderRadius: 1 }}>
+          Show More
+        </ListItem>
+      )}
     </Box>
   );
 }

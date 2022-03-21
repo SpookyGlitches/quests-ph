@@ -1,4 +1,7 @@
 import prisma from "../../../../../../lib/prisma";
+import { PrismaClientValidationError } from "@prisma/client/runtime";
+import { ValidationError } from "yup";
+import { createTaskSchema } from "../../../../../../validations/TasksCreate";
 
 async function getTask(req, res) {
   try {
@@ -18,6 +21,7 @@ async function updateTask(req, res) {
   try {
     const { title, description, points, dueDate } = req.body;
 
+    await createTaskSchema.validate({ ...req.body });
     const task = await prisma.questTasks.update({
       where: {
         id: Number(req.query.taskId),
@@ -30,9 +34,15 @@ async function updateTask(req, res) {
       },
     });
     res.status(200).json(task);
-  } catch (error) {
-    res.status(500).json({ message: "Error updating this task" });
-    console.log(error);
+  } catch (err) {
+    switch (err.constructor) {
+      case ValidationError:
+      case PrismaClientValidationError:
+        res.status(400).send();
+        break;
+      default:
+        res.status(500).send();
+    }
   }
 }
 

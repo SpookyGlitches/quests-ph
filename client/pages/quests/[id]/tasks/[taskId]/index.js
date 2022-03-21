@@ -13,7 +13,7 @@ import TitleRoundedIcon from "@mui/icons-material/TitleRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import SportsScoreRoundedIcon from "@mui/icons-material/SportsScoreRounded";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
-
+import { createTaskSchema } from "../../../../../validations/TasksCreate";
 import { useRouter } from "next/router";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -25,15 +25,6 @@ import axios from "axios";
 import { add } from "date-fns";
 import useSWR from "swr";
 import AppLayout from "../../../../../components/Layouts/AppLayout";
-
-const createTaskSchema = yup
-  .object({
-    title: yup.string().max(20).required(),
-    description: yup.string().required(),
-    points: yup.number().positive().integer().required(),
-    dueDate: yup.date().required(),
-  })
-  .required();
 
 const UpdateTask = () => {
   const router = useRouter();

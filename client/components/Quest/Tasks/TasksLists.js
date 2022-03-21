@@ -19,24 +19,27 @@ import useSWR, { mutate } from "swr";
 import axios from "axios";
 import StyledPaper from "../../Common/StyledPaper";
 
-export const deleteHandler = async (id) => {
-  if (window.confirm("Delete item?")) {
-    const deleteUrl = `/api/quests/${router.query.id}/tasks/${id}`;
-    const url = `http://localhost:3000/quests/${router.query.id}/tasks`;
-    mutate(
-      url,
-      data.filter((c) => c.id !== task.id),
-      false,
-    ),
-      await axios.delete(deleteUrl);
-    // put trigger here
-  }
-};
-
 const TasksLists = () => {
   const router = useRouter();
 
-  const { data, error } = useSWR(`/api/quests/${router.query.id}/tasks`);
+  const createBtn = `/quests/${router.query.id}/tasks/create`;
+
+  const deleteHandler = async (id) => {
+    if (window.confirm("Delete item?")) {
+      if (!router.query.id) {
+        console.log("no id found");
+      }
+      const deleteUrl = `/api/quests/${router.query.id}/tasks/${id}`;
+      const url = `http://localhost:3000/quests/${router.query.id}/tasks`;
+
+      await axios.delete(deleteUrl);
+      // put trigger here
+    }
+  };
+
+  const { data, error } = useSWR(`/api/quests/${router.query.id}/tasks`, {
+    refreshInterval: 1000,
+  });
 
   if (error) return <div>failed to load</div>;
   if (!data) return <LinearProgress />;
@@ -52,15 +55,17 @@ const TasksLists = () => {
         }}
         spacing={3}
       >
+        <Typography variant="h5" sx={{ color: "#755cde" }}>
+          Today
+        </Typography>
         {/* show this button when current user is mentor */}
-        <Link href="/quests/1/tasks/create" passHref>
+        <Link href={createBtn} passHref>
           <Button
-            sx={{ maxHeight: "45px" }}
+            sx={{ alignItems: "flex-end" }}
             variant="contained"
             startIcon={<AddRoundedIcon />}
           >
-            {" "}
-            New Task{" "}
+            New Task
           </Button>
         </Link>
       </Box>
@@ -70,10 +75,6 @@ const TasksLists = () => {
           m: 1,
         }}
       >
-        <Typography variant="h5" sx={{ color: "#755cde", marginBottom: 2 }}>
-          Today
-        </Typography>
-
         {data.map((task) => (
           <StyledPaper
             key={task.id}
@@ -128,7 +129,10 @@ const TasksLists = () => {
                       {format(new Date(task.dueAt), "MMMM dd")}
                     </Typography>
 
-                    <IconButton onClick={deleteHandler(task.id)} size="small">
+                    <IconButton
+                      onClick={() => deleteHandler(task.id)}
+                      size="small"
+                    >
                       <DeleteRoundedIcon />
                     </IconButton>
                   </Box>
