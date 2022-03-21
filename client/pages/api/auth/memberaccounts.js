@@ -2,14 +2,14 @@ import prisma from "../../../lib/prisma";
 // eslint-disable-next-line
 export default async function (req, res) {
   // eslint-disable-next-line
-  require("dotenv").config();
+
   if (req.method === "POST") {
     const userDetails = JSON.parse(req.body);
     // eslint-disable-next-line
     const nodemailer = require("nodemailer");
     const transporter = nodemailer.createTransport({
-      port: 465,
-      host: "smtp.gmail.com",
+      port: process.env.MAIL_PORT,
+      host: process.env.MAIL_HOST,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD,
