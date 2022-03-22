@@ -371,7 +371,7 @@ model PostReact {
 }
 
 model CommentReact {
-  postReactId Int       @id @default(autoincrement())
+  commentReactId Int       @id @default(autoincrement())
   postId      Int
   userId      String
   type        ReactType // didnt follow convention since this will be used by 2 tables

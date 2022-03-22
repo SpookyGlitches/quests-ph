@@ -39,8 +39,15 @@ const OrderedListElement = styled("ol")(() => ({
 
 const LinkElement = (props) => {
   const { attributes, children, nodeProps, element } = props;
+  console.log(props);
   return (
-    <Link {...attributes} href={element.url} {...nodeProps}>
+    <Link
+      {...attributes}
+      href={element.url}
+      rel="noreferrer"
+      {...nodeProps}
+      target="_blank"
+    >
       {children}
     </Link>
   );
