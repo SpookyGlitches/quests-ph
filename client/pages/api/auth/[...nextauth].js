@@ -1,18 +1,18 @@
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
 import prisma from "../../../lib/prisma";
 
-let userAccount = null;
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
   cookie: {
     secure: process.env.NODE_ENV && process.env.NODE_ENV === "production",
   },
-
+  secret: "test",
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60,
+    // maxAge: 30 * 24 * 60 * 60,
   },
   providers: [
     CredentialsProvider({
@@ -24,16 +24,26 @@ export default NextAuth({
       },
       // eslint-disable-next-line
       async authorize(credentials, req) {
-        const user = await prisma.user.findFirst({
+        const findUser = await prisma.user.findFirst({
           where: {
             email: credentials.email,
-            password: credentials.password,
           },
         });
-
-        if (user) {
-          userAccount = user;
-          return user;
+        if (findUser) {
+          const checkPass = await bcrypt.compare(
+            credentials.password,
+            findUser.password,
+          );
+          if (checkPass) {
+            const user = await prisma.user.findFirst({
+              where: {
+                email: credentials.email,
+              },
+            });
+            if (user) {
+              return user;
+            }
+          }
         }
         return null;
       },
@@ -42,30 +52,31 @@ export default NextAuth({
   callbacks: {
     // eslint-disable-next-line
     signIn(user, account, profile) {
-      if (typeof user.user.id !== typeof undefined) {
+      if (typeof user.user.userId !== typeof undefined) {
         if (user.user.isActive === "1") {
           return user;
         }
-        return false;
       }
       return false;
     },
     jwt: ({ token, user }) => {
-      // first time jwt callback is run, user object is available
-      if (user) {
-        // token.id = user.id;
-        // eslint-disable-next-line
-        token.user = user;
-      }
+      // user is only available after signing in. The rest is handled by token.
 
+      if (user) {
+        // eslint-disable-next-line
+        token.user = user; // assign user object to token bc this will be used in succeeding sessions.
+      }
+      // eslint-disable-next-line
       return token;
     },
+
     // eslint-disable-next-line
-    session: ({ session }) => {
-      if (userAccount !== null) {
+    session: ({ session, token, user }) => {
+      if (token) {
         // eslint-disable-next-line
-        session.user = userAccount;
+        session.user = token.user;
       }
+      // eslint-disable-next-line
       return session;
     },
   },
