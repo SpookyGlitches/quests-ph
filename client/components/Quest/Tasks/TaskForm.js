@@ -25,7 +25,7 @@ const TaskForm = () => {
   } = useForm({ resolver: yupResolver(createTaskSchema) });
 
   const onSubmit = async (data) => {
-    const questId = router.query.id;
+    const questId = router.query.questId;
 
     try {
       const res = await axios.post(`/api/quests/${questId}/tasks/create`, data);
