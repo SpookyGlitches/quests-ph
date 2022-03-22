@@ -35,11 +35,14 @@ export default function Login() {
       callbackUrl: `/`,
       redirect: false,
     }).then((result) => {
+      console.log(result.status);
       if (result.error !== null) {
         if (result.status === 401) {
           setLoginError(
             "The email or password you entered isn't registered to an account.",
           );
+        } else if (result.status === 403) {
+          setLoginError("Please verify your account.");
         } else {
           setLoginError(result.error);
         }

@@ -53,7 +53,9 @@ export default NextAuth({
     // eslint-disable-next-line
     signIn(user, account, profile) {
       if (typeof user.user.userId !== typeof undefined) {
-        if (user.user.isActive === "1") {
+        if (user.user.verificationStatus === false) {
+          console.log("not verified");
+        } else {
           return user;
         }
       }
