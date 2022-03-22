@@ -1,16 +1,72 @@
 import NextAuth from "next-auth";
-import GithubProvider from "next-auth/providers/github";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "../../../lib/prisma";
 
+let userAccount = null;
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
+  cookie: {
+    secure: process.env.NODE_ENV && process.env.NODE_ENV === "production",
+  },
 
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60,
+  },
   providers: [
-    GithubProvider({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
+    CredentialsProvider({
+      name: "credentials",
+      id: "credentials",
+      credentials: {
+        email: { label: "email", type: "text" },
+        password: { label: "password", type: "password" },
+      },
+      // eslint-disable-next-line
+      async authorize(credentials, req) {
+        const user = await prisma.user.findFirst({
+          where: {
+            email: credentials.email,
+            password: credentials.password,
+          },
+        });
+
+        if (user) {
+          userAccount = user;
+          return user;
+        }
+        return null;
+      },
     }),
-    // ...add more providers here
   ],
+  callbacks: {
+    // eslint-disable-next-line
+    signIn(user, account, profile) {
+      if (typeof user.user.id !== typeof undefined) {
+        if (user.user.isActive === "1") {
+          return user;
+        }
+        return false;
+      }
+      return false;
+    },
+    jwt: ({ token, user }) => {
+      // first time jwt callback is run, user object is available
+      if (user) {
+        // token.id = user.id;
+        // eslint-disable-next-line
+        token.user = user;
+      }
+
+      return token;
+    },
+    // eslint-disable-next-line
+    session: ({ session }) => {
+      if (userAccount !== null) {
+        // eslint-disable-next-line
+        session.user = userAccount;
+      }
+      return session;
+    },
+  },
 });

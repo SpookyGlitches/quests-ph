@@ -27,11 +27,13 @@
     "@udecode/plate-list": "^10.1.2",
     "@udecode/plate-paragraph": "^10.1.2",
     "axios": "^0.26.0",
+    "bcryptjs": "^2.4.3",
     "chart.js": "^3.7.1",
     "date-fns": "^2.28.0",
     "moment": "^2.29.1",
     "next": "12.0.10",
     "next-auth": "^4.2.1",
+    "nodemailer": "^6.7.2",
     "react": "17.0.2",
     "react-chartjs-2": "^4.0.1",
     "react-clamp-lines": "^3.0.2",
@@ -43,6 +45,7 @@
     "slate-history": "^0.66.0",
     "slate-hyperscript": "^0.67.0",
     "slate-react": "^0.74.0",
+    "uuid": "^8.3.2",
     "yup": "^0.32.11"
   },
   "devDependencies": {
