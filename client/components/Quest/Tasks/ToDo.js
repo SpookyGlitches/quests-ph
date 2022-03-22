@@ -7,28 +7,22 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material";
-
 import { format } from "date-fns";
 import { useRouter } from "next/router";
 import useSWR from "swr";
-
 export default function CheckboxListSecondary() {
   const router = useRouter();
-
   const { data, error } = useSWR(`/quests/${router.query.questId}/tasks`, {
     refreshInterval: 1000,
   });
-
   if (error) return <div>failed to load</div>;
   if (!data) return <CircularProgress />;
-
   console.log(data);
   return (
     <Box
       sx={{
         backgroundColor: "background.paper",
         height: "100%",
-
         borderRadius: 2,
       }}
     >

@@ -2,10 +2,8 @@
 /* eslint-disable dot-notation */
 /* eslint-disable no-param-reassign */
 import { PrismaClient } from "@prisma/client";
-
 // eslint-disable-next-line import/no-mutable-exports
 let prisma;
-
 if (process.env.NODE_ENV === "production") {
   prisma = new PrismaClient();
 } else {
@@ -14,7 +12,6 @@ if (process.env.NODE_ENV === "production") {
   }
   prisma = global.prisma;
 }
-
 prisma.$use(async (params, next) => {
   // Check incoming query type
   if (
