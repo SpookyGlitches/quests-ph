@@ -21,8 +21,7 @@ model Account {
   scope             String?
   id_token          String? @map("idToken") @db.Text
   session_state     String?
-
-  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -36,19 +35,19 @@ model Session {
 }
 
 model User {
-  userId             String               @id @default(cuid())
-  displayName        String               @unique
+  userId             String                   @id @default(cuid())
+  displayName        String                   @unique
   fullName           String?
-  email              String               @unique
+  email              String                   @unique
   password           String
   dateOfBirth        DateTime
   role               String
   image              String?
-  verificationStatus Boolean              @default(false)
-  createdAt          DateTime             @default(now())
+  verificationStatus Boolean                  @default(false)
+  createdAt          DateTime                 @default(now())
   updatedAt          DateTime?
   deletedAt          DateTime?
-  isActive           String               @default("1") @db.Char(1)
+  isActive           String                   @default("1") @db.Char(1)
   token              String
   mentorApplication  MentorApplication[]
   mentorFile         MentorFile[]
@@ -68,16 +67,16 @@ model User {
   commentReact       CommentReact[]
   postFile           PostFile[]
   userBadge          UserBadge[]
-  userReporter       UserReport[] @relation("userReporter")
-  userRecipient      UserReport[] @relation("userRecipient")
+  userReporter       UserReport[]             @relation("userReporter")
+  userRecipient      UserReport[]             @relation("userRecipient")
   articles           Article[]
   questPartyBan      QuestPartyBan[]
   partyLeader        QuestMentorshipRequest[] @relation("partyLeader")
   mentor             QuestMentorshipRequest[] @relation("mentor")
-  userOne            Friendship[]  @relation("userOne")
-  userTwo            Friendship[]  @relation("userTwo")
-  requester          FriendRequest[] @relation("requester")
-  requestee          FriendRequest[] @relation("requestee")
+  userOne            Friendship[]             @relation("userOne")
+  userTwo            Friendship[]             @relation("userTwo")
+  requester          FriendRequest[]          @relation("requester")
+  requestee          FriendRequest[]          @relation("requestee")
 }
 
 model MentorApplication {
@@ -113,40 +112,41 @@ model UserReport {
 }
 
 model Article {
-  articleId  Int       @id @default(autoincrement())
+  articleId  Int           @id @default(autoincrement())
   userId     String
-  category   QuestCategory       @default(SOCIAL)
+  category   QuestCategory @default(SOCIAL)
   link       String
   image      String?
-  status     ArticleStatus    @default(DISAPPROVED)
-  createdAt  DateTime   @default(now())
+  status     ArticleStatus @default(DISAPPROVED)
+  createdAt  DateTime      @default(now())
   updatedAt  DateTime?
   approvedAt DateTime?
   deletedAt  DateTime?
-  user       User       @relation(fields: [userId], references: [userId])
+  user       User          @relation(fields: [userId], references: [userId])
 }
+
 model Quest {
-  questId            Int                 @id @default(autoincrement())
-  userId             String
-  wish               String
-  difficulty         QuestDifficulty     @default(EASY)
-  visibility         QuestVisibility     @default(PRIVATE)
-  category           QuestCategory       @default(SOCIAL)
-  wiki               String              @default("[{\"type\":\"h1\",\"children\":[{\"text\":\"Welcome\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"This is our Wiki where you can find tips, resources, and strategies to increase the success of us achieving our wishes. If you want to add here, just send me a message in our chat and I'll do it for you!\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"},{\"type\":\"a\",\"url\":\"https://www.youtube.com/watch?v=dQw4w9WgXcQ\",\"children\":[{\"text\":\"watch this awesome tip!\"}]},{\"text\":\"\"}]},{\"type\":\"p\",\"children\":[{\"text\":\" \"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"}]}]") @db.LongText
-  mentorMessage      String?
-  estimatedStartDate DateTime            @db.Date
-  estimatedEndDate   DateTime            @db.Date
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
-  completedAt        DateTime?
-  deletedAt          DateTime?
-  partyMembers       PartyMember[]
-  user               User                @relation(fields: [userId], references: [userId])
-  posts              Post[]
-  questTask          QuestTask[]
-  questTaskFinisher  QuestTaskFinisher[]
-  conversation       Conversation[]
-  questPartyBan      QuestPartyBan[]
+  questId                Int                      @id @default(autoincrement())
+  userId                 String
+  wish                   String
+  difficulty             QuestDifficulty          @default(EASY)
+  visibility             QuestVisibility          @default(PRIVATE)
+  category               QuestCategory            @default(SOCIAL)
+  wiki                   String                   @default("[{\"type\":\"h1\",\"children\":[{\"text\":\"Welcome\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"This is our Wiki where you can find tips, resources, and strategies to increase the success of us achieving our wishes. If you want to add here, just send me a message in our chat and I'll do it for you!\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"},{\"type\":\"a\",\"url\":\"https://www.youtube.com/watch?v=dQw4w9WgXcQ\",\"children\":[{\"text\":\"watch this awesome tip!\"}]},{\"text\":\"\"}]},{\"type\":\"p\",\"children\":[{\"text\":\" \"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"}]}]") @db.LongText
+  mentorMessage          String?
+  estimatedStartDate     DateTime                 @db.Date
+  estimatedEndDate       DateTime                 @db.Date
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt
+  completedAt            DateTime?
+  deletedAt              DateTime?
+  partyMembers           PartyMember[]
+  user                   User                     @relation(fields: [userId], references: [userId])
+  posts                  Post[]
+  questTask              QuestTask[]
+  questTaskFinisher      QuestTaskFinisher[]
+  conversation           Conversation[]
+  questPartyBan          QuestPartyBan[]
   questMentorshipRequest QuestMentorshipRequest[]
 }
 
@@ -176,28 +176,30 @@ model QuestTaskFinisher {
 }
 
 model QuestMentorshipRequest {
-  questMentorshipRequestId  Int                @id @default(autoincrement())
-  partyLeaderId             String
-  mentorId                  String
-  questId                   Int
-  status                    MentorshipStatus  @default(ACTIVE)
-  createdAt                 DateTime          @default(now())
-  updatedAt                 DateTime?
-  deletedAt                 DateTime?
-  partyLeader               User              @relation(name: "partyLeader", fields: [partyLeaderId], references: [userId])
-  mentor                    User              @relation(name: "mentor", fields: [mentorId], references: [userId])
-  quest                     Quest             @relation(fields: [questId], references: [questId])
+  questMentorshipRequestId Int              @id @default(autoincrement())
+  partyLeaderId            String
+  mentorId                 String
+  questId                  Int
+  status                   MentorshipStatus @default(ACTIVE)
+  createdAt                DateTime         @default(now())
+  updatedAt                DateTime?
+  deletedAt                DateTime?
+  partyLeader              User             @relation(name: "partyLeader", fields: [partyLeaderId], references: [userId])
+  mentor                   User             @relation(name: "mentor", fields: [mentorId], references: [userId])
+  quest                    Quest            @relation(fields: [questId], references: [questId])
 }
+
 model QuestPartyBan {
-  questPartyBanId    Int      @id @default(autoincrement())
-  questId            Int
-  userId             String
-  createdAt          DateTime @default(now())
-  deletedAt          DateTime?
-  updatedAt          DateTime?
-  quest              Quest    @relation(fields: [questId], references: [questId])
-  user               User      @relation(fields: [userId], references: [userId])
+  questPartyBanId Int       @id @default(autoincrement())
+  questId         Int
+  userId          String
+  createdAt       DateTime  @default(now())
+  deletedAt       DateTime?
+  updatedAt       DateTime?
+  quest           Quest     @relation(fields: [questId], references: [questId])
+  user            User      @relation(fields: [userId], references: [userId])
 }
+
 model PointLog {
   id          Int      @id @default(autoincrement())
   user        User     @relation(fields: [userId], references: [userId])
@@ -207,28 +209,28 @@ model PointLog {
   totalPoints Int
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
-
 }
 
 model FriendRequest {
-  friendRequestId Int      @id @default(autoincrement())
+  friendRequestId Int           @id @default(autoincrement())
   requesterId     String
   requesteeId     String
   status          RequestStatus @default(PENDING)
-  createdAt       DateTime @default(now())
-  completedAt     DateTime? 
+  createdAt       DateTime      @default(now())
+  completedAt     DateTime?
   deletedAt       DateTime?
-  requester       User @relation(name: "requester", fields: [requesterId], references: [userId])
-  requestee       User @relation(name: "requestee", fields: [requesteeId], references: [userId])
+  requester       User          @relation(name: "requester", fields: [requesterId], references: [userId])
+  requestee       User          @relation(name: "requestee", fields: [requesteeId], references: [userId])
 }
+
 model Friendship {
-  friendshipId  Int      @id @default(autoincrement())
-  userOneId     String
-  userTwoId     String
-  createdAt     DateTime     @default(now())
-  deletedAt     DateTime?
-  userOne       User              @relation(name: "userOne", fields: [userOneId], references: [userId])
-  userTwo       User              @relation(name: "userTwo", fields: [userTwoId], references: [userId])
+  friendshipId Int       @id @default(autoincrement())
+  userOneId    String
+  userTwoId    String
+  createdAt    DateTime  @default(now())
+  deletedAt    DateTime?
+  userOne      User      @relation(name: "userOne", fields: [userOneId], references: [userId])
+  userTwo      User      @relation(name: "userTwo", fields: [userTwoId], references: [userId])
 }
 
 model Message {
@@ -239,7 +241,6 @@ model Message {
   userId         String
   text           String
   createdAt      DateTime     @default(now())
-
 }
 
 model Conversation {
@@ -298,7 +299,7 @@ enum MentorshipStatus {
   INACTIVE
 }
 
-enum RequestStatus{
+enum RequestStatus {
   PENDING
   COMPLETED
 }
@@ -372,12 +373,12 @@ model PostReact {
 
 model CommentReact {
   commentReactId Int       @id @default(autoincrement())
-  postId      Int
-  userId      String
-  type        ReactType // didnt follow convention since this will be used by 2 tables
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now())
-  user        User      @relation(fields: [userId], references: [userId])
+  postId         Int
+  userId         String
+  type           ReactType // didnt follow convention since this will be used by 2 tables
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @default(now())
+  user           User      @relation(fields: [userId], references: [userId])
 }
 
 //  before kay positive emotions ra and not these, kani lang kay nice ang emojis and i think it's necessary sad ang negative emotions (Inside Out) :),
