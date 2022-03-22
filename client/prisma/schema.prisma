@@ -1,3 +1,4 @@
+// ADDDDDDD
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
@@ -7,19 +8,418 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model User {
-  id            Int    @id @default(autoincrement())
-  displayName   String    @unique
-  fullName      String?
-  email         String    @unique
-  password      String
-  dateOfBirth   DateTime
-  role          String
-  image         String?
-  verificationStatus  Boolean    @default(false)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime?
-  deletedAt     DateTime?
-  isActive      String      @default("1") @db.Char(1)
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @map("refreshToken") @db.Text
+  access_token      String? @map("accessToken") @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @map("idToken") @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
 }
 
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+}
+
+model User {
+  userId             String               @id @default(cuid())
+  displayName        String               @unique
+  fullName           String?
+  email              String               @unique
+  password           String
+  dateOfBirth        DateTime
+  role               String
+  image              String?
+  verificationStatus Boolean              @default(false)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime?
+  deletedAt          DateTime?
+  isActive           String               @default("1") @db.Char(1)
+  token              String
+  mentorApplication  MentorApplication[]
+  mentorFile         MentorFile[]
+  accounts           Account[]
+  sessions           Session[]
+  pointLog           PointLog[]
+  quests             Quest[]
+  questTask          QuestTask[]
+  questTaskFinisher  QuestTaskFinisher[]
+  message            Message[]
+  notification       Notification[]
+  conversationMember ConversationMember[]
+  partyMembers       PartyMember[]
+  post               Post[]
+  comment            Comment[]
+  postReact          PostReact[]
+  commentReact       CommentReact[]
+  postFile           PostFile[]
+  userBadge          UserBadge[]
+  userReporter       UserReport[] @relation("userReporter")
+  userRecipient      UserReport[] @relation("userRecipient")
+  articles           Article[]
+  questPartyBan      QuestPartyBan[]
+  partyLeader        QuestMentorshipRequest[] @relation("partyLeader")
+  mentor             QuestMentorshipRequest[] @relation("mentor")
+  userOne            Friendship[]  @relation("userOne")
+  userTwo            Friendship[]  @relation("userTwo")
+  requester          FriendRequest[] @relation("requester")
+  requestee          FriendRequest[] @relation("requestee")
+}
+
+model MentorApplication {
+  mentorApplicationid Int    @id @default(autoincrement())
+  mentorId            String
+  experience          String
+  detailedExperience  String
+  user                User   @relation(fields: [mentorId], references: [userId])
+}
+
+model MentorFile {
+  mentorFileId   Int       @id @default(autoincrement())
+  mentorUploadId String
+  path           String
+  createdAt      DateTime? @default(now())
+  deletedAt      DateTime?
+  user           User      @relation(fields: [mentorUploadId], references: [userId])
+}
+
+model UserReport {
+  userReportId  Int       @id @default(autoincrement())
+  reporterId    String
+  recipientId   String
+  category      String
+  description   String
+  status        BanStatus @default(INACTIVE)
+  createdAt     DateTime  @default(now())
+  banStart      DateTime?
+  banEnd        DateTime?
+  deletedAt     DateTime?
+  userReporter  User      @relation(name: "userReporter", fields: [reporterId], references: [userId])
+  userRecipient User      @relation(name: "userRecipient", fields: [recipientId], references: [userId])
+}
+
+model Article {
+  articleId  Int       @id @default(autoincrement())
+  userId     String
+  category   QuestCategory       @default(SOCIAL)
+  link       String
+  image      String?
+  status     ArticleStatus    @default(DISAPPROVED)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime?
+  approvedAt DateTime?
+  deletedAt  DateTime?
+  user       User       @relation(fields: [userId], references: [userId])
+}
+model Quest {
+  questId            Int                 @id @default(autoincrement())
+  userId             String
+  wish               String
+  difficulty         QuestDifficulty     @default(EASY)
+  visibility         QuestVisibility     @default(PRIVATE)
+  category           QuestCategory       @default(SOCIAL)
+  wiki               String              @default("[{\"type\":\"h1\",\"children\":[{\"text\":\"Welcome\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"This is our Wiki where you can find tips, resources, and strategies to increase the success of us achieving our wishes. If you want to add here, just send me a message in our chat and I'll do it for you!\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"},{\"type\":\"a\",\"url\":\"https://www.youtube.com/watch?v=dQw4w9WgXcQ\",\"children\":[{\"text\":\"watch this awesome tip!\"}]},{\"text\":\"\"}]},{\"type\":\"p\",\"children\":[{\"text\":\" \"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"}]}]") @db.LongText
+  mentorMessage      String?
+  estimatedStartDate DateTime            @db.Date
+  estimatedEndDate   DateTime            @db.Date
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  completedAt        DateTime?
+  deletedAt          DateTime?
+  partyMembers       PartyMember[]
+  user               User                @relation(fields: [userId], references: [userId])
+  posts              Post[]
+  questTask          QuestTask[]
+  questTaskFinisher  QuestTaskFinisher[]
+  conversation       Conversation[]
+  questPartyBan      QuestPartyBan[]
+  questMentorshipRequest QuestMentorshipRequest[]
+}
+
+model QuestTask {
+  questTaskid Int       @id @default(autoincrement())
+  quest       Quest     @relation(fields: [questId], references: [questId])
+  questId     Int
+  user        User      @relation(fields: [userId], references: [userId])
+  userId      String
+  title       String
+  description String
+  points      Int
+  dueAt       DateTime
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+}
+
+model QuestTaskFinisher {
+  questTaskFinisherId Int      @id @default(autoincrement())
+  quest               Quest    @relation(fields: [questId], references: [questId])
+  questId             Int
+  user                User     @relation(fields: [userId], references: [userId])
+  userId              String
+  gainedPoints        Int
+  createdAt           DateTime @default(now())
+}
+
+model QuestMentorshipRequest {
+  questMentorshipRequestId  Int                @id @default(autoincrement())
+  partyLeaderId             String
+  mentorId                  String
+  questId                   Int
+  status                    MentorshipStatus  @default(ACTIVE)
+  createdAt                 DateTime          @default(now())
+  updatedAt                 DateTime?
+  deletedAt                 DateTime?
+  partyLeader               User              @relation(name: "partyLeader", fields: [partyLeaderId], references: [userId])
+  mentor                    User              @relation(name: "mentor", fields: [mentorId], references: [userId])
+  quest                     Quest             @relation(fields: [questId], references: [questId])
+}
+model QuestPartyBan {
+  questPartyBanId    Int      @id @default(autoincrement())
+  questId            Int
+  userId             String
+  createdAt          DateTime @default(now())
+  deletedAt          DateTime?
+  updatedAt          DateTime?
+  quest              Quest    @relation(fields: [questId], references: [questId])
+  user               User      @relation(fields: [userId], references: [userId])
+}
+model PointLog {
+  id          Int      @id @default(autoincrement())
+  user        User     @relation(fields: [userId], references: [userId])
+  userId      String
+  action      String
+  rowId       Int
+  totalPoints Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+
+}
+
+model FriendRequest {
+  friendRequestId Int      @id @default(autoincrement())
+  requesterId     String
+  requesteeId     String
+  status          RequestStatus @default(PENDING)
+  createdAt       DateTime @default(now())
+  completedAt     DateTime? 
+  deletedAt       DateTime?
+  requester       User @relation(name: "requester", fields: [requesterId], references: [userId])
+  requestee       User @relation(name: "requestee", fields: [requesteeId], references: [userId])
+}
+model Friendship {
+  friendshipId  Int      @id @default(autoincrement())
+  userOneId     String
+  userTwoId     String
+  createdAt     DateTime     @default(now())
+  deletedAt     DateTime?
+  userOne       User              @relation(name: "userOne", fields: [userOneId], references: [userId])
+  userTwo       User              @relation(name: "userTwo", fields: [userTwoId], references: [userId])
+}
+
+model Message {
+  id             Int          @id @default(autoincrement())
+  conversation   Conversation @relation(fields: [conversationId], references: [conversationId])
+  conversationId Int
+  user           User         @relation(fields: [userId], references: [userId])
+  userId         String
+  text           String
+  createdAt      DateTime     @default(now())
+
+}
+
+model Conversation {
+  conversationId     Int                  @id @default(autoincrement())
+  quest              Quest                @relation(fields: [questId], references: [questId])
+  questId            Int
+  name               String
+  createdAt          DateTime             @default(now())
+  message            Message[]
+  conversationMember ConversationMember[]
+}
+
+model Notification {
+  notificationId Int       @id @default(autoincrement())
+  user           User      @relation(fields: [userId], references: [userId])
+  userId         String
+  message        String
+  createdAt      DateTime  @default(now())
+  deletedAt      DateTime?
+}
+
+model ConversationMember {
+  conversationMemberId Int          @id @default(autoincrement())
+  conversation         Conversation @relation(fields: [conversationId], references: [conversationId])
+  conversationId       Int
+  user                 User         @relation(fields: [userId], references: [userId])
+  userId               String
+  createdAt            DateTime     @default(now())
+  deletedAt            DateTime?
+}
+
+model PartyMember {
+  partyMemberId Int             @id @default(autoincrement())
+  userId        String
+  questId       Int
+  role          PartyMemberRole @default(MENTEE)
+  outcome       String
+  obstacle      String
+  plan          String
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @default(now())
+  deletedAt     DateTime?
+  quest         Quest           @relation(fields: [questId], references: [questId])
+  user          User            @relation(fields: [userId], references: [userId])
+
+  @@unique([questId, userId, deletedAt])
+}
+
+enum BanStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum MentorshipStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum RequestStatus{
+  PENDING
+  COMPLETED
+}
+
+enum ArticleStatus {
+  APPROVED
+  DISAPPROVED
+}
+
+enum QuestDifficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum QuestVisibility {
+  PUBLIC
+  PRIVATE
+}
+
+enum QuestCategory {
+  SOCIAL
+  CAREER
+  HEALTH
+}
+
+enum PartyMemberRole {
+  MENTOR
+  MENTEE
+  PARTY_LEADER
+}
+
+// NEW START, basically before nag ingani ta post -> quest Post, post -> comment Post, pero karon separate jud
+// did a workaround tungod ani https://github.com/prisma/prisma/issues/1644 kay ato react2 thingy
+
+model Post {
+  postId    Int        @id @default(autoincrement())
+  userId    String
+  questId   Int
+  title     String
+  body      String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @default(now())
+  deletedAt DateTime?
+  postFiles PostFile[]
+  comments  Comment[]
+  user      User       @relation(fields: [userId], references: [userId])
+  quest     Quest      @relation(fields: [questId], references: [questId])
+}
+
+model Comment {
+  commentId Int       @id @default(autoincrement())
+  postId    Int
+  userId    String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
+  deletedAt DateTime?
+  post      Post      @relation(fields: [postId], references: [postId])
+  user      User      @relation(fields: [userId], references: [userId])
+}
+
+model PostReact {
+  postReactId Int       @id @default(autoincrement())
+  postId      Int
+  userId      String
+  type        ReactType
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
+  user        User      @relation(fields: [userId], references: [userId])
+}
+
+model CommentReact {
+  postReactId Int       @id @default(autoincrement())
+  postId      Int
+  userId      String
+  type        ReactType // didnt follow convention since this will be used by 2 tables
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
+  user        User      @relation(fields: [userId], references: [userId])
+}
+
+//  before kay positive emotions ra and not these, kani lang kay nice ang emojis and i think it's necessary sad ang negative emotions (Inside Out) :),
+// let users freely express their emotions basically
+// didnt follow convention since this will be used by 2 tables
+enum ReactType {
+  LAUGH
+  SAD
+  CRYING
+  SURPRISED
+  PARTY
+}
+
+// NEW END
+
+model PostFile {
+  postFileId Int       @id @default(autoincrement())
+  userId     String
+  postId     Int
+  path       String
+  createdAt  DateTime  @default(now())
+  deletedAt  DateTime?
+  user       User      @relation(fields: [userId], references: [userId])
+  post       Post      @relation(fields: [postId], references: [postId])
+}
+
+model Badge {
+  badgeId     Int         @id @default(autoincrement())
+  name        String
+  description String
+  image       String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @default(now())
+  userBadges  UserBadge[]
+}
+
+model UserBadge {
+  userBadgeId Int       @id @default(autoincrement())
+  userId      String
+  badgeId     Int
+  createdAt   DateTime  @default(now())
+  deletedAt   DateTime? // NEW, the user cant delete pero in case the user wants to delete the account we can delete for them
+  user        User      @relation(fields: [userId], references: [userId])
+  badge       Badge     @relation(fields: [badgeId], references: [badgeId])
+}
