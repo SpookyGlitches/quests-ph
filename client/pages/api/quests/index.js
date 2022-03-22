@@ -16,7 +16,7 @@ function computeIfJoined(quests) {
 }
 
 async function getQuests(req, res) {
-  const user = await getSession({ req });
+  const { user } = await getSession({ req });
   try {
     const quests = await prisma.quest.findMany({
       where: {
@@ -57,7 +57,7 @@ async function createQuest(req, res) {
       plan,
       outcome,
     } = req.body;
-    const user = await getSession({ req });
+    const { user } = await getSession({ req });
     await step1Validations.concat(step2Validations).validate({ ...req.body });
     const quest = await prisma.quest.create({
       data: {
@@ -81,6 +81,7 @@ async function createQuest(req, res) {
     });
     return res.status(200).json({ quest });
   } catch (err) {
+    console.error(err);
     switch (err.constructor) {
       case ValidationError:
       case PrismaClientValidationError:

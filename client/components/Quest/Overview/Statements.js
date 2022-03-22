@@ -28,7 +28,8 @@ const titleTypographyProps = {
 export default function Statements() {
   const router = useRouter();
   const { query } = router;
-  const { data: session } = useSession();
+  const ses = useSession();
+  const session = ses?.data?.user;
   const { data: quest } = useSWR(
     query?.questId ? `/quests/${router.query.questId}` : null,
   );
@@ -151,7 +152,7 @@ export default function Statements() {
           {partyMembers.map((item) => (
             <MemberStatement
               text={item.outcome}
-              name={item.user.name}
+              name={item.user.displayName}
               key={item.partyMemberId}
             />
           ))}
@@ -161,7 +162,7 @@ export default function Statements() {
           {partyMembers.map((item) => (
             <MemberStatement
               text={item.obstacle}
-              name={item.user.name}
+              name={item.user.displayName}
               key={item.partyMemberId}
             />
           ))}
@@ -171,7 +172,7 @@ export default function Statements() {
           {partyMembers.map((item) => (
             <MemberStatement
               text={item.plan}
-              name={item.user.name}
+              name={item.user.displayName}
               key={item.partyMemberId}
             />
           ))}

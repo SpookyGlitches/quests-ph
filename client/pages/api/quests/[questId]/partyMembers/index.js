@@ -28,9 +28,8 @@ async function fetchPartyMembers(req, res) {
       include: {
         user: {
           select: {
-            name: true,
-            id: true,
-            image: true,
+            displayName: true,
+            userId: true,
           },
         },
       },
@@ -44,7 +43,7 @@ async function fetchPartyMembers(req, res) {
 
 async function addPartyMember(req, res) {
   try {
-    const user = await getSession({ req });
+    const { user } = await getSession({ req });
     const { outcome, obstacle, plan, role } = req.body;
     console.log(req.body);
     await oopValidations.concat(roleValidation).validate({ ...req.body });

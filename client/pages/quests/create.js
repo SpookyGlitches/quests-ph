@@ -80,7 +80,6 @@ const Create = () => {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-
   return (
     <AppLayout>
       <Box
