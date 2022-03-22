@@ -1,26 +1,21 @@
-import * as React from "react";
 import { Box, StepLabel, Stack, Stepper, Button, Step } from "@mui/material";
-import Alert from "@mui/material/Alert";
+
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
-import Router from "next/router";
-import AuthHeader from "../../../components/Auth/AuthHeader";
-import AuthLayout from "../../../components/Layouts/AuthLayout";
-import Step1 from "../../../components/Registration/Step1";
-import Step2 from "../../../components/Registration/Step2";
-import { registerUserValidation } from "../../../validations/UserRegistration";
-import SignUpDisclaimer from "../../../components/Registration/SignUpDisclaimer";
+import Step1 from "./Step1";
+import Step2 from "./Step2";
+import Step3 from "./Step3";
+import { MentorRegistration } from "../../validations/MentorRegistration";
+import SignUpDisclaimer from "./SignUpDisclaimer";
 
-const steps = ["", ""];
-export default function Register() {
+const steps = ["", "", ""];
+
+const RegistrationForm = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const [message, setMessage] = useState("");
-  const [show, setShow] = useState(false);
-
   // eslint-disable-next-line no-undef
-  const currentValidationSchema = registerUserValidation[activeStep];
+  const currentValidationSchema = MentorRegistration[activeStep];
 
   const methods = useForm({
     resolver: yupResolver(currentValidationSchema),
@@ -32,41 +27,16 @@ export default function Register() {
       email: "",
       password: "",
       confirmPassword: "",
+      experience: " ",
+      detailedExperience: "",
+      fileUpload: "",
     },
   });
 
   const { trigger, handleSubmit, control } = methods;
-
-  const here = async (values) => {
-    // eslint-disable-next-line
-    try {
-      const res = await fetch("/api/auth/memberaccounts", {
-        method: "POST",
-        body: JSON.stringify(values),
-      });
-
-      if (res.status === 200) {
-        Router.push({
-          pathname: "/auth/verify-email/[emailAddress]",
-          query: { emailAddress: values.email },
-        });
-      } else if (res.status === 403) {
-        setMessage("Display Name is already in use.");
-        setShow(true);
-      } else if (res.status === 409) {
-        console.log("email");
-        setMessage("Email address is already in use.");
-        setShow(true);
-      } else if (res.status === 400) {
-        console.log("both");
-        setMessage("Display Name and Email Address are already in use.");
-        setShow(true);
-      }
-    } catch (err) {
-      throw err;
-    }
+  const here = (values) => {
+    console.log(values);
   };
-
   const handleNext = async () => {
     if (activeStep >= steps.length) return;
     const valid = await trigger();
@@ -83,16 +53,7 @@ export default function Register() {
   };
 
   return (
-    <AuthLayout>
-      <AuthHeader subtitle="Create an account" />
-      {!show ? (
-        ""
-      ) : (
-        <Alert variant="outlined" severity="error">
-          {message}
-        </Alert>
-      )}
-
+    <>
       <Stepper activeStep={activeStep}>
         {steps.map((label) => {
           const stepProps = {};
@@ -105,9 +66,8 @@ export default function Register() {
           );
         })}
       </Stepper>
-
       {activeStep === 0 || activeStep === steps.length ? (
-        <>{console.log("")}</>
+        <>{console.log("no prev button")}</>
       ) : (
         <Button
           color="primary"
@@ -140,13 +100,14 @@ export default function Register() {
         <form>
           <Stack spacing={4}>
             {activeStep === 0 ? (
-              <Step1 control={control} memberType="member" />
-            ) : (
-              <Step2 />
-            )}
+              <Step1 control={control} memberType="mentor" />
+            ) : null}
+            {activeStep === 1 ? <Step2 control={control} /> : null}
+            {activeStep === 2 ? <Step3 control={control} /> : null}
           </Stack>
         </form>
       </FormProvider>
+
       <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
         <Stack style={{ width: "100%" }}>
           <Button
@@ -154,6 +115,7 @@ export default function Register() {
             variant="contained"
             color="primary"
             onClick={handleNext}
+            sx={{ mt: "-2em" }}
             fullWidth
           >
             {activeStep === steps.length - 1 ? "Finish" : "Next"}
@@ -161,6 +123,8 @@ export default function Register() {
           {activeStep === steps.length - 1 ? <SignUpDisclaimer /> : ""}
         </Stack>
       </Box>
-    </AuthLayout>
+    </>
   );
-}
+};
+
+export default RegistrationForm;
