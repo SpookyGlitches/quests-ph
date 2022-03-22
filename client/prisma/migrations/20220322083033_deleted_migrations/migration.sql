@@ -1,16 +1,3 @@
-/*
-  Warnings:
-
-  - The primary key for the `mentorfile` table will be changed. If it partially fails, the table could be left without primary key constraint.
-  - You are about to drop the column `id` on the `mentorfile` table. All the data in the column will be lost.
-
-*/
--- AlterTable
-ALTER TABLE `mentorfile` DROP PRIMARY KEY,
-    DROP COLUMN `id`,
-    ADD COLUMN `mentorFileId` INTEGER NOT NULL AUTO_INCREMENT,
-    ADD PRIMARY KEY (`mentorFileId`);
-
 -- CreateTable
 CREATE TABLE `Account` (
     `id` VARCHAR(191) NOT NULL,
@@ -39,6 +26,49 @@ CREATE TABLE `Session` (
 
     UNIQUE INDEX `Session_sessionToken_key`(`sessionToken`),
     PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `User` (
+    `userId` VARCHAR(191) NOT NULL,
+    `displayName` VARCHAR(191) NOT NULL,
+    `fullName` VARCHAR(191) NULL,
+    `email` VARCHAR(191) NOT NULL,
+    `password` VARCHAR(191) NOT NULL,
+    `dateOfBirth` DATETIME(3) NOT NULL,
+    `role` VARCHAR(191) NOT NULL,
+    `image` VARCHAR(191) NULL,
+    `verificationStatus` BOOLEAN NOT NULL DEFAULT false,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NULL,
+    `deletedAt` DATETIME(3) NULL,
+    `isActive` CHAR(1) NOT NULL DEFAULT '1',
+    `token` VARCHAR(191) NOT NULL,
+
+    UNIQUE INDEX `User_displayName_key`(`displayName`),
+    UNIQUE INDEX `User_email_key`(`email`),
+    PRIMARY KEY (`userId`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `MentorApplication` (
+    `mentorApplicationid` INTEGER NOT NULL AUTO_INCREMENT,
+    `mentorId` VARCHAR(191) NOT NULL,
+    `experience` VARCHAR(191) NOT NULL,
+    `detailedExperience` VARCHAR(191) NOT NULL,
+
+    PRIMARY KEY (`mentorApplicationid`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `MentorFile` (
+    `mentorFileId` INTEGER NOT NULL AUTO_INCREMENT,
+    `mentorUploadId` VARCHAR(191) NOT NULL,
+    `path` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `deletedAt` DATETIME(3) NULL,
+
+    PRIMARY KEY (`mentorFileId`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -283,14 +313,14 @@ CREATE TABLE `PostReact` (
 
 -- CreateTable
 CREATE TABLE `CommentReact` (
-    `postReactId` INTEGER NOT NULL AUTO_INCREMENT,
+    `commentReactId` INTEGER NOT NULL AUTO_INCREMENT,
     `postId` INTEGER NOT NULL,
     `userId` VARCHAR(191) NOT NULL,
     `type` ENUM('LAUGH', 'SAD', 'CRYING', 'SURPRISED', 'PARTY') NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
-    PRIMARY KEY (`postReactId`)
+    PRIMARY KEY (`commentReactId`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -333,6 +363,12 @@ ALTER TABLE `Account` ADD CONSTRAINT `Account_userId_fkey` FOREIGN KEY (`userId`
 
 -- AddForeignKey
 ALTER TABLE `Session` ADD CONSTRAINT `Session_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `MentorApplication` ADD CONSTRAINT `MentorApplication_mentorId_fkey` FOREIGN KEY (`mentorId`) REFERENCES `User`(`userId`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `MentorFile` ADD CONSTRAINT `MentorFile_mentorUploadId_fkey` FOREIGN KEY (`mentorUploadId`) REFERENCES `User`(`userId`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `UserReport` ADD CONSTRAINT `UserReport_reporterId_fkey` FOREIGN KEY (`reporterId`) REFERENCES `User`(`userId`) ON DELETE RESTRICT ON UPDATE CASCADE;
