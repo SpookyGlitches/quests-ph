@@ -2,22 +2,19 @@ import {
   Box,
   Typography,
   IconButton,
-  LinearProgress,
+  CircularProgress,
   Grid,
   Button,
 } from "@mui/material";
 import { useEffect } from "react";
 import Link from "next/link";
-
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
-
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import StyledPaper from "../../Common/StyledPaper";
 import { format } from "date-fns";
-
 import { useRouter } from "next/router";
 import useSWR, { mutate } from "swr";
 import axios from "axios";
-import StyledPaper from "../../Common/StyledPaper";
 
 const TasksLists = () => {
   const router = useRouter();
@@ -37,12 +34,9 @@ const TasksLists = () => {
     }
   };
 
-  const { data, error } = useSWR(`/api/quests/${router.query.id}/tasks`, {
-    refreshInterval: 1000,
-  });
-
+  const { data, error } = useSWR(`/quests/${router.query.id}/tasks`);
   if (error) return <div>failed to load</div>;
-  if (!data) return <LinearProgress />;
+  if (!data) return <CircularProgress />;
 
   return (
     <Box sx={{ flexGrow: 1 }}>
