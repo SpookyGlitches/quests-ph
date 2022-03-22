@@ -99,7 +99,9 @@ const RegistrationForm = () => {
       <FormProvider {...methods}>
         <form>
           <Stack spacing={4}>
-            {activeStep === 0 ? <Step1 control={control} /> : null}
+            {activeStep === 0 ? (
+              <Step1 control={control} memberType="mentor" />
+            ) : null}
             {activeStep === 1 ? <Step2 control={control} /> : null}
             {activeStep === 2 ? <Step3 control={control} /> : null}
           </Stack>

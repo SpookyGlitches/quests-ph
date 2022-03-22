@@ -22,7 +22,6 @@ export default function Home() {
   return (
     <>
       landing page ~ not signed in <br />
-      <Button onClick={() => signOut()}>Sign out</Button>
       <Button onClick={() => router.push("/auth/login")}>Sign In</Button>
     </>
   );

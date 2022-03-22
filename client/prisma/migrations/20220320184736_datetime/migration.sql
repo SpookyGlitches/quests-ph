@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `mentorfiles` MODIFY `createdAt` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
+    MODIFY `deletedAt` DATETIME(3) NULL;

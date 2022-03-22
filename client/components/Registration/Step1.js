@@ -1,4 +1,4 @@
-import { TextField, Stack, Button, Typography } from "@mui/material";
+import { TextField, Stack } from "@mui/material";
 import DatePicker from "@mui/lab/DatePicker";
 import { Controller, useFormContext } from "react-hook-form";
 import moment from "moment";
@@ -11,21 +11,6 @@ export default function Step1({ memberType }) {
   } = useFormContext(); //
   return (
     <Stack spacing={2}>
-      <Button
-        style={{
-          borderRadius: 10,
-          minheight: "56px",
-          width: "100%",
-          backgroundColor: "white",
-          color: "black",
-          marginTop: "1rem",
-        }}
-        variant="contained"
-      >
-        <img src="/auth/google.png" width="15" height="15" alt="questsgoogle" />{" "}
-        &nbsp; Sign Up with Google
-      </Button>
-      <Typography align="center">or</Typography>
       <Controller
         name="displayName"
         render={({ field: { onChange, value } }) => (
@@ -40,18 +25,37 @@ export default function Step1({ memberType }) {
           />
         )}
       />
-      <Controller
-        name="fullName"
-        render={({ field: { onChange, value } }) => (
-          <TextField
-            fullWidth
-            id="filled-basic"
-            label="Full Name"
-            onChange={onChange}
-            value={value}
-          />
-        )}
-      />
+
+      {memberType === "mentor" ? (
+        <Controller
+          name="fullName"
+          render={({ field: { onChange, value } }) => (
+            <TextField
+              fullWidth
+              id="filled-basic"
+              label="Full Name"
+              onChange={onChange}
+              value={value}
+              error={errors.fullName && errors.fullName.message}
+              helperText={errors.fullName ? errors.fullName.message : ""}
+            />
+          )}
+        />
+      ) : (
+        <Controller
+          name="fullName"
+          render={({ field: { onChange, value } }) => (
+            <TextField
+              fullWidth
+              id="filled-basic"
+              label="Full Name"
+              onChange={onChange}
+              value={value}
+            />
+          )}
+        />
+      )}
+
       <Controller
         name="dateOfBirth"
         control={control}
