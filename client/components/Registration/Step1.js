@@ -25,18 +25,37 @@ export default function Step1({ memberType }) {
           />
         )}
       />
-      <Controller
-        name="fullName"
-        render={({ field: { onChange, value } }) => (
-          <TextField
-            fullWidth
-            id="filled-basic"
-            label="Full Name"
-            onChange={onChange}
-            value={value}
-          />
-        )}
-      />
+
+      {memberType === "mentor" ? (
+        <Controller
+          name="fullName"
+          render={({ field: { onChange, value } }) => (
+            <TextField
+              fullWidth
+              id="filled-basic"
+              label="Full Name"
+              onChange={onChange}
+              value={value}
+              error={errors.fullName && errors.fullName.message}
+              helperText={errors.fullName ? errors.fullName.message : ""}
+            />
+          )}
+        />
+      ) : (
+        <Controller
+          name="fullName"
+          render={({ field: { onChange, value } }) => (
+            <TextField
+              fullWidth
+              id="filled-basic"
+              label="Full Name"
+              onChange={onChange}
+              value={value}
+            />
+          )}
+        />
+      )}
+
       <Controller
         name="dateOfBirth"
         control={control}

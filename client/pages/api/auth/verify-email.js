@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 import prisma from "../../../lib/prisma";
-
-export default async function verify(req, res) {
+// eslint-disable-next-line
+export default async function (req, res) {
   if (req.method === "POST") {
     const userDetails = JSON.parse(req.body);
     const findToken = await prisma.user.findFirst({
