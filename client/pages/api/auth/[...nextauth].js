@@ -4,7 +4,6 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import prisma from "../../../lib/prisma";
 
-let userAccount = null;
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
   cookie: {
@@ -42,7 +41,6 @@ export default NextAuth({
               },
             });
             if (user) {
-              userAccount = user;
               return user;
             }
           }
@@ -54,7 +52,7 @@ export default NextAuth({
   callbacks: {
     // eslint-disable-next-line
     signIn(user, account, profile) {
-      if (typeof user.user.id !== typeof undefined) {
+      if (typeof user.user.userId !== typeof undefined) {
         if (user.user.isActive === "1") {
           return user;
         }
@@ -62,26 +60,23 @@ export default NextAuth({
       return false;
     },
     jwt: ({ token, user }) => {
-      // first time jwt callback is run, user object is available
-      if (user) {
-        // token.id = user.id;
-        // eslint-disable-next-line
-        token.user = user;
-      }
+      // user is only available after signing in. The rest is handled by token.
 
+      if (user) {
+        // eslint-disable-next-line
+        token.user = user; // assign user object to token bc this will be used in succeeding sessions.
+      }
+      // eslint-disable-next-line
       return token;
     },
 
     // eslint-disable-next-line
     session: ({ session, token, user }) => {
-      // if (token) {
-      //   session.id = token.id;
-      // }
-      if (userAccount !== null) {
+      if (token) {
         // eslint-disable-next-line
-        session.user = userAccount;
+        session.user = token.user;
       }
-      console.log(token.sub);
+      // eslint-disable-next-line
       return session;
     },
   },
