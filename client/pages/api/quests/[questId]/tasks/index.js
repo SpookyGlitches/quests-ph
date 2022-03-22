@@ -11,7 +11,7 @@ export default async function getAllTasks(req, res) {
         deletedAt: null,
       },
     });
-    return res.status(200).json({ tasks, message: "im here" });
+    return res.status(200).json(tasks);
   } catch (error) {
     console.log(error);
     a;

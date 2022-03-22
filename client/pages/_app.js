@@ -10,7 +10,7 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import { SessionProvider } from "next-auth/react";
 import theme from "../config/theme";
-import swrConfig from "../config/swr";
+import { swrConfig } from "../config/swr";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   const getLayout = Component.getLayout || ((page) => page);

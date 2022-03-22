@@ -50,7 +50,8 @@ const UpdateTask = () => {
   };
 
   const { data, error } = useSWR(
-    `/api/quests/${router.query.id}/tasks/${router.query.taskId}`,
+    `/quests/${router.query.questId}/tasks/${router.query.taskId}`,
+    { refreshInterval: 1000 },
   );
   // trigger(
   //   `http://localhost:3000/quests/${router.query.id}/tasks/${router.query.taskId}`,

@@ -26,7 +26,7 @@ const TasksLists = () => {
       if (!router.query.id) {
         console.log("no id found");
       }
-      const deleteUrl = `/api/quests/${router.query.id}/tasks/${id}`;
+      const deleteUrl = `/api/quests/${router.query.questId}/tasks/${id}`;
       const url = `http://localhost:3000/quests/${router.query.id}/tasks`;
 
       await axios.delete(deleteUrl);
@@ -34,7 +34,9 @@ const TasksLists = () => {
     }
   };
 
-  const { data, error } = useSWR(`/quests/${router.query.id}/tasks`);
+  const { data, error } = useSWR(`/quests/${router.query.id}/tasks`, {
+    refreshInterval: 1000,
+  });
   if (error) return <div>failed to load</div>;
   if (!data) return <CircularProgress />;
 

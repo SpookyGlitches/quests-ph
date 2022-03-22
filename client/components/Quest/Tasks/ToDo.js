@@ -15,7 +15,9 @@ import useSWR from "swr";
 export default function CheckboxListSecondary() {
   const router = useRouter();
 
-  const { data, error } = useSWR(`/quests/${router.query.id}/tasks`);
+  const { data, error } = useSWR(`/quests/${router.query.questId}/tasks`, {
+    refreshInterval: 1000,
+  });
 
   if (error) return <div>failed to load</div>;
   if (!data) return <CircularProgress />;
