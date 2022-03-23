@@ -8,10 +8,7 @@ export default async function getAllTasks(req, res) {
 
   const isValid = await prisma.questTask.findMany();
 
-  const { user } = getSession({ req });
-
   try {
-    const { user } = getSession({ req });
     const tasks = await prisma.questTask.findMany({
       where: {
         questId: parseInt(req.query.questId),
