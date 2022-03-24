@@ -1,11 +1,20 @@
+import { format } from "date-fns";
 import { Typography, Box, Button, Grid } from "@mui/material";
 import ScheduleRoundedIcon from "@mui/icons-material/ScheduleRounded";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import StyledPaper from "../Common/StyledPaper";
 
-export default function QuestItem({ hasJoined, onJoinClick }) {
+export default function QuestItem({ onJoinClick, quest, navigate }) {
   return (
-    <StyledPaper sx={{ width: "100%", height: "auto", overflow: "hidden" }}>
+    <StyledPaper
+      sx={{
+        width: "100%",
+        height: "auto",
+        overflow: "hidden",
+        cursor: "pointer",
+      }}
+      onClick={navigate}
+    >
       <Grid container sx={{ minHeight: "6rem" }}>
         <Grid item xs={12} md={2}>
           <Box
@@ -27,9 +36,7 @@ export default function QuestItem({ hasJoined, onJoinClick }) {
               justifyContent: "center",
             }}
           >
-            <Typography variant="h6">
-              Do Keto Diet Three Times A Week
-            </Typography>
+            <Typography variant="h6">{quest.wish}</Typography>
             <Box
               sx={{
                 display: "flex",
@@ -39,11 +46,14 @@ export default function QuestItem({ hasJoined, onJoinClick }) {
               }}
             >
               <ScheduleRoundedIcon sx={{ fontSize: 16 }} />
-              <Typography variant="caption">November 8 - December 4</Typography>
+              <Typography variant="caption">
+                {format(new Date(quest.estimatedStartDate), "MMMM d")} -{" "}
+                {format(new Date(quest.estimatedEndDate), "MMMM d")}
+              </Typography>
             </Box>
           </Box>
         </Grid>
-        {!hasJoined && (
+        {!quest.isJoined && (
           <Grid item xs={12} md={2}>
             <Box
               sx={{

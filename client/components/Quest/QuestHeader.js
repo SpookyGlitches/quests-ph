@@ -1,6 +1,8 @@
 import { Box, Typography, Link as MuiLink } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import useSWR from "swr";
+import capitalizeFirstLetterOnly from "../../helpers/strings";
 
 const muiLinkProps = {
   component: "button",
@@ -23,7 +25,13 @@ const tabs = ["Overview", "Posts", "Tasks", "Party", "Wiki", "Chat"];
 
 export default function QuestHeader() {
   const router = useRouter();
-  const basePath = `/quests/${router.query.id}`;
+  const { questId } = router.query;
+  const { data: quest } = useSWR(questId ? `/quests/${questId}` : null);
+  const basePath = `/quests/${questId}`;
+
+  if (!quest) {
+    return <div>Loading</div>;
+  }
 
   return (
     <Box
@@ -35,6 +43,7 @@ export default function QuestHeader() {
         flexDirection: "column",
         paddingTop: "2rem",
         paddingBottom: "1rem",
+        paddingX: 2,
         maxHeight: "20rem",
         gap: 2,
         borderRadius: 2,
@@ -50,11 +59,11 @@ export default function QuestHeader() {
         }}
       >
         <Typography component="div" variant="body2">
-          Health
+          {capitalizeFirstLetterOnly(quest.category)}
         </Typography>
         <Box sx={{ marginTop: "0.2rem" }}>
           <Typography variant="h4" align="center" color="primary">
-            Run 5 km daily for 3 months
+            {quest.wish}
           </Typography>
         </Box>
       </Box>
