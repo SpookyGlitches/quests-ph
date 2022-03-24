@@ -66,7 +66,6 @@ model User {
   comment            Comment[]
   postReact          PostReact[]
   commentReact       CommentReact[]
-  postFile           PostFile[]
   userBadge          UserBadge[]
   userReporter       UserReport[] @relation("userReporter")
   userRecipient      UserReport[] @relation("userRecipient")
@@ -395,12 +394,10 @@ enum ReactType {
 
 model PostFile {
   postFileId Int       @id @default(autoincrement())
-  userId     String
   postId     Int
   path       String
   createdAt  DateTime  @default(now())
   deletedAt  DateTime?
-  user       User      @relation(fields: [userId], references: [userId])
   post       Post      @relation(fields: [postId], references: [postId])
 }
 
