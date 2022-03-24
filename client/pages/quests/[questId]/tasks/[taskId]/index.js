@@ -37,7 +37,7 @@ const UpdateTask = () => {
   const onSubmit = async (data) => {
     try {
       const res = await axios.put(
-        `/api/quests/${router.query.id}/tasks/${router.query.taskId}`,
+        `/api/quests/${router.query.questId}/tasks/${router.query.taskId}`,
         data,
       );
 
@@ -45,7 +45,7 @@ const UpdateTask = () => {
     } catch (error) {
       console.log(error);
     }
-    router.push(`/quests/${router.query.id}/tasks`);
+    router.push(`/quests/${router.query.questId}/tasks`);
     console.log("updated");
   };
 
@@ -93,7 +93,7 @@ const UpdateTask = () => {
               justifyContent: "flex-start",
             }}
           >
-            <Link href={`/quests/${router.query.id}/tasks`} passHref>
+            <Link href={`/quests/${router.query.questId}/tasks`} passHref>
               <Button startIcon={<ArrowBackRoundedIcon />}>Back</Button>
             </Link>
           </Box>

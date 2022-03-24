@@ -19,22 +19,24 @@ import axios from "axios";
 const TasksLists = () => {
   const router = useRouter();
 
-  const createBtn = `/quests/${router.query.id}/tasks/create`;
+  const questId = router.query.questId;
+
+  const createBtn = `/quests/${questId}/tasks/create`;
 
   const deleteHandler = async (id) => {
     if (window.confirm("Delete item?")) {
       if (!router.query.id) {
         console.log("no id found");
       }
-      const deleteUrl = `/api/quests/${router.query.questId}/tasks/${id}`;
-      const url = `http://localhost:3000/quests/${router.query.id}/tasks`;
+      const deleteUrl = `/api/quests/${questId}/tasks/${id}`;
+      const url = `http://localhost:3000/quests/${questId}/tasks`;
 
       await axios.delete(deleteUrl);
       // put trigger here
     }
   };
 
-  const { data, error } = useSWR(`/quests/${router.query.id}/tasks`, {
+  const { data, error } = useSWR(`/quests/${router.query.questId}/tasks`, {
     refreshInterval: 1000,
   });
   if (error) return <div>failed to load</div>;
@@ -73,14 +75,14 @@ const TasksLists = () => {
       >
         {data.map((task) => (
           <StyledPaper
-            key={task.id}
+            key={task.questTaskid}
             sx={{ width: "100%", height: "auto", overflow: "hidden", mb: 2 }}
           >
             <Grid container sx={{ minHeight: "1rem" }}>
               <Grid item xs={12} md={2}>
                 {/** only render this if mentor is using */}
                 <Link
-                  href={`/quests/${router.query.id}/tasks/${task.id}`}
+                  href={`/quests/${router.query.questId}/tasks/${task.questTaskid}`}
                   passHref
                 >
                   <Box
@@ -126,7 +128,7 @@ const TasksLists = () => {
                     </Typography>
 
                     <IconButton
-                      onClick={() => deleteHandler(task.id)}
+                      onClick={() => deleteHandler(task.questTaskid)}
                       size="small"
                     >
                       <DeleteRoundedIcon />
