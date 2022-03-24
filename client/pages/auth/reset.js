@@ -1,15 +1,15 @@
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { Link as MuiLink } from "@mui/material";
-import Link from "next/link";
-import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
+import * as React from "react";
+import { useState } from "react";
+import Alert from "@mui/material/Alert";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import AuthLayout from "../../components/Layouts/AuthLayout";
 import AuthHeader from "../../components/Auth/AuthHeader";
 import { resetUserPassword } from "../../validations/ResetPassword";
+import CreateAnAccount from "../../components/Registration/CreateAnAccount";
 
 export default function ResetPassword() {
   // eslint-disable-next-line no-undef
@@ -17,33 +17,21 @@ export default function ResetPassword() {
   const formOptions = { resolver: yupResolver(currentValidationSchema) };
   const { register, handleSubmit, formState } = useForm(formOptions);
   const { errors } = formState;
+  const [message, setMessage] = useState("");
   const onSubmit = (data) => {
-    // console.log(data.email);
     // eslint-disable-next-line
     try {
       // eslint-disable-next-line
       const res = fetch("/api/auth/resetpassword", {
         method: "POST",
         body: JSON.stringify(data),
+      }).then((response) => {
+        if (response.ok) {
+          setMessage("We have sent a reset password link to your email.");
+        } else {
+          setMessage("Your email doesn't exist.");
+        }
       });
-
-      // if (res.status === 200) {
-      //   Router.push({
-      //     pathname: "/auth/verify-email/[emailAddress]",
-      //     query: { emailAddress: values.email },
-      //   });
-      // } else if (res.status === 403) {
-      //   setMessage("Display Name is already in use.");
-      //   setShow(true);
-      // } else if (res.status === 409) {
-      //   console.log("email");
-      //   setMessage("Email address is already in use.");
-      //   setShow(true);
-      // } else if (res.status === 400) {
-      //   console.log("both");
-      //   setMessage("Display Name and Email Address are already in use.");
-      //   setShow(true);
-      // }
     } catch (err) {
       throw err;
     }
@@ -51,6 +39,13 @@ export default function ResetPassword() {
   return (
     <AuthLayout>
       <AuthHeader subtitle="Reset your password" />
+      {message !== "" ? (
+        <Alert severity="success" color="primary">
+          {message}
+        </Alert>
+      ) : (
+        ""
+      )}
 
       <Stack direction="column" spacing={2}>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -70,20 +65,7 @@ export default function ResetPassword() {
         </form>
       </Stack>
 
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="string" align="center">
-          Not yet registered?{" "}
-          <Link href="/" passHref>
-            <MuiLink sx={{ cursor: "pointer" }}>Create an account</MuiLink>
-          </Link>
-        </Typography>
-      </Box>
+      <CreateAnAccount />
     </AuthLayout>
   );
 }

@@ -48,8 +48,8 @@ export default function Reset({ data }) {
     const timeFromDb = JSON.stringify(data.createdAt);
     const removedQuote = timeFromDb.replace(/['"]+/g, "");
     const time = new Date();
-    const currenTime = time.toISOString();
-    const current = new Date(currenTime);
+    const currentTime = time.toISOString();
+    const current = new Date(currentTime);
     const dbTime = new Date(removedQuote);
     const hourDiff = current - dbTime; // in ms
     const minDiff = hourDiff / 60 / 1000; // in minutes

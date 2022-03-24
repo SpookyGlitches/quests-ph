@@ -48,7 +48,10 @@ export default async function (req, res) {
         });
         res.status(200).send({ message: "Success!" });
       }
+    } else {
+      res.status(400).send({ message: "Email doesn't exist" });
     }
+
     await prisma.$disconnect();
   }
 }

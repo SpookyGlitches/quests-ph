@@ -16,6 +16,7 @@ import { signIn, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import AuthHeader from "../../components/Auth/AuthHeader";
 import AuthLayout from "../../components/Layouts/AuthLayout";
+import CreateAnAccount from "../../components/Registration/CreateAnAccount";
 
 export default function Login() {
   const router = useRouter();
@@ -111,31 +112,13 @@ export default function Login() {
         </form>
       </Stack>
 
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="string" align="center">
-          Not yet registered? Create a{" "}
-          <Link href="/auth/register/mentor" passHref>
-            <MuiLink sx={{ cursor: "pointer" }}>Mentor</MuiLink>
-          </Link>{" "}
-          or{" "}
-          <Link href="/auth/register/member" passHref>
-            <MuiLink sx={{ cursor: "pointer" }}>Member</MuiLink>
-          </Link>{" "}
-          account
-        </Typography>
-        <Typography variant="string" align="center">
-          Forgot password?{" "}
-          <Link href="/auth/reset" passHref>
-            <MuiLink sx={{ cursor: "pointer" }}>Click here</MuiLink>
-          </Link>
-        </Typography>
-      </Box>
+      <CreateAnAccount />
+      <Typography variant="string" align="center">
+        Forgot password?{" "}
+        <Link href="/auth/reset" passHref>
+          <MuiLink sx={{ cursor: "pointer" }}>Click here</MuiLink>
+        </Link>
+      </Typography>
     </AuthLayout>
   );
 }
