@@ -27,10 +27,20 @@ export default function Reset({ data }) {
   const formOptions = { resolver: yupResolver(currentValidationSchema) };
   const { register, handleSubmit, formState } = useForm(formOptions);
   const { errors } = formState;
-  // eslint-disable-next-line
-  const onSubmit = (data) => {
-    // eslint-disable-next-line
-    console.log(data);
+
+  const onSubmit = (values) => {
+    const userDetails = {
+      userId: data.userId,
+      forgotPasswordId: data.forgotPasswordId,
+      password: values.password,
+    };
+    const response = fetch("/api/auth/updatepassword", {
+      method: "POST",
+      body: JSON.stringify(userDetails),
+    });
+    if (response.status === 200) {
+      console.log("Password has been updated!");
+    }
   };
   if (data !== null) {
     // check if link is still valid
@@ -43,7 +53,6 @@ export default function Reset({ data }) {
     const dbTime = new Date(removedQuote);
     const hourDiff = current - dbTime; // in ms
     const minDiff = hourDiff / 60 / 1000; // in minutes
-    console.log(minDiff);
     if (minDiff > 5) {
       // 5 mins has passed
       flag = 1;
@@ -134,10 +143,9 @@ export default function Reset({ data }) {
 }
 
 export async function getServerSideProps({ params }) {
-  const token = params.resetToken;
   const findAccount = await prisma.forgotPassword.findFirst({
     where: {
-      token,
+      token: params.resetToken,
     },
   });
   const data = JSON.parse(JSON.stringify(findAccount));

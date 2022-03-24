@@ -3,8 +3,6 @@ import { v4 as uuidv4 } from "uuid";
 import prisma from "../../../lib/prisma";
 // eslint-disable-next-line
 export default async function (req, res) {
-  // eslint-disable-next-line
-
   if (req.method === "POST") {
     const userInfo = JSON.parse(req.body);
     const tok = uuidv4();
@@ -15,8 +13,6 @@ export default async function (req, res) {
       },
     });
     if (checkEmail) {
-      console.log("Found!");
-      console.log(checkEmail.userId);
       const createRecord = await prisma.forgotPassword.create({
         data: {
           userId: checkEmail.userId,
