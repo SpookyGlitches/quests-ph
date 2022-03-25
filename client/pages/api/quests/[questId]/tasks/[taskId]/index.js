@@ -1,6 +1,6 @@
-import prisma from "../../../../../../lib/prisma";
 import { PrismaClientValidationError } from "@prisma/client/runtime";
 import { ValidationError } from "yup";
+import prisma from "../../../../../../lib/prisma";
 import { createTaskSchema } from "../../../../../../validations/TasksCreate";
 import { useSession } from "next-auth/react";
 
@@ -8,7 +8,7 @@ async function getTask(req, res) {
   try {
     const task = await prisma.questTask.findUnique({
       where: {
-        questTaskid: parseInt(req.query.taskId),
+        questTaskid: Number(req.query.taskId),
       },
     });
     res.status(200).json(task);

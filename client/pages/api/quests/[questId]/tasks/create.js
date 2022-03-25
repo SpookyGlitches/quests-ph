@@ -1,6 +1,5 @@
-import prisma from "../../../../../lib/prisma";
-
 import { getSession } from "next-auth/react";
+import prisma from "../../../../../lib/prisma";
 
 export default async function createQuest(req, res) {
   if (req.method !== "POST") {
@@ -27,6 +26,6 @@ export default async function createQuest(req, res) {
     }
   } catch (error) {
     console.log(error);
-    return res.status(400).json({ message: "Something went wrong" });
   }
+  return res.status(400).json({ message: "Something went wrong" });
 }

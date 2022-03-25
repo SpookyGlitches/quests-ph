@@ -25,7 +25,7 @@ const TaskForm = () => {
   } = useForm({ resolver: yupResolver(createTaskSchema) });
 
   const onSubmit = async (data) => {
-    const questId = router.query.questId;
+    const { questId } = router.query;
 
     try {
       const res = await axios.post(`/api/quests/${questId}/tasks/create`, data);
@@ -45,9 +45,17 @@ const TaskForm = () => {
           name="title"
           control={control}
           defaultValue=""
-          render={({ field: { onChange, value }, fieldState: { invalid } }) => (
+          render={({
+            // eslint-disable-next-line
+            field:
+              // eslint-disable-next-line
+              { onChange, value },
+            fieldState: { invalid },
+          }) => (
             <TextField
+              // eslint-disable-next-line
               value={value}
+              // eslint-disable-next-line
               onChange={(value) => onChange(value)}
               InputProps={{
                 startAdornment: (
@@ -67,9 +75,17 @@ const TaskForm = () => {
           name="description"
           control={control}
           defaultValue=""
-          render={({ field: { onChange, value }, fieldState: { invalid } }) => (
+          render={({
+            // eslint-disable-next-line
+            field:
+              // eslint-disable-next-line
+              { onChange, value },
+            fieldState: { invalid },
+          }) => (
             <TextField
+              // eslint-disable-next-line
               value={value}
+              // eslint-disable-next-line
               onChange={(value) => onChange(value)}
               InputProps={{
                 startAdornment: (
@@ -91,9 +107,17 @@ const TaskForm = () => {
           name="points"
           control={control}
           defaultValue=""
-          render={({ field: { onChange, value }, fieldState: { invalid } }) => (
+          render={({
+            // eslint-disable-next-line
+            field:
+              // eslint-disable-next-line
+              { onChange, value },
+            fieldState: { invalid },
+          }) => (
             <TextField
+              // eslint-disable-next-line
               value={value}
+              // eslint-disable-next-line
               onChange={(value) => onChange(value)}
               InputProps={{
                 startAdornment: (
@@ -115,7 +139,9 @@ const TaskForm = () => {
           defaultValue={new Date()}
           render={({
             // eslint-disable-next-line
-            field: { onChange, value },
+            field:
+              // eslint-disable-next-line
+              { onChange, value },
             fieldState: { invalid },
           }) => (
             <DatePicker

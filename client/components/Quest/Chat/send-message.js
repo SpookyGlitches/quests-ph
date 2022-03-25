@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Box, IconButton, TextField } from "@mui/material";
 
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 
 const SendMessage = () => {
+  const [message, setMessage] = useState("");
+
+  const sendMessage = (event) => {
+    if (event.key === "Enter") {
+      setMessage(event.target.value);
+    }
+  };
+
+  console.log(message);
   return (
     <Box
       sx={{
@@ -26,6 +35,7 @@ const SendMessage = () => {
         placeholder="Send a message"
         variant="standard"
         InputProps={{ disableUnderline: true }}
+        onKeyPress={sendMessage}
       />
 
       <IconButton aria-label="delete" size="small">
