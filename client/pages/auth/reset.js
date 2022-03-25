@@ -6,6 +6,7 @@ import { useState } from "react";
 import Alert from "@mui/material/Alert";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import Router from "next/router";
 import AuthLayout from "../../components/Layouts/AuthLayout";
 import AuthHeader from "../../components/Auth/AuthHeader";
 import { resetUserPassword } from "../../validations/ResetPassword";
@@ -17,19 +18,24 @@ export default function ResetPassword() {
   const formOptions = { resolver: yupResolver(currentValidationSchema) };
   const { register, handleSubmit, formState } = useForm(formOptions);
   const { errors } = formState;
-  const [message, setMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const onSubmit = (data) => {
     // eslint-disable-next-line
     try {
-      // eslint-disable-next-line
-      const res = fetch("/api/auth/resetpassword", {
+      fetch("/api/auth/sendresetpassword", {
         method: "POST",
         body: JSON.stringify(data),
       }).then((response) => {
-        if (response.ok) {
-          setMessage("We have sent a reset password link to your email.");
+        if (!response.ok) {
+          setErrorMessage("Your email doesn't exist.");
         } else {
-          setMessage("Your email doesn't exist.");
+          Router.push(
+            {
+              pathname: "/auth/reset-confirmation",
+              query: { message: "Please check your email for more details." },
+            },
+            "/auth/reset-confirmation",
+          );
         }
       });
     } catch (err) {
@@ -39,14 +45,13 @@ export default function ResetPassword() {
   return (
     <AuthLayout>
       <AuthHeader subtitle="Reset your password" />
-      {message !== "" ? (
-        <Alert severity="success" color="primary">
-          {message}
+      {errorMessage !== "" ? (
+        <Alert severity="error" color="error">
+          {errorMessage}
         </Alert>
       ) : (
         ""
       )}
-
       <Stack direction="column" spacing={2}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextField
@@ -64,7 +69,6 @@ export default function ResetPassword() {
           </Button>
         </form>
       </Stack>
-
       <CreateAnAccount />
     </AuthLayout>
   );

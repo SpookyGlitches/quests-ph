@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { yupResolver } from "@hookform/resolvers/yup";
+import Router from "next/router";
 import { resetUserPassword } from "../../../validations/ResetPassword";
 import AuthHeader from "../../../components/Auth/AuthHeader";
 import AuthLayout from "../../../components/Layouts/AuthLayout";
@@ -34,13 +35,20 @@ export default function Reset({ data }) {
       forgotPasswordId: data.forgotPasswordId,
       password: values.password,
     };
-    const response = fetch("/api/auth/updatepassword", {
+    fetch("/api/auth/updatepassword", {
       method: "POST",
       body: JSON.stringify(userDetails),
+    }).then((response) => {
+      if (response.ok) {
+        Router.push(
+          {
+            pathname: "/auth/reset-confirmation",
+            query: { message: "You have successfully updated your password!" },
+          },
+          "/auth/reset-confirmation",
+        );
+      }
     });
-    if (response.status === 200) {
-      console.log("Password has been updated!");
-    }
   };
   if (data !== null) {
     // check if link is still valid
@@ -57,7 +65,6 @@ export default function Reset({ data }) {
       // 5 mins has passed
       flag = 1;
     }
-
     // check if time is valid and link hasnt been used
     if (flag === 0 && data.isUsed === false) {
       return (

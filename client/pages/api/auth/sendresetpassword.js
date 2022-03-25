@@ -6,7 +6,6 @@ export default async function (req, res) {
   if (req.method === "POST") {
     const userInfo = JSON.parse(req.body);
     const tok = uuidv4();
-    console.log(userInfo.email);
     const checkEmail = await prisma.user.findUnique({
       where: {
         email: userInfo.email,
