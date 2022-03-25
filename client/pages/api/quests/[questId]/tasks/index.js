@@ -6,15 +6,15 @@ export default async function getAllTasks(req, res) {
   }
 
   try {
-    const tasks = await prisma.questTasks.findMany({
+    const tasks = await prisma.questTask.findMany({
       where: {
+        questId: Number(req.query.questId),
         deletedAt: null,
       },
     });
     return res.status(200).json(tasks);
   } catch (error) {
     console.log(error);
-    a;
-    return res.status(400).json({ message: "Something went wrong" });
   }
+  return res.status(400).json({ message: "Something went wrong" });
 }
