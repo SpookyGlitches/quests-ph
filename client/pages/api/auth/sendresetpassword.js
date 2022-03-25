@@ -4,13 +4,14 @@ import prisma from "../../../lib/prisma";
 // eslint-disable-next-line
 export default async function (req, res) {
   if (req.method === "POST") {
-    const userInfo = JSON.parse(req.body);
+    const userInfo = req.body;
     const tok = uuidv4();
     const checkEmail = await prisma.user.findUnique({
       where: {
-        email: userInfo.email,
+        email: userInfo.data.email,
       },
     });
+
     if (checkEmail) {
       const createRecord = await prisma.forgotPassword.create({
         data: {
@@ -30,7 +31,7 @@ export default async function (req, res) {
         });
         const mailData = {
           from: process.env.SMTP_USER,
-          to: userInfo.email,
+          to: userInfo.data.email,
           subject: `Reset Password`,
           html: `<div>
               This is an automated reply from Quests App University of San Carlos. Please do not reply.

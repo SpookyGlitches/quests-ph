@@ -7,6 +7,7 @@ import Alert from "@mui/material/Alert";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Router from "next/router";
+import axios from "axios";
 import AuthLayout from "../../components/Layouts/AuthLayout";
 import AuthHeader from "../../components/Auth/AuthHeader";
 import { resetUserPassword } from "../../validations/ResetPassword";
@@ -20,27 +21,30 @@ export default function ResetPassword() {
   const { errors } = formState;
   const [errorMessage, setErrorMessage] = useState("");
   const onSubmit = (data) => {
-    // eslint-disable-next-line
-    try {
-      fetch("/api/auth/sendresetpassword", {
-        method: "POST",
-        body: JSON.stringify(data),
-      }).then((response) => {
-        if (!response.ok) {
-          setErrorMessage("Your email doesn't exist.");
-        } else {
+    axios({
+      method: "POST",
+      url: "/api/auth/sendresetpassword",
+      data: {
+        data,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
           Router.push(
             {
               pathname: "/auth/reset-confirmation",
-              query: { message: "Please check your email for more details." },
+              query: {
+                message: "Please check your email for more details.",
+              },
             },
             "/auth/reset-confirmation",
           );
         }
+      })
+      .catch((error) => {
+        setErrorMessage("Your email doesn't exist.");
+        console.log(error);
       });
-    } catch (err) {
-      throw err;
-    }
   };
   return (
     <AuthLayout>

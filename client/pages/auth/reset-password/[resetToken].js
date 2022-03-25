@@ -7,10 +7,11 @@ import {
   IconButton,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
+import VisibilityOffRoundedIcon from "@mui/icons-material/VisibilityOffRounded";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Router from "next/router";
+import axios from "axios";
 import { resetUserPassword } from "../../../validations/ResetPassword";
 import AuthHeader from "../../../components/Auth/AuthHeader";
 import AuthLayout from "../../../components/Layouts/AuthLayout";
@@ -35,20 +36,29 @@ export default function Reset({ data }) {
       forgotPasswordId: data.forgotPasswordId,
       password: values.password,
     };
-    fetch("/api/auth/updatepassword", {
+    axios({
       method: "POST",
-      body: JSON.stringify(userDetails),
-    }).then((response) => {
-      if (response.ok) {
-        Router.push(
-          {
-            pathname: "/auth/reset-confirmation",
-            query: { message: "You have successfully updated your password!" },
-          },
-          "/auth/reset-confirmation",
-        );
-      }
-    });
+      url: "/api/auth/updatepassword",
+      data: {
+        userDetails,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          Router.push(
+            {
+              pathname: "/auth/reset-confirmation",
+              query: {
+                message: "You have successfully updated your password!",
+              },
+            },
+            "/auth/reset-confirmation",
+          );
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   if (data !== null) {
     // check if link is still valid
@@ -87,7 +97,11 @@ export default function Reset({ data }) {
                         aria-label="toggle password visibility"
                         onClick={handleClickShowPassword}
                       >
-                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                        {showPassword ? (
+                          <VisibilityRoundedIcon />
+                        ) : (
+                          <VisibilityOffRoundedIcon />
+                        )}
                       </IconButton>
                     </InputAdornment>
                   ),
@@ -111,9 +125,9 @@ export default function Reset({ data }) {
                         onClick={handleClickShowConfirmPassword}
                       >
                         {showConfirmPassword ? (
-                          <Visibility />
+                          <VisibilityRoundedIcon />
                         ) : (
-                          <VisibilityOff />
+                          <VisibilityOffRoundedIcon />
                         )}
                       </IconButton>
                     </InputAdornment>

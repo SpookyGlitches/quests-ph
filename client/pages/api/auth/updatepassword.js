@@ -3,11 +3,11 @@ import prisma from "../../../lib/prisma";
 // eslint-disable-next-line
 export default async function (req, res) {
   if (req.method === "POST") {
-    const userInfo = JSON.parse(req.body);
+    const userInfo = req.body;
     const salt = bcrypt.genSaltSync(10);
     const findUser = await prisma.user.findFirst({
       where: {
-        userId: userInfo.userId,
+        userId: userInfo.userDetails.userId,
       },
     });
     if (findUser) {
@@ -16,13 +16,13 @@ export default async function (req, res) {
           userId: findUser.userId,
         },
         data: {
-          password: bcrypt.hashSync(userInfo.password, salt),
+          password: bcrypt.hashSync(userInfo.userDetails.password, salt),
         },
       });
 
       await prisma.forgotPassword.update({
         where: {
-          forgotPasswordId: userInfo.forgotPasswordId,
+          forgotPasswordId: userInfo.userDetails.forgotPasswordId,
         },
         data: {
           isUsed: true,
@@ -31,5 +31,6 @@ export default async function (req, res) {
     }
     res.status(200).send({ message: "Success!" });
   }
+
   await prisma.$disconnect();
 }
