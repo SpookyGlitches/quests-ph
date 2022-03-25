@@ -8,7 +8,7 @@ async function getTask(req, res) {
   try {
     const task = await prisma.questTask.findUnique({
       where: {
-        questTaskid: Number(req.query.taskId),
+        questTaskid: parseInt(req.query.taskId),
       },
     });
     res.status(200).json(task);
