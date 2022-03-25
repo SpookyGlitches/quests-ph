@@ -150,28 +150,31 @@ model Quest {
 }
 
 model QuestTask {
-  questTaskid Int       @id @default(autoincrement())
-  quest       Quest     @relation(fields: [questId], references: [questId])
-  questId     Int
-  user        User      @relation(fields: [userId], references: [userId])
-  userId      String
-  title       String
-  description String
-  points      Int
-  dueAt       DateTime
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  deletedAt   DateTime?
+  questTaskid        Int       @id @default(autoincrement())
+  quest              Quest     @relation(fields: [questId], references: [questId])
+  questId            Int
+  user               User      @relation(fields: [userId], references: [userId])
+  userId             String
+  title              String
+  description        String
+  points             Int
+  dueAt              DateTime
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  deletedAt          DateTime?
+  questTaskFinisher  QuestTaskFinisher[]
 }
 
 model QuestTaskFinisher {
-  questTaskFinisherId Int      @id @default(autoincrement())
-  quest               Quest    @relation(fields: [questId], references: [questId])
+  questTaskFinisherId Int       @id @default(autoincrement())
+  quest               Quest     @relation(fields: [questId], references: [questId])
   questId             Int
-  user                User     @relation(fields: [userId], references: [userId])
+  user                User      @relation(fields: [userId], references: [userId])
   userId              String
+  questTask           QuestTask @relation(fields: [questTaskid], references: [questTaskid])
+  questTaskid         Int
   gainedPoints        Int
-  createdAt           DateTime @default(now())
+  createdAt           DateTime  @default(now())
 }
 
 model QuestMentorshipRequest {
