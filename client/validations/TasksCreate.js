@@ -1,8 +1,7 @@
-import { object, string, number, date, ref, mixed } from "yup";
-import moment from "moment";
+import { object, string, number, date } from "yup";
 
 const requiredMsg = "This field is required";
-
+/* eslint-disable import/prefer-default-export */
 export const createTaskSchema = object({
   title: string()
     .max(40, "Title must not exceed 20 characters")

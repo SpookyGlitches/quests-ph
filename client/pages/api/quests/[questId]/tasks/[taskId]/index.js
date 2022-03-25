@@ -1,8 +1,7 @@
-import prisma from "../../../../../../lib/prisma";
 import { PrismaClientValidationError } from "@prisma/client/runtime";
 import { ValidationError } from "yup";
+import prisma from "../../../../../../lib/prisma";
 import { createTaskSchema } from "../../../../../../validations/TasksCreate";
-import { useSession } from "next-auth/react";
 
 async function getTask(req, res) {
   try {

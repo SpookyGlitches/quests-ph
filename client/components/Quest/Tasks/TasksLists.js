@@ -6,30 +6,30 @@ import {
   Grid,
   Button,
 } from "@mui/material";
-import { useEffect } from "react";
 import Link from "next/link";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import StyledPaper from "../../Common/StyledPaper";
 import { format } from "date-fns";
 import { useRouter } from "next/router";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 import axios from "axios";
+import StyledPaper from "../../Common/StyledPaper";
 
 const TasksLists = () => {
   const router = useRouter();
 
-  const questId = router.query.questId;
+  const { questId } = router.query;
 
   const createBtn = `/quests/${questId}/tasks/create`;
 
   const deleteHandler = async (id) => {
+    // eslint-disable-next-line
     if (window.confirm("Delete item?")) {
+      // eslint-disable-next-line
       if (!router.query.id) {
         console.log("no id found");
       }
       const deleteUrl = `/api/quests/${questId}/tasks/${id}`;
-      const url = `http://localhost:3000/quests/${questId}/tasks`;
 
       await axios.delete(deleteUrl);
       // put trigger here

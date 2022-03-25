@@ -10,6 +10,7 @@ import {
 import { format } from "date-fns";
 import { useRouter } from "next/router";
 import useSWR from "swr";
+
 export default function CheckboxListSecondary() {
   const router = useRouter();
   const { data, error } = useSWR(`/quests/${router.query.questId}/tasks`, {
