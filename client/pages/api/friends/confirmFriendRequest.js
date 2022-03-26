@@ -1,6 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import prisma from "../../../lib/prisma";
 
 export default async function confirmFriendRequest(req, res) {
   if (req.method !== "POST") {
@@ -18,7 +16,7 @@ export default async function confirmFriendRequest(req, res) {
       },
     });
     let returnValue = confirmFriendRequest;
-    if (confirmFriendRequest.completedAt) {
+    if (confirmFriendRequest) {
       const newFriendship = await prisma.friendship.create({
         data: {
           userOneId: req.body.requesterId,
