@@ -1,7 +1,5 @@
-import { PrismaClient } from "@prisma/client";
 import { getSession } from "next-auth/react";
-
-const prisma = new PrismaClient();
+import prisma from "../../../lib/prisma";
 
 export default async function getAllFriends(req, res) {
   if (req.method !== "GET") {
