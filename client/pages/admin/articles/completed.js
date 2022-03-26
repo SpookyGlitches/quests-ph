@@ -1,8 +1,9 @@
-import { Box, TextField } from "@mui/material";
+import { Box, TextField, Typography } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import * as React from "react";
 // import SearchBar from "../../../components/Admin/Search";
+import Link from "next/link";
 import AdminLayout from "../../../components/Layouts/AdminLayout";
 import DataTable from "../../../components/Admin/Table/DataTable";
 
@@ -52,6 +53,36 @@ export default function Index() {
 
   return (
     <AdminLayout>
+      <Box
+        m="auto"
+        alignItems="center"
+        direction="column"
+        justifyContent="center"
+        sx={{
+          backgroundColor: "primary.main",
+          padding: "1rem",
+          display: "flex",
+          flexDirection: "column",
+          borderRadius: 1,
+          width: "50%",
+          mb: 5,
+        }}
+      >
+        <Typography sx={{ mt: 3, color: "white", fontSize: "20px" }}>
+          Hello Admin
+        </Typography>
+        <h2 style={{ color: "white" }}>You have 5 new submissions!</h2>
+        <Typography sx={{ mt: 2, color: "white", fontSize: "18px" }}>
+          <Link href="/admin/articles" passHref>
+            <a href="replace">New</a>
+          </Link>{" "}
+          <Link href="/admin/articles/completed" passHref>
+            <a href="replace">
+              <strong>Completed</strong>
+            </a>
+          </Link>
+        </Typography>
+      </Box>
       <Box
         sx={{
           backgroundColor: "background.paper",

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CssBaseline, Box, Toolbar, Container } from "@mui/material";
 import Sidebar from "../Admin/Sidebar";
+import AdminNavBar from "../Common/AdminNavBar";
 
 const drawerWidth = 240;
 
@@ -14,6 +15,10 @@ const AdminLayout = ({ children }) => {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
+      <AdminNavBar
+        drawerWidth={drawerWidth}
+        handleDrawerToggle={handleDrawerToggle}
+      />
       <Sidebar
         drawerWidth={drawerWidth}
         mobileOpen={mobileOpen}

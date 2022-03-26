@@ -13,6 +13,7 @@ import {
   Box,
   ListItemIcon,
   ListItemText,
+  Toolbar,
 } from "@mui/material";
 
 const Sidebar = (props) => {
@@ -39,6 +40,7 @@ const Sidebar = (props) => {
 
   const drawer = (
     <div>
+      <Toolbar />
       <Divider />
       {/* something app logo/profile should be here */}
       <List>
