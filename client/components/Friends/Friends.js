@@ -1,5 +1,5 @@
 import { Avatar, Typography, Box, IconButton } from "@mui/material";
-import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import PersonRemoveRoundedIcon from "@mui/icons-material/PersonRemoveRounded";
 import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
 // import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
@@ -32,7 +32,7 @@ const FriendsField = (item) => {
 
   const firstIcon = (
     <IconButton onClick={handleDeleteFriend}>
-      <PersonRemoveIcon />
+      <PersonRemoveRoundedIcon />
     </IconButton>
   );
   const secondIcon = (
