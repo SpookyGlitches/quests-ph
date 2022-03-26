@@ -1,9 +1,17 @@
-import { Box } from "@mui/material";
-import SearchBar from "../../../components/Admin/Search";
-import AdminLayout from "../../../components/Layouts/AdminLayout";
+import { Box, TextField } from "@mui/material";
+// import SearchBar from "../../../components/Admin/Search";
+import InputAdornment from "@mui/material/InputAdornment";
+import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import * as React from "react";
 import DataTable from "../../../components/Admin/Table/DataTable";
+import AdminLayout from "../../../components/Layouts/AdminLayout";
 
 export default function Index() {
+  const [search, setSearch] = React.useState("");
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
+    console.log(search);
+  };
   const applicationsData = [
     {
       id: 1,
@@ -55,7 +63,25 @@ export default function Index() {
             flexDirection: "row",
           }}
         >
-          <SearchBar />
+          {/* <SearchBar /> */}
+          <TextField
+            label="Search"
+            variant="outlined"
+            name="search"
+            value={search}
+            onChange={handleSearch}
+            sx={{
+              borderRadius: 1,
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchRoundedIcon />
+                </InputAdornment>
+              ),
+              disableUnderline: true,
+            }}
+          />
         </Box>
         <DataTable
           tableData={applicationsData}

@@ -1,5 +1,4 @@
 import * as React from "react";
-import PropTypes from "prop-types";
 import { Box, Button } from "@mui/material";
 
 const Table = ({ tableData, headingColumns, page, path }) => {
@@ -27,7 +26,9 @@ const Table = ({ tableData, headingColumns, page, path }) => {
           );
           secondButtons = (
             <Box sx={{ display: "flex", flex: "column" }}>
-              <Button variant="contained">Approve</Button>
+              <Button variant="contained" sx={{ mr: 1 }}>
+                Approve
+              </Button>
               <Button variant="contained">Reject</Button>
             </Box>
           );
@@ -38,7 +39,9 @@ const Table = ({ tableData, headingColumns, page, path }) => {
         if (path === "new") {
           firstButtons = (
             <Box>
-              <Button variant="contained">Approve</Button>
+              <Button variant="contained" sx={{ mr: 3 }}>
+                Approve
+              </Button>
               <Button variant="contained">Reject</Button>
             </Box>
           );
@@ -63,7 +66,9 @@ const Table = ({ tableData, headingColumns, page, path }) => {
         if (path === "new") {
           firstButtons = (
             <Box>
-              <Button variant="contained">View</Button>
+              <Button variant="contained" sx={{ mr: 1 }}>
+                View
+              </Button>
               <Button variant="contained">Delete</Button>
             </Box>
           );
@@ -83,7 +88,9 @@ const Table = ({ tableData, headingColumns, page, path }) => {
         } else if (path === "completed") {
           secondButtons = (
             <Box>
-              <Button variant="contained">Delete</Button>
+              <Button variant="contained" sx={{ ml: "-6em" }}>
+                Delete
+              </Button>
             </Box>
           );
           break;
@@ -122,24 +129,21 @@ const Table = ({ tableData, headingColumns, page, path }) => {
   });
 
   return (
-    <div className="table-container">
-      <table className="table-container_table" style={{ marginTop: "1.5rem" }}>
-        <thead>
-          <tr>
-            {headingColumns.map((col) => (
-              <th key="row">{col}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>{finalTableData}</tbody>
-      </table>
-    </div>
+    <table
+      className="table-container_table"
+      style={{ marginTop: "1.5rem", marginLeft: "auto", marginRight: "auto" }}
+      cellSpacing="30"
+    >
+      <thead>
+        <tr>
+          {headingColumns.map((col) => (
+            <th key="row">{col}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>{finalTableData}</tbody>
+    </table>
   );
-};
-
-Table.propTypes = {
-  tableData: PropTypes.arrayOf(PropTypes.object).isRequired,
-  headingColumns: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default Table;
