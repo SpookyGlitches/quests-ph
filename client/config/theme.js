@@ -29,6 +29,7 @@ const theme = createTheme({
     MuiPaper: {
       defaultProps: {
         elevation: 0,
+        variant: "outlined",
       },
     },
     MuiButtonBase: {
