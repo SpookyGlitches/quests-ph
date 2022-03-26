@@ -1,13 +1,13 @@
-import prisma from "../../../../../../lib/prisma";
 import { PrismaClientValidationError } from "@prisma/client/runtime";
 import { ValidationError } from "yup";
+import prisma from "../../../../../../lib/prisma";
 import { createTaskSchema } from "../../../../../../validations/TasksCreate";
 
 async function getTask(req, res) {
   try {
-    const task = await prisma.questTasks.findUnique({
+    const task = await prisma.questTask.findUnique({
       where: {
-        id: Number(req.query.taskId),
+        questTaskid: Number(req.query.taskId),
       },
     });
     res.status(200).json(task);
@@ -22,9 +22,9 @@ async function updateTask(req, res) {
     const { title, description, points, dueDate } = req.body;
 
     await createTaskSchema.validate({ ...req.body });
-    const task = await prisma.questTasks.update({
+    const task = await prisma.questTask.update({
       where: {
-        id: Number(req.query.taskId),
+        questTaskid: Number(req.query.taskId),
       },
       data: {
         title,
@@ -50,9 +50,9 @@ async function taskDelete(req, res) {
   const { taskId } = req.query;
 
   try {
-    const deletedTask = prisma.questTasks.delete({
+    const deletedTask = prisma.questTask.delete({
       where: {
-        id: Number(taskId),
+        questTaskid: Number(taskId),
       },
     });
 

@@ -13,17 +13,16 @@ import TitleRoundedIcon from "@mui/icons-material/TitleRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import SportsScoreRoundedIcon from "@mui/icons-material/SportsScoreRounded";
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
-import { createTaskSchema } from "../../../../../validations/TasksCreate";
 import { useRouter } from "next/router";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import moment from "moment";
 import Link from "next/link";
 
 import axios from "axios";
 import { add } from "date-fns";
 import useSWR from "swr";
+import { createTaskSchema } from "../../../../../validations/TasksCreate";
 import AppLayout from "../../../../../components/Layouts/AppLayout";
 
 const UpdateTask = () => {
@@ -37,7 +36,7 @@ const UpdateTask = () => {
   const onSubmit = async (data) => {
     try {
       const res = await axios.put(
-        `/api/quests/${router.query.id}/tasks/${router.query.taskId}`,
+        `/api/quests/${router.query.questId}/tasks/${router.query.taskId}`,
         data,
       );
 
@@ -45,7 +44,7 @@ const UpdateTask = () => {
     } catch (error) {
       console.log(error);
     }
-    router.push(`/quests/${router.query.id}/tasks`);
+    router.push(`/quests/${router.query.questId}/tasks`);
     console.log("updated");
   };
 
@@ -93,7 +92,7 @@ const UpdateTask = () => {
               justifyContent: "flex-start",
             }}
           >
-            <Link href={`/quests/${router.query.id}/tasks`} passHref>
+            <Link href={`/quests/${router.query.questId}/tasks`} passHref>
               <Button startIcon={<ArrowBackRoundedIcon />}>Back</Button>
             </Link>
           </Box>
@@ -112,11 +111,16 @@ const UpdateTask = () => {
                 control={control}
                 defaultValue={data.title}
                 render={({
-                  field: { onChange, value },
-                  fieldState: { error, invalid },
+                  // eslint-disable-next-line
+                  field:
+                    // eslint-disable-next-line
+                    { onChange, value },
+                  fieldState: { invalid },
                 }) => (
                   <TextField
+                    // eslint-disable-next-line
                     value={value}
+                    // eslint-disable-next-line
                     onChange={(value) => onChange(value)}
                     InputProps={{
                       startAdornment: (
@@ -137,11 +141,16 @@ const UpdateTask = () => {
                 control={control}
                 defaultValue={data.description}
                 render={({
-                  field: { onChange, value },
-                  fieldState: { error, invalid },
+                  // eslint-disable-next-line
+                  field:
+                    // eslint-disable-next-line
+                    { onChange, value },
+                  fieldState: { invalid },
                 }) => (
                   <TextField
+                    // eslint-disable-next-line
                     value={value}
+                    // eslint-disable-next-line
                     onChange={(value) => onChange(value)}
                     InputProps={{
                       startAdornment: (
@@ -164,11 +173,16 @@ const UpdateTask = () => {
                 control={control}
                 defaultValue={data.points}
                 render={({
-                  field: { onChange, value },
-                  fieldState: { error, invalid },
+                  // eslint-disable-next-line
+                  field:
+                    // eslint-disable-next-line
+                    { onChange, value },
+                  fieldState: { invalid },
                 }) => (
                   <TextField
+                    // eslint-disable-next-line
                     value={value}
+                    // eslint-disable-next-line
                     onChange={(value) => onChange(value)}
                     InputProps={{
                       startAdornment: (
@@ -190,8 +204,10 @@ const UpdateTask = () => {
                 defaultValue={data.dueAt}
                 render={({
                   // eslint-disable-next-line
-                  field: { onChange, value },
-                  fieldState: { error, invalid },
+                  field:
+                    // eslint-disable-next-line
+                    { onChange, value },
+                  fieldState: { invalid },
                 }) => (
                   <DatePicker
                     label="Due Date"
