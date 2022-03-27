@@ -19,9 +19,6 @@ async function getQuests(req, res) {
   const { user } = await getSession({ req });
   try {
     const quests = await prisma.quest.findMany({
-      where: {
-        deletedAt: null,
-      },
       include: {
         partyMembers: {
           where: {

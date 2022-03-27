@@ -17,7 +17,11 @@ if (process.env.NODE_ENV === "production") {
 
 prisma.$use(async (params, next) => {
   // Check incoming query type
-  if (params.model == "PartyMember" || params.model == "Quest") {
+  if (
+    params.model == "PartyMember" ||
+    params.model == "Quest" ||
+    params.model == "PostFile"
+  ) {
     if (params.action == "delete") {
       // Delete queries
       // Change action to an update
@@ -36,4 +40,15 @@ prisma.$use(async (params, next) => {
   }
   return next(params);
 });
+
+//
+prisma.$use(async (params, next) => {
+  if (params.model == "PostFile" || params.model == "Quest") {
+    if (params.action == "findMany") {
+      params.args["where"] = { deletedAt: null };
+    }
+  }
+  return next(params);
+});
+
 export default prisma;
