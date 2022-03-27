@@ -96,6 +96,6 @@ export default async function handler(req, res) {
     case "POST":
       return createQuest(req, res);
     default:
-      return res.sendStatus(404);
+      return res.status(404).send();
   }
 }
