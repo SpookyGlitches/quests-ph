@@ -45,7 +45,7 @@ prisma.$use(async (params, next) => {
 prisma.$use(async (params, next) => {
   if (params.model == "PostFile" || params.model == "Quest") {
     if (params.action == "findMany") {
-      params.args["where"] = { deletedAt: null };
+      params.args["where"] = { ...params.args["where"], deletedAt: null };
     }
   }
   return next(params);
