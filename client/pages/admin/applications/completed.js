@@ -19,30 +19,35 @@ export default function Index() {
       username: "grapejuice",
       name: "Ninomae Inanis",
       email: "ninomae@gmail.com",
+      status: "Completed",
     },
     {
       id: 2,
       username: "grapejuice",
       name: "Ninomae Inanis",
       email: "ninomae@gmail.com",
+      status: "Completed",
     },
     {
       id: 3,
       username: "grapejuice",
       name: "Ninomae Inanis",
       email: "ninomae@gmail.com",
+      status: "Completed",
     },
     {
       id: 4,
       username: "grapejuice",
       name: "Ninomae Inanis",
       email: "ninomae@gmail.com",
+      status: "Completed",
     },
     {
       id: 5,
       username: "grapejuice",
       name: "Ninomae Inanis",
       email: "ninomae@gmail.com",
+      status: "Completed",
     },
   ];
 
@@ -116,7 +121,6 @@ export default function Index() {
         </Box>
         <DataTable
           tableData={applicationsData}
-          headingColumns={["ID", "Name", "Email", "Status"]}
           sx={{
             margin: "2rem",
           }}

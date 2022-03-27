@@ -17,32 +17,32 @@ export default function Index() {
     {
       id: 1,
       username: "grapejuice",
-      name: "Ninomae Inanis",
-      email: "ninomae@gmail.com",
+      category: "Health",
+      link: "haha.com",
     },
     {
       id: 2,
       username: "grapejuice",
-      name: "Ninomae Inanis",
-      email: "ninomae@gmail.com",
+      category: "Career",
+      link: "haha.com",
     },
     {
       id: 3,
       username: "grapejuice",
-      name: "Ninomae Inanis",
-      email: "ninomae@gmail.com",
+      category: "Social",
+      link: "haha.com",
     },
     {
       id: 4,
       username: "grapejuice",
-      name: "Ninomae Inanis",
-      email: "ninomae@gmail.com",
+      category: "Social",
+      link: "haha.com",
     },
     {
       id: 5,
       username: "grapejuice",
-      name: "Ninomae Inanis",
-      email: "ninomae@gmail.com",
+      category: "Health",
+      link: "haha.com",
     },
   ];
 
@@ -116,7 +116,6 @@ export default function Index() {
         </Box>
         <DataTable
           tableData={applicationsData}
-          headingColumns={["ID", "Username", "Category", "Link", "Action"]}
           title="Hatdog"
           sx={{
             margin: "2rem",

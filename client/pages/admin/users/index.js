@@ -54,7 +54,7 @@ export default function Index() {
     {
       id: 5,
       username: "grapejuice",
-      name: "Ninomae Inanis",
+      name: "Ainomae Inanis",
       email: "ninomae@gmail.com",
       type: "Admin",
     },
@@ -120,18 +120,7 @@ export default function Index() {
         </Box>
 
         <Box sx={{ marginTop: "0rem" }}>
-          <BasicTable
-            tableData={usersData}
-            headingColumns={[
-              "ID",
-              "Username",
-              "Name",
-              "Email",
-              "Type",
-              "Action",
-            ]}
-            page="users"
-          />
+          <BasicTable tableData={usersData} page="users" />
         </Box>
       </Box>
     </AdminLayout>

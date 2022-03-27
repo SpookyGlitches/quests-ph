@@ -124,14 +124,6 @@ export default function Index() {
         </Box>
         <DataTable
           tableData={applicationsData}
-          headingColumns={[
-            "ID",
-            "Username",
-            "Status",
-            "Start Date",
-            "End Date",
-            "Action",
-          ]}
           sx={{
             margin: "2rem",
           }}

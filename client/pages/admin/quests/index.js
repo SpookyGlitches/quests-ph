@@ -50,10 +50,11 @@ export default function Index() {
       <Box
         sx={{
           backgroundColor: "background.paper",
-          padding: "1rem",
+          padding: "2rem",
           display: "flex",
           flexDirection: "column",
           borderRadius: 2,
+          margin: "1rem",
         }}
       >
         <Box
@@ -85,7 +86,6 @@ export default function Index() {
         </Box>
         <DataTable
           tableData={applicationsData}
-          headingColumns={["ID", "Party Leader", "Status", "Wish", "Action"]}
           sx={{
             margin: "2rem",
           }}
