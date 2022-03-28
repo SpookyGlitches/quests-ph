@@ -1,51 +1,64 @@
-import {
-  Box,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  Typography,
-  Button,
-  DialogActions,
-} from "@mui/material";
-import QuestItem from "./QuestItem";
+import { Box } from "@mui/material";
+import { useRouter } from "next/router";
+import axios from "axios";
+import useSWR from "swr";
 import { useState } from "react";
+import QuestItem from "./QuestItem";
+import WoopModal from "./WoopModal";
 
-// remove ra ning hasJoined inig nanay backend
-const DialogItem = ({ handleOk, handleCancel, open }) => {
-  return (
-    <Dialog
-      sx={{ "& .MuiDialog-paper": { width: "100%", maxHeight: 435 } }}
-      maxWidth="xs"
-      open={open}
-    >
-      <DialogTitle>Join Quest</DialogTitle>
-      <DialogContent>
-        <Typography variant="body1">
-          Are you sure you want to join this Quest?
-        </Typography>
-      </DialogContent>
-      <DialogActions>
-        <Button autoFocus onClick={handleCancel}>
-          No
-        </Button>
-        <Button onClick={handleOk}>Yes</Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
+export default function QuestsList({ url }) {
+  const router = useRouter();
+  const { data: quests } = useSWR(url);
+  const [modalDetails, setModalDetails] = useState({
+    loading: false,
+    title: "Join Quest",
+    open: false,
+    statement: {
+      outcome: "",
+      obstacle: "",
+      plan: "",
+      wish: "",
+    },
+    questId: null,
+  });
 
-export default function QuestsList({ hasJoined }) {
-  const [open, setOpen] = useState(false);
+  const toggleModal = (event, quest) => {
+    event.stopPropagation();
+    setModalDetails((prev) => ({
+      ...prev,
+      statement: {
+        ...prev.statement,
+        wish: quest?.wish,
+      },
+      open: !prev.open,
+      questId: quest?.questId,
+    }));
+  };
 
-  const onJoinClick = () => {
-    setOpen(true);
+  const navigateToQuest = (questUrl) => {
+    router.push(questUrl);
   };
-  const cancelJoin = () => {
-    setOpen(false);
+
+  const submitForm = async (values) => {
+    try {
+      await axios.post(`/api/quests/${modalDetails.questId}/partyMembers`, {
+        ...values,
+        role: "MENTEE",
+      });
+      setModalDetails((prev) => ({
+        ...prev,
+        open: false,
+      }));
+      navigateToQuest(`/quests/${modalDetails.questId}`);
+    } catch (error) {
+      console.error(error);
+    }
   };
-  const joinQuest = () => {
-    setOpen(false);
-  };
+
+  if (!quests) {
+    return <div>Loading</div>;
+  }
+
   return (
     <Box
       sx={{
@@ -55,14 +68,22 @@ export default function QuestsList({ hasJoined }) {
         rowGap: 2,
       }}
     >
-      {[...Array(4)].map((item, index) => (
+      {quests.map((item) => (
         <QuestItem
-          key={item + index}
-          hasJoined={hasJoined}
-          onJoinClick={onJoinClick}
+          key={item.questId}
+          quest={item}
+          onJoinClick={(event) => toggleModal(event, item)}
+          navigate={() => {
+            navigateToQuest(`/quests/${item.questId}`);
+          }}
         />
       ))}
-      <DialogItem open={open} handleOk={joinQuest} handleCancel={cancelJoin} />
+      <WoopModal
+        handleOk={submitForm}
+        handleCancel={toggleModal}
+        okText="Join Quest"
+        details={modalDetails}
+      />
     </Box>
   );
 }

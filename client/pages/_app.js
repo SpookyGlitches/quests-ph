@@ -1,18 +1,27 @@
 import "../styles/globals.css";
-import "@fontsource/roboto/500.css";
+
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
+import { SWRConfig } from "swr";
 import { ThemeProvider } from "@mui/material/styles";
-import theme from "../config/theme";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
-function MyApp({ Component, pageProps }) {
+import { SessionProvider } from "next-auth/react";
+import theme from "../config/theme";
+import { swrConfig } from "../config/swr";
+
+function MyApp({ Component, pageProps: { session, ...pageProps } }) {
+  const getLayout = Component.getLayout || ((page) => page);
   return (
     <ThemeProvider theme={theme}>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <Component {...pageProps} />
+        <SWRConfig value={swrConfig}>
+          <SessionProvider session={session}>
+            {getLayout(<Component {...pageProps} />)}
+          </SessionProvider>
+        </SWRConfig>
       </LocalizationProvider>
     </ThemeProvider>
   );

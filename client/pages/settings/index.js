@@ -1,6 +1,6 @@
 import { Typography, Box } from "@mui/material";
-import AppLayout from "../../components/Layouts/AppLayout";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
+import AppLayout from "../../components/Layouts/AppLayout";
 import DataFieldHolder from "../../components/Settings/DataFieldHolder";
 
 const Index = () => {

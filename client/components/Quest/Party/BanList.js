@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import { tableCellClasses } from "@mui/material/TableCell";
 import { deepOrange } from "@mui/material/colors";
+
 function createData(num, name, button) {
   return { num, name, button };
 }
@@ -80,8 +81,8 @@ const banList = () => {
             >
               <TableHead>
                 <TableRow>
-                  <TableCell></TableCell>
-                  <TableCell align="right"></TableCell>
+                  <TableCell />
+                  <TableCell align="right" />
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -97,7 +98,7 @@ const banList = () => {
                             sx={{
                               bgcolor: deepOrange[500],
                             }}
-                          ></Avatar>
+                          />
                         }
                         title={row.name}
                       />

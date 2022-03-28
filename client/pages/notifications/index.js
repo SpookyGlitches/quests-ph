@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import AppLayout from "../../components/Layouts/AppLayout";
 import {
   Button,
   Box,
@@ -16,6 +15,7 @@ import {
 
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
+import AppLayout from "../../components/Layouts/AppLayout";
 
 const index = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -73,7 +73,7 @@ const index = () => {
               <ListItemText
                 primary="Brunch this weekend?"
                 secondary={
-                  <React.Fragment>
+                  <>
                     <Typography
                       sx={{ display: "inline" }}
                       component="span"
@@ -83,7 +83,7 @@ const index = () => {
                       15 hours ago
                     </Typography>
                     {" — I'll be in your neighborhood doing errands this…"}
-                  </React.Fragment>
+                  </>
                 }
               />
               {unread && markallread ? (
@@ -102,7 +102,7 @@ const index = () => {
               <ListItemText
                 primary="Brunch this weekend?"
                 secondary={
-                  <React.Fragment>
+                  <>
                     <Typography
                       sx={{ display: "inline" }}
                       component="span"
@@ -112,7 +112,7 @@ const index = () => {
                       15 hours ago
                     </Typography>
                     {" — I'll be in your neighborhood doing errands this…"}
-                  </React.Fragment>
+                  </>
                 }
               />
               {unread && markallread ? (
@@ -131,7 +131,7 @@ const index = () => {
               <ListItemText
                 primary="Summer BBQ"
                 secondary={
-                  <React.Fragment>
+                  <>
                     <Typography
                       sx={{ display: "inline" }}
                       component="span"
@@ -141,7 +141,7 @@ const index = () => {
                       3d
                     </Typography>
                     {" — Wish I could come, but I'm out of town this…"}
-                  </React.Fragment>
+                  </>
                 }
               />
             </ListItem>
@@ -153,7 +153,7 @@ const index = () => {
               <ListItemText
                 primary="Summer BBQ"
                 secondary={
-                  <React.Fragment>
+                  <>
                     <Typography
                       sx={{ display: "inline" }}
                       component="span"
@@ -163,7 +163,7 @@ const index = () => {
                       3d
                     </Typography>
                     {" — Wish I could come, but I'm out of town this…"}
-                  </React.Fragment>
+                  </>
                 }
               />
             </ListItem>
@@ -175,7 +175,7 @@ const index = () => {
               <ListItemText
                 primary="Summer BBQ"
                 secondary={
-                  <React.Fragment>
+                  <>
                     <Typography
                       sx={{ display: "inline" }}
                       component="span"
@@ -185,7 +185,7 @@ const index = () => {
                       3d
                     </Typography>
                     {" — Wish I could come, but I'm out of town this…"}
-                  </React.Fragment>
+                  </>
                 }
               />
             </ListItem>
@@ -197,7 +197,7 @@ const index = () => {
               <ListItemText
                 primary="Summer BBQ"
                 secondary={
-                  <React.Fragment>
+                  <>
                     <Typography
                       sx={{ display: "inline" }}
                       component="span"
@@ -207,7 +207,7 @@ const index = () => {
                       3d
                     </Typography>
                     {" — Wish I could come, but I'm out of town this…"}
-                  </React.Fragment>
+                  </>
                 }
               />
               {unread && markallread ? (
@@ -226,7 +226,7 @@ const index = () => {
               <ListItemText
                 primary="Summer BBQ"
                 secondary={
-                  <React.Fragment>
+                  <>
                     <Typography
                       sx={{ display: "inline" }}
                       component="span"
@@ -236,7 +236,7 @@ const index = () => {
                       3d
                     </Typography>
                     {" — Wish I could come, but I'm out of town this…"}
-                  </React.Fragment>
+                  </>
                 }
               />
               {unread && markallread ? (

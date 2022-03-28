@@ -7,6 +7,12 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+
+import { Bar } from "react-chartjs-2";
+import { Box, Typography } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -15,11 +21,6 @@ ChartJS.register(
   Tooltip,
   Legend,
 );
-
-import { Bar } from "react-chartjs-2";
-import { Box, Typography } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 export default function QuestChart() {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("md"));
@@ -57,7 +58,7 @@ export default function QuestChart() {
               },
               tooltip: {
                 callbacks: {
-                  label: function (tooltipItem) {
+                  label(tooltipItem) {
                     return `${tooltipItem.parsed.y} ${tooltipItem.label} Quests completed`;
                   },
                 },

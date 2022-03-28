@@ -1,6 +1,3 @@
-import React from "react";
-import AppLayout from "../../components/Layouts/AppLayout";
-
 import {
   Button,
   Box,
@@ -13,9 +10,10 @@ import {
   MenuItem,
   Paper,
 } from "@mui/material";
-
 import AddIcon from "@mui/icons-material/Add";
+import AppLayout from "../../components/Layouts/AppLayout";
 import QuestsList from "../../components/Quest/QuestsList";
+
 const Index = () => {
   return (
     <AppLayout>
@@ -59,7 +57,7 @@ const Index = () => {
           </Box>
 
           <Box m={2} mp={{ sx: 1, sm: 2, md: 1 }}>
-            <QuestsList hasJoined={true} />
+            <QuestsList url="/quests" />
           </Box>
 
           <Stack

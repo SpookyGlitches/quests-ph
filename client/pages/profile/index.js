@@ -25,7 +25,7 @@ export default function Profile() {
             gap: 2,
           }}
         >
-          <BasicInfo />
+          <BasicInfo fullName="Ninomae Desu" displayName="inainaDesu" />
           <BadgesList />
           <QuestChart />
         </Box>

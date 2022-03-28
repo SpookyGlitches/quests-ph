@@ -1,37 +1,85 @@
 import {
   Typography,
   Box,
-  TextField,
-  FormHelperText,
-  InputLabel,
-  FormControl,
-  Select,
-  MenuItem,
-  Grid,
   StepLabel,
   Stack,
   Stepper,
   Button,
   Step,
 } from "@mui/material";
-import AppLayout from "../../components/Layouts/AppLayout";
-import DatePicker from "@mui/lab/DatePicker";
+import { add } from "date-fns";
+import axios from "axios";
+import { useRouter } from "next/router";
 import { useState } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import {
+  QuestDifficulty,
+  QuestVisibility,
+  QuestCategory,
+} from "@prisma/client";
+import AppLayout from "../../components/Layouts/AppLayout";
+import Step1 from "../../components/Quest/Create/Step1";
+import Step2 from "../../components/Quest/Create/Step2";
+import { createQuestValidation } from "../../validations/quest";
+import WishInput from "../../components/Quest/Create/WishInput";
 
-const steps = ["Set the WOOP", "Configure Settings"];
+const steps = ["Set the WOOP", "Configure the settings"];
+
+const wishItem = <WishInput />;
 
 const Create = () => {
   const [activeStep, setActiveStep] = useState(0);
-  // eslint-disable-next-line no-undef
+  const [loading, setLoading] = useState(false);
+  const currentValidationSchema = createQuestValidation[activeStep];
+  const router = useRouter();
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  const methods = useForm({
+    resolver: yupResolver(currentValidationSchema),
+    mode: "onChange",
+    defaultValues: {
+      wish: "",
+      outcome: "",
+      obstacle: "",
+      plan: "",
+      category: QuestCategory.SOCIAL,
+      difficulty: QuestDifficulty.EASY,
+      visibility: QuestVisibility.PRIVATE,
+      startDate: new Date(),
+      endDate: add(new Date(), { days: 1 }),
+    },
+  });
+  const { trigger, handleSubmit } = methods;
+
+  const postData = async (values) => {
+    try {
+      setLoading(true);
+      const {
+        data: { quest },
+      } = await axios.post("/api/quests/", values);
+      router.push(`/quests/${quest.questId}/overview`);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handleNext = async () => {
+    if (activeStep >= steps.length) return;
+
+    const valid = await trigger();
+    if (!valid) return;
+
+    if (activeStep < steps.length - 1)
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    if (activeStep === steps.length - 1) {
+      handleSubmit(postData)();
+    }
   };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-
   return (
     <AppLayout>
       <Box
@@ -76,111 +124,19 @@ const Create = () => {
               );
             })}
           </Stepper>
-          <Stack spacing={4}>
-            {activeStep === 0 ? (
-              <>
-                <TextField
-                  fullWidth
-                  id="filled-basic"
-                  label="Wish"
-                  helperText="What is something that you want to achieve?"
-                />
-                <TextField
-                  fullWidth
-                  id="filled-basic"
-                  label="Outcome"
-                  helperText="What positive impact can your wish bring to you?"
-                />
-                <TextField
-                  fullWidth
-                  id="filled-basic"
-                  label="Obstacle"
-                  multiline
-                  minRows={3}
-                  maxRows={7}
-                  helperText="What's stopping you from achieving your wish?"
-                />
-                <TextField
-                  fullWidth
-                  id="filled-basic"
-                  label="Plan"
-                  multiline
-                  minRows={3}
-                  maxRows={7}
-                  helperText="What steps will you take to overcome your obstacle?"
-                />
-              </>
-            ) : (
-              <>
-                <FormControl variant="filled">
-                  <InputLabel>Category</InputLabel>
-                  <Select>
-                    <MenuItem>Health</MenuItem>
-                    <MenuItem>Career</MenuItem>
-                    <MenuItem>Social</MenuItem>
-                    {/* <MenuItem>Social</MenuItem> ??? na pa ba? hahahahha */}
-                  </Select>
-                  <FormHelperText></FormHelperText>
-                </FormControl>
-                <FormControl variant="filled">
-                  <InputLabel>Difficulty</InputLabel>
-                  <Select>
-                    <MenuItem>Easy</MenuItem>
-                    <MenuItem>Medium</MenuItem>
-                    <MenuItem>Hard</MenuItem>
-                  </Select>
-                  <FormHelperText>
-                    If public, let your potential party members know the
-                    difficulty.
-                  </FormHelperText>
-                </FormControl>
-                <FormControl variant="filled">
-                  <InputLabel>Visibility</InputLabel>
-                  <Select>
-                    <MenuItem>Only Me</MenuItem>
-                    <MenuItem>Public</MenuItem>
-                  </Select>
-                  <FormHelperText>
-                    Setting to Public means every content can be seen to all
-                    users.
-                  </FormHelperText>
-                </FormControl>
-                <div>
-                  <Grid container spacing={2}>
-                    <Grid item md={6} xs={12}>
-                      <FormControl variant="filled" sx={{ width: "100%" }}>
-                        <DatePicker
-                          label="Start date"
-                          minDate={new Date()}
-                          onChange={() => {}}
-                          renderInput={(params) => <TextField {...params} />}
-                        />
-                        <FormHelperText>
-                          Set it to a later time to have potential party
-                          members.
-                        </FormHelperText>
-                      </FormControl>
-                    </Grid>
-                    <Grid item md={6} xs={12}>
-                      <FormControl variant="filled" sx={{ width: "100%" }}>
-                        <DatePicker
-                          label="End date"
-                          minDate={new Date()}
-                          onChange={() => {}}
-                          renderInput={(params) => <TextField {...params} />}
-                        />
-                        <FormHelperText>Set the graduation day!</FormHelperText>
-                      </FormControl>
-                    </Grid>
-                  </Grid>
-                </div>
-              </>
-            )}
-          </Stack>
+          <FormProvider {...methods}>
+            <form>
+              <Stack spacing={4}>
+                {activeStep === 0 ? <Step1 wishItem={wishItem} /> : <Step2 />}
+              </Stack>
+            </form>
+          </FormProvider>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Button
               color="inherit"
-              disabled={activeStep === 0 || activeStep === steps.length}
+              disabled={
+                activeStep === 0 || activeStep === steps.length || loading
+              }
               onClick={handleBack}
               sx={{ mr: 1 }}
             >
@@ -188,7 +144,7 @@ const Create = () => {
             </Button>
             <Box sx={{ flex: "1 1 auto" }} />
 
-            <Button onClick={handleNext} disabled={steps.length === activeStep}>
+            <Button onClick={handleNext} disabled={loading}>
               {activeStep === steps.length - 1 ? "Finish" : "Next"}
             </Button>
           </Box>

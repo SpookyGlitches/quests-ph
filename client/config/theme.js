@@ -13,6 +13,7 @@ const theme = createTheme({
       default: "#f5f5f5",
     },
   },
+
   components: {
     MuiLink: {
       defaultProps: {
@@ -25,11 +26,15 @@ const theme = createTheme({
         variant: "filled",
       },
     },
-    MuiCardHeader: {
-      styleOverrides: {
-        root: {
-          padding: "0px",
-        },
+    MuiPaper: {
+      defaultProps: {
+        elevation: 0,
+        variant: "outlined",
+      },
+    },
+    MuiButtonBase: {
+      defaultProps: {
+        disableRipple: true,
       },
     },
   },

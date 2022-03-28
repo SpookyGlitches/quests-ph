@@ -1,3 +1,9 @@
+/* eslint-disable consistent-return */
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-shadow */
+/* eslint-disable default-param-last */
+/* eslint-disable camelcase */
 import { useState, useEffect, useCallback } from "react";
 import { get_prop_values, is_object, is_required, VALUE, ERROR } from "./utils";
 
@@ -26,6 +32,7 @@ function useForm(
   useEffect(() => {
     setStateSchema(stateSchema);
     setDisable(true); // Disable button in initial render.
+    // eslint-disable-next-line no-use-before-define
     setInitialErrorState();
   }, []); // eslint-disable-line
 
@@ -73,12 +80,12 @@ function useForm(
       let error = "";
       error = is_required(value, field.required);
 
-      if (is_object(field["validator"]) && error === "") {
-        const validateFieldByCallback = field["validator"];
+      if (is_object(field.validator) && error === "") {
+        const validateFieldByCallback = field.validator;
 
         // Test the function callback if the value is meet the criteria
-        if (!validateFieldByCallback["func"](value, values)) {
-          error = validateFieldByCallback["error"];
+        if (!validateFieldByCallback.func(value, values)) {
+          error = validateFieldByCallback.error;
         }
       }
 
@@ -124,8 +131,8 @@ function useForm(
     (event) => {
       setIsDirty(true);
 
-      const name = event.target.name;
-      const value = event.target.value;
+      const { name } = event.target;
+      const { value } = event.target;
 
       const error = validateField(name, value);
 
