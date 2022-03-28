@@ -14,22 +14,20 @@ export default async function getAllFriends(req, res) {
         },
       });
       // find badge depending on getBadges.badgeId
-      // console.log(getBadges[2].badgeId);
       if (getBadges) {
         for (let i = 0; i < getBadges.length; i++) {
-          const badgeInfo = prisma.badge.findFirst({
+          // eslint-disable-next-line
+          const badgeInfo = await prisma.badge.findFirst({
             where: {
               badgeId: getBadges[i].badgeId,
             },
           });
           if (badgeInfo) {
             returnArray.push(badgeInfo);
-            // console.log(badgeInfo);
           }
         }
       }
-      //   console.log("aloha");
-      //   console.log(returnArray);
+
       return res.status(200).json(returnArray);
     } catch (error) {
       console.log(error);
