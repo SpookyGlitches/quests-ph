@@ -1,5 +1,4 @@
 import * as React from "react";
-import AppLayout from "../../components/Layouts/AppLayout";
 import {
   Box,
   Button,
@@ -15,6 +14,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
+import AppLayout from "../../components/Layouts/AppLayout";
 import Articles from "../../components/Articles/Articles";
 
 export default function Search() {
