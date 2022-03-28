@@ -7,8 +7,8 @@ import {
   Typography,
 } from "@mui/material";
 
-export default function Articles(props) {
-  console.log(props.type);
+export default function Articles({ type }) {
+  console.log(type);
   return (
     <Box>
       <Grid container spacing={2}>
@@ -50,7 +50,7 @@ export default function Articles(props) {
             <CardMedia
               component="img"
               alt="banana"
-              src="/assets/banana.jpg"
+              src="/auth/banana.jpg"
               sx={{
                 width: { xs: "100%", sm: 100 },
               }}
@@ -79,7 +79,7 @@ export default function Articles(props) {
             <CardMedia
               component="img"
               alt="banana"
-              src="/assets/banana.jpg"
+              src="/auth/banana.jpg"
               sx={{
                 width: { xs: "100%", sm: 100 },
               }}
@@ -109,7 +109,7 @@ export default function Articles(props) {
             <CardMedia
               component="img"
               alt="banana"
-              src="/assets/banana.jpg"
+              src="/auth/banana.jpg"
               sx={{
                 width: { xs: "100%", sm: 100 },
               }}
@@ -140,7 +140,7 @@ export default function Articles(props) {
             <CardMedia
               component="img"
               height="140"
-              image="/assets/banana.jpg"
+              image="/auth/banana.jpg"
               alt="sample pic"
             />
             <CardContent>
@@ -163,7 +163,7 @@ export default function Articles(props) {
             <CardMedia
               component="img"
               height="140"
-              image="/assets/banana.jpg"
+              image="/auth/banana.jpg"
               alt="sample pic"
             />
             <CardContent>
@@ -186,7 +186,7 @@ export default function Articles(props) {
             <CardMedia
               component="img"
               height="140"
-              image="/assets/banana.jpg"
+              image="/auth/banana.jpg"
               alt="sample pic"
             />
             <CardContent>
