@@ -6,7 +6,7 @@ import BasicInfo from "../../components/Profile/BasicInfo";
 import QuestChart from "../../components/Profile/QuestChart";
 
 import AccessDenied from "../../components/Error/AccessDenied";
-
+import QuestList from "../../components/Profile/QuestList";
 export default function Profile() {
   const { data: session } = useSession();
   if (session) {
@@ -36,6 +36,7 @@ export default function Profile() {
             />
             <BadgesList />
             <QuestChart />
+            <QuestList />
           </Box>
         </Box>
       </AppLayout>
