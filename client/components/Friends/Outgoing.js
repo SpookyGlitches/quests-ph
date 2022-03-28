@@ -1,46 +1,43 @@
 import { Avatar, Typography, Box, IconButton } from "@mui/material";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import GroupAddRoundedIcon from "@mui/icons-material/GroupAddRounded";
-import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
-import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
+import { useState } from "react";
+import axios from "axios";
 
-const FriendField = ({ fieldType, fullName, username }) => {
-  const router = useRouter();
-  const handleProfileClick = (name) => () => {
-    router.push(`/profile/${name}`); // profile page url here
+// async function getUser() {
+//   try {
+//     const { data } = await axios.get("/api/friends");
+//     console.log(data);
+//   } catch (error) {
+//     console.error(error);
+//   }
+//   return data;
+// }
+
+const OutgoingField = (item) => {
+  const [outgoingData] = useState(item.item);
+  // const router = useRouter();
+  // const handleProfileClick = (name) => () => {
+  //   router.push(`/profile/${name}`); // profile page url here
+  // };
+  //   let firstIcon;
+
+  const handleDeleteFriendRequest = async () => {
+    await axios({
+      method: "put",
+      url: "/api/friends/removeFriendRequest",
+      data: {
+        friendRequestId: outgoingData.friendRequestId,
+      },
+    });
   };
-  let firstIcon;
-  let secondIcon;
-  if (fieldType === "Incoming Requests") {
-    firstIcon = (
-      <IconButton>
-        <DeleteRoundedIcon />
-      </IconButton>
-    );
-    secondIcon = (
-      <IconButton>
-        <GroupAddRoundedIcon />
-      </IconButton>
-    );
-  } else if (fieldType === "Outgoing Requests") {
-    secondIcon = (
-      <IconButton>
-        <DeleteRoundedIcon />
-      </IconButton>
-    );
-  } else {
-    firstIcon = (
-      <IconButton>
-        <PersonRemoveIcon />
-      </IconButton>
-    );
-    secondIcon = (
-      <IconButton>
-        <ChatRoundedIcon />
-      </IconButton>
-    );
-  }
+
+  const secondIcon = (
+    <IconButton onClick={handleDeleteFriendRequest}>
+      <DeleteRoundedIcon />
+    </IconButton>
+  );
+
   return (
     <Box
       sx={{
@@ -52,7 +49,6 @@ const FriendField = ({ fieldType, fullName, username }) => {
       }}
     >
       <Box
-        onClick={fieldType === "Friends" ? handleProfileClick(username) : null}
         sx={{
           display: "flex",
           justifyContent: "space-between",
@@ -75,7 +71,7 @@ const FriendField = ({ fieldType, fullName, username }) => {
               marginTop: "-.25rem",
             }}
           >
-            {fullName}
+            {outgoingData.requestee.fullName}
           </Typography>
           <Typography
             variant="body2"
@@ -85,7 +81,7 @@ const FriendField = ({ fieldType, fullName, username }) => {
               marginTop: "-.4rem",
             }}
           >
-            {username}
+            {outgoingData.requestee.displayName}
           </Typography>
         </Box>
       </Box>
@@ -99,11 +95,11 @@ const FriendField = ({ fieldType, fullName, username }) => {
           marginRight: "1rem",
         }}
       >
-        {firstIcon}
+        {/* {firstIcon} */}
         {secondIcon}
       </Box>
     </Box>
   );
 };
 
-export default FriendField;
+export default OutgoingField;
