@@ -8,7 +8,7 @@ import axios from "axios";
 
 const FriendsField = (item) => {
   const { data: session } = useSession();
-
+  // eslint-disable-next-line
   const [friendData] = useState(item.item);
   console.log(friendData);
 
