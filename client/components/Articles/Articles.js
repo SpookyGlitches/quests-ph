@@ -25,7 +25,7 @@ export default function Articles(props) {
               <CardMedia
                 component="img"
                 height="140"
-                image="/assets/banana.jpg"
+                image="/auth/banana.jpg"
                 alt="sample pic"
               />
 
@@ -198,7 +198,6 @@ export default function Articles(props) {
           </Grid>
         </Grid>
       </Box>
-      ;
     </>
   );
 }
