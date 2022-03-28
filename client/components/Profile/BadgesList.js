@@ -2,18 +2,10 @@ import { Box, IconButton, Typography, Popper, Fade } from "@mui/material";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import { useEffect, useState } from "react";
+import axios from "axios";
 import StyledPaper from "../Common/StyledPaper";
 
 const itemsToDisplay = 3;
-const colors = [
-  "#EB5B5B",
-  "#28D4D4",
-  "#BCCF74",
-  "#25E6E6",
-  "#E8D5D5",
-  "#C4EB28",
-  "#D0F7F7",
-];
 
 export default function BadgesList() {
   const [badges, setBadges] = useState([]);
@@ -23,7 +15,6 @@ export default function BadgesList() {
   });
   const [openPopper, setOpenPopper] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-
   const handleBadgeClick = (event) => {
     if (event.currentTarget) setAnchorEl(event.currentTarget);
     setOpenPopper((prev) => !prev);
@@ -31,11 +22,15 @@ export default function BadgesList() {
   };
 
   const initBadges = () => {
-    const temp = [];
-    for (let x = 0; x < 28; x++) {
-      temp.push(colors[Math.floor(Math.random() * colors.length)]);
-    }
-    setBadges(temp);
+    axios.get("/api/profile/userbadges").then((response) => {
+      if (response.status === 200) {
+        const temp = [];
+        for (let x = 0; x < response.data.length; x++) {
+          temp.push(response.data[x].name);
+        }
+        setBadges(temp);
+      }
+    });
   };
 
   useEffect(() => {
@@ -73,7 +68,7 @@ export default function BadgesList() {
           borderRadius: "50%",
         }}
       >
-        {" "}
+        {item}
       </Box>
     ));
   };

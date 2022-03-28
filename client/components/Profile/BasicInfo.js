@@ -1,6 +1,7 @@
 import { Box, Avatar, Typography } from "@mui/material";
 
-export default function BasicInfo() {
+export default function BasicInfo({ displayName, fullName }) {
+  const letter = displayName.charAt(0);
   return (
     <Box
       sx={{
@@ -20,7 +21,7 @@ export default function BasicInfo() {
           width: "6rem",
         }}
       >
-        Ina
+        {letter}
       </Avatar>
       <Typography
         color="primary"
@@ -29,9 +30,9 @@ export default function BasicInfo() {
         align="center"
         sx={{ wordBreak: "break-all" }}
       >
-        Ninomae Inanis
+        {displayName}
       </Typography>
-      <Typography variant="body2">inainainaaaaa</Typography>
+      <Typography variant="body2">{fullName}</Typography>
     </Box>
   );
 }

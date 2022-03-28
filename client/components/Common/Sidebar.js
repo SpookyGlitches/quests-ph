@@ -4,6 +4,7 @@ import MapRoundedIcon from "@mui/icons-material/MapRounded";
 import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
+import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import {
   List,
   ListItem,
@@ -31,6 +32,8 @@ const Sidebar = (props) => {
         return <PeopleRoundedIcon />;
       case "Chats":
         return <ChatRoundedIcon />;
+      case "Profile":
+        return <AccountCircleRoundedIcon />;
       default:
     }
   };
@@ -48,6 +51,7 @@ const Sidebar = (props) => {
           "Articles",
           "Friends",
           "Chats",
+          "Profile",
         ].map((text) => (
           <Link
             href={`/${text.replace(/ /g, "").toLowerCase()}`}

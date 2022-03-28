@@ -12,6 +12,8 @@ import { Bar } from "react-chartjs-2";
 import { Box, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 
 ChartJS.register(
   CategoryScale,
@@ -22,8 +24,42 @@ ChartJS.register(
   Legend,
 );
 export default function QuestChart() {
+  const [questArr, setQuestArr] = useState([]);
   const theme = useTheme();
+
+  const Chart = () => {
+    const questsNum = [];
+    let career = 0;
+    let social = 0;
+    let health = 0;
+    axios
+      .get("/api/profile/questchart")
+      .then((res) => {
+        // console.log(res.data);
+        const questData = res.data;
+        for (let x = 0; x < questData.length; x++) {
+          if (questData[x].category === "CAREER") {
+            career++;
+          } else if (questData[x].category === "SOCIAL") {
+            social++;
+          } else {
+            health++;
+          }
+        }
+        questsNum[0] = health;
+        questsNum[1] = social;
+        questsNum[2] = career;
+        setQuestArr(questsNum);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const matches = useMediaQuery(theme.breakpoints.up("md"));
+  useEffect(() => {
+    Chart();
+  }, []);
+
   return (
     <Box
       sx={{
@@ -82,11 +118,11 @@ export default function QuestChart() {
             labels: ["Health", "Social", "Career"],
             datasets: [
               {
-                data: [20, 40, 60],
+                data: questArr,
                 backgroundColor: [
-                  "rgba(255, 159, 64)",
-                  "rgb(37, 230, 230)",
-                  "rgb(235, 91, 91)",
+                  "rgb(21,136,25)",
+                  "rgb(101,19,223)",
+                  "rgb(218,83,83)",
                 ],
                 borderWidth: 0,
                 borderRadius: matches ? 20 : 10,
