@@ -16,6 +16,7 @@ import { signIn, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import AuthHeader from "../../components/Auth/AuthHeader";
 import AuthLayout from "../../components/Layouts/AuthLayout";
+import CreateAnAccount from "../../components/Registration/CreateAnAccount";
 
 export default function Login() {
   const router = useRouter();
@@ -35,11 +36,14 @@ export default function Login() {
       callbackUrl: `/`,
       redirect: false,
     }).then((result) => {
+      console.log(result.status);
       if (result.error !== null) {
         if (result.status === 401) {
           setLoginError(
-            "Your username/password combination was incorrect. Please try again",
+            "The email or password you entered isn't registered to an account.",
           );
+        } else if (result.status === 403) {
+          setLoginError("Please verify your account.");
         } else {
           setLoginError(result.error);
         }
@@ -52,32 +56,11 @@ export default function Login() {
   return (
     <AuthLayout>
       <AuthHeader subtitle="Sign in to your account" />
-      <Stack direction="column" spacing={2}>
-        <Button
-          style={{
-            borderRadius: 10,
-            minHeight: "56px",
-            width: "100%",
-            backgroundColor: "white",
-            color: "black",
-            marginTop: "0.5rem",
-          }}
-          variant="contained"
-        >
-          <img
-            src="/auth/google.png"
-            width="15"
-            height="15"
-            alt="questsgoogle"
-          />{" "}
-          &nbsp; Login with Google
-        </Button>
-        <Typography align="center">or</Typography>
 
+      <Stack direction="column" spacing={2}>
         <form onSubmit={handleLogin}>
           <TextField
             fullWidth
-            required
             id="filled-required"
             label="Email Address"
             value={email}
@@ -93,7 +76,6 @@ export default function Login() {
             name="password"
             value={password}
             error={loginError && loginError}
-            helperText={loginError || ""}
             onChange={(e) => setPassword(e.target.value)}
             type={showPassword ? "text" : "password"}
             autoComplete="current-password"
@@ -111,32 +93,32 @@ export default function Login() {
               ),
             }}
           />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Typography
+              sx={{ fontSize: "12px", color: "red", align: "center", mb: 2 }}
+            >
+              {loginError}
+            </Typography>
+          </Box>
           <Button variant="contained" type="submit" fullWidth>
             Sign In
           </Button>
         </form>
       </Stack>
 
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="string" align="center">
-          Not yet registered?{" "}
-          <Link href="/auth/register/member" passHref>
-            <MuiLink sx={{ cursor: "pointer" }}>Create an account</MuiLink>
-          </Link>
-        </Typography>
-        <Typography variant="string" align="center">
-          Forgot password?{" "}
-          <Link href="/auth/reset" passHref>
-            <MuiLink sx={{ cursor: "pointer" }}>Click here</MuiLink>
-          </Link>
-        </Typography>
-      </Box>
+      <CreateAnAccount />
+      <Typography variant="string" align="center">
+        Forgot password?{" "}
+        <Link href="/auth/reset" passHref>
+          <MuiLink sx={{ cursor: "pointer" }}>Click here</MuiLink>
+        </Link>
+      </Typography>
     </AuthLayout>
   );
 }
