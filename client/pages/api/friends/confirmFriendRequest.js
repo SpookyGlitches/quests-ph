@@ -1,6 +1,6 @@
 import prisma from "../../../lib/prisma";
 
-export default async function confirmFriendRequest(req, res) {
+export default async function confirmFriendRequests(req, res) {
   if (req.method !== "POST") {
     return res.status(404).json({ message: "Method not allowed " });
   }

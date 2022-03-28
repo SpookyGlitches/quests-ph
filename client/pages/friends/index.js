@@ -24,6 +24,7 @@ function ListHolder({ items, requestName }) {
       <Typography color="primary" variant="h4">
         {requestName}
       </Typography>
+      {/* eslint-disable-next-line */}
       {items.map((item) => {
         switch (requestName) {
           case "Incoming Requests":
@@ -32,6 +33,8 @@ function ListHolder({ items, requestName }) {
             return <Outgoing key={item.friendRequestId} item={item} />;
           case "Friends":
             return <Friends key={item.friendshipId} item={item} />;
+          default:
+            return <h4>Friends</h4>;
         }
       })}
     </Box>

@@ -1,6 +1,6 @@
 import prisma from "../../../lib/prisma";
 
-export default async function deleteFriend(req, res) {
+export default async function deleteFriends(req, res) {
   if (req.method !== "PUT") {
     return res.status(404).json({ message: "Method not allowed " });
   }
