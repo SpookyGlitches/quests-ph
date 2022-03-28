@@ -1,42 +1,79 @@
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { Link as MuiLink } from "@mui/material";
-import Link from "next/link";
-import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
+import * as React from "react";
+import { useState } from "react";
+import Alert from "@mui/material/Alert";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import Router from "next/router";
+import axios from "axios";
 import AuthLayout from "../../components/Layouts/AuthLayout";
 import AuthHeader from "../../components/Auth/AuthHeader";
+import { resetUserPassword } from "../../validations/ResetPassword";
+import CreateAnAccount from "../../components/Registration/CreateAnAccount";
 
 export default function ResetPassword() {
+  // eslint-disable-next-line no-undef
+  const currentValidationSchema = resetUserPassword[0];
+  const formOptions = { resolver: yupResolver(currentValidationSchema) };
+  const { register, handleSubmit, formState } = useForm(formOptions);
+  const { errors } = formState;
+  const [errorMessage, setErrorMessage] = useState("");
+  const onSubmit = (data) => {
+    axios({
+      method: "POST",
+      url: "/api/auth/sendresetpassword",
+      data: {
+        data,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          Router.push(
+            {
+              pathname: "/auth/reset-confirmation",
+              query: {
+                message: "Please check your email for more details.",
+              },
+            },
+            "/auth/reset-confirmation",
+          );
+        }
+      })
+      .catch((error) => {
+        setErrorMessage("Your email doesn't exist.");
+        console.log(error);
+      });
+  };
   return (
     <AuthLayout>
       <AuthHeader subtitle="Reset your password" />
+      {errorMessage !== "" ? (
+        <Alert severity="error" color="error">
+          {errorMessage}
+        </Alert>
+      ) : (
+        ""
+      )}
       <Stack direction="column" spacing={2}>
-        <TextField
-          fullWidth
-          required
-          style={{}}
-          id="filled-required"
-          label="Email Address"
-        />
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <TextField
+            fullWidth
+            name="email"
+            style={{}}
+            id="filled-required"
+            label="Email Address"
+            error={errors.email && errors.email.message}
+            helperText={errors.email ? errors.email.message : ""}
+            {...register("email")}
+          />
+          <Button fullWidth variant="contained" sx={{ mt: 2 }} type="submit">
+            Reset Password
+          </Button>
+        </form>
       </Stack>
-      <Button variant="contained">Reset Password</Button>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        {/* https://stackoverflow.com/questions/66226576/using-the-material-ui-link-component-with-the-next-js-link-component */}
-        <Typography variant="string" align="center">
-          Not yet registered?{" "}
-          <Link href="/" passHref>
-            <MuiLink sx={{ cursor: "pointer" }}>Create an account</MuiLink>
-          </Link>
-        </Typography>
-      </Box>
+      <CreateAnAccount />
     </AuthLayout>
   );
 }
