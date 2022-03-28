@@ -3,38 +3,28 @@ import { useDropzone } from "react-dropzone";
 import CloudUploadRoundedIcon from "@mui/icons-material/CloudUploadRounded";
 import { alpha } from "@mui/material/styles";
 
-export default function FileDropzone({ uploadFiles }) {
-  const { getRootProps, getInputProps } = useDropzone({
-    multiple: true,
-    onDropAccepted: (acceptedFiles) => {
-      uploadFiles(acceptedFiles);
-    },
-    onDropRejected: (rejectedFiles) => {
-      console.log(rejectedFiles);
-    },
-  });
+const rootStyles = {
+  height: "8rem",
+  borderStyle: "dashed",
+  borderColor: "#cbcbcb",
+  borderRadius: 1,
+  borderWidth: "thin",
+  cursor: "pointer",
+  backgroundColor: "background.default",
+  "&:hover": {
+    borderColor: (theme) => theme.palette.common.black,
+  },
+  "&:focus-within": {
+    borderColor: "primary.main",
+    backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.1),
+    color: "primary.main",
+  },
+};
+
+export default function FileDropzone({ dropzoneTitle, useDropzoneProps }) {
+  const { getRootProps, getInputProps } = useDropzone(useDropzoneProps);
   return (
-    <Box
-      {...getRootProps({})}
-      sx={{
-        height: "8rem",
-        borderStyle: "dashed",
-        borderColor: "#cbcbcb",
-        borderRadius: 1,
-        borderWidth: "thin",
-        cursor: "pointer",
-        backgroundColor: "background.default",
-        // remove lang ni later siguro
-        "&:hover": {
-          borderColor: (theme) => theme.palette.common.black,
-        },
-        "&:focus-within": {
-          borderColor: "primary.main",
-          backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.1),
-          color: "primary.main",
-        },
-      }}
-    >
+    <Box {...getRootProps({})} sx={rootStyles}>
       <input {...getInputProps()} />
       <Box
         sx={{
@@ -43,16 +33,16 @@ export default function FileDropzone({ uploadFiles }) {
           alignItems: "center",
           flexDirection: "column",
           height: "100%",
-          padding: "2rem",
+          padding: 2,
         }}
       >
         <CloudUploadRoundedIcon
           sx={{
-            fontSize: "3rem",
+            fontSize: 50,
           }}
         />
         <Typography variant="body2" align="center">
-          Drag and drop some images/video here, or click to add.
+          {dropzoneTitle || "Drag and drop files here, or click to add."}
         </Typography>
       </Box>
     </Box>

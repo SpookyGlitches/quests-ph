@@ -9,25 +9,32 @@ import {
   Fade,
   IconButton,
   Paper,
+  Menu,
+  MenuItem,
 } from "@mui/material";
-import { useState } from "react";
-import Image from "next/image";
+import Carousel from "react-material-ui-carousel";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import AddReactionRoundedIcon from "@mui/icons-material/AddReactionRounded";
 import InsertCommentRoundedIcon from "@mui/icons-material/InsertCommentRounded";
 import { formatRelative } from "date-fns";
-import Carousel from "react-material-ui-carousel";
 import { useRouter } from "next/router";
-// import ClampLines from "react-clamp-lines";
+import Image from "next/image";
+import { useState } from "react";
+import useSWR from "swr";
 import Emoji1 from "../../Icons/Emoji1";
 import Emoji2 from "../../Icons/Emoji2";
 import Emoji3 from "../../Icons/Emoji3";
 
 const Post = ({ post }) => {
   const router = useRouter();
+  const { questId } = router.query;
+  const { data: postFiles } = useSWR(
+    post.postId && questId
+      ? `/quests/${questId}/posts/${post.postId}/postFiles`
+      : null,
+  );
   const [postOptionsAnchor, setPostOptionsAnchor] = useState(null);
   const [openPostOptions, setOpenPostOptions] = useState(false);
-
   const [reactAnchor, setReactAnchor] = useState(null);
   const [openReact, setOpenReact] = useState(false);
 
@@ -41,18 +48,29 @@ const Post = ({ post }) => {
     setReactAnchor(event.currentTarget);
     setOpenReact(!openReact);
   };
+  const closePostOptions = () => {
+    setOpenPostOptions(false);
+  };
 
   const navigateToPost = (event) => {
     event.stopPropagation();
-    router.push(`/quests/${router.query.questId}/posts/${post.postId}`);
+    router.push(`/quests/${questId}/posts/${post.postId}`);
   };
 
   const openImage = (event, link) => {
     event.stopPropagation();
-    // copy pasta  https://stackoverflow.com/questions/45046030/maintaining-href-open-in-new-tab-with-an-onclick-handler-in-react
     const newWindow = window.open(link, "_blank", "noopener,noreferrer");
     if (newWindow) newWindow.opener = null;
+    // copy pasta  https://stackoverflow.com/questions/45046030/maintaining-href-open-in-new-tab-with-an-onclick-handler-in-react
   };
+
+  const navigateToEditPage = () => {
+    router.push(`/quests/${questId}/posts/${post.postId}/edit`);
+  };
+
+  if (!postFiles) {
+    return <div>Loading</div>;
+  }
 
   return (
     <>
@@ -82,49 +100,53 @@ const Post = ({ post }) => {
             </IconButton>
           </Box>
         </Box>
+
         {/* Post Content */}
         <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
           <Box sx={{ cursor: "pointer" }} onClick={navigateToPost}>
             <Typography variant="h6" sx={{ fontWeight: "medium" }}>
               {post.title}
             </Typography>
-            <Typography variant="body2">{post.body}</Typography>
+            <Typography variant="body2" sx={{ wordBreak: "break-all" }}>
+              {post.body}
+            </Typography>
           </Box>
           <Box style={{}}>
-            <Carousel
-              autoPlay={false}
-              sx={{
-                zIndex: 1,
-                width: "100%",
-                height: "auto",
-              }}
-              navButtonsAlwaysVisible={post._count.postFiles > 1}
-              indicators={false}
-            >
-              {post.postFiles.map((item) => {
-                const link = `${process.env.NEXT_PUBLIC_IMAGES_BASE_LINK}/${item.path}`;
-                return (
-                  <Box
-                    sx={{
-                      position: "relative",
-                      height: "400px",
-                      maxHeight: "400px",
-                      backgroundColor: "grey.200",
-                      cursor: "pointer",
-                    }}
-                    key={item.postFileId}
-                  >
-                    <Image
-                      layout="fill"
-                      onClick={(event) => openImage(event, link)}
-                      objectFit="contain"
-                      alt={item.title}
-                      src={link}
-                    />
-                  </Box>
-                );
-              })}
-            </Carousel>
+            {postFiles.length !== 0 && (
+              <Carousel
+                autoPlay={false}
+                sx={{
+                  zIndex: 1,
+                  width: "100%",
+                  height: "auto",
+                }}
+                indicators={false}
+              >
+                {postFiles.map((item) => {
+                  const link = `${process.env.NEXT_PUBLIC_FILES_BASE_LINK}/${item.key}`;
+                  return (
+                    <Box
+                      sx={{
+                        position: "relative",
+                        height: "400px",
+                        maxHeight: "400px",
+                        backgroundColor: "grey.200",
+                        cursor: "pointer",
+                      }}
+                      key={item.key}
+                    >
+                      <Image
+                        layout="fill"
+                        onClick={(event) => openImage(event, link)}
+                        objectFit="contain"
+                        alt={item.title}
+                        src={link}
+                      />
+                    </Box>
+                  );
+                })}
+              </Carousel>
+            )}
           </Box>
           <Box
             sx={{
@@ -148,6 +170,8 @@ const Post = ({ post }) => {
             </Typography>
           </Box>
         </Box>
+
+        {/* Post Actions */}
         <Box
           sx={{
             display: "flex",
@@ -176,21 +200,20 @@ const Post = ({ post }) => {
           </Button>
         </Box>
       </Paper>
-      <Popper
+
+      <Menu
+        dense
         open={openPostOptions}
         anchorEl={postOptionsAnchor}
-        placement="right-start"
         transition
+        onClose={closePostOptions}
       >
-        {({ TransitionProps }) => (
-          <Fade {...TransitionProps} timeout={350}>
-            <Paper>
-              <Button>Edit Post</Button>
-              <Button>Visit Post</Button>
-            </Paper>
-          </Fade>
-        )}
-      </Popper>
+        <MenuItem dense onClick={navigateToEditPage}>
+          Edit
+        </MenuItem>
+        <MenuItem dense>Delete</MenuItem>
+      </Menu>
+
       <Popper
         open={openReact}
         anchorEl={reactAnchor}

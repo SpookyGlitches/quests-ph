@@ -20,7 +20,8 @@ prisma.$use(async (params, next) => {
   if (
     params.model == "PartyMember" ||
     params.model == "Quest" ||
-    params.model == "PostFile"
+    params.model == "PostFile" ||
+    params.model == "Post"
   ) {
     if (params.action == "delete") {
       // Delete queries

@@ -1,24 +1,25 @@
-import { Box, Avatar, Typography } from "@mui/material";
+import { Box, Avatar, Typography, Paper } from "@mui/material";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import useSWR from "swr";
 import PostsList from "../../../../components/Quest/Post/PostsList";
 import QuestLayout from "../../../../components/Layouts/QuestLayout";
 
 const Index = () => {
-  const {
-    query: { questId },
-  } = useRouter();
-
+  const router = useRouter();
+  const { questId } = router.query;
   const { data: posts } = useSWR(questId ? `/quests/${questId}/posts` : null);
 
   if (!posts) {
     return <div>Loading</div>;
   }
 
+  const navigateToCreatePost = () => {
+    router.push(`/quests/${questId}/posts/create`);
+  };
+
   return (
     <div>
-      <Box
+      <Paper
         sx={{
           backgroundColor: "background.paper",
           borderRadius: 1,
@@ -42,14 +43,16 @@ const Index = () => {
             borderRadius: 1,
             paddingX: 1,
             display: "flex",
+            cursor: "pointer",
             alignItems: "center",
           }}
+          onClick={navigateToCreatePost}
         >
           <Typography variant="subtitle2" sx={{ color: "grey.700" }}>
-            <Link href={`/quests/${questId}/posts/create`}>Create a Post</Link>
+            Create a Post
           </Typography>
         </Box>
-      </Box>
+      </Paper>
       <PostsList posts={posts} />
     </div>
   );
