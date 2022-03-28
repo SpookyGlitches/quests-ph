@@ -77,6 +77,16 @@ model User {
   userTwo            Friendship[]             @relation("userTwo")
   requester          FriendRequest[]          @relation("requester")
   requestee          FriendRequest[]          @relation("requestee")
+  forgotPassword     ForgotPassword[] 
+}
+
+model ForgotPassword {
+  forgotPasswordId  Int    @id @default(autoincrement())
+  userId            String
+  token             String
+  isUsed            Boolean              @default(false)
+  createdAt         DateTime  @default(now())
+  user              User   @relation(fields: [userId], references: [userId])
 }
 
 model MentorApplication {
