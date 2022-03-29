@@ -14,24 +14,45 @@ import React, { useState, useEffect } from "react";
 
 export default function QuestChart() {
   const [dataTable, setDataTable] = useState([]);
-  const [category, setCategory] = React.useState("");
+  const [category, setCategory] = useState(0);
+  const [categoryNum, setCategoryNum] = useState(0);
+  const gatherData = (val) => {
+    if (val === 0) {
+      axios
+        .get("/api/profile/questlist", {
+          params: {
+            categoryNum: 0,
+          },
+        })
+        .then((res) => {
+          setDataTable(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      axios
+        .get("/api/profile/questlist", {
+          params: {
+            categoryNum: 1,
+          },
+        })
+        .then((res) => {
+          setDataTable(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
   const handleChange = (event) => {
     setCategory(event.target.value);
-    console.log(category);
-  };
-  const gatherData = () => {
-    axios
-      .get("/api/profile/questlist")
-      .then((res) => {
-        setDataTable(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    setCategoryNum(event.target.value);
+    gatherData(event.target.value);
   };
 
   useEffect(() => {
-    gatherData();
+    gatherData(categoryNum);
   }, []);
 
   return (
@@ -88,6 +109,7 @@ export default function QuestChart() {
           },
         }}
       >
+        {/* {filterData(category)} */}
         {dataTable.map((elem) => (
           <Stack
             item
