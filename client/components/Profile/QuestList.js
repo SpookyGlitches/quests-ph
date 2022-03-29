@@ -53,6 +53,7 @@ export default function QuestChart() {
 
   useEffect(() => {
     gatherData(categoryNum);
+    // eslint-disable-next-line
   }, []);
 
   return (
