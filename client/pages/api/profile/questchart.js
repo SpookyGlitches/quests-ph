@@ -1,7 +1,7 @@
 import { getSession } from "next-auth/react";
 import prisma from "../../../lib/prisma";
 
-export default async function getAllFriends(req, res) {
+export default async function getUserChart(req, res) {
   if (req.method === "GET") {
     try {
       const { user } = await getSession({ req });

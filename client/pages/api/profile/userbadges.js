@@ -1,7 +1,7 @@
 import { getSession } from "next-auth/react";
 import prisma from "../../../lib/prisma";
 
-export default async function getAllFriends(req, res) {
+export default async function getUserBadges(req, res) {
   const returnArray = [];
   if (req.method === "GET") {
     try {

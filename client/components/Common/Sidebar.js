@@ -51,7 +51,6 @@ const Sidebar = (props) => {
           "Articles",
           "Friends",
           "Chats",
-          "Profile",
         ].map((text) => (
           <Link
             href={`/${text.replace(/ /g, "").toLowerCase()}`}
