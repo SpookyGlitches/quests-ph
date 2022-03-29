@@ -65,7 +65,6 @@ model User {
   comment            Comment[]
   postReact          PostReact[]
   commentReact       CommentReact[]
-  postFile           PostFile[]
   userBadge          UserBadge[]
   userReporter       UserReport[]             @relation("userReporter")
   userRecipient      UserReport[]             @relation("userRecipient")
@@ -143,6 +142,7 @@ model Quest {
   visibility             QuestVisibility          @default(PRIVATE)
   category               QuestCategory            @default(SOCIAL)
   wiki                   String                   @default("[{\"type\":\"h1\",\"children\":[{\"text\":\"Welcome\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"This is our Wiki where you can find tips, resources, and strategies to increase the success of us achieving our wishes. If you want to add here, just send me a message in our chat and I'll do it for you!\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"},{\"type\":\"a\",\"url\":\"https://www.youtube.com/watch?v=dQw4w9WgXcQ\",\"children\":[{\"text\":\"watch this awesome tip!\"}]},{\"text\":\"\"}]},{\"type\":\"p\",\"children\":[{\"text\":\" \"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"}]}]") @db.LongText
+  mentorMessage          String?
   estimatedStartDate     DateTime                 @db.Date
   estimatedEndDate       DateTime                 @db.Date
   createdAt              DateTime                 @default(now())
@@ -408,13 +408,13 @@ enum ReactType {
 
 model PostFile {
   postFileId Int       @id @default(autoincrement())
-  userId     String
-  postId     Int
-  path       String
+  postId     Int?
+  key        String    @unique
+  name       String    
+  mimeType   String
   createdAt  DateTime  @default(now())
   deletedAt  DateTime?
-  user       User      @relation(fields: [userId], references: [userId])
-  post       Post      @relation(fields: [postId], references: [postId])
+  post       Post?     @relation(fields: [postId], references: [postId])
 }
 
 model Badge {
