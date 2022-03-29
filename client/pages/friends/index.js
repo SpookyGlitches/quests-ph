@@ -2,14 +2,17 @@ import CircularProgress from "@mui/material/CircularProgress";
 import useSWR from "swr";
 import { Box, Typography } from "@mui/material";
 import axios from "axios";
+import { useSession, getSession } from "next-auth/react";
 import AppLayout from "../../components/Layouts/AppLayout";
 import SearchBar from "../../components/Friends/Search";
 import FilterHolder from "../../components/Friends/FilterHolder";
 import Friends from "../../components/Friends/Friends";
 import Incoming from "../../components/Friends/Incoming";
 import Outgoing from "../../components/Friends/Outgoing";
+import AccessDenied from "../../components/Error/AccessDenied";
 
 function ListHolder({ items, requestName }) {
+  const { data: session } = useSession();
   return (
     <Box
       sx={{
@@ -32,7 +35,13 @@ function ListHolder({ items, requestName }) {
           case "Outgoing Requests":
             return <Outgoing key={item.friendRequestId} item={item} />;
           case "Friends":
-            return <Friends key={item.friendshipId} item={item} />;
+            return (
+              <Friends
+                key={item.friendshipId}
+                item={item}
+                displayName={session.user.displayName}
+              />
+            );
           default:
             return <h4>Friends</h4>;
         }
@@ -44,52 +53,68 @@ function ListHolder({ items, requestName }) {
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
 const Index = () => {
-  const { data: friends, error: one } = useSWR("/api/friends/friends", fetcher);
-
-  const { data: incoming, error: two } = useSWR(
-    "/api/friends/incoming",
-    fetcher,
-  );
-
-  const { data: outgoing, error: three } = useSWR(
-    "/api/friends/outgoing",
-    fetcher,
-  );
-
-  // Progress bar lng sa cause Im not sure how to handle this.
-  if (!friends || one)
-    return (
-      <div>
-        <CircularProgress />
-      </div>
+  const { data: session } = useSession();
+  if (session) {
+    // eslint-disable-next-line
+    const { data: friends, error: one } = useSWR(
+      "/api/friends/friends",
+      fetcher,
     );
-  if (!incoming || two)
-    return (
-      <div>
-        <CircularProgress />
-      </div>
+    // eslint-disable-next-line
+    const { data: incoming, error: two } = useSWR(
+      "/api/friends/incoming",
+      fetcher,
     );
-  if (!outgoing || three)
-    return (
-      <div>
-        <CircularProgress />
-      </div>
+    // eslint-disable-next-line
+    const { data: outgoing, error: three } = useSWR(
+      "/api/friends/outgoing",
+      fetcher,
     );
 
-  return (
-    <AppLayout>
-      <div>
-        <SearchBar />
+    // Progress bar lng sa cause Im not sure how to handle this.
+    if (!friends || one)
+      return (
+        <div>
+          <CircularProgress />
+        </div>
+      );
+    if (!incoming || two)
+      return (
+        <div>
+          <CircularProgress />
+        </div>
+      );
+    if (!outgoing || three)
+      return (
+        <div>
+          <CircularProgress />
+        </div>
+      );
 
-        <FilterHolder />
+    return (
+      <AppLayout>
+        <div>
+          <SearchBar />
 
-        <ListHolder items={incoming} requestName="Incoming Requests" />
+          <FilterHolder />
 
-        <ListHolder items={outgoing} requestName="Outgoing Requests" />
+          <ListHolder items={incoming} requestName="Incoming Requests" />
 
-        <ListHolder items={friends} requestName="Friends" />
-      </div>
-    </AppLayout>
-  );
+          <ListHolder items={outgoing} requestName="Outgoing Requests" />
+
+          <ListHolder items={friends} requestName="Friends" />
+        </div>
+      </AppLayout>
+    );
+  }
+  return <AccessDenied />;
 };
 export default Index;
+
+export async function getServerSideProps(context) {
+  return {
+    props: {
+      session: await getSession(context),
+    },
+  };
+}

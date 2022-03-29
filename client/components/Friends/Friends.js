@@ -2,16 +2,14 @@ import { Avatar, Typography, Box, IconButton } from "@mui/material";
 import PersonRemoveRoundedIcon from "@mui/icons-material/PersonRemoveRounded";
 import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
 import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
 import { useState } from "react";
 import axios from "axios";
 
 const FriendsField = (item) => {
-  const { data: session } = useSession();
   // eslint-disable-next-line
   const [friendData] = useState(item.item);
-  console.log(friendData);
-
+  // eslint-disable-next-line
+  const userDisplayName = item.displayName; // displayname of logged in user
   const handleDeleteFriend = async () => {
     await axios({
       method: "put",
@@ -24,7 +22,7 @@ const FriendsField = (item) => {
   const router = useRouter();
 
   const userDisplayed =
-    friendData.userTwo.fullName === session.user.fullName
+    friendData.userTwo.displayName === userDisplayName
       ? friendData.userOne
       : friendData.userTwo;
   const handleProfileClick = () => {

@@ -1,6 +1,6 @@
 import { Box, Avatar, Typography } from "@mui/material";
 
-export default function friendsBasicInfo({ displayName }) {
+export default function friendsBasicInfo({ displayName, fullName }) {
   //   const letter = displayName.charAt(0);
 
   return (
@@ -31,7 +31,7 @@ export default function friendsBasicInfo({ displayName }) {
       >
         {displayName}
       </Typography>
-      <Typography variant="body2" />
+      <Typography variant="body2">{fullName}</Typography>
     </Box>
   );
 }

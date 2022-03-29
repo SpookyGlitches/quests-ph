@@ -1,16 +1,16 @@
+import { getSession } from "next-auth/react";
 import prisma from "../../../../lib/prisma";
 
-export default async function getFriendInfo(req, res) {
+export default async function getFriendsChart(req, res) {
   if (req.method === "GET") {
     try {
-      const param = req.query.displayName;
-      const getUserInfo = await prisma.user.findFirst({
+      const { user } = await getSession({ req });
+      const getData = await prisma.quest.findMany({
         where: {
-          displayName: param,
+          userId: user.userId,
         },
       });
-
-      return res.status(200).json(getUserInfo);
+      return res.status(200).json(getData);
     } catch (error) {
       console.log(error);
       return res.status(400).json({ message: "Something went wrong" });

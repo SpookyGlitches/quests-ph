@@ -4,14 +4,16 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useSession, getSession } from "next-auth/react";
 import AppLayout from "../../../components/Layouts/AppLayout";
-// import BadgesList from "../../../components/Profile/BadgesList";
+import FriendBadgesList from "../../../components/Profile/Friends/FriendsBadgesList";
 import FriendsBasicInfo from "../../../components/Profile/Friends/FriendsBasicInfo";
-// import QuestChart from "../../../components/Profile/QuestChart";
+import FriendsQuestChart from "../../../components/Profile/Friends/FriendsQuestChart";
 import OptionsBar from "../../../components/Profile/Friends/OptionsBar";
 import AccessDenied from "../../../components/Error/AccessDenied";
 
 export default function Profile() {
   const [role, setRole] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [userId, setUserId] = useState("");
   const router = useRouter();
   const { displayName } = router.query;
   const getFriendInfo = () => {
@@ -22,8 +24,9 @@ export default function Profile() {
         },
       })
       .then((res) => {
-        // console.log(res.data);
-        setRole(res.data);
+        setRole(res.data.role);
+        setFullName(res.data.fullName);
+        setUserId(res.data.userId);
       })
       .catch((err) => {
         console.log(err);
@@ -56,10 +59,10 @@ export default function Profile() {
               gap: 2,
             }}
           >
-            <FriendsBasicInfo displayName={displayName} />
+            <FriendsBasicInfo displayName={displayName} fullName={fullName} />
             <OptionsBar role={role} />
-            {/* <BadgesList />
-          <QuestChart />   */}
+            <FriendBadgesList userId={userId} />
+            <FriendsQuestChart userId={userId} />
           </Box>
         </Box>
       </AppLayout>
