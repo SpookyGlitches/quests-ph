@@ -32,6 +32,7 @@ export default function Profile() {
 
   useEffect(() => {
     getFriendInfo();
+    // eslint-disable-next-line
   }, []);
   const { data: session } = useSession();
   if (session) {
