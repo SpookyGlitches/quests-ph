@@ -1,7 +1,7 @@
 import { Avatar, Typography, Box, IconButton } from "@mui/material";
 import PersonRemoveRoundedIcon from "@mui/icons-material/PersonRemoveRounded";
 import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
-// import { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import axios from "axios";
@@ -21,15 +21,15 @@ const FriendsField = (item) => {
       },
     });
   };
-  // const router = useRouter();
-  // const handleProfileClick = (name) => () => {
-  //   router.push(`/profile/${name}`); // profile page url here
-  // };
+  const router = useRouter();
+
   const userDisplayed =
     friendData.userTwo.fullName === session.user.fullName
       ? friendData.userOne
       : friendData.userTwo;
-
+  const handleProfileClick = () => {
+    router.push(`/profile/${userDisplayed.displayName}`); // profile page url here
+  };
   const firstIcon = (
     <IconButton onClick={handleDeleteFriend}>
       <PersonRemoveRoundedIcon />
@@ -56,6 +56,7 @@ const FriendsField = (item) => {
           justifyContent: "space-between",
           flexDirection: "row",
         }}
+        onClick={handleProfileClick}
       >
         <Avatar
           sx={{
@@ -73,7 +74,7 @@ const FriendsField = (item) => {
               marginTop: "-.25rem",
             }}
           >
-            {userDisplayed.fullName}
+            {userDisplayed.displayName}
           </Typography>
           <Typography
             variant="body2"
@@ -83,7 +84,7 @@ const FriendsField = (item) => {
               marginTop: "-.4rem",
             }}
           >
-            {userDisplayed.displayName}
+            {userDisplayed.fullName}
           </Typography>
         </Box>
       </Box>
