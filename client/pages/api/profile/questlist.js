@@ -13,7 +13,6 @@ export default async function getAllFriends(req, res) {
           where: {
             userId: user.userId,
             completedAt: null,
-            visibility: "PUBLIC",
           },
         });
         return res.status(200).json(getQuests);
