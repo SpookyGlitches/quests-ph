@@ -28,6 +28,6 @@ export default async function handler(req, res) {
     case "PUT":
       return completeQuest(req, res);
     default:
-      return res.sendStatus(405);
+      return res.status(405).send();
   }
 }

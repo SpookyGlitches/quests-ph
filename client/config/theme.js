@@ -32,9 +32,26 @@ const theme = createTheme({
         variant: "outlined",
       },
     },
+    MuiPopper: {
+      defaultProps: {
+        placement: "bottom",
+      },
+    },
     MuiButtonBase: {
       defaultProps: {
         disableRipple: true,
+      },
+    },
+    MuiMenu: {
+      defaultProps: {
+        anchorOrigin: {
+          horizontal: "right",
+          vertical: "bottom",
+        },
+        transformOrigin: {
+          vertical: "center",
+          horizontal: "left",
+        },
       },
     },
   },

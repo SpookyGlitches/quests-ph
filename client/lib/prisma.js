@@ -17,6 +17,8 @@ prisma.$use(async (params, next) => {
   if (
     params.model == "PartyMember" ||
     params.model == "Quest" ||
+    params.model == "PostFile" ||
+    params.model == "Post" ||
     params.model == "QuestTask"
   ) {
     if (params.action == "delete") {
@@ -37,4 +39,15 @@ prisma.$use(async (params, next) => {
   }
   return next(params);
 });
+
+//
+prisma.$use(async (params, next) => {
+  if (params.model == "PostFile" || params.model == "Quest") {
+    if (params.action == "findMany") {
+      params.args["where"] = { ...params.args["where"], deletedAt: null };
+    }
+  }
+  return next(params);
+});
+
 export default prisma;
