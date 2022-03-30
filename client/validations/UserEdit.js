@@ -2,8 +2,10 @@ import { object, string } from "yup";
 import moment from "moment";
 
 const requiredMsg = "This field is required";
-/* eslint-disable import/prefer-default-export */
+
+// eslint-disable-next-line import/prefer-default-export
 export const EditMemberValidations = object({
+  // eslint-disable-line no-param-reassign
   fullName: string().required(requiredMsg),
   displayName: string()
     .matches(
