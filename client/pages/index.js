@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import { useSession, signOut, getSession } from "next-auth/react";
+import { useSession, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import AppLayout from "../components/Layouts/AppLayout";
 
@@ -13,7 +13,6 @@ export default function Home() {
         Signed in as {session.user.email} <br />
         Signed in as {session.user.userId} <br />
         You are a {session.user.role} <br />
-        <Button onClick={() => signOut()}>Sign out</Button>
       </AppLayout>
     );
   }
