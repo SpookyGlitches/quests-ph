@@ -13,8 +13,14 @@ export default async function getUserCredential(req, res) {
       where: {
         userId: user.userId,
       },
+      select: {
+        fullName: true,
+        displayName: true,
+        dateOfBirth: true,
+        email: true,
+        userId: true,
+      },
     });
-
     return res.status(200).json(foundUser);
   } catch (error) {
     return res.status(400).json({ message: "Something went wrong" });
