@@ -25,6 +25,6 @@ export default async function handler(req, res) {
     case "PUT":
       return editWoopStatement(req, res);
     default:
-      return res.sendStatus(404);
+      return res.status(404).send();
   }
 }

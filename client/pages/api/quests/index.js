@@ -19,9 +19,6 @@ async function getQuests(req, res) {
   const { user } = await getSession({ req });
   try {
     const quests = await prisma.quest.findMany({
-      where: {
-        deletedAt: null,
-      },
       include: {
         partyMembers: {
           where: {
@@ -99,6 +96,6 @@ export default async function handler(req, res) {
     case "POST":
       return createQuest(req, res);
     default:
-      return res.sendStatus(404);
+      return res.status(404).send();
   }
 }
