@@ -53,7 +53,6 @@ model User {
   mentorFile         MentorFile[]
   accounts           Account[]
   sessions           Session[]
-  pointLogs          PointsLog[]
   quests             Quest[]
   questTask          QuestTask[]
   questTaskFinisher  QuestTaskFinisher[]
@@ -214,14 +213,14 @@ model QuestPartyBan {
 }
 
 model PointsLog {
-  pointsLogId  Int             @id @default(autoincrement())
-  questId      Int
-  userId       String
-  gainedPoints Int
-  action       PointsLogAction
-  createdAt    DateTime        @default(now())
-  quest        Quest           @relation(fields: [questId], references: [questId])
-  user         User            @relation(fields: [userId], references: [userId])
+  pointsLogId   Int             @id @default(autoincrement())
+  questId       Int
+  partyMemberId Int
+  gainedPoints  Int
+  action        PointsLogAction
+  createdAt     DateTime        @default(now())
+  quest         Quest           @relation(fields: [questId], references: [questId])
+  partyMember   PartyMember     @relation(fields: [partyMemberId], references: [partyMemberId])
 }
 
 model FriendRequest {
@@ -298,6 +297,7 @@ model PartyMember {
   deletedAt     DateTime?
   quest         Quest           @relation(fields: [questId], references: [questId])
   user          User            @relation(fields: [userId], references: [userId])
+  pointsLog     PointsLog[]
 
   @@unique([questId, userId, deletedAt])
 }
