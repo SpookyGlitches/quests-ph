@@ -148,7 +148,6 @@ export default function Statements() {
         </div>
         <div>
           <Typography {...titleTypographyProps}>🎁 Outcome</Typography>
-          {partyMembers.length}
           {partyMembers.map((item) => (
             <MemberStatement
               text={item.outcome}
