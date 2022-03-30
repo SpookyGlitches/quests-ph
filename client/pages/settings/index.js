@@ -25,13 +25,8 @@ import DataFieldHolder from "../../components/Settings/DataFieldHolder";
 import AppLayout from "../../components/Layouts/AppLayout";
 
 const Index = () => {
-  const fetcher = (url) => axios.get(url).then((res) => res.data);
-
   const { mutate } = useSWRConfig();
-  const { data: userCredentials, error } = useSWR(
-    "/api/auth/getUserCredentials",
-    fetcher,
-  );
+  const { data: userCredentials, error } = useSWR("/auth/getUserCredentials");
 
   console.log(userCredentials);
   if (error) {
@@ -64,7 +59,7 @@ const Index = () => {
         .put(`/api/auth/${userCredentials.userId}/editmemberaccount`, data)
         .then(() => {
           handleProfileClosed();
-          mutate(`/api/auth/getUserCredentials`);
+          mutate(`/auth/getUserCredentials`);
         });
     } catch (err) {
       console.log(err);
