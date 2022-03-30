@@ -1,9 +1,10 @@
 import * as React from "react";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import { useForm, Controller } from "react-hook-form";
+import useSWR, { useSWRConfig } from "swr";
 import { yupResolver } from "@hookform/resolvers/yup";
 import moment from "moment";
-import { useSession, getSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import DatePicker from "@mui/lab/DatePicker";
 import axios from "axios";
 // import editMemberAccount from "../api/auth/[userId]/editmemberaccount";
@@ -24,7 +25,21 @@ import DataFieldHolder from "../../components/Settings/DataFieldHolder";
 import AppLayout from "../../components/Layouts/AppLayout";
 
 const Index = () => {
-  const { data: session } = useSession();
+  const fetcher = (url) => axios.get(url).then((res) => res.data);
+
+  const { mutate } = useSWRConfig();
+  const { data: userCredentials, error } = useSWR(
+    "/api/auth/getUserCredentials",
+    fetcher,
+  );
+
+  console.log(userCredentials);
+  if (error) {
+    console.log(error);
+  }
+  if (!userCredentials) {
+    <div>Loading</div>;
+  }
   const [openProfileForm, setopenProfileForm] = React.useState(false);
 
   const handleProfileClickOpen = () => {
@@ -43,15 +58,16 @@ const Index = () => {
   } = useForm({ resolver: yupResolver(EditMemberValidations) });
 
   const onSubmit = async (data) => {
-    data.userId = session.user.userId; // eslint-disable-line no-param-reassign
+    data.userId = userCredentials.userId; // eslint-disable-line no-param-reassign
     try {
       await axios
-        .put(`/api/auth/${session.user.userId}/editmemberaccount`, data)
+        .put(`/api/auth/${userCredentials.userId}/editmemberaccount`, data)
         .then(() => {
           handleProfileClosed();
+          mutate(`/api/auth/getUserCredentials`);
         });
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -101,11 +117,25 @@ const Index = () => {
               borderRadius: 2,
             }}
           >
-            <DataFieldHolder value={session.user.fullName} />
-            <DataFieldHolder value={session.user.displayName} />
-            <DataFieldHolder value={session.user.email} />
+            <DataFieldHolder
+              value={userCredentials ? userCredentials.fullName : <div />}
+            />
+            <DataFieldHolder
+              value={userCredentials ? userCredentials.displayName : <div />}
+            />
+            <DataFieldHolder
+              value={userCredentials ? userCredentials.email : <div />}
+            />
             {/* <DataFieldHolder value="*********" /> */}
-            <DataFieldHolder value={session.user.dateOfBirth} />
+            <DataFieldHolder
+              value={
+                userCredentials ? (
+                  userCredentials.dateOfBirth.substring(0, 10)
+                ) : (
+                  <div />
+                )
+              }
+            />
           </Box>
         </Box>
         <Box
@@ -150,7 +180,7 @@ const Index = () => {
                 <Controller
                   control={control}
                   name="fullName"
-                  defaultValue={session.user.fullName}
+                  defaultValue={userCredentials ? userCredentials.fullName : ""}
                   render={({
                     field: { onChange, value },
                     fieldState: { invalid },
@@ -178,7 +208,9 @@ const Index = () => {
                 <Controller
                   control={control}
                   name="displayName"
-                  defaultValue={session.user.displayName}
+                  defaultValue={
+                    userCredentials ? userCredentials.displayName : ""
+                  }
                   render={({
                     field: { onChange, value },
                     fieldState: { invalid },
@@ -208,7 +240,7 @@ const Index = () => {
                 <Controller
                   control={control}
                   name="email"
-                  defaultValue={session.user.email}
+                  defaultValue={userCredentials ? userCredentials.email : ""}
                   render={({
                     field:
                       // eslint-disable-next-line
@@ -236,7 +268,9 @@ const Index = () => {
                 <Controller
                   name="dateOfBirth"
                   control={control}
-                  defaultValue={session.user.dateOfBirth}
+                  defaultValue={
+                    userCredentials ? userCredentials.dateOfBirth : ""
+                  }
                   render={({
                     // eslint-disable-next-line
                     field:
