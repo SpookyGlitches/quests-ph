@@ -156,7 +156,6 @@ model Quest {
   conversation           Conversation[]
   questPartyBan          QuestPartyBan[]
   questMentorshipRequest QuestMentorshipRequest[]
-  pointsLog              PointsLog[]
 }
 
 model QuestTask {
@@ -214,12 +213,10 @@ model QuestPartyBan {
 
 model PointsLog {
   pointsLogId   Int             @id @default(autoincrement())
-  questId       Int
   partyMemberId Int
   gainedPoints  Int
   action        PointsLogAction
   createdAt     DateTime        @default(now())
-  quest         Quest           @relation(fields: [questId], references: [questId])
   partyMember   PartyMember     @relation(fields: [partyMemberId], references: [partyMemberId])
 }
 
