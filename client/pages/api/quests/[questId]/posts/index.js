@@ -1,8 +1,7 @@
-import { PrismaClient } from "@prisma/client";
 import { getSession } from "next-auth/react";
 import postValidations from "../../../../../validations/post";
 
-const prisma = new PrismaClient();
+import prisma from "../../../../../lib/prisma";
 
 async function getPosts(req, res) {
   try {

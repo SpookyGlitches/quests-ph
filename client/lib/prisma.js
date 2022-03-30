@@ -19,7 +19,8 @@ prisma.$use(async (params, next) => {
     params.model == "Quest" ||
     params.model == "PostFile" ||
     params.model == "Post" ||
-    params.model == "QuestTask"
+    params.model == "QuestTask" ||
+    params.model == "QuestPartyBan"
   ) {
     if (params.action == "delete") {
       // Delete queries
@@ -33,6 +34,11 @@ prisma.$use(async (params, next) => {
       if (params.args.data != undefined) {
         params.args.data["deletedAt"] = new Date();
       } else {
+        if (params.args["where"]) {
+          params.args["where"] = { ...params.args["where"], deletedAt: null };
+        } else {
+          params.args["where"] = { deletedAt: null };
+        }
         params.args["data"] = { deletedAt: new Date() };
       }
     }
@@ -42,12 +48,20 @@ prisma.$use(async (params, next) => {
 
 //
 prisma.$use(async (params, next) => {
-  if (params.model == "PostFile" || params.model == "Quest") {
-    if (params.action == "findMany") {
+  if (
+    params.model == "Quest" ||
+    params.model == "PostFile" ||
+    params.model == "Quest" ||
+    params.model == "PartyMember" ||
+    params.model == "QuestPartyBan"
+  ) {
+    if (params.action == "findMany" || params.action == "findFirst") {
       params.args["where"] = { ...params.args["where"], deletedAt: null };
     }
   }
   return next(params);
 });
+
+// prisma.$on("query", (e) => console.log("Query:" + e.query));
 
 export default prisma;

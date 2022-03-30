@@ -9,10 +9,11 @@ import {
 async function fetchPartyMembers(req, res) {
   const searchObj = {
     questId: Number(req.query.questId),
+    userId: req.query.memberId,
   };
 
   if (req.query.memberId) searchObj.userId = req.query.memberId;
-  if (req.query.excludeMentor)
+  if (req.query.excludeMentor === "true")
     searchObj.OR = [
       {
         role: PartyMemberRole.MENTEE,
@@ -30,6 +31,7 @@ async function fetchPartyMembers(req, res) {
           select: {
             displayName: true,
             userId: true,
+            image: true,
           },
         },
       },
@@ -45,22 +47,28 @@ async function addPartyMember(req, res) {
   try {
     const { user } = await getSession({ req });
     const { outcome, obstacle, plan, role } = req.body;
-    console.log(req.body);
+    const { questId } = req.query;
     await oopValidations.concat(roleValidation).validate({ ...req.body });
+    const existingPartyMember = await prisma.partyMember.findFirst({
+      where: {
+        userId: user.userId,
+        questId: Number(questId),
+      },
+    });
+    if (existingPartyMember) return res.status(200).json(existingPartyMember);
     const partyMember = await prisma.partyMember.create({
       data: {
         userId: user.userId,
         outcome,
         obstacle,
         plan,
-        questId: Number(req.query.questId),
+        questId: Number(questId),
         role,
       },
     });
-    res.status(200).json(partyMember);
+    return res.status(200).json(partyMember);
   } catch (error) {
-    res.status(500).send();
-    console.error(error);
+    return res.status(500).send();
   }
 }
 

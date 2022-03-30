@@ -23,6 +23,7 @@ async function getQuests(req, res) {
         partyMembers: {
           where: {
             userId: user.userId,
+            deletedAt: null,
           },
         },
       },
