@@ -8,8 +8,6 @@ import axios from "axios";
 const FriendsField = (item) => {
   // eslint-disable-next-line
   const [friendData] = useState(item.item);
-  // eslint-disable-next-line
-  const userDisplayName = item.displayName; // displayname of logged in user
   const handleDeleteFriend = async () => {
     await axios({
       method: "put",
@@ -22,11 +20,20 @@ const FriendsField = (item) => {
   const router = useRouter();
 
   const userDisplayed =
-    friendData.userTwo.displayName === userDisplayName
+    // eslint-disable-next-line
+    friendData.userTwo.displayName === item.displayName
       ? friendData.userOne
       : friendData.userTwo;
-  const handleProfileClick = () => {
-    router.push(`/profile/${userDisplayed.displayName}`); // profile page url here
+  const handleProfileClick = async () => {
+    axios
+      .get("/api/profile/friends/friendinfo", {
+        params: {
+          displayName: userDisplayed.displayName,
+        },
+      })
+      .then((res) => {
+        router.push(`/profile/${res.data.userId}`); // profile page url here
+      });
   };
   const firstIcon = (
     <IconButton onClick={handleDeleteFriend}>

@@ -2,48 +2,49 @@ import { Box, IconButton, Typography, Popper, Fade } from "@mui/material";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import { useState } from "react";
-import axios from "axios";
+import useSWR from "swr";
+import CircularProgress from "@mui/material/CircularProgress";
 import StyledPaper from "../../Common/StyledPaper";
 
 const itemsToDisplay = 3;
 
 export default function FriendsBadgesList({ userId }) {
-  const [badges, setBadges] = useState([]);
   const [pagination, setPagination] = useState({
     start: 0,
     end: itemsToDisplay - 1,
   });
   const [openPopper, setOpenPopper] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [flag, setFlag] = useState(0);
   const handleBadgeClick = (event) => {
     if (event.currentTarget) setAnchorEl(event.currentTarget);
     setOpenPopper((prev) => !prev);
     event.stopPropagation();
   };
+  const { data: friendBadges } = useSWR(
+    userId ? `/profile/${userId}/userBadges` : null,
+  );
+  if (!friendBadges) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <CircularProgress />
+      </div>
+    );
+  }
 
-  if (userId !== "" && flag === 0) {
-    axios
-      .get("/api/profile/friends/friendbadges", {
-        params: {
-          userId,
-        },
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          const temp = [];
-          for (let x = 0; x < response.data.length; x++) {
-            temp.push(response.data[x].name);
-          }
-          setBadges(temp);
-          setFlag(1);
-        }
-      });
+  const temp = [];
+  for (let x = 0; x < friendBadges.length; x++) {
+    temp.push(friendBadges[x].name);
   }
 
   const incrementPagination = () => {
-    if (pagination.end - (badges.length - 1) === 0) return;
-    if (pagination.end >= badges.length) return;
+    if (pagination.end - (temp.length - 1) === 0) return;
+    if (pagination.end >= temp.length) return;
     setPagination((prev) => {
       return { start: prev.end + 1, end: prev.end + itemsToDisplay };
     });
@@ -57,9 +58,9 @@ export default function FriendsBadgesList({ userId }) {
       };
     });
   };
-
   const badgeItems = () => {
-    const preview = badges.slice(pagination.start, pagination.end + 1);
+    const preview = temp.slice(pagination.start, pagination.end + 1);
+
     return preview.map((item) => (
       <Box
         key={`${item}`}

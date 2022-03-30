@@ -1,14 +1,13 @@
-import prisma from "../../../../lib/prisma";
+import prisma from "../../../../../lib/prisma";
 
 export default async function getFriendBadges(req, res) {
   const returnArray = [];
   if (req.method === "GET") {
     try {
-      const param = req.query.userId;
       // find badges of the user
       const getBadges = await prisma.userBadge.findMany({
         where: {
-          userId: param,
+          userId: req.query.userId,
         },
       });
       // find badge depending on getBadges.badgeId
@@ -18,6 +17,9 @@ export default async function getFriendBadges(req, res) {
           const badgeInfo = await prisma.badge.findFirst({
             where: {
               badgeId: getBadges[i].badgeId,
+            },
+            orderBy: {
+              badgeId: "asc",
             },
           });
           if (badgeInfo) {

@@ -1,7 +1,5 @@
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
-import axios from "axios";
-import { useState, useEffect } from "react";
 import { useSession, getSession } from "next-auth/react";
 import AppLayout from "../../../components/Layouts/AppLayout";
 import FriendBadgesList from "../../../components/Profile/Friends/FriendsBadgesList";
@@ -11,32 +9,9 @@ import OptionsBar from "../../../components/Profile/Friends/OptionsBar";
 import AccessDenied from "../../../components/Error/AccessDenied";
 
 export default function Profile() {
-  const [role, setRole] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [userId, setUserId] = useState("");
   const router = useRouter();
-  const { displayName } = router.query;
-  const getFriendInfo = () => {
-    axios
-      .get("/api/profile/friends/friendinfo", {
-        params: {
-          displayName,
-        },
-      })
-      .then((res) => {
-        setRole(res.data.role);
-        setFullName(res.data.fullName);
-        setUserId(res.data.userId);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  const { userId } = router.query;
 
-  useEffect(() => {
-    getFriendInfo();
-    // eslint-disable-next-line
-  }, []);
   const { data: session } = useSession();
   if (session) {
     return (
@@ -59,8 +34,8 @@ export default function Profile() {
               gap: 2,
             }}
           >
-            <FriendsBasicInfo displayName={displayName} fullName={fullName} />
-            <OptionsBar role={role} />
+            <FriendsBasicInfo userId={userId} />
+            <OptionsBar userId={userId} />
             <FriendBadgesList userId={userId} />
             <FriendsQuestChart userId={userId} />
           </Box>

@@ -10,10 +10,8 @@ import {
 
 import { Bar } from "react-chartjs-2";
 import { Box, Typography } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import axios from "axios";
-import React, { useState } from "react";
+import React from "react";
+import useSWR from "swr";
 
 ChartJS.register(
   CategoryScale,
@@ -25,40 +23,20 @@ ChartJS.register(
 );
 export default function FriendsQuestChart({ userId }) {
   // eslint-disable-next-line
-  const [questArr, setQuestArr] = useState([]);
-  // const [flag, setFlag] = useState(0);
-  const theme = useTheme();
-  if (userId !== "") {
-    // const questsNum = [];
-    // let career = 0;
-    // let social = 0;
-    // let health = 0;
-    axios
-      .get("/api/profile/questchart")
-      // eslint-disable-next-line
-      .then((res) => {
-        // console.log(res.data);
-        //   const questData = res.data;
-        //   for (let x = 0; x < questData.length; x++) {
-        //     if (questData[x].category === "CAREER") {
-        //       career++;
-        //     } else if (questData[x].category === "SOCIAL") {
-        //       social++;
-        //     } else {
-        //       health++;
-        //     }
-        //   }
-        //   questsNum[0] = health;
-        //   questsNum[1] = social;
-        //   questsNum[2] = career;
-        //   setQuestArr(questsNum);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const { data: friendQuests } = useSWR(
+    userId ? `/profile/${userId}/friendchart` : null,
+  );
+  if (!friendQuests) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      />
+    );
   }
-
-  const matches = useMediaQuery(theme.breakpoints.up("md"));
 
   return (
     <Box
@@ -118,14 +96,14 @@ export default function FriendsQuestChart({ userId }) {
             labels: ["Health", "Social", "Career"],
             datasets: [
               {
-                data: questArr,
+                data: friendQuests,
                 backgroundColor: [
                   "rgb(21,136,25)",
                   "rgb(101,19,223)",
                   "rgb(218,83,83)",
                 ],
                 borderWidth: 0,
-                borderRadius: matches ? 20 : 10,
+                borderRadius: 10,
               },
             ],
           }}

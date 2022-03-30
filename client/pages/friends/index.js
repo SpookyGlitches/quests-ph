@@ -74,19 +74,37 @@ const Index = () => {
     // Progress bar lng sa cause Im not sure how to handle this.
     if (!friends || one)
       return (
-        <div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <CircularProgress />
         </div>
       );
     if (!incoming || two)
       return (
-        <div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <CircularProgress />
         </div>
       );
     if (!outgoing || three)
       return (
-        <div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <CircularProgress />
         </div>
       );
@@ -102,7 +120,11 @@ const Index = () => {
 
           <ListHolder items={outgoing} requestName="Outgoing Requests" />
 
-          <ListHolder items={friends} requestName="Friends" />
+          <ListHolder
+            items={friends}
+            requestName="Friends"
+            fullName={session.user.displayName}
+          />
         </div>
       </AppLayout>
     );

@@ -4,8 +4,24 @@ import ErrorRoundedIcon from "@mui/icons-material/ErrorRounded";
 import CommentRoundedIcon from "@mui/icons-material/CommentRounded";
 // eslint-disable-next-line
 import HelpCenterRounded from "@mui/icons-material/HelpCenterRounded";
-export default function Options({ role }) {
-  if (role === "member") {
+import useSWR from "swr";
+
+export default function Options({ userId }) {
+  const { data: friendInfos } = useSWR(
+    userId ? `/profile/${userId}/friendInfo` : null,
+  );
+  if (!friendInfos) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      />
+    );
+  }
+  if (friendInfos.role === "member") {
     return (
       <Box
         sx={{
