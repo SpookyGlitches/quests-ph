@@ -7,8 +7,6 @@ import moment from "moment";
 import { getSession } from "next-auth/react";
 import DatePicker from "@mui/lab/DatePicker";
 import axios from "axios";
-// import editMemberAccount from "../api/auth/[userId]/editmemberaccount";
-
 import {
   TextField,
   Box,
@@ -20,6 +18,8 @@ import {
   DialogContentText,
   DialogActions,
 } from "@mui/material";
+import Notification from "../../components/Settings/Notification";
+
 import { EditMemberValidations } from "../../validations/UserEdit";
 import DataFieldHolder from "../../components/Settings/DataFieldHolder";
 import AppLayout from "../../components/Layouts/AppLayout";
@@ -28,7 +28,6 @@ const Index = () => {
   const { mutate } = useSWRConfig();
   const { data: userCredentials, error } = useSWR("/auth/getUserCredentials");
 
-  console.log(userCredentials);
   if (error) {
     console.log(error);
   }
@@ -44,7 +43,12 @@ const Index = () => {
   const handleProfileClosed = () => {
     setopenProfileForm(false);
   };
-  // const [data, setData] = React.useState(session.user);
+
+  const [notify, setNotify] = React.useState({
+    isOpen: false,
+    message: "",
+    type: "",
+  });
 
   const {
     control,
@@ -60,6 +64,11 @@ const Index = () => {
         .then(() => {
           handleProfileClosed();
           mutate(`/auth/getUserCredentials`);
+          setNotify({
+            isOpen: true,
+            message: "Data updated successfully",
+            type: "success",
+          });
         });
     } catch (err) {
       console.log(err);
@@ -78,6 +87,7 @@ const Index = () => {
           borderRadius: 2,
         }}
       >
+        <Notification notify={notify} setNotify={setNotify} />
         <Typography color="primary" variant="h4">
           <SettingsRoundedIcon sx={{ marginRight: "1rem" }} />
           Account Settings
