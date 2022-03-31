@@ -71,7 +71,11 @@ const Index = () => {
           });
         });
     } catch (err) {
-      console.log(err);
+      setNotify({
+        isOpen: true,
+        message: err.response.data.message,
+        type: "error",
+      });
     }
   };
 
@@ -81,7 +85,7 @@ const Index = () => {
         sx={{
           backgroundColor: "background.paper",
           pt: "5rem",
-          pb: "10rem",
+          pb: "3rem",
           px: "2rem",
           margin: "2rem",
           borderRadius: 2,
@@ -153,8 +157,11 @@ const Index = () => {
         >
           <Button
             variant="contained"
-            color="primary"
             onClick={handleProfileClickOpen}
+            sx={{
+              color: (theme) => theme.primary,
+              width: 1 / 5,
+            }}
           >
             Edit Profile
           </Button>
@@ -164,7 +171,6 @@ const Index = () => {
           style={{
             height: 100,
             display: "flex",
-
             padding: 1,
             justifyContent: "space-between",
             alignItems: "center",
