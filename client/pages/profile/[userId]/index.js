@@ -35,7 +35,7 @@ export default function Profile() {
             }}
           >
             <FriendsBasicInfo userId={userId} />
-            <OptionsBar userId={userId} />
+            <OptionsBar userId={userId} role={session.user.role} />
             <FriendBadgesList userId={userId} />
             <FriendsQuestChart userId={userId} />
           </Box>
