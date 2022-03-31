@@ -15,10 +15,16 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Router from "next/router";
+import Snackbar from "@mui/material/Snackbar";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
 export default function Options({ userId, role }) {
   const [friendInfo, setFriendInfo] = React.useState("");
+  const [message, setMessage] = React.useState("");
   const [open, setOpen] = React.useState(false);
+  const [openSb, setOpenSb] = React.useState(false);
+
   const { data: friendInfos } = useSWR(
     userId ? `/profile/${userId}/friendInfo` : null,
   );
@@ -52,6 +58,7 @@ export default function Options({ userId, role }) {
       />
     );
   }
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -69,15 +76,65 @@ export default function Options({ userId, role }) {
       Router.reload();
     });
   };
-  const handleAdd = () => {
-    // axios here
 
-    console.log("will add");
+  const handleAdd = () => {
+    axios({
+      method: "get",
+      url: `/api/profile/${userId}/outgoingFriend`,
+      data: {
+        userId,
+      },
+    })
+      .then((response) => {
+        if (response.data.length !== 1) {
+          axios({
+            method: "POST",
+            url: `/api/profile/${userId}/addFriend`,
+            data: {
+              userId,
+            },
+          })
+            .then((res) => {
+              setMessage("You have successfully sent a friend request!");
+              setOpenSb(true);
+              console.log(res);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          setMessage(
+            "You've already added this user. Please check your outgoing requests.",
+          );
+          setOpenSb(true);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   const handleClose = () => {
     setOpen(false);
   };
 
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenSb(false);
+  };
+
+  const action = (
+    <IconButton
+      size="small"
+      aria-label="close"
+      color="inherit"
+      onClick={handleCloseSnackbar}
+    >
+      <CloseIcon fontSize="small" />
+    </IconButton>
+  );
   if (friendInfo.role === "member" && friendships.length === 0) {
     // member but not friend
     return (
@@ -96,6 +153,13 @@ export default function Options({ userId, role }) {
           overflow: "auto",
         }}
       >
+        <Snackbar
+          open={openSb}
+          autoHideDuration={3000}
+          onClose={handleCloseSnackbar}
+          message={message}
+          action={action}
+        />
         <Button
           variant="outlined"
           style={{
@@ -225,6 +289,13 @@ export default function Options({ userId, role }) {
           overflow: "auto",
         }}
       >
+        <Snackbar
+          open={openSb}
+          autoHideDuration={3000}
+          onClose={handleCloseSnackbar}
+          message={message}
+          action={action}
+        />
         <Button
           variant="outlined"
           style={{
