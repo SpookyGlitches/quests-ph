@@ -162,39 +162,45 @@ export default function FriendsOptionsBar({
     setOpenRequest(false);
   };
   const submitMentor = () => {
-    axios
-      .get(`/api/profile/${userId}/mentorrequest`, {
-        params: {
-          questMentored,
-        },
-      })
-      .then((response) => {
-        if (response.data.length !== 1) {
-          axios({
-            method: "POST",
-            url: `/api/profile/${userId}/mentorrequest`,
-            data: {
-              questMentored,
-            },
-          }) // eslint-disable-next-line
-            .then((res) => {
-              console.log(res);
-              setMessageTwo("You have sent a request!");
-              setOpenSbTwo(true);
-              setQuestMentored("");
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-          setOpenRequest(false);
-        } else {
-          setMessageTwo(
-            "This Quest is currently being requested to be mentored! Please choose another Quest!",
-          );
-          setOpenSbTwo(true);
-          setOpenRequest(true);
-        }
-      });
+    if (questMentored !== "") {
+      axios
+        .get(`/api/profile/${userId}/mentorrequest`, {
+          params: {
+            questMentored,
+          },
+        })
+        .then((response) => {
+          if (response.data.length !== 1) {
+            axios({
+              method: "POST",
+              url: `/api/profile/${userId}/mentorrequest`,
+              data: {
+                questMentored,
+              },
+            }) // eslint-disable-next-line
+              .then((res) => {
+                console.log(res);
+                setMessageTwo("You have sent a request!");
+                setOpenSbTwo(true);
+                setQuestMentored("");
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+            setOpenRequest(false);
+          } else {
+            setMessageTwo(
+              "This Quest is currently being requested to be mentored! Please choose another Quest!",
+            );
+            setOpenSbTwo(true);
+            setOpenRequest(true);
+          }
+        });
+    } else {
+      setMessageTwo("Please choose a valid Quest!");
+      setOpenSbTwo(true);
+      setOpenRequest(true);
+    }
   };
 
   const handleChange = (event) => {
