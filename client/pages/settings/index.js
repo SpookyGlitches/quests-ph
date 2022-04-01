@@ -1,5 +1,7 @@
 import * as React from "react";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
+import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
+import VisibilityOffRoundedIcon from "@mui/icons-material/VisibilityOffRounded";
 import { useForm, Controller } from "react-hook-form";
 import useSWR, { useSWRConfig } from "swr";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -12,6 +14,8 @@ import {
   Box,
   Button,
   Typography,
+  InputAdornment,
+  IconButton,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -20,6 +24,7 @@ import {
 } from "@mui/material";
 import Notification from "../../components/Settings/Notification";
 
+import { ChangePasswordValidations } from "../../validations/ChangePassword";
 import { EditMemberValidations } from "../../validations/UserEdit";
 import DataFieldHolder from "../../components/Settings/DataFieldHolder";
 import AppLayout from "../../components/Layouts/AppLayout";
@@ -35,7 +40,10 @@ const Index = () => {
     <div>Loading</div>;
   }
   const [openProfileForm, setopenProfileForm] = React.useState(false);
+  const [openResetPasswordForm, setopenResetPasswordForm] =
+    React.useState(false);
 
+  // Open and close of Edit Profile form
   const handleProfileClickOpen = () => {
     setopenProfileForm(true);
   };
@@ -43,6 +51,22 @@ const Index = () => {
   const handleProfileClosed = () => {
     setopenProfileForm(false);
   };
+
+  // Open and close of Change Password form
+  const handleResetPasswordClickOpen = () => {
+    setopenResetPasswordForm(true);
+  };
+
+  const handleResetPasswordClosed = () => {
+    setopenResetPasswordForm(false);
+  };
+
+  // Show password and confirm password fields
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleClickShowConfirmPassword = () =>
+    setShowConfirmPassword(!showConfirmPassword);
 
   const [notify, setNotify] = React.useState({
     isOpen: false,
@@ -56,7 +80,13 @@ const Index = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(EditMemberValidations) });
 
-  const onSubmit = async (data) => {
+  const {
+    control: controlPassword,
+    handleSubmit: handleSubmitPassword,
+    formState: { errors: errorsPassword },
+  } = useForm({ resolver: yupResolver(ChangePasswordValidations) });
+
+  const onSubmitDetails = async (data) => {
     data.userId = userCredentials.userId; // eslint-disable-line no-param-reassign
     try {
       await axios
@@ -79,13 +109,37 @@ const Index = () => {
     }
   };
 
+  const onSubmitChangePassword = async (changeData) => {
+    // eslint-disable-next-line no-param-reassign
+    changeData.userId = userCredentials.userId;
+
+    try {
+      await axios
+        .put(`/api/auth/${userCredentials.userId}/changePassword`, changeData)
+        .then(() => {
+          handleResetPasswordClosed();
+          setNotify({
+            isOpen: true,
+            message: "Password changed successfully",
+            type: "success",
+          });
+        });
+    } catch (err) {
+      setNotify({
+        isOpen: true,
+        message: err.response.data.message,
+        type: "error",
+      });
+    }
+  };
+
   return (
     <AppLayout>
       <Box
         sx={{
           backgroundColor: "background.paper",
           pt: "5rem",
-          pb: "3rem",
+          pb: "5rem",
           px: "2rem",
           margin: "2rem",
           borderRadius: 2,
@@ -152,7 +206,8 @@ const Index = () => {
             backgroundColor: "background.paper",
             marginTop: "2rem",
             display: "flex",
-            flexDirection: "column",
+            justifyContent: "space-around",
+            flexDirection: "row",
           }}
         >
           <Button
@@ -164,6 +219,16 @@ const Index = () => {
             }}
           >
             Edit Profile
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleResetPasswordClickOpen}
+            sx={{
+              color: (theme) => theme.primary,
+              width: 1 / 5,
+            }}
+          >
+            Change Password
           </Button>
         </Box>
 
@@ -182,7 +247,7 @@ const Index = () => {
                 Edit Profile
               </Typography>
             </DialogTitle>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmitDetails)}>
               <DialogContent sx={{ mt: -1 }}>
                 <DialogContentText>
                   <Typography>Edit your profile credentials here.</Typography>
@@ -301,8 +366,8 @@ const Index = () => {
                           fullWidth
                           sx={{ mt: 2 }}
                           helperText={
-                            errors.dateOfBirth && (
-                              <p>{errors.dateOfBirth.message}</p>
+                            errorsPassword.dateOfBirth && (
+                              <p>{errorsPassword.dateOfBirth.message}</p>
                             )
                           }
                           id="dateOfBirth"
@@ -317,6 +382,141 @@ const Index = () => {
               <DialogActions>
                 <Button
                   onClick={handleProfileClosed}
+                  variant="outlined"
+                  color="primary"
+                  style={{
+                    backgroundColor: "#B0B0B0",
+                    borderColor: "#E8E8E8",
+                    color: "white",
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  sx={{ m: 1 }}
+                >
+                  Submit
+                </Button>
+              </DialogActions>
+            </form>
+          </Dialog>
+          <Dialog
+            open={openResetPasswordForm}
+            onClose={handleResetPasswordClosed}
+          >
+            <DialogTitle>
+              <Typography variant="h4" style={{ color: "#755cde" }}>
+                Reset your Password
+              </Typography>
+            </DialogTitle>
+            <form onSubmit={handleSubmitPassword(onSubmitChangePassword)}>
+              <DialogContent sx={{ mt: -1 }}>
+                <DialogContentText>
+                  <Typography>
+                    Enter your old password and new password here.
+                  </Typography>
+                </DialogContentText>
+
+                <Controller
+                  control={controlPassword}
+                  name="password"
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { invalid },
+                  }) => (
+                    <TextField
+                      autoFocus
+                      // eslint-disable-next-line
+                      value={value}
+                      // eslint-disable-next-line
+                      onChange={(value) => onChange(value)}
+                      margin="dense"
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      fullWidth
+                      label="New Password"
+                      variant="outlined"
+                      sx={{ mt: 2 }}
+                      helperText={
+                        errorsPassword.password && (
+                          <p>{errorsPassword.password.message}</p>
+                        )
+                      }
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={handleClickShowPassword}
+                            >
+                              {showPassword ? (
+                                <VisibilityRoundedIcon />
+                              ) : (
+                                <VisibilityOffRoundedIcon />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                      error={invalid}
+                    />
+                  )}
+                />
+
+                <Controller
+                  control={controlPassword}
+                  name="confirmPassword"
+                  render={({
+                    field:
+                      // eslint-disable-next-line
+                      { onChange, value },
+                    fieldState: { invalid },
+                  }) => (
+                    <TextField
+                      autoFocus
+                      // eslint-disable-next-line
+                      value={value}
+                      // eslint-disable-next-line
+                      onChange={(value) => onChange(value)}
+                      margin="dense"
+                      id="Confirm Password"
+                      type={showConfirmPassword ? "text" : "password"}
+                      fullWidth
+                      label="Confirm Password"
+                      variant="outlined"
+                      sx={{ mt: 2 }}
+                      helperText={
+                        errorsPassword.confirmPassword && (
+                          <p>{errorsPassword.confirmPassword.message}</p>
+                        )
+                      }
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={handleClickShowConfirmPassword}
+                            >
+                              {showConfirmPassword ? (
+                                <VisibilityRoundedIcon />
+                              ) : (
+                                <VisibilityOffRoundedIcon />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                      error={invalid}
+                    />
+                  )}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={handleResetPasswordClosed}
                   variant="outlined"
                   color="primary"
                   style={{
