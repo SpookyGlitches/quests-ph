@@ -17,6 +17,7 @@ import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import { styled, alpha } from "@mui/material/styles";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { signOut } from "next-auth/react";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -105,7 +106,7 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
     >
       <MenuItem onClick={handleProfile}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Log Out</MenuItem>
+      <MenuItem onClick={() => signOut()}>Log Out</MenuItem>
     </Menu>
   );
 
