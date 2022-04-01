@@ -100,7 +100,15 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      <MenuItem onClick={() => signOut()}>Log Out</MenuItem>
+      <MenuItem
+        onClick={() =>
+          signOut({
+            callbackUrl: `${window.location.origin}`,
+          })
+        }
+      >
+        Log Out
+      </MenuItem>
     </Menu>
   );
 
