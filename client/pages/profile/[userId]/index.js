@@ -1,14 +1,17 @@
 import { Box } from "@mui/material";
+import { useRouter } from "next/router";
 import { useSession, getSession } from "next-auth/react";
-import AppLayout from "../../components/Layouts/AppLayout";
-import BadgesList from "../../components/Profile/BadgesList";
-import BasicInfo from "../../components/Profile/BasicInfo";
-import QuestChart from "../../components/Profile/QuestChart";
-
-import AccessDenied from "../../components/Error/AccessDenied";
-import QuestList from "../../components/Profile/QuestList";
+import AppLayout from "../../../components/Layouts/AppLayout";
+import FriendBadgesList from "../../../components/Profile/Friends/FriendsBadgesList";
+import FriendsBasicInfo from "../../../components/Profile/Friends/FriendsBasicInfo";
+import FriendsQuestChart from "../../../components/Profile/Friends/FriendsQuestChart";
+import OptionsBar from "../../../components/Profile/Friends/OptionsBar";
+import AccessDenied from "../../../components/Error/AccessDenied";
 
 export default function Profile() {
+  const router = useRouter();
+  const { userId } = router.query;
+
   const { data: session } = useSession();
   if (session) {
     return (
@@ -31,13 +34,10 @@ export default function Profile() {
               gap: 2,
             }}
           >
-            <BasicInfo
-              fullName={session.user.fullName}
-              displayName={session.user.displayName}
-            />
-            <BadgesList />
-            <QuestChart />
-            <QuestList />
+            <FriendsBasicInfo userId={userId} />
+            <OptionsBar userId={userId} role={session.user.role} />
+            <FriendBadgesList userId={userId} />
+            <FriendsQuestChart userId={userId} />
           </Box>
         </Box>
       </AppLayout>
@@ -45,7 +45,6 @@ export default function Profile() {
   }
   return <AccessDenied />;
 }
-
 export async function getServerSideProps(context) {
   return {
     props: {
