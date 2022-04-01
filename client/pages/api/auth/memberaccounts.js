@@ -39,7 +39,7 @@ export default async function (req, res) {
       html: `<div>
         This is an automated reply from Quests App University of San Carlos. Please do not reply.
         You are receiving this email because your email was just registered to an account on Quests.
-        Verify your account through this <a href="http://localhost:3000/verify/${userDetails.token}">link</a>.
+        Verify your account through this <a href="${process.env.NEXTAUTH_URL}/verify/${userDetails.token}">link</a>.
 
     <div>`,
     };
