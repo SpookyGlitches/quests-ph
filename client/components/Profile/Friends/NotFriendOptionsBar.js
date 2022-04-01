@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useForm, Controller } from "react-hook-form";
-import PersonRemoveAlt1RoundedIcon from "@mui/icons-material/PersonRemoveAlt1Rounded";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -9,7 +8,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import ErrorRoundedIcon from "@mui/icons-material/ErrorRounded";
 import CommentRoundedIcon from "@mui/icons-material/CommentRounded";
 import axios from "axios";
-import Router from "next/router";
+import PersonAddAlt1RoundedIcon from "@mui/icons-material/PersonAddAlt1Rounded";
+import HelpCenterRounded from "@mui/icons-material/HelpCenterRounded";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Box,
@@ -25,13 +25,12 @@ import {
 import Snackbar from "@mui/material/Snackbar";
 import { UserReport } from "../../../validations/userReport";
 
-export default function MemberFriendOptionsBar({
+export default function MentorNotFriendOptionsBar({
   userId,
-  friendshipId,
   friendInfo,
   action,
+  role,
 }) {
-  const [open, setOpen] = React.useState(false);
   const [openReport, setOpenReport] = React.useState(false);
   const [message, setMessage] = React.useState("");
   const [openSb, setOpenSb] = React.useState(false);
@@ -108,25 +107,41 @@ export default function MemberFriendOptionsBar({
     setOpenReport(false);
   };
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const handleDelete = async () => {
-    // axios here
-    setOpen(false);
-    await axios({
-      method: "put",
-      url: "/api/friends/deleteFriend",
+  const handleAdd = () => {
+    axios({
+      method: "get",
+      url: `/api/profile/${userId}/outgoingFriend`,
       data: {
-        friendshipId,
+        userId,
       },
-      // eslint-disable-next-line
-    }).then((res) => {
-      Router.reload();
-    });
+    })
+      .then((response) => {
+        if (response.data.length !== 1) {
+          axios({
+            method: "POST",
+            url: `/api/profile/${userId}/addFriend`,
+            data: {
+              userId,
+            },
+          })
+            .then((res) => {
+              setMessage("You have successfully sent a friend request!");
+              setOpenSb(true);
+              console.log(res);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          setMessage(
+            "You've already added this user. Please check your outgoing requests.",
+          );
+          setOpenSb(true);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const handleCloseSnackbar = (event, reason) => {
@@ -163,36 +178,19 @@ export default function MemberFriendOptionsBar({
       <Button
         variant="outlined"
         style={{
-          width: 100,
+          width: 150,
           display: "flex",
           backgroundColor: "#E8E8E8",
           borderColor: "#E8E8E8",
           color: "black",
         }}
         sx={{ mr: 2 }}
-        onClick={handleClickOpen}
+        onClick={handleAdd}
       >
         {" "}
-        <PersonRemoveAlt1RoundedIcon sx={{ mr: 1 }} />
-        Unfriend
+        <PersonAddAlt1RoundedIcon sx={{ mr: 1 }} />
+        Add Friend
       </Button>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <DialogTitle>Delete Friend</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            Are you sure you want to delete {friendInfo.displayName} as a
-            friend?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleDelete}>Okay</Button>
-        </DialogActions>
-      </Dialog>
       <Button
         variant="outlined"
         style={{
@@ -270,6 +268,26 @@ export default function MemberFriendOptionsBar({
           </DialogActions>
         </form>
       </Dialog>
+      {role === "member" && friendInfo.role === "mentor" ? (
+        <Button
+          variant="outlined"
+          style={{
+            backgroundColor: "#E8E8E8",
+            borderColor: "#E8E8E8",
+            color: "black",
+            float: "right",
+            maxWidth: "105px",
+            minWidth: "105px",
+            marginRight: "1em",
+          }}
+        >
+          <HelpCenterRounded sx={{ mr: 1 }} />
+          Request
+        </Button>
+      ) : (
+        // eslint-disable-next-line
+        <></>
+      )}
       <Button
         variant="outlined"
         style={{

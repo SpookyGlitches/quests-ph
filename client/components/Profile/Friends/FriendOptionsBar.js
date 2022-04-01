@@ -26,7 +26,7 @@ import {
 import Snackbar from "@mui/material/Snackbar";
 import { UserReport } from "../../../validations/userReport";
 
-export default function MentorFriendsOptionsBar({
+export default function FriendsOptionsBar({
   userId,
   friendshipId,
   friendInfo,
@@ -272,7 +272,7 @@ export default function MentorFriendsOptionsBar({
           </DialogActions>
         </form>
       </Dialog>
-      {role === "member" ? (
+      {role === "member" && friendInfo.role === "mentor" ? ( //if user is a member while friend is a mentor, render a request button
         <Button
           variant="outlined"
           style={{

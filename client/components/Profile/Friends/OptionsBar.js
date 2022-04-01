@@ -3,10 +3,8 @@ import { useEffect } from "react";
 import useSWR from "swr";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import MemberFriendOptionsBar from "./MemberFriendOptionsBar";
-import MemberNotFriendOptionsBar from "./MemberNotFriendOptionsBar";
-import MentorNotFriendOptionsBar from "./MentorNotFriendOptionsBar";
-import MentorFriendsOptionsBar from "./MentorFriendOptionsBar";
+import FriendOptionsBar from "./FriendOptionsBar";
+import NotFriendOptionsBar from "./NotFriendOptionsBar";
 
 export default function Options({ userId, role }) {
   const [friendInfo, setFriendInfo] = React.useState("");
@@ -66,28 +64,41 @@ export default function Options({ userId, role }) {
   );
   if (friendInfo.role === "member" && friendships.length === 0) {
     // member but not friend
-    return <MemberNotFriendOptionsBar userId={userId} action={action} />;
+    return (
+      <NotFriendOptionsBar
+        userId={userId}
+        friendInfo={friendInfo}
+        action={action}
+        role={role}
+      />
+    );
   }
   if (friendInfo.role === "member" && friendships.length !== 0) {
     // member but friend
     return (
-      <MemberFriendOptionsBar
+      <FriendOptionsBar
         userId={userId}
         friendshipId={friendships[0].friendshipId}
         friendInfo={friendInfo}
         action={action}
+        role={role}
       />
     );
   }
   if (friendInfo.role === "mentor" && friendships.length === 0) {
     // mentor but not friend
     return (
-      <MentorNotFriendOptionsBar userId={userId} action={action} role={role} />
+      <NotFriendOptionsBar
+        userId={userId}
+        friendInfo={friendInfo}
+        action={action}
+        role={role}
+      />
     );
   }
   // mentor but friend
   return (
-    <MentorFriendsOptionsBar
+    <FriendOptionsBar
       userId={userId}
       friendshipId={friendships[0].friendshipId}
       friendInfo={friendInfo}
