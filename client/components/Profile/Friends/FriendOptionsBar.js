@@ -22,8 +22,10 @@ import {
   Select,
   Stack,
   FormHelperText,
+  Typography,
 } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
+import useSWR from "swr";
 import { UserReport } from "../../../validations/userReport";
 
 export default function FriendsOptionsBar({
@@ -37,6 +39,11 @@ export default function FriendsOptionsBar({
   const [openReport, setOpenReport] = React.useState(false);
   const [message, setMessage] = React.useState("");
   const [openSb, setOpenSb] = React.useState(false);
+  const [messageTwo, setMessageTwo] = React.useState("");
+  const [openSbTwo, setOpenSbTwo] = React.useState(false);
+  const [openRequest, setOpenRequest] = React.useState(false);
+  const [questMentored, setQuestMentored] = React.useState("");
+
   const currentValidationSchema = UserReport[0];
   const methods = useForm({
     resolver: yupResolver(currentValidationSchema),
@@ -48,6 +55,7 @@ export default function FriendsOptionsBar({
   });
   const { control, handleSubmit, reset, formState } = methods;
   const { errors } = formState;
+
   const handleReport = () => {
     setOpenReport(true);
   };
@@ -139,6 +147,78 @@ export default function FriendsOptionsBar({
     setOpenSb(false);
   };
 
+  const handleCloseSnackbarTwo = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenSbTwo(false);
+  };
+  const handleRequest = () => {
+    setOpenRequest(true);
+  };
+
+  const handleCloseRequest = () => {
+    setOpenRequest(false);
+  };
+  const submitMentor = () => {
+    axios
+      .get(`/api/profile/${userId}/mentorrequest`, {
+        params: {
+          questMentored,
+        },
+      })
+      .then((response) => {
+        if (response.data.length !== 1) {
+          axios({
+            method: "POST",
+            url: `/api/profile/${userId}/mentorrequest`,
+            data: {
+              questMentored,
+            },
+          }) // eslint-disable-next-line
+            .then((res) => {
+              console.log(res);
+              setMessageTwo("You have sent a request!");
+              setOpenSbTwo(true);
+              setQuestMentored("");
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+          setOpenRequest(false);
+        } else {
+          setMessageTwo(
+            "This Quest is currently being requested to be mentored! Please choose another Quest!",
+          );
+          setOpenSbTwo(true);
+          setOpenRequest(true);
+        }
+      });
+  };
+
+  const handleChange = (event) => {
+    setQuestMentored(event.target.value);
+  };
+
+  const fetcher = (url) => axios.get(url).then((res) => res.data);
+  const { data: questsPartyLeader } = useSWR(
+    "/api/profile/getongoingquests",
+    fetcher,
+  );
+
+  if (!questsPartyLeader) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      />
+    );
+  }
+  // console.log(questsPartyLeader);
   return (
     <Box
       sx={{
@@ -160,6 +240,13 @@ export default function FriendsOptionsBar({
         autoHideDuration={3000}
         onClose={handleCloseSnackbar}
         message={message}
+        action={action}
+      />
+      <Snackbar
+        open={openSbTwo}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbarTwo}
+        message={messageTwo}
         action={action}
       />
       <Button
@@ -273,21 +360,76 @@ export default function FriendsOptionsBar({
         </form>
       </Dialog>
       {role === "member" && friendInfo.role === "mentor" ? ( // if user is a member while friend is a mentor, render a request button
-        <Button
-          variant="outlined"
-          style={{
-            backgroundColor: "#E8E8E8",
-            borderColor: "#E8E8E8",
-            color: "black",
-            float: "right",
-            maxWidth: "105px",
-            minWidth: "105px",
-            marginRight: "1em",
-          }}
-        >
-          <HelpCenterRounded sx={{ mr: 1 }} />
-          Request
-        </Button>
+        <>
+          <Button
+            variant="outlined"
+            style={{
+              backgroundColor: "#E8E8E8",
+              borderColor: "#E8E8E8",
+              color: "black",
+              float: "right",
+              maxWidth: "105px",
+              minWidth: "105px",
+              marginRight: "1em",
+            }}
+            onClick={handleRequest}
+          >
+            <HelpCenterRounded sx={{ mr: 1 }} />
+            Request
+          </Button>
+          <Dialog
+            open={openRequest}
+            onClose={handleCloseRequest}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              <Typography variant="h4" style={{ color: "#755cde" }}>
+                Request for Mentorship
+              </Typography>
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Choose which Quest below you want to be mentored by{" "}
+                {friendInfo.fullName}.
+              </DialogContentText>
+
+              <FormControl
+                fullWidth
+                variant="filled"
+                sx={{ m: 1, minWidth: 120 }}
+              >
+                <InputLabel id="demo-simple-select-filled-label">
+                  Quests that can be mentored
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-filled-label"
+                  id="demo-simple-select-filled"
+                  value={questMentored}
+                  defaultValue=""
+                  onChange={handleChange}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {/* eslint-disable-next-line */}
+                  {questsPartyLeader.map((item, index) => (
+                    // eslint-disable-next-line
+                    <MenuItem key={index} value={item.questId}>
+                      {item.wish}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseRequest}>Cancel</Button>
+              <Button onClick={submitMentor} autoFocus>
+                Submit
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </>
       ) : (
         // eslint-disable-next-line
         <></>
