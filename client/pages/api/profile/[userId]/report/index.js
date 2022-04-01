@@ -8,7 +8,7 @@ async function createReport(req, res) {
       data: {
         reporterId: user.userId,
         recipientId: req.query.userId,
-        category: req.body.values.categorySelect,
+        category: req.body.values.category,
         description: req.body.values.reportDetails,
       },
     });

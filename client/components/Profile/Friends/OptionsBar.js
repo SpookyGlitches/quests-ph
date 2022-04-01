@@ -17,7 +17,8 @@ import Router from "next/router";
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import MemberFriendOptionsBar from "./memberFriendOptionsBar";
+import MemberFriendOptionsBar from "./MemberFriendOptionsBar";
+import MemberNotFriendOptionsBar from "./MemberNotFriendOptionsBar";
 
 export default function Options({ userId, role }) {
   const [friendInfo, setFriendInfo] = React.useState("");
@@ -137,60 +138,7 @@ export default function Options({ userId, role }) {
   );
   if (friendInfo.role === "member" && friendships.length === 0) {
     // member but not friend
-    return (
-      <Box
-        sx={{
-          backgroundColor: "background.paper",
-          borderRadius: 2,
-        }}
-        style={{
-          height: "auto",
-          width: "auto",
-          display: "flex",
-          padding: "1rem",
-          justifyContent: "space-between",
-          alignItems: "center",
-          overflow: "auto",
-        }}
-      >
-        <Snackbar
-          open={openSb}
-          autoHideDuration={3000}
-          onClose={handleCloseSnackbar}
-          message={message}
-          action={action}
-        />
-        <Button
-          variant="outlined"
-          style={{
-            width: 150,
-            display: "flex",
-            backgroundColor: "#E8E8E8",
-            borderColor: "#E8E8E8",
-            color: "black",
-          }}
-          sx={{ mr: 2 }}
-          onClick={handleAdd}
-        >
-          {" "}
-          <PersonAddAlt1RoundedIcon sx={{ mr: 1 }} />
-          Add Friend
-        </Button>
-        <Button
-          variant="outlined"
-          style={{
-            width: 100,
-            display: "flex",
-            backgroundColor: "#E8E8E8",
-            borderColor: "#E8E8E8",
-            color: "black",
-          }}
-        >
-          <ErrorRoundedIcon sx={{ mr: 1 }} />
-          Report
-        </Button>
-      </Box>
-    );
+    return <MemberNotFriendOptionsBar userId={userId} action={action} />;
   }
   if (friendInfo.role === "member" && friendships.length !== 0) {
     // member but friend
