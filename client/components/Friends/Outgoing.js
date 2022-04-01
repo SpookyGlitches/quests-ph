@@ -1,4 +1,5 @@
 import { Avatar, Typography, Box, IconButton } from "@mui/material";
+import { useSWRConfig } from "swr";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 // import { useRouter } from "next/router";
 import { useState } from "react";
@@ -15,6 +16,7 @@ import axios from "axios";
 // }
 
 const OutgoingField = (item) => {
+  const { mutate } = useSWRConfig();
   // eslint-disable-next-line
   const [outgoingData] = useState(item.item);
   // const router = useRouter();
@@ -30,6 +32,8 @@ const OutgoingField = (item) => {
       data: {
         friendRequestId: outgoingData.friendRequestId,
       },
+    }).then(() => {
+      mutate(`/api/friends/outgoing`);
     });
   };
 
