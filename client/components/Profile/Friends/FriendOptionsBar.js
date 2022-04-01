@@ -272,7 +272,7 @@ export default function FriendsOptionsBar({
           </DialogActions>
         </form>
       </Dialog>
-      {role === "member" && friendInfo.role === "mentor" ? ( //if user is a member while friend is a mentor, render a request button
+      {role === "member" && friendInfo.role === "mentor" ? ( // if user is a member while friend is a mentor, render a request button
         <Button
           variant="outlined"
           style={{

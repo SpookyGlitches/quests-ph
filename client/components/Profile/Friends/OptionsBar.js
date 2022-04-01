@@ -62,8 +62,7 @@ export default function Options({ userId, role }) {
       <CloseIcon fontSize="small" />
     </IconButton>
   );
-  if (friendInfo.role === "member" && friendships.length === 0) {
-    // member but not friend
+  if (friendships.length === 0) {
     return (
       <NotFriendOptionsBar
         userId={userId}
@@ -73,30 +72,6 @@ export default function Options({ userId, role }) {
       />
     );
   }
-  if (friendInfo.role === "member" && friendships.length !== 0) {
-    // member but friend
-    return (
-      <FriendOptionsBar
-        userId={userId}
-        friendshipId={friendships[0].friendshipId}
-        friendInfo={friendInfo}
-        action={action}
-        role={role}
-      />
-    );
-  }
-  if (friendInfo.role === "mentor" && friendships.length === 0) {
-    // mentor but not friend
-    return (
-      <NotFriendOptionsBar
-        userId={userId}
-        friendInfo={friendInfo}
-        action={action}
-        role={role}
-      />
-    );
-  }
-  // mentor but friend
   return (
     <FriendOptionsBar
       userId={userId}
