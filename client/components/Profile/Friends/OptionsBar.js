@@ -5,7 +5,6 @@ import PersonRemoveAlt1RoundedIcon from "@mui/icons-material/PersonRemoveAlt1Rou
 import PersonAddAlt1RoundedIcon from "@mui/icons-material/PersonAddAlt1Rounded";
 import ErrorRoundedIcon from "@mui/icons-material/ErrorRounded";
 import CommentRoundedIcon from "@mui/icons-material/CommentRounded";
-// eslint-disable-next-line
 import HelpCenterRounded from "@mui/icons-material/HelpCenterRounded";
 import useSWR from "swr";
 import axios from "axios";
@@ -18,6 +17,7 @@ import Router from "next/router";
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import MemberFriendOptionsBar from "./memberFriendOptionsBar";
 
 export default function Options({ userId, role }) {
   const [friendInfo, setFriendInfo] = React.useState("");
@@ -195,80 +195,12 @@ export default function Options({ userId, role }) {
   if (friendInfo.role === "member" && friendships.length !== 0) {
     // member but friend
     return (
-      <Box
-        sx={{
-          backgroundColor: "background.paper",
-          borderRadius: 2,
-        }}
-        style={{
-          height: "auto",
-          width: "auto",
-          display: "flex",
-          padding: "1rem",
-          justifyContent: "space-between",
-          alignItems: "center",
-          overflow: "auto",
-        }}
-      >
-        <Button
-          variant="outlined"
-          style={{
-            width: 100,
-            display: "flex",
-            backgroundColor: "#E8E8E8",
-            borderColor: "#E8E8E8",
-            color: "black",
-          }}
-          sx={{ mr: 2 }}
-          onClick={handleClickOpen}
-        >
-          {" "}
-          <PersonRemoveAlt1RoundedIcon sx={{ mr: 1 }} />
-          Unfriend
-        </Button>
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          aria-describedby="alert-dialog-slide-description"
-        >
-          <DialogTitle>Delete Friend</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-slide-description">
-              Are you sure you want to delete {friendInfo.displayName} as a
-              friend?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleDelete}>Okay</Button>
-          </DialogActions>
-        </Dialog>
-        <Button
-          variant="outlined"
-          style={{
-            width: 100,
-            display: "flex",
-            backgroundColor: "#E8E8E8",
-            borderColor: "#E8E8E8",
-            color: "black",
-          }}
-        >
-          <ErrorRoundedIcon sx={{ mr: 1 }} />
-          Report
-        </Button>
-        <Button
-          variant="outlined"
-          style={{
-            backgroundColor: "#E8E8E8",
-            borderColor: "#E8E8E8",
-            color: "black",
-            float: "right",
-          }}
-        >
-          <CommentRoundedIcon sx={{ mr: 1 }} />
-          Chat
-        </Button>
-      </Box>
+      <MemberFriendOptionsBar
+        userId={userId}
+        friendshipId={friendships[0].friendshipId}
+        friendInfo={friendInfo}
+        action={action}
+      />
     );
   }
   if (friendInfo.role === "mentor" && friendships.length === 0) {
