@@ -224,7 +224,6 @@ export default function FriendsOptionsBar({
       />
     );
   }
-  // console.log(questsPartyLeader);
   return (
     <Box
       sx={{
