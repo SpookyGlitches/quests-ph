@@ -15,6 +15,7 @@ export default function Home() {
         Signed in as {session.user.email} <br />
         Signed in as {session.user.userId} <br />
         You are a {session.user.role} <br />
+        You are a {session.user.fullName} <br />
         <Button onClick={() => signOut()}>Sign out</Button>
       </AppLayout>
     );

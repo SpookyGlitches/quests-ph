@@ -142,6 +142,7 @@ CREATE TABLE `QuestTaskFinisher` (
     `questTaskFinisherId` INTEGER NOT NULL AUTO_INCREMENT,
     `questId` INTEGER NOT NULL,
     `userId` VARCHAR(191) NOT NULL,
+    `questTaskid` INTEGER NOT NULL,
     `gainedPoints` INTEGER NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
@@ -391,6 +392,9 @@ ALTER TABLE `QuestTaskFinisher` ADD CONSTRAINT `QuestTaskFinisher_userId_fkey` F
 
 -- AddForeignKey
 ALTER TABLE `QuestTaskFinisher` ADD CONSTRAINT `QuestTaskFinisher_questId_fkey` FOREIGN KEY (`questId`) REFERENCES `Quest`(`questId`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `QuestTaskFinisher` ADD CONSTRAINT `QuestTaskFinisher_questTaskid_fkey` FOREIGN KEY (`questTaskid`) REFERENCES `QuestTask`(`questTaskid`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `QuestMentorshipRequest` ADD CONSTRAINT `QuestMentorshipRequest_partyLeaderId_fkey` FOREIGN KEY (`partyLeaderId`) REFERENCES `User`(`userId`) ON DELETE RESTRICT ON UPDATE CASCADE;

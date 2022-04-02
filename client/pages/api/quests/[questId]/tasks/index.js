@@ -3,13 +3,18 @@ import { getSession } from "next-auth/react";
 
 async function getAllTasks(req, res) {
   try {
-    const tasks = await prisma.questTask.findMany({
+    const returnAllTask = await prisma.questTask.findMany({
       where: {
-        questId: Number(req.query.questId),
+        questTaskFinisher: {
+          none: {},
+        },
+
         deletedAt: null,
+        questId: req.query.questTaskid,
       },
     });
-    return res.status(200).json(tasks);
+
+    return res.status(200).json(returnAllTask);
   } catch (error) {
     console.log(error);
   }
@@ -18,15 +23,14 @@ async function getAllTasks(req, res) {
 
 async function taskFinisher(req, res) {
   const { user } = await getSession({ req });
-
-  // const { questTaskId, points } = req.body;
-
   try {
+    const { points, questTaskid } = req.body;
+
     const finisher = await prisma.questTaskFinisher.create({
       data: {
-        quetId: req.query.questId,
-        questTaskid: 2,
-        userId: "cl1288oym00048sir2ebhllz0",
+        questId: Number(req.query.questId),
+        questTaskid: questTaskid,
+        userId: user.userId,
         gainedPoints: points,
       },
     });
@@ -37,6 +41,12 @@ async function taskFinisher(req, res) {
   return res.status(404).json({ message: "error request" });
 }
 
+// async function getUnfinishedTask(req, res) {
+//   const { user } = await getSession({ req });
+
+//   res.status(200).json(user.userId);
+// }
+
 export default async function handler(req, res) {
   if (req.method === "GET") {
     await getAllTasks(req, res);
@@ -44,3 +54,17 @@ export default async function handler(req, res) {
     await taskFinisher(req, res);
   }
 }
+
+// prisma.questTaskFinisher.findUnique({
+//   where: {
+//     userId: user.userId, //current user
+//   },
+// });
+
+// prisma.questTask.findMany({
+//   where: {
+//     questTaskFinisher: {
+//       some: {},
+//     },
+//   },
+// });
