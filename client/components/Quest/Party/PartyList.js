@@ -8,17 +8,13 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Avatar,
   Button,
-  IconButton,
 } from "@mui/material";
-import { deepOrange } from "@mui/material/colors";
-import BlockRoundedIcon from "@mui/icons-material/BlockRounded";
-import PersonRemoveAlt1RoundedIcon from "@mui/icons-material/PersonRemoveAlt1Rounded";
 import axios from "axios";
 import { useRouter } from "next/router";
 import useSWR, { useSWRConfig } from "swr";
 import { useSession } from "next-auth/react";
+import PartyListItem from "./PartyListItem";
 
 export default function PartyList() {
   const router = useRouter();
@@ -26,8 +22,10 @@ export default function PartyList() {
   const session = useSession();
   const userId = session?.data?.user?.userId;
   const { data: partyMembers, mutate: mutatePartyMembers } = useSWR(
-    questId ? `/quests/${questId}/partyMembers` : null,
+    questId ? `/quests/${questId}/partyMembers?includePoints=true` : null,
   );
+  const { data: quest } = useSWR(questId ? `/quests/${questId}` : null);
+
   const { mutate } = useSWRConfig();
 
   const generateInviteLink = async () => {
@@ -43,8 +41,8 @@ export default function PartyList() {
     }
   };
 
-  if (!partyMembers) {
-    return <div>loading</div>;
+  if (!partyMembers || !quest) {
+    return <div>Loading</div>;
   }
 
   const removePartyMember = async (partyMemberId) => {
@@ -86,6 +84,25 @@ export default function PartyList() {
     }
   };
 
+  const isPartyLeader = (userIdToCheck) => {
+    return quest.userId === userIdToCheck;
+  };
+
+  const renderMentor = () => {
+    const mentor = partyMembers.find((member) => member.role === "MENTOR");
+    if (!mentor) return null;
+    return (
+      <PartyListItem
+        item={mentor}
+        rank="_"
+        isPartyLeader={isPartyLeader}
+        removePartyMember={removePartyMember}
+        banPartyMember={banPartyMember}
+        userId={userId}
+      />
+    );
+  };
+
   return (
     <Box
       sx={{
@@ -93,96 +110,58 @@ export default function PartyList() {
         m: 3,
       }}
     >
-      <Typography variant="h4" sx={{ color: "primary.main" }}>
+      <Typography variant="h4" sx={{ color: "primary.main", mb: 2 }}>
         Party
       </Typography>
       <Stack spacing={3}>
         <TableContainer sx={{}}>
-          <Table aria-label="simple table">
+          <Table aria-label="simple table" size="small">
             <TableHead>
               <TableRow>
                 <TableCell>Rank</TableCell>
                 <TableCell>User</TableCell>
                 <TableCell align="center">Points</TableCell>
-                <TableCell align="center">Actions</TableCell>
+                {isPartyLeader(userId) && (
+                  <TableCell align="center">Actions</TableCell>
+                )}
               </TableRow>
             </TableHead>
 
             <TableBody>
-              {partyMembers.map((item, index) => (
-                <TableRow
-                  key={item.partyMemberId}
-                  sx={{
-                    "&:last-child td, &:last-child th": {
-                      border: 0,
-                    },
-                  }}
-                >
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      display: "flex",
-                      gap: 2,
-                      alignItems: "center",
-                    }}
-                  >
-                    <Avatar
-                      sx={{
-                        bgcolor: deepOrange[500],
-                      }}
-                    >
-                      {item.user.displayName[0]}
-                    </Avatar>
-                    <Typography variant="body2">
-                      {item.user.displayName}
-                    </Typography>
-                  </TableCell>
-
-                  <TableCell align="center">{0}</TableCell>
-                  <TableCell align="center">
-                    <IconButton
-                      onClick={() => removePartyMember(item.partyMemberId)}
-                    >
-                      <PersonRemoveAlt1RoundedIcon />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => banPartyMember(item.user.userId)}
-                    >
-                      <BlockRoundedIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {partyMembers
+                .filter((item) => item.role !== "MENTOR")
+                .map((item, index) => (
+                  <PartyListItem
+                    item={item}
+                    rank={index + 1}
+                    key={item.partyMemberId}
+                    isPartyLeader={isPartyLeader}
+                    removePartyMember={removePartyMember}
+                    banPartyMember={banPartyMember}
+                    userId={userId}
+                  />
+                ))}
+              {renderMentor()}
             </TableBody>
           </Table>
         </TableContainer>
 
         <Box>
-          <Button
-            variant="outlined"
-            color="primary"
-            style={
-              {
-                // maxWidth: "80px",
-                // minWidth: "80px",
-                // backgroundColor: "#E8E8E8",
-                // borderColor: "#E8E8E8",
-                // color: "#B0B0B0",
-              }
-            }
-            onClick={leaveParty}
-          >
-            Leave
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            style={{ float: "right", maxWidth: "80px", minWidth: "80px" }}
-            onClick={generateInviteLink}
-          >
-            Invite
-          </Button>
+          {!isPartyLeader(userId) && (
+            <Button variant="outlined" color="primary" onClick={leaveParty}>
+              Leave
+            </Button>
+          )}
+          {isPartyLeader(userId) && (
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ float: "right", maxWidth: "80px", minWidth: "80px" }}
+              onClick={generateInviteLink}
+            >
+              Invite
+            </Button>
+          )}
         </Box>
       </Stack>
     </Box>

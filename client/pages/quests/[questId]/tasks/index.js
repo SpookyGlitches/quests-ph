@@ -1,6 +1,7 @@
 import { Box, Grid } from "@mui/material";
 import TaskLists from "../../../../components/Quest/Tasks/TasksLists";
 import QuestLayout from "../../../../components/Layouts/QuestLayout";
+import AppLayout from "../../../../components/Layouts/AppLayout";
 
 const index = () => {
   return (
@@ -28,5 +29,9 @@ const index = () => {
 export default index;
 
 index.getLayout = function getLayout(page) {
-  return <QuestLayout>{page}</QuestLayout>;
+  return (
+    <AppLayout>
+      <QuestLayout>{page}</QuestLayout>
+    </AppLayout>
+  );
 };

@@ -1,4 +1,5 @@
 import prisma from "../../../../../lib/prisma";
+import withQuestProtect from "../../../../../middlewares/withQuestProtect";
 
 async function revokeQuestPartyBan(req, res) {
   try {
@@ -17,7 +18,7 @@ async function revokeQuestPartyBan(req, res) {
 export default async function handler(req, res) {
   switch (req.method) {
     case "DELETE":
-      return revokeQuestPartyBan(req, res);
+      return withQuestProtect(revokeQuestPartyBan, req, res, ["PARTY_LEADER"]);
     default:
       return res.status(405).send();
   }

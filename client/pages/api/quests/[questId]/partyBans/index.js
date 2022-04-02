@@ -1,10 +1,12 @@
 import prisma from "../../../../../lib/prisma";
+import withQuestProtect from "../../../../../middlewares/withQuestProtect";
 
 async function getQuestPartyBans(req, res) {
   try {
+    const { questId } = req.query;
     const partyBans = await prisma.questPartyBan.findMany({
       where: {
-        questId: Number(req.query.questId),
+        questId: Number(questId),
       },
       include: {
         user: {
@@ -25,7 +27,6 @@ async function getQuestPartyBans(req, res) {
 
 async function banPartyMember(req, res) {
   try {
-    console.log(req.body);
     const { questId } = req.query;
     const { userId } = req.body;
     const parsedQuestId = Number(questId) || -1;
@@ -59,9 +60,9 @@ async function banPartyMember(req, res) {
 export default async function handler(req, res) {
   switch (req.method) {
     case "GET":
-      return getQuestPartyBans(req, res);
+      return withQuestProtect(getQuestPartyBans, req, res, ["PARTY_LEADER"]);
     case "POST":
-      return banPartyMember(req, res);
+      return withQuestProtect(banPartyMember, req, res, ["PARTY_LEADER"]);
     default:
       return res.status(405).send();
   }

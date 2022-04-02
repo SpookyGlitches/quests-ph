@@ -10,6 +10,7 @@ import {
   MenuItem,
   Paper,
 } from "@mui/material";
+import Link from "next/link";
 import AddIcon from "@mui/icons-material/Add";
 import AppLayout from "../../components/Layouts/AppLayout";
 import QuestsList from "../../components/Quest/QuestsList";
@@ -40,13 +41,15 @@ const Index = () => {
               variant="standard"
             />
 
-            <Button
-              sx={{ maxHeight: "45px", marginRight: 2 }}
-              variant="contained"
-              startIcon={<AddIcon />}
-            >
-              Quest{" "}
-            </Button>
+            <Link href="/quests/create" passHref>
+              <Button
+                sx={{ maxHeight: "45px", marginRight: 2 }}
+                variant="contained"
+                startIcon={<AddIcon />}
+              >
+                Quest{" "}
+              </Button>
+            </Link>
 
             <FormControl sx={{ minWidth: 80 }}>
               <Select sx={{ height: "80%" }} displayEmpty>

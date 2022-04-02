@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import prisma from "../../../../../lib/prisma";
+import withQuestProtect from "../../../../../middlewares/withQuestProtect";
 
 async function generateInviteLink(req, res) {
   try {
@@ -28,7 +29,7 @@ async function generateInviteLink(req, res) {
 export default async function handler(req, res) {
   switch (req.method) {
     case "GET":
-      return generateInviteLink(req, res);
+      return withQuestProtect(generateInviteLink, req, res, ["PARTY_LEADER"]);
     default:
       return res.status(405).send();
   }

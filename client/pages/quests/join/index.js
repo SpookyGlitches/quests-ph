@@ -2,13 +2,13 @@ import { Box } from "@mui/material";
 import jwt from "jsonwebtoken";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { useSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import AppLayout from "../../../components/Layouts/AppLayout";
 import WoopModal from "../../../components/Quest/WoopModal";
+import prisma from "../../../lib/prisma";
 
 const Index = ({ error, token }) => {
   const router = useRouter();
-  const session = useSession();
 
   const modalDetails = {
     open: true,
@@ -20,26 +20,15 @@ const Index = ({ error, token }) => {
     },
   };
 
-  const getRole = () => {
-    const role = session?.user?.role;
-    switch (role) {
-      case "mentor":
-        return "MENTOR";
-      default:
-        return "MENTEE";
-    }
-  };
-
   const navigateToQuest = () => {
     router.push(`/quests/${token.questId}/`);
   };
 
   const submitForm = async (values) => {
-    const mappedRole = getRole();
     try {
       await axios.post(`/api/quests/${token.questId}/partyMembers`, {
         ...values,
-        role: mappedRole,
+        role: "MENTEE",
       });
       navigateToQuest();
     } catch (err) {
@@ -49,7 +38,11 @@ const Index = ({ error, token }) => {
 
   return (
     <Box p={{ xs: 1, sm: 2, md: 3 }}>
-      {!error && <WoopModal details={modalDetails} handleOk={submitForm} />}
+      {error ? (
+        <div>{error}</div>
+      ) : (
+        <WoopModal details={modalDetails} handleOk={submitForm} />
+      )}
     </Box>
   );
 };
@@ -60,8 +53,9 @@ Index.getLayout = function getLayout(page) {
   return <AppLayout>{page}</AppLayout>;
 };
 
-export async function getServerSideProps({ query }) {
-  const { token } = query;
+export async function getServerSideProps(context) {
+  const { user } = await getSession(context);
+  const { token } = context.query;
   if (!token) {
     return {
       redirect: {
@@ -70,11 +64,33 @@ export async function getServerSideProps({ query }) {
       },
     };
   }
+  // if (user.role === "mentor") {
+  //   return {
+  //     props: {
+  //       error: "This link is not available for mentors.",
+  //     },
+  //   };
+  // }
   try {
     const verified = jwt.verify(
       token,
       process.env.INVITE_PARTY_MEMBER_SECRET_KEY,
     );
+    const existingMember = await prisma.partyMember.findFirst({
+      where: {
+        userId: user.userId,
+        questId: verified.questId,
+      },
+    });
+
+    if (existingMember) {
+      return {
+        redirect: {
+          permanent: true,
+          destination: `/quests/${verified.questId}`,
+        },
+      };
+    }
     return {
       props: {
         token: verified,

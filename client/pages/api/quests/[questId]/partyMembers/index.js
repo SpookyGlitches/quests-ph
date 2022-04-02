@@ -5,15 +5,16 @@ import {
   oopValidations,
   roleValidation,
 } from "../../../../../validations/partyMember";
+import withQuestProtect from "../../../../../middlewares/withQuestProtect";
 
 async function fetchPartyMembers(req, res) {
-  const searchObj = {
-    questId: Number(req.query.questId),
-    userId: req.query.memberId,
-  };
+  const { questId, memberId, excludeMentor, includePoints } = req.query;
 
-  if (req.query.memberId) searchObj.userId = req.query.memberId;
-  if (req.query.excludeMentor === "true")
+  const searchObj = {
+    questId: Number(questId),
+    userId: memberId,
+  };
+  if (excludeMentor === "true")
     searchObj.OR = [
       {
         role: PartyMemberRole.MENTEE,
@@ -36,7 +37,38 @@ async function fetchPartyMembers(req, res) {
         },
       },
     });
-    return res.status(200).json(partyMembers);
+    if (includePoints === "true") {
+      const mapped = partyMembers.map((item) => item.partyMemberId);
+      const points = await prisma.pointsLog.groupBy({
+        by: ["partyMemberId"],
+        _sum: {
+          gainedPoints: true,
+        },
+        where: {
+          partyMemberId: {
+            in: mapped,
+          },
+        },
+      });
+      partyMembers.forEach((item) => {
+        const foundInPointsLog = points.findIndex(
+          (element) => element.partyMemberId === item.partyMemberId,
+        );
+        if (foundInPointsLog !== -1) {
+          /* eslint-disable-next-line no-param-reassign, no-underscore-dangle */
+          item.points = points[foundInPointsLog]._sum.gainedPoints;
+          return item;
+        }
+        // eslint-disable-next-line no-param-reassign
+        item.points = 0;
+        return item;
+      });
+      partyMembers.sort(
+        // eslint-disable-next-line no-underscore-dangle
+        (a, b) => b.points - a.points,
+      );
+    }
+    return res.status(200).send(partyMembers);
   } catch (error) {
     console.log(error);
     return res.status(500).send();
@@ -56,6 +88,7 @@ async function addPartyMember(req, res) {
       },
     });
     if (existingPartyMember) return res.status(200).json(existingPartyMember);
+
     const partyMember = await prisma.partyMember.create({
       data: {
         userId: user.userId,
@@ -68,6 +101,7 @@ async function addPartyMember(req, res) {
     });
     return res.status(200).json(partyMember);
   } catch (error) {
+    console.error(error);
     return res.status(500).send();
   }
 }
@@ -75,7 +109,11 @@ async function addPartyMember(req, res) {
 export default async function handler(req, res) {
   switch (req.method) {
     case "GET":
-      return fetchPartyMembers(req, res);
+      return withQuestProtect(fetchPartyMembers, req, res, [
+        "MENTOR",
+        "MENTEE",
+        "PARTY_LEADER",
+      ]);
     case "POST":
       return addPartyMember(req, res);
     default:

@@ -1,4 +1,5 @@
 import prisma from "../../../../../lib/prisma";
+import withQuestProtect from "../../../../../middlewares/withQuestProtect";
 
 async function editWoopStatement(req, res) {
   try {
@@ -36,10 +37,18 @@ async function removePartyMember(req, res) {
 
 export default async function handler(req, res) {
   switch (req.method) {
+    // todo: check if the current user is really the one who owns the resource
     case "PUT":
-      return editWoopStatement(req, res);
+      return withQuestProtect(editWoopStatement, req, res, [
+        "MENTEE",
+        "PARTY_LEADER",
+      ]);
     case "DELETE":
-      return removePartyMember(req, res);
+      return withQuestProtect(removePartyMember, req, res, [
+        "MENTOR",
+        "MENTEE",
+        "PARTY_LEADER",
+      ]);
     default:
       return res.status(404).send();
   }

@@ -1,6 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import prisma from "../../../../../../lib/prisma";
 
 async function getPost(req, res) {
   try {
@@ -68,6 +66,7 @@ async function deletePost(req, res) {
 }
 export default async function handler(req, res) {
   switch (req.method) {
+    // todo: change userId in post schema to partyMemberId
     case "GET":
       return getPost(req, res);
     case "PUT":

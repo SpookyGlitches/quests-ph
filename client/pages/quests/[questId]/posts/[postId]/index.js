@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import QuestLayout from "../../../../../components/Layouts/QuestLayout";
 import Post from "../../../../../components/Quest/Post/Post";
+import AppLayout from "../../../../../components/Layouts/AppLayout";
 
 const PostPage = () => {
   const {
@@ -25,5 +26,9 @@ const PostPage = () => {
 export default PostPage;
 
 PostPage.getLayout = function getLayout(page) {
-  return <QuestLayout>{page}</QuestLayout>;
+  return (
+    <AppLayout>
+      <QuestLayout>{page}</QuestLayout>
+    </AppLayout>
+  );
 };

@@ -5,12 +5,15 @@ import { getSession } from "next-auth/react";
 import prisma from "../../../lib/prisma";
 import { step1Validations, step2Validations } from "../../../validations/quest";
 
-function computeIfJoined(quests) {
-  const computed = quests.map((item) => {
-    return {
-      ...item,
-      isJoined: item.partyMembers && item.partyMembers.length !== 0,
-    };
+function computeIfJoinedAndBanned(quests) {
+  const computed = [];
+  quests.forEach((item) => {
+    if (item.questPartyBan.length === 0) {
+      computed.push({
+        ...item,
+        isJoined: item.partyMembers && item.partyMembers.length !== 0,
+      });
+    }
   });
   return computed;
 }
@@ -26,12 +29,19 @@ async function getQuests(req, res) {
             deletedAt: null,
           },
         },
+        questPartyBan: {
+          where: {
+            userId: user.userId,
+            deletedAt: null,
+          },
+        },
       },
     });
 
-    const computed = computeIfJoined(quests);
+    const computed = computeIfJoinedAndBanned(quests);
     return res.status(200).json(computed);
   } catch (error) {
+    console.error(error);
     switch (error.constructor) {
       case ValidationError:
       case PrismaClientValidationError:
