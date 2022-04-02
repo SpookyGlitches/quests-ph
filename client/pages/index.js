@@ -1,21 +1,18 @@
 import { Button } from "@mui/material";
-import { useSession, signOut } from "next-auth/react";
+import { useSession, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import AppLayout from "../components/Layouts/AppLayout";
 
 export default function Home() {
   const router = useRouter();
-  // eslint-disable-next-line
-  const { data: session, status } = useSession();
-  // console.log("session", session);
-  // console.log(status);
-  if (status === "authenticated") {
+
+  const { data: session } = useSession();
+  if (session) {
     return (
       <AppLayout>
         Signed in as {session.user.email} <br />
         Signed in as {session.user.userId} <br />
         You are a {session.user.role} <br />
-        <Button onClick={() => signOut()}>Sign out</Button>
       </AppLayout>
     );
   }
@@ -25,4 +22,12 @@ export default function Home() {
       <Button onClick={() => router.push("/auth/login")}>Sign In</Button>
     </>
   );
+}
+
+export async function getServerSideProps(context) {
+  return {
+    props: {
+      session: await getSession(context),
+    },
+  };
 }

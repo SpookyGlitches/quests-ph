@@ -1,7 +1,6 @@
 import { getSession } from "next-auth/react";
 import prisma from "../../../../../lib/prisma";
 
-
 export default async function createQuest(req, res) {
   if (req.method !== "POST") {
     return res.status(404).json({ message: "Method not allowed " });
