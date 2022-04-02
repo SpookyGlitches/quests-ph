@@ -64,13 +64,13 @@ export async function getServerSideProps(context) {
       },
     };
   }
-  // if (user.role === "mentor") {
-  //   return {
-  //     props: {
-  //       error: "This link is not available for mentors.",
-  //     },
-  //   };
-  // }
+  if (user.role === "mentor") {
+    return {
+      props: {
+        error: "This link is not available for mentors.",
+      },
+    };
+  }
   try {
     const verified = jwt.verify(
       token,
