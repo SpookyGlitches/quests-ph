@@ -3,14 +3,18 @@ import {
   Card,
   Typography,
   CardHeader,
+  CardContent,
   Box,
   InputLabel,
   MenuItem,
   FormControl,
   Select,
+  Grid,
 } from "@mui/material";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
+import { format } from "date-fns";
+import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 
 export default function QuestChart({ userId }) {
   const [dataTable, setDataTable] = useState([]);
@@ -134,6 +138,26 @@ export default function QuestChart({ userId }) {
                 title={`${elem.wish}`}
                 subheader={`${elem.category}`}
               />
+              <CardContent>
+                <Grid container spacing={3} sx={{ ml: "0em" }}>
+                  <AccessTimeRoundedIcon sx={{ mr: 1 }} />
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ mt: "0.2em" }}
+                  >
+                    {format(
+                      new Date(`${elem.estimatedStartDate}`),
+                      "MMMM d, yyyy",
+                    )}{" "}
+                    -{" "}
+                    {format(
+                      new Date(`${elem.estimatedEndDate}`),
+                      "MMMM d, yyyy",
+                    )}
+                  </Typography>
+                </Grid>
+              </CardContent>
             </Card>
           </Stack>
         ))}
