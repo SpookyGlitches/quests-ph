@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import {
   List,
   ListItem,
@@ -8,21 +7,13 @@ import {
   Typography,
   ListItemText,
   Chip,
-  CircularProgress,
-  Grid,
-  Divider,
 } from "@mui/material";
-import Pusher from "pusher-js";
-import useSWR, { mutate } from "swr";
-import { format, formatDistance, formatRelative, subDays } from "date-fns";
-import ReactScrollableFeed from "react-scrollable-feed";
-import { useSession } from "next-auth/react";
 
 const ChatContent = () => {
   return (
     <Box
       border={1}
-      borderColor={"#eeeee4"}
+      borderColor="#eeeee4"
       display="column"
       height="490px"
       style={{

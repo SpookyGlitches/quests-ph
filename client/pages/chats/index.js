@@ -1,8 +1,9 @@
 import React from "react";
 
 import ChatLayout from "../../components/Layouts/ChatLayout";
+
 const chatMain = () => {
-  return <ChatLayout></ChatLayout>;
+  return <ChatLayout />;
 };
 
 export default chatMain;

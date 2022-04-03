@@ -1,7 +1,7 @@
 import { Box, Grid } from "@mui/material";
+import { getSession } from "next-auth/react";
 import TaskLists from "../../../../components/Quest/Tasks/TasksLists";
 import QuestLayout from "../../../../components/Layouts/QuestLayout";
-import { useSession, getSession } from "next-auth/react";
 
 const index = ({ session }) => {
   return (

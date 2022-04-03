@@ -2,17 +2,11 @@ import {
   Dialog,
   DialogTitle,
   Typography,
-  IconButton,
   Button,
   DialogActions,
   DialogContent,
-  Divider,
 } from "@mui/material";
 import { useRouter } from "next/router";
-import { useState } from "react";
-import axios from "axios";
-import useSWR from "swr";
-import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 
 const TaskDetails = ({
   handleOk,

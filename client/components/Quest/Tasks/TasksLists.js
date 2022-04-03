@@ -5,38 +5,26 @@ import {
   CircularProgress,
   Grid,
   Button,
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
 } from "@mui/material";
 import Image from "next/image";
-import TaskDone from "../../../public/images/tasks-all-done.svg";
 import { useState } from "react";
 import Link from "next/link";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { format } from "date-fns";
 import { useRouter } from "next/router";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 import StyledPaper from "../../Common/StyledPaper";
 import TaskModal from "./TaskModal";
-import { useSession } from "next-auth/react";
+import TaskDone from "../../../public/images/tasks-all-done.svg";
 
 const TasksLists = () => {
-  const [open, setOpen] = useState(false);
   const router = useRouter();
   const { data: session } = useSession();
 
   const { questId } = router.query;
-
-  const handleCancelClick = () => {
-    setOpen(false);
-  };
-  const handleButtonClick = () => {
-    setOpen(true);
-  };
 
   const createBtn = `/quests/${questId}/tasks/create`;
 

@@ -2,7 +2,6 @@ import { Typography, Box } from "@mui/material";
 
 import AppLayout from "../../../../components/Layouts/AppLayout";
 import TaskForm from "../../../../components/Quest/Tasks/TaskForm";
-import QuestLayout from "../../../../components/Layouts/QuestLayout";
 
 const createTask = () => {
   return (

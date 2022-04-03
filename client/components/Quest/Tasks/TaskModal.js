@@ -1,12 +1,4 @@
-import {
-  Dialog,
-  DialogTitle,
-  Typography,
-  IconButton,
-  Button,
-  DialogActions,
-  DialogContent,
-} from "@mui/material";
+import { IconButton } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import axios from "axios";

@@ -2,13 +2,11 @@ import React from "react";
 import {
   Box,
   Grid,
-  IconButton,
   List,
   ListItem,
   ListItemText,
   ListItemAvatar,
   Paper,
-  Divider,
   Avatar,
   Typography,
   ListItemButton,
@@ -34,7 +32,7 @@ const ChatSidebar = () => {
       <Box
         borderRadius={1}
         border={1}
-        borderColor={"#eeeee4"}
+        borderColor="#eeeee4"
         marginTop={1}
         display="column"
         height="490px"
@@ -49,7 +47,7 @@ const ChatSidebar = () => {
             overflow: "hidden",
           }}
         >
-          <Link href={"/chats/asdfadfafa"} passHref>
+          <Link href="/chats/asdfadfafa" passHref>
             <ListItemButton divider>
               <ListItem alignItems="flex-start">
                 <ListItemAvatar>
