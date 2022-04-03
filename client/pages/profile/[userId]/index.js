@@ -6,9 +6,10 @@ import FriendBadgesList from "../../../components/Profile/Friends/FriendsBadgesL
 import FriendsBasicInfo from "../../../components/Profile/Friends/FriendsBasicInfo";
 import FriendsQuestChart from "../../../components/Profile/Friends/FriendsQuestChart";
 import OptionsBar from "../../../components/Profile/Friends/OptionsBar";
+import FriendsQuestList from "../../../components/Profile/Friends/FriendsQuestsList";
 import AccessDenied from "../../../components/Error/AccessDenied";
 
-export default function Profile() {
+export default function FriendsProfile() {
   const router = useRouter();
   const { userId } = router.query;
 
@@ -38,6 +39,7 @@ export default function Profile() {
             <OptionsBar userId={userId} role={session.user.role} />
             <FriendBadgesList userId={userId} />
             <FriendsQuestChart userId={userId} />
+            <FriendsQuestList userId={userId} />
           </Box>
         </Box>
       </AppLayout>
