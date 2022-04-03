@@ -21,6 +21,9 @@ export default async function getUserBadges(req, res) {
             where: {
               badgeId: getBadges[i].badgeId,
             },
+            orderBy: {
+              badgeId: "asc",
+            },
           });
           if (badgeInfo) {
             returnArray.push(badgeInfo);

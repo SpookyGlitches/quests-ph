@@ -35,7 +35,6 @@ export default function QuestChart() {
       />
     );
   }
-  console.log(myQuests);
   const questsArrComplete = [];
   let healthCount = 0;
   let socialCount = 0;
