@@ -117,7 +117,7 @@ export default function MentorNotFriendOptionsBar({
   const handleAdd = () => {
     axios({
       method: "get",
-      url: `/api/profile/${userId}/outgoingFriend`,
+      url: `/api/profile/${userId}/outgoingfriend`,
       data: {
         userId,
       },
@@ -126,7 +126,7 @@ export default function MentorNotFriendOptionsBar({
         if (response.data.length !== 1) {
           axios({
             method: "POST",
-            url: `/api/profile/${userId}/addFriend`,
+            url: `/api/profile/${userId}/addfriend`,
             data: {
               userId,
             },

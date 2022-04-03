@@ -21,7 +21,7 @@ export default function FriendsBadgesList({ userId }) {
     event.stopPropagation();
   };
   const { data: friendBadges } = useSWR(
-    userId ? `/profile/${userId}/userBadges` : null,
+    userId ? `/profile/${userId}/userbadges` : null,
   );
   if (!friendBadges) {
     return (
