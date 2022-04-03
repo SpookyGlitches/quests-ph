@@ -78,6 +78,7 @@ export default function PartyList() {
     try {
       const member = partyMembers.find((item) => item.userId === userId);
       await removePartyMember(member.partyMemberId);
+      mutate(`/quests/${questId}/partyMembers/currentUser`);
       router.push("/quests");
     } catch (err) {
       console.error(err);

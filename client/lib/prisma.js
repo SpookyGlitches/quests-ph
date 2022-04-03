@@ -22,23 +22,18 @@ prisma.$use(async (params, next) => {
     params.model == "QuestTask" ||
     params.model == "QuestPartyBan"
   ) {
-    if (params.action == "delete") {
-      // Delete queries
-      // Change action to an update
-      params.action = "update";
-      params.args["data"] = { deletedAt: new Date() };
-    }
-    if (params.action == "deleteMany") {
-      // Delete many queries
-      params.action = "updateMany";
+    if (params.action == "delete" || params.action == "deleteMany") {
+      if (params.action == "delete") {
+        params.action = "update";
+      }
+      if (params.action == "deleteMany") {
+        params.args.where = { ...params.args.where, deletedAt: null };
+        params.action = "updateMany";
+      }
+
       if (params.args.data != undefined) {
         params.args.data["deletedAt"] = new Date();
       } else {
-        if (params.args["where"]) {
-          params.args["where"] = { ...params.args["where"], deletedAt: null };
-        } else {
-          params.args["where"] = { deletedAt: null };
-        }
         params.args["data"] = { deletedAt: new Date() };
       }
     }
@@ -51,12 +46,12 @@ prisma.$use(async (params, next) => {
   if (
     params.model == "Quest" ||
     params.model == "PostFile" ||
-    params.model == "Quest" ||
     params.model == "PartyMember" ||
-    params.model == "QuestPartyBan"
+    params.model == "QuestPartyBan" ||
+    params.model == "Post"
   ) {
     if (params.action == "findMany" || params.action == "findFirst") {
-      params.args["where"] = { ...params.args["where"], deletedAt: null };
+      params.args["where"] = { ...params.args.where, deletedAt: null };
     }
   }
   return next(params);

@@ -1,10 +1,7 @@
 import { PartyMemberRole } from "@prisma/client";
 import { getSession } from "next-auth/react";
 import prisma from "../../../../../lib/prisma";
-import {
-  oopValidations,
-  roleValidation,
-} from "../../../../../validations/partyMember";
+import { oopValidations } from "../../../../../validations/partyMember";
 import withQuestProtect from "../../../../../middlewares/withQuestProtect";
 
 async function fetchPartyMembers(req, res) {
@@ -78,9 +75,9 @@ async function fetchPartyMembers(req, res) {
 async function addPartyMember(req, res) {
   try {
     const { user } = await getSession({ req });
-    const { outcome, obstacle, plan, role } = req.body;
+    const { outcome, obstacle, plan } = req.body;
     const { questId } = req.query;
-    await oopValidations.concat(roleValidation).validate({ ...req.body });
+    await oopValidations.validate({ ...req.body });
     const existingPartyMember = await prisma.partyMember.findFirst({
       where: {
         userId: user.userId,
@@ -91,12 +88,12 @@ async function addPartyMember(req, res) {
 
     const partyMember = await prisma.partyMember.create({
       data: {
-        userId: user.userId,
         outcome,
         obstacle,
         plan,
+        role: user.role === "mentor" ? "MENTOR" : "MENTEE",
         questId: Number(questId),
-        role,
+        userId: user.userId,
       },
     });
     return res.status(200).json(partyMember);
