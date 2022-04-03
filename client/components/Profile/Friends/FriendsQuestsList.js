@@ -19,11 +19,9 @@ import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 export default function QuestChart({ userId }) {
   const [dataTable, setDataTable] = useState([]);
   const [category, setCategory] = useState(0);
-  const [categoryNum, setCategoryNum] = useState(0);
   const questsArr = [];
   let x = 0;
   const gatherData = (val) => {
-    // console.log(val);
     if (val === 0) {
       axios
         .get(`/api/profile/${userId}/friendquestslistActive`)
@@ -62,12 +60,11 @@ export default function QuestChart({ userId }) {
   };
   const handleChange = (event) => {
     setCategory(event.target.value);
-    setCategoryNum(event.target.value);
     gatherData(event.target.value);
   };
 
   useEffect(() => {
-    gatherData(categoryNum);
+    gatherData(category);
     // eslint-disable-next-line
   }, []);
 
