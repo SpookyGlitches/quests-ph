@@ -1,12 +1,8 @@
 import React from "react";
-import AppLayout from "../../components/Layouts/AppLayout";
 
+import ChatLayout from "../../components/Layouts/ChatLayout";
 const chatMain = () => {
-  return (
-    <AppLayout>
-      <hi>HI</hi>
-    </AppLayout>
-  );
+  return <ChatLayout></ChatLayout>;
 };
 
 export default chatMain;

@@ -21,15 +21,10 @@ const TaskDetails = ({
   points,
   description,
   questTaskid,
+  memberId,
   title,
 }) => {
   const router = useRouter();
-
-  const { data, error } = useSWR(`/quests/${router.query.questId}/tasks`, {
-    refreshInterval: 1000,
-  });
-  if (error) return <div>failed to load</div>;
-  if (!data) return <CircularProgress />;
 
   return (
     <form>
@@ -43,11 +38,13 @@ const TaskDetails = ({
         <DialogContent>
           <Typography variant="h5">Title: {title}</Typography>
 
-          <Typography variant="body1">Description: {description}</Typography>
+          <Typography variant="body1">description: {description}</Typography>
           <Typography variant="body1">ID: {questTaskid}</Typography>
           <Typography variant="caption1">Points: {points}</Typography>
+          <Typography variant="caption1">Member ID: {memberId}</Typography>
           <input type="hidden" value={questTaskid} />
           <input type="hidden" value={points} />
+          <input type="hidden" value={memberId} />
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleCancel}>

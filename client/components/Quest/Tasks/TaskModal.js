@@ -19,6 +19,7 @@ export default function FinishTask({
   description,
   title,
   questTaskid,
+  memberId,
 }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -30,6 +31,7 @@ export default function FinishTask({
       await axios.post(`/api/quests/${questId}/tasks`, {
         points,
         questTaskid,
+        memberId,
       });
       setOpen(false);
       mutate(`/quests/${questId}/tasks`);
@@ -55,6 +57,7 @@ export default function FinishTask({
         points={points}
         description={description}
         title={title}
+        memberId={memberId}
         questTaskid={questTaskid}
         open={open}
         handleOk={handleOk}

@@ -10,6 +10,8 @@ import {
   DialogActions,
   DialogContent,
 } from "@mui/material";
+import Image from "next/image";
+import TaskDone from "../../../public/images/tasks-all-done.svg";
 import { useState } from "react";
 import Link from "next/link";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
@@ -25,7 +27,7 @@ import { useSession } from "next-auth/react";
 const TasksLists = () => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   const { questId } = router.query;
 
@@ -57,6 +59,11 @@ const TasksLists = () => {
   if (error) return <div>failed to load</div>;
   if (!data) return <CircularProgress />;
 
+  // const memberId = data.member.map((m) => m.partyMemberId);
+
+  const memberId = data.member[0].partyMemberId;
+
+  console.log(memberId);
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Box
@@ -66,7 +73,7 @@ const TasksLists = () => {
           display: "flex",
           justifyContent: "space-between",
         }}
-        spacing={3}
+        spacing={4}
       >
         <Typography variant="h5" sx={{ color: "#755cde" }}>
           Today
@@ -94,8 +101,8 @@ const TasksLists = () => {
           m: 1,
         }}
       >
-        {data.length > 0 ? (
-          data.map((task) => (
+        {data.tasks.length > 0 ? (
+          data.tasks.map((task) => (
             <StyledPaper
               key={task.questTaskid}
               sx={{ width: "100%", height: "auto", overflow: "hidden", mb: 2 }}
@@ -155,11 +162,11 @@ const TasksLists = () => {
                         {task.points}
                         {" points"}
                       </Typography>
-
                       <Typography variant="body2">
-                        {"   "}
                         {format(new Date(task.dueAt), "MMMM dd")}
                       </Typography>
+
+                      <Typography variant="body2">{"   "}</Typography>
 
                       {session.user.role === "mentor" ? (
                         <IconButton
@@ -174,6 +181,7 @@ const TasksLists = () => {
                           description={task.description}
                           points={task.points}
                           questTaskid={task.questTaskid}
+                          memberId={memberId}
                         />
                       )}
                     </Box>
@@ -184,7 +192,11 @@ const TasksLists = () => {
           ))
         ) : (
           <Box sx={{ textAlign: "center" }}>
-            <Typography>Yeyyy</Typography>
+            <Image alt="tasks_done" src={TaskDone} width={240} height={240} />
+            <Typography variant="h6">Well Done</Typography>
+            <Typography variant="body2">
+              Your to do list is empty. Good job keep hustlin.
+            </Typography>
           </Box>
         )}
       </Box>

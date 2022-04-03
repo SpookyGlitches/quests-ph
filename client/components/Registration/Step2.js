@@ -1,8 +1,8 @@
 import { TextField, Stack, InputAdornment, IconButton } from "@mui/material";
 import React, { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
+import VisibilityOffRoundedIcon from "@mui/icons-material/VisibilityOffRounded";
 
 export default function Step2() {
   const [showPassword, setShowPassword] = useState(false);
@@ -49,7 +49,11 @@ export default function Step2() {
                     aria-label="toggle password visibility"
                     onClick={handleClickShowPassword}
                   >
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                    {showPassword ? (
+                      <VisibilityRoundedIcon />
+                    ) : (
+                      <VisibilityOffRoundedIcon />
+                    )}
                   </IconButton>
                 </InputAdornment>
               ),
@@ -78,7 +82,11 @@ export default function Step2() {
                     aria-label="toggle password visibility"
                     onClick={handleClickShowConfirmPassword}
                   >
-                    {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                    {showConfirmPassword ? (
+                      <VisibilityRoundedIcon />
+                    ) : (
+                      <VisibilityOffRoundedIcon />
+                    )}
                   </IconButton>
                 </InputAdornment>
               ),
