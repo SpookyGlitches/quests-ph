@@ -5,15 +5,20 @@ import { getSession } from "next-auth/react";
 import prisma from "../../../lib/prisma";
 import { step1Validations, step2Validations } from "../../../validations/quest";
 
-function computeIfJoinedAndBanned(quests) {
+function computeIfJoinedAndBanned(quests, role) {
   const computed = [];
+  if (role === "mentor")
+    return quests.map((quest) => ({ ...quest, canJoin: false }));
+
+  let canJoin = false;
   quests.forEach((item) => {
-    if (item.questPartyBan.length === 0) {
+    canJoin =
+      item.questPartyBan.length === 0 &&
+      item.partyMembers.length !== 0 &&
       computed.push({
         ...item,
-        isJoined: item.partyMembers && item.partyMembers.length !== 0,
+        canJoin,
       });
-    }
   });
   return computed;
 }
@@ -38,7 +43,7 @@ async function getQuests(req, res) {
       },
     });
 
-    const computed = computeIfJoinedAndBanned(quests);
+    const computed = computeIfJoinedAndBanned(quests, user.role);
     return res.status(200).json(computed);
   } catch (error) {
     console.error(error);
