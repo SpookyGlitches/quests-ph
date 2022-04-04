@@ -1,10 +1,18 @@
+import { useRouter } from "next/router";
+import useSWR from "swr";
 import { Box, Grid } from "@mui/material";
 import PartyList from "../../../../components/Quest/Party/PartyList";
 import BanList from "../../../../components/Quest/Party/BanList";
 import QuestLayout from "../../../../components/Layouts/QuestLayout";
 import AppLayout from "../../../../components/Layouts/AppLayout";
 
-const index = () => {
+export default function PartyPage() {
+  const router = useRouter();
+
+  const { questId } = router.query;
+  const { data: partyMember } = useSWR(
+    questId ? `/quests/${questId}/partyMembers/currentUser` : null,
+  );
   return (
     <Grid
       container
@@ -23,24 +31,25 @@ const index = () => {
         >
           <PartyList />
         </Box>
-        <Box
-          sx={{
-            backgroundColor: "background.paper",
-            borderRadius: 2,
-            height: "auto",
-            padding: "0.5rem",
-            marginTop: "2em",
-          }}
-        >
-          <BanList />
-        </Box>
+        {partyMember && partyMember.role === "PARTY_LEADER" && (
+          <Box
+            sx={{
+              backgroundColor: "background.paper",
+              borderRadius: 2,
+              height: "auto",
+              padding: "0.5rem",
+              marginTop: "2em",
+            }}
+          >
+            <BanList />
+          </Box>
+        )}
       </Grid>
     </Grid>
   );
-};
-export default index;
+}
 
-index.getLayout = function getLayout(page) {
+PartyPage.getLayout = function getLayout(page) {
   return (
     <AppLayout>
       <QuestLayout>{page}</QuestLayout>

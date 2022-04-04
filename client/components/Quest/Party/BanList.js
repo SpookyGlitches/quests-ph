@@ -27,7 +27,7 @@ export default function BanList() {
   );
 
   if (!partyBans) {
-    return <div>loading</div>;
+    return <div>Loading</div>;
   }
 
   const revokeBan = async (partyBanId) => {
