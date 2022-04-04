@@ -2,200 +2,52 @@ import {
   Box,
   Grid,
   Card,
-  CardContent,
   CardMedia,
-  Typography,
+  CardHeader,
+  CardActions,
+  Button,
 } from "@mui/material";
+import useSWR from "swr";
+import CircularProgress from "@mui/material/CircularProgress";
 
-export default function Articles({ type }) {
-  console.log(type);
+export default function Articles({ category }) {
+  const { data: articles } = useSWR(
+    category ? `/articles/${category}/articlelist` : null,
+  );
+  if (!articles) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <CircularProgress />
+      </div>
+    );
+  }
+  console.log(articles);
+
   return (
     <Box>
       <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <Card
-            sx={{
-              mb: "1em",
-              flexDirection: {
-                xs: "column", // mobile
-                sm: "row", // tablet and up
-              },
-            }}
-          >
-            <CardMedia
-              component="img"
-              height="140"
-              image="/auth/banana.jpg"
-              alt="sample pic"
-            />
-
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                Lorem Ipsum Dolor Sit Amet Tis Uni 1
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={6}>
-          <Card
-            sx={{
-              display: "flex",
-              mb: "1em",
-              flexDirection: {
-                xs: "column", // mobile
-                sm: "row", // tablet and up
-              },
-            }}
-          >
-            <CardMedia
-              component="img"
-              alt="banana"
-              src="/auth/banana.jpg"
-              sx={{
-                width: { xs: "100%", sm: 100 },
-              }}
-            />
-            <Box sx={{ alignSelf: "center", m: 2 }}>
-              <Typography
-                style={{
-                  fontSize: "14px",
-                  fontWeight: "bold",
-                  padding: 10,
-                }}
-              >
-                Lorem Ipsum Dolor Sit Amet Tis Uni
-              </Typography>
-            </Box>
-          </Card>
-          <Card
-            sx={{
-              display: "flex",
-              flexDirection: {
-                xs: "column", // mobile
-                sm: "row", // tablet and up
-              },
-            }}
-          >
-            <CardMedia
-              component="img"
-              alt="banana"
-              src="/auth/banana.jpg"
-              sx={{
-                width: { xs: "100%", sm: 100 },
-              }}
-            />
-            <Box sx={{ alignSelf: "center", m: 2 }}>
-              <Typography
-                style={{
-                  fontSize: "14px",
-                  fontWeight: "bold",
-                  padding: 10,
-                }}
-              >
-                Lorem Ipsum Dolor Sit Amet Tis Uni
-              </Typography>
-            </Box>
-          </Card>
-          <Card
-            sx={{
-              display: "flex",
-              mt: "1em",
-              flexDirection: {
-                xs: "column", // mobile
-                sm: "row", // tablet and up
-              },
-            }}
-          >
-            <CardMedia
-              component="img"
-              alt="banana"
-              src="/auth/banana.jpg"
-              sx={{
-                width: { xs: "100%", sm: 100 },
-              }}
-            />
-            <Box sx={{ alignSelf: "center", m: 2 }}>
-              <Typography
-                style={{
-                  fontSize: "14px",
-                  fontWeight: "bold",
-                  padding: 10,
-                }}
-              >
-                Lorem Ipsum Dolor Sit Amet Tis Uni 2
-              </Typography>
-            </Box>
-          </Card>
-        </Grid>
-        <Grid item xs={4}>
-          <Card
-            sx={{
-              mb: "1em",
-              flexDirection: {
-                xs: "column", // mobile
-                sm: "row", // tablet and up
-              },
-            }}
-          >
-            <CardMedia
-              component="img"
-              height="140"
-              image="/auth/banana.jpg"
-              alt="sample pic"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                Lorem Ipsum Dolor Sit Amet Tis Uni 1
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={4}>
-          <Card
-            sx={{
-              mb: "1em",
-              flexDirection: {
-                xs: "column", // mobile
-                sm: "row", // tablet and up
-              },
-            }}
-          >
-            <CardMedia
-              component="img"
-              height="140"
-              image="/auth/banana.jpg"
-              alt="sample pic"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                Lorem Ipsum Dolor Sit Amet Tis Uni 1
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={4}>
-          <Card
-            sx={{
-              mb: "1em",
-              flexDirection: {
-                xs: "column", // mobile
-                sm: "row", // tablet and up
-              },
-            }}
-          >
-            <CardMedia
-              component="img"
-              height="140"
-              image="/auth/banana.jpg"
-              alt="sample pic"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                Lorem Ipsum Dolor Sit Amet Tis Uni 1
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+        {articles.map((elem) => (
+          <Grid item xs={3} key={articles.indexOf(elem)}>
+            <Card sx={{ maxWidth: 345 }}>
+              <CardMedia
+                component="img"
+                height="140"
+                image={elem.image}
+                alt="green iguana"
+              />
+              <CardHeader title={`${elem.title}`} />
+              <CardActions>
+                <Button>Read More</Button>
+              </CardActions>
+            </Card>
+          </Grid>
+        ))}
       </Grid>
     </Box>
   );

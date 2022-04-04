@@ -14,16 +14,16 @@ export default function Search() {
   const showArticles = (val) => {
     switch (val) {
       case 0:
-        return <Articles type="health" />;
+        return <Articles category="HEALTH" />;
 
       case 1:
-        return <Articles type="social" />;
+        return <Articles category="SOCIAL" />;
 
       case 2:
-        return <Articles type="career" />;
+        return <Articles category="CAREER" />;
 
       default:
-        return <Articles type="health" />;
+        return <Articles category="HEALTH" />;
     }
   };
 
