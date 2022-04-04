@@ -51,6 +51,17 @@ CREATE TABLE `User` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `ForgotPassword` (
+    `forgotPasswordId` INTEGER NOT NULL AUTO_INCREMENT,
+    `userId` VARCHAR(191) NOT NULL,
+    `token` VARCHAR(191) NOT NULL,
+    `isUsed` BOOLEAN NOT NULL DEFAULT false,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`forgotPasswordId`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `MentorApplication` (
     `mentorApplicationid` INTEGER NOT NULL AUTO_INCREMENT,
     `mentorId` VARCHAR(191) NOT NULL,
@@ -111,6 +122,7 @@ CREATE TABLE `Quest` (
     `difficulty` ENUM('EASY', 'MEDIUM', 'HARD') NOT NULL DEFAULT 'EASY',
     `visibility` ENUM('PUBLIC', 'PRIVATE') NOT NULL DEFAULT 'PRIVATE',
     `category` ENUM('SOCIAL', 'CAREER', 'HEALTH') NOT NULL DEFAULT 'SOCIAL',
+    `mentorMessage` VARCHAR(191) NULL,
     `estimatedStartDate` DATE NOT NULL,
     `estimatedEndDate` DATE NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -142,6 +154,7 @@ CREATE TABLE `QuestTaskFinisher` (
     `questTaskFinisherId` INTEGER NOT NULL AUTO_INCREMENT,
     `questId` INTEGER NOT NULL,
     `userId` VARCHAR(191) NOT NULL,
+    `questTaskid` INTEGER NOT NULL,
     `gainedPoints` INTEGER NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
@@ -175,16 +188,14 @@ CREATE TABLE `QuestPartyBan` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `PointLog` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `userId` VARCHAR(191) NOT NULL,
-    `action` VARCHAR(191) NOT NULL,
-    `rowId` INTEGER NOT NULL,
-    `totalPoints` INTEGER NOT NULL,
+CREATE TABLE `PointsLog` (
+    `pointsLogId` INTEGER NOT NULL AUTO_INCREMENT,
+    `partyMemberId` INTEGER NOT NULL,
+    `gainedPoints` INTEGER NOT NULL,
+    `action` ENUM('COMPLETED_TASK', 'RECEIVED_POST_REACT', 'RECEIVED_COMMENT_REACT', 'RECEIVED_POST_COMMENT') NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`pointsLogId`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -324,12 +335,14 @@ CREATE TABLE `CommentReact` (
 -- CreateTable
 CREATE TABLE `PostFile` (
     `postFileId` INTEGER NOT NULL AUTO_INCREMENT,
-    `userId` VARCHAR(191) NOT NULL,
-    `postId` INTEGER NOT NULL,
-    `path` VARCHAR(191) NOT NULL,
+    `postId` INTEGER NULL,
+    `key` VARCHAR(191) NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
+    `mimeType` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `deletedAt` DATETIME(3) NULL,
 
+    UNIQUE INDEX `PostFile_key_key`(`key`),
     PRIMARY KEY (`postFileId`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -363,6 +376,9 @@ ALTER TABLE `Account` ADD CONSTRAINT `Account_userId_fkey` FOREIGN KEY (`userId`
 ALTER TABLE `Session` ADD CONSTRAINT `Session_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`userId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `ForgotPassword` ADD CONSTRAINT `ForgotPassword_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`userId`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `MentorApplication` ADD CONSTRAINT `MentorApplication_mentorId_fkey` FOREIGN KEY (`mentorId`) REFERENCES `User`(`userId`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -393,6 +409,9 @@ ALTER TABLE `QuestTaskFinisher` ADD CONSTRAINT `QuestTaskFinisher_userId_fkey` F
 ALTER TABLE `QuestTaskFinisher` ADD CONSTRAINT `QuestTaskFinisher_questId_fkey` FOREIGN KEY (`questId`) REFERENCES `Quest`(`questId`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `QuestTaskFinisher` ADD CONSTRAINT `QuestTaskFinisher_questTaskid_fkey` FOREIGN KEY (`questTaskid`) REFERENCES `QuestTask`(`questTaskid`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `QuestMentorshipRequest` ADD CONSTRAINT `QuestMentorshipRequest_partyLeaderId_fkey` FOREIGN KEY (`partyLeaderId`) REFERENCES `User`(`userId`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -408,7 +427,7 @@ ALTER TABLE `QuestPartyBan` ADD CONSTRAINT `QuestPartyBan_userId_fkey` FOREIGN K
 ALTER TABLE `QuestPartyBan` ADD CONSTRAINT `QuestPartyBan_questId_fkey` FOREIGN KEY (`questId`) REFERENCES `Quest`(`questId`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `PointLog` ADD CONSTRAINT `PointLog_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`userId`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `PointsLog` ADD CONSTRAINT `PointsLog_partyMemberId_fkey` FOREIGN KEY (`partyMemberId`) REFERENCES `PartyMember`(`partyMemberId`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `FriendRequest` ADD CONSTRAINT `FriendRequest_requesterId_fkey` FOREIGN KEY (`requesterId`) REFERENCES `User`(`userId`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -465,10 +484,7 @@ ALTER TABLE `PostReact` ADD CONSTRAINT `PostReact_userId_fkey` FOREIGN KEY (`use
 ALTER TABLE `CommentReact` ADD CONSTRAINT `CommentReact_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`userId`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `PostFile` ADD CONSTRAINT `PostFile_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`userId`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `PostFile` ADD CONSTRAINT `PostFile_postId_fkey` FOREIGN KEY (`postId`) REFERENCES `Post`(`postId`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `PostFile` ADD CONSTRAINT `PostFile_postId_fkey` FOREIGN KEY (`postId`) REFERENCES `Post`(`postId`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `UserBadge` ADD CONSTRAINT `UserBadge_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`userId`) ON DELETE RESTRICT ON UPDATE CASCADE;

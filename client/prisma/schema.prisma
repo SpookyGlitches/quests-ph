@@ -53,7 +53,6 @@ model User {
   mentorFile         MentorFile[]
   accounts           Account[]
   sessions           Session[]
-  pointLog           PointLog[]
   quests             Quest[]
   questTask          QuestTask[]
   questTaskFinisher  QuestTaskFinisher[]
@@ -76,16 +75,16 @@ model User {
   userTwo            Friendship[]             @relation("userTwo")
   requester          FriendRequest[]          @relation("requester")
   requestee          FriendRequest[]          @relation("requestee")
-  forgotPassword     ForgotPassword[] 
+  forgotPassword     ForgotPassword[]
 }
 
 model ForgotPassword {
-  forgotPasswordId  Int    @id @default(autoincrement())
-  userId            String
-  token             String
-  isUsed            Boolean              @default(false)
-  createdAt         DateTime  @default(now())
-  user              User   @relation(fields: [userId], references: [userId])
+  forgotPasswordId Int      @id @default(autoincrement())
+  userId           String
+  token            String
+  isUsed           Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  user             User     @relation(fields: [userId], references: [userId])
 }
 
 model MentorApplication {
@@ -160,19 +159,19 @@ model Quest {
 }
 
 model QuestTask {
-  questTaskid        Int       @id @default(autoincrement())
-  quest              Quest     @relation(fields: [questId], references: [questId])
-  questId            Int
-  user               User      @relation(fields: [userId], references: [userId])
-  userId             String
-  title              String
-  description        String
-  points             Int
-  dueAt              DateTime
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
-  deletedAt          DateTime?
-  questTaskFinisher  QuestTaskFinisher[]
+  questTaskid       Int                 @id @default(autoincrement())
+  quest             Quest               @relation(fields: [questId], references: [questId])
+  questId           Int
+  user              User                @relation(fields: [userId], references: [userId])
+  userId            String
+  title             String
+  description       String
+  points            Int
+  dueAt             DateTime
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  deletedAt         DateTime?
+  questTaskFinisher QuestTaskFinisher[]
 }
 
 model QuestTaskFinisher {
@@ -212,15 +211,13 @@ model QuestPartyBan {
   user            User      @relation(fields: [userId], references: [userId])
 }
 
-model PointLog {
-  id          Int      @id @default(autoincrement())
-  user        User     @relation(fields: [userId], references: [userId])
-  userId      String
-  action      String
-  rowId       Int
-  totalPoints Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
+model PointsLog {
+  pointsLogId   Int             @id @default(autoincrement())
+  partyMemberId Int
+  gainedPoints  Int
+  action        PointsLogAction
+  createdAt     DateTime        @default(now())
+  partyMember   PartyMember     @relation(fields: [partyMemberId], references: [partyMemberId])
 }
 
 model FriendRequest {
@@ -297,6 +294,7 @@ model PartyMember {
   deletedAt     DateTime?
   quest         Quest           @relation(fields: [questId], references: [questId])
   user          User            @relation(fields: [userId], references: [userId])
+  pointsLog     PointsLog[]
 
   @@unique([questId, userId, deletedAt])
 }
@@ -410,7 +408,7 @@ model PostFile {
   postFileId Int       @id @default(autoincrement())
   postId     Int?
   key        String    @unique
-  name       String    
+  name       String
   mimeType   String
   createdAt  DateTime  @default(now())
   deletedAt  DateTime?
@@ -435,4 +433,11 @@ model UserBadge {
   deletedAt   DateTime? // NEW, the user cant delete pero in case the user wants to delete the account we can delete for them
   user        User      @relation(fields: [userId], references: [userId])
   badge       Badge     @relation(fields: [badgeId], references: [badgeId])
+}
+
+enum PointsLogAction {
+  COMPLETED_TASK
+  RECEIVED_POST_REACT
+  RECEIVED_COMMENT_REACT
+  RECEIVED_POST_COMMENT
 }
