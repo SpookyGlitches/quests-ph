@@ -24,7 +24,7 @@ export default function Index() {
     setSearch(event.target.value);
     console.log(search);
   };
-  const { data: usersData, error } = useSWR(`/admin/users/getUsers`);
+  const { data: usersData, error } = useSWR(`/admin/users/getRemovedUsers`);
 
   if (error) {
     console.log(error);
@@ -56,12 +56,12 @@ export default function Index() {
         <h2 style={{ color: "white" }}>You have 5 new applications!</h2>
         <Typography sx={{ mt: 2, color: "white", fontSize: "18px" }}>
           <Link href="/admin/users" passHref>
-            <a href="replace">
-              <strong>All</strong>
-            </a>
+            <a href="replace">All</a>
           </Link>{" "}
           <Link href="/admin/users/removed" passHref>
-            <a href="replace">Removed</a>
+            <a href="replace">
+              <strong>Removed</strong>
+            </a>
           </Link>
         </Typography>
       </Box>

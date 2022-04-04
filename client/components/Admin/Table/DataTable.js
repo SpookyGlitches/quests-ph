@@ -72,33 +72,21 @@ export default function DataGridDemo({ tableData, page, path }) {
       // eslint-disable-next-line
       columns = [
         {
-          field: "id",
-          headerName: "ID",
-          width: 100,
+          field: "mentorApplicationid",
+          headerName: "Application ID",
+          width: 250,
           headerAlign: "center",
         },
         {
-          field: "name",
-          headerName: "Name",
-          width: 120,
-          headerAlign: "center",
-        },
-        {
-          field: "email",
-          headerName: "Email",
-          width: 180,
-          headerAlign: "center",
-        },
-        {
-          field: "status",
-          headerName: "Status",
-          width: 150,
+          field: "mentorId",
+          headerName: "Applicant Name",
+          width: 250,
           headerAlign: "center",
         },
         {
           field: "Document",
           headerAlign: "center",
-          width: 200,
+          width: 250,
           renderCell: (cellValues) => {
             return (
               <Button
@@ -117,7 +105,7 @@ export default function DataGridDemo({ tableData, page, path }) {
         {
           field: "Action",
           headerAlign: "center",
-          width: 200,
+          width: 250,
           renderCell: (cellValues) => {
             return (
               <>
@@ -147,47 +135,164 @@ export default function DataGridDemo({ tableData, page, path }) {
           },
         },
       ];
+      dataGrid = (
+        <DataGrid
+          sx={{ m: 2 }}
+          rowHeight={120}
+          rows={tableData}
+          getRowId={(row) => row.mentorApplicationid}
+          // getRowId={getRowInput}
+          // eslint-disable next-line
+          columns={columns}
+          pageSize={5}
+        />
+      );
+    } else if (path === "approved") {
+      // eslint-disable-next-line
+      columns = [
+        {
+          field: "mentorApplicationid",
+          headerName: "Application ID",
+          width: 250,
+          headerAlign: "center",
+        },
+        {
+          field: "mentorId",
+          headerName: "Applicant Name",
+          width: 250,
+          headerAlign: "center",
+        },
+        {
+          field: "Document",
+          headerAlign: "center",
+          width: 250,
+          renderCell: (cellValues) => {
+            return (
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ margin: "0 auto", display: "flex" }}
+                onClick={(event) => {
+                  handleClick(event, cellValues);
+                }}
+              >
+                View
+              </Button>
+            );
+          },
+        },
+        {
+          field: "Action",
+          headerAlign: "center",
+          width: 150,
+          renderCell: (cellValues) => {
+            return (
+              <Button
+                fullWidth
+                variant="contained"
+                color="error"
+                onClick={(event) => {
+                  handleClick(event, cellValues);
+                }}
+              >
+                Reject
+              </Button>
+            );
+          },
+        },
+      ];
+      dataGrid = (
+        <DataGrid
+          sx={{ m: 2 }}
+          rowHeight={120}
+          rows={tableData}
+          getRowId={(row) => row.mentorApplicationid}
+          // getRowId={getRowInput}
+          // eslint-disable next-line
+          columns={columns}
+          pageSize={5}
+        />
+      );
     } else {
       // eslint-disable-next-line
       columns = [
         {
-          field: "id",
-          headerName: "ID",
-          width: 200,
+          field: "mentorApplicationid",
+          headerName: "Application ID",
+          width: 250,
           headerAlign: "center",
         },
         {
-          field: "name",
-          headerName: "Name",
-          width: 200,
+          field: "mentorId",
+          headerName: "Applicant Name",
+          width: 250,
           headerAlign: "center",
         },
         {
-          field: "email",
-          headerName: "Email",
-          width: 200,
+          field: "Document",
           headerAlign: "center",
+          width: 250,
+          renderCell: (cellValues) => {
+            return (
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ margin: "0 auto", display: "flex" }}
+                onClick={(event) => {
+                  handleClick(event, cellValues);
+                }}
+              >
+                View
+              </Button>
+            );
+          },
         },
         {
-          field: "status",
-          headerName: "Status",
-          width: 200,
+          field: "Action",
           headerAlign: "center",
+          width: 150,
+          renderCell: (cellValues) => {
+            return (
+              <Button
+                fullWidth
+                variant="contained"
+                color="success"
+                sx={{ mr: 2 }}
+                onClick={(event) => {
+                  handleClick(event, cellValues);
+                }}
+              >
+                Approve
+              </Button>
+            );
+          },
         },
       ];
+      dataGrid = (
+        <DataGrid
+          sx={{ m: 2 }}
+          rowHeight={120}
+          rows={tableData}
+          getRowId={(row) => row.mentorApplicationid}
+          // getRowId={getRowInput}
+          // eslint-disable next-line
+          columns={columns}
+          pageSize={5}
+        />
+      );
     }
   } else if (page === "articles") {
     if (path === "new") {
       // eslint-disable-next-line
       columns = [
         {
-          field: "id",
+          field: "articleId",
           headerName: "ID",
           width: 200,
           headerAlign: "center",
         },
         {
-          field: "username",
+          field: "userId",
           headerName: "Username",
           width: 160,
           headerAlign: "center",
@@ -237,17 +342,29 @@ export default function DataGridDemo({ tableData, page, path }) {
           },
         },
       ];
+      dataGrid = (
+        <DataGrid
+          sx={{ m: 2 }}
+          rowHeight={120}
+          rows={tableData}
+          getRowId={(row) => row.articleId}
+          // getRowId={getRowInput}
+          // eslint-disable next-line
+          columns={columns}
+          pageSize={5}
+        />
+      );
     } else {
       // eslint-disable-next-line
       columns = [
         {
-          field: "id",
+          field: "articleId",
           headerName: "ID",
-          width: 100,
+          width: 200,
           headerAlign: "center",
         },
         {
-          field: "username",
+          field: "userId",
           headerName: "Username",
           width: 160,
           headerAlign: "center",
@@ -261,12 +378,6 @@ export default function DataGridDemo({ tableData, page, path }) {
         {
           field: "link",
           headerName: "Link",
-          width: 150,
-          headerAlign: "center",
-        },
-        {
-          field: "status",
-          headerName: "Status",
           width: 150,
           headerAlign: "center",
         },
@@ -290,6 +401,18 @@ export default function DataGridDemo({ tableData, page, path }) {
           },
         },
       ];
+      dataGrid = (
+        <DataGrid
+          sx={{ m: 2 }}
+          rowHeight={120}
+          rows={tableData}
+          getRowId={(row) => row.articleId}
+          // getRowId={getRowInput}
+          // eslint-disable next-line
+          columns={columns}
+          pageSize={5}
+        />
+      );
     }
   } else if (page === "quests") {
     // eslint-disable-next-line
@@ -363,192 +486,229 @@ export default function DataGridDemo({ tableData, page, path }) {
         pageSize={5}
       />
     );
-  } else if (path === "new") {
-    // eslint-disable-next-line
-    columns = [
-      {
-        field: "id",
-        headerName: "ID",
-        width: 100,
-        headerAlign: "center",
-      },
-      {
-        field: "username",
-        headerName: "Username",
-        width: 160,
-        headerAlign: "center",
-      },
-      {
-        field: "status",
-        headerName: "Status",
-        width: 160,
-        headerAlign: "center",
-      },
-      {
-        field: "Report",
-        headerAlign: "center",
-        width: 200,
-        renderCell: (cellValues) => {
-          return (
-            <Button
-              variant="contained"
-              color="primary"
-              style={{ margin: "0 auto", display: "flex" }}
-              onClick={(event) => {
-                handleClick(event, cellValues);
-              }}
-            >
-              View
-            </Button>
-          );
+  } else if (page === "reports") {
+    if (path === "new") {
+      // eslint-disable-next-line
+      columns = [
+        {
+          field: "userReportId",
+          headerName: "ID",
+          width: 100,
+          headerAlign: "center",
         },
-      },
-      {
-        field: "Action",
-        headerAlign: "center",
-        width: 200,
-        renderCell: (cellValues) => {
-          return (
-            <Button
-              variant="contained"
-              color="error"
-              style={{ margin: "0 auto", display: "flex" }}
-              onClick={(event) => {
-                handleClick(event, cellValues);
-              }}
-            >
-              Action
-            </Button>
-          );
+        {
+          field: "recipientId",
+          headerName: "Username",
+          width: 160,
+          headerAlign: "center",
         },
-      },
-    ];
-  } else if (path === "ongoing") {
-    // eslint-disable-next-line
-    columns = [
-      {
-        field: "id",
-        headerName: "ID",
-        width: 100,
-        headerAlign: "center",
-      },
-      {
-        field: "username",
-        headerName: "Username",
-        width: 140,
-        headerAlign: "center",
-      },
-      {
-        field: "status",
-        headerName: "Status",
-        width: 140,
-        headerAlign: "center",
-      },
-      {
-        field: "StartDate",
-        headerName: "Start Date",
-        width: 140,
-        headerAlign: "center",
-      },
-      {
-        field: "EndDate",
-        headerName: "End Date",
-        width: 140,
-        headerAlign: "center",
-      },
-      {
-        field: "Report",
-        headerAlign: "center",
-        width: 160,
-        renderCell: (cellValues) => {
-          return (
-            <Button
-              variant="contained"
-              color="primary"
-              style={{ margin: "0 auto", display: "flex" }}
-              onClick={(event) => {
-                handleClick(event, cellValues);
-              }}
-            >
-              View
-            </Button>
-          );
+        {
+          field: "status",
+          headerName: "Status",
+          width: 160,
+          headerAlign: "center",
         },
-      },
-      {
-        field: "Action",
-        headerAlign: "center",
-        width: 160,
-        renderCell: (cellValues) => {
-          return (
-            <Button
-              variant="contained"
-              color="success"
-              style={{ margin: "0 auto", display: "flex" }}
-              onClick={(event) => {
-                handleClick(event, cellValues);
-              }}
-            >
-              Enable
-            </Button>
-          );
+        {
+          field: "Report",
+          headerAlign: "center",
+          width: 200,
+          renderCell: (cellValues) => {
+            return (
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ margin: "0 auto", display: "flex" }}
+                onClick={(event) => {
+                  handleClick(event, cellValues);
+                }}
+              >
+                View
+              </Button>
+            );
+          },
         },
-      },
-    ];
-  } else {
-    // eslint-disable-next-line
-    columns = [
-      {
-        field: "id",
-        headerName: "ID",
-        width: 100,
-        headerAlign: "center",
-      },
-      {
-        field: "username",
-        headerName: "Username",
-        width: 150,
-        headerAlign: "center",
-      },
-      {
-        field: "status",
-        headerName: "Status",
-        width: 150,
-        headerAlign: "center",
-      },
-      {
-        field: "StartDate",
-        headerName: "Start Date",
-        width: 150,
-        headerAlign: "center",
-      },
-      {
-        field: "EndDate",
-        headerName: "End Date",
-        width: 150,
-        headerAlign: "center",
-      },
-
-      {
-        field: "Action",
-        headerAlign: "center",
-        width: 200,
-        renderCell: (cellValues) => {
-          return (
-            <Button
-              variant="contained"
-              color="error"
-              style={{ margin: "0 auto", display: "flex" }}
-              onClick={(event) => {
-                handleClick(event, cellValues);
-              }}
-            >
-              Delete
-            </Button>
-          );
+        {
+          field: "Action",
+          headerAlign: "center",
+          width: 200,
+          renderCell: (cellValues) => {
+            return (
+              <Button
+                variant="contained"
+                color="error"
+                style={{ margin: "0 auto", display: "flex" }}
+                onClick={(event) => {
+                  handleClick(event, cellValues);
+                }}
+              >
+                Action
+              </Button>
+            );
+          },
         },
-      },
-    ];
+      ];
+      dataGrid = (
+        <DataGrid
+          sx={{ m: 2 }}
+          rowHeight={120}
+          rows={tableData}
+          getRowId={(row) => row.userReportId}
+          // getRowId={getRowInput}
+          // eslint-disable next-line
+          columns={columns}
+          pageSize={5}
+        />
+      );
+    } else if (path === "ongoing") {
+      // eslint-disable-next-line
+      columns = [
+        {
+          field: "userReportId",
+          headerName: "ID",
+          width: 100,
+          headerAlign: "center",
+        },
+        {
+          field: "recipientId",
+          headerName: "Username",
+          width: 140,
+          headerAlign: "center",
+        },
+        {
+          field: "status",
+          headerName: "Status",
+          width: 140,
+          headerAlign: "center",
+        },
+        {
+          field: "banStart",
+          headerName: "Start Date",
+          width: 140,
+          headerAlign: "center",
+        },
+        {
+          field: "banEnd",
+          headerName: "End Date",
+          width: 140,
+          headerAlign: "center",
+        },
+        {
+          field: "Report",
+          headerAlign: "center",
+          width: 160,
+          renderCell: (cellValues) => {
+            return (
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ margin: "0 auto", display: "flex" }}
+                onClick={(event) => {
+                  handleClick(event, cellValues);
+                }}
+              >
+                View
+              </Button>
+            );
+          },
+        },
+        {
+          field: "Action",
+          headerAlign: "center",
+          width: 160,
+          renderCell: (cellValues) => {
+            return (
+              <Button
+                variant="contained"
+                color="success"
+                style={{ margin: "0 auto", display: "flex" }}
+                onClick={(event) => {
+                  handleClick(event, cellValues);
+                }}
+              >
+                Enable
+              </Button>
+            );
+          },
+        },
+      ];
+      dataGrid = (
+        <DataGrid
+          sx={{ m: 2 }}
+          rowHeight={120}
+          rows={tableData}
+          getRowId={(row) => row.userReportId}
+          // getRowId={getRowInput}
+          // eslint-disable next-line
+          columns={columns}
+          pageSize={5}
+        />
+      );
+    } else {
+      // eslint-disable-next-line
+      columns = [
+        {
+          field: "userReportId",
+          headerName: "ID",
+          width: 100,
+          headerAlign: "center",
+        },
+        {
+          field: "recipientId",
+          headerName: "Username",
+          width: 150,
+          headerAlign: "center",
+        },
+        {
+          field: "status",
+          headerName: "Status",
+          width: 150,
+          headerAlign: "center",
+        },
+        {
+          field: "banStart",
+          headerName: "Start Date",
+          width: 150,
+          headerAlign: "center",
+        },
+        {
+          field: "banEnd",
+          headerName: "End Date",
+          width: 150,
+          headerAlign: "center",
+        },
+        {
+          field: "Action",
+          headerAlign: "center",
+          width: 200,
+          renderCell: (cellValues) => {
+            return (
+              <Button
+                variant="contained"
+                color="error"
+                style={{ margin: "0 auto", display: "flex" }}
+                onClick={(event) => {
+                  handleClick(event, cellValues);
+                }}
+              >
+                Delete
+              </Button>
+            );
+          },
+        },
+      ];
+      dataGrid = (
+        <DataGrid
+          sx={{ m: 2 }}
+          rowHeight={120}
+          rows={tableData}
+          getRowId={(row) => row.userReportId}
+          // getRowId={getRowInput}
+          // eslint-disable next-line
+          columns={columns}
+          pageSize={5}
+        />
+      );
+    }
   }
 
   return (
