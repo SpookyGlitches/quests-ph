@@ -12,14 +12,10 @@ import useSWR from "swr";
 import CircularProgress from "@mui/material/CircularProgress";
 import Link from "next/link";
 import { makeStyles } from "@mui/styles";
-
 export default function Articles({ category }) {
-  const useStyles = makeStyles((theme) => ({
+  const useStyles = makeStyles(() => ({
     root: {
       maxWidth: 345,
-      [theme.breakpoints.down("md")]: {
-        maxWidth: 200,
-      },
     },
     media: {
       height: 140,
