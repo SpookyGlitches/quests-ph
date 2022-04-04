@@ -3,8 +3,9 @@ import { Box, TextField, Typography } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import * as React from "react";
+import useSWR from "swr";
 import Link from "next/link";
-import DataTable from "../../../components/Admin/Table/DataTable";
+import BasicTable from "../../../components/Admin/Table/DataTable";
 import AdminLayout from "../../../components/Layouts/AdminLayout";
 
 export default function Index() {
@@ -13,43 +14,17 @@ export default function Index() {
     setSearch(event.target.value);
     console.log(search);
   };
-  const applicationsData = [
-    {
-      id: 1,
-      username: "grapejuice",
-      status: "Completed",
-      StartDate: "2022-01-10",
-      EndDate: "2023-02-10",
-    },
-    {
-      id: 2,
-      username: "grapejuice",
-      status: "Completed",
-      StartDate: "2022-01-10",
-      EndDate: "2023-02-10",
-    },
-    {
-      id: 3,
-      username: "grapejuice",
-      status: "Completed",
-      StartDate: "2022-01-10",
-      EndDate: "2023-02-10",
-    },
-    {
-      id: 4,
-      username: "grapejuice",
-      status: "Completed",
-      StartDate: "2022-01-10",
-      EndDate: "2023-02-10",
-    },
-    {
-      id: 5,
-      username: "grapejuice",
-      status: "Completed",
-      StartDate: "2022-01-10",
-      EndDate: "2023-02-10",
-    },
-  ];
+
+  const { data: reportsData, error } = useSWR(
+    `/admin/reports/getCompletedReports`,
+  );
+
+  if (error) {
+    console.log(error);
+  }
+  if (!reportsData) {
+    <div>Loading</div>;
+  }
 
   return (
     <AdminLayout>
@@ -69,7 +44,7 @@ export default function Index() {
         }}
       >
         <Typography sx={{ mt: 3, color: "white", fontSize: "20px" }}>
-          Hello Admin
+          Reports Page
         </Typography>
         <h2 style={{ color: "white" }}>You have 5 new reports!</h2>
         <Typography sx={{ mt: 2, color: "white", fontSize: "18px" }}>
@@ -122,8 +97,8 @@ export default function Index() {
             }}
           />
         </Box>
-        <DataTable
-          tableData={applicationsData}
+        <BasicTable
+          tableData={reportsData}
           sx={{
             margin: "2rem",
           }}
