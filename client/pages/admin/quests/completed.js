@@ -14,7 +14,9 @@ export default function Index() {
     setSearch(event.target.value);
     console.log(search);
   };
-  const { data: questsData, error } = useSWR(`/admin/quests/getQuests`);
+  const { data: questsData, error } = useSWR(
+    `/admin/quests/getCompletedQuests`,
+  );
 
   if (error) {
     console.log(error);
@@ -46,12 +48,12 @@ export default function Index() {
         <h2 style={{ color: "white" }}>You have 5 new reports!</h2>
         <Typography sx={{ mt: 2, color: "white", fontSize: "18px" }}>
           <Link href="/admin/quests" passHref>
-            <a href="replace">
-              <strong>New</strong>
-            </a>
+            <a href="replace">New</a>
           </Link>{" "}
           <Link href="/admin/quests/completed" passHref>
-            <a href="replace">Completed</a>
+            <a href="replace">
+              <strong>Completed</strong>
+            </a>
           </Link>
         </Typography>
       </Box>

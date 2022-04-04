@@ -1,6 +1,6 @@
 import prisma from "../../../../lib/prisma";
 
-export default async function getAllQuests(req, res) {
+export default async function getCompletedQuests(req, res) {
   if (req.method !== "GET") {
     return res.status(404).json({ message: "Method not allowed " });
   }
@@ -8,8 +8,12 @@ export default async function getAllQuests(req, res) {
   try {
     const quests = await prisma.quest.findMany({
       where: {
-        deletedAt: null,
-        completedAt: null,
+        NOT: [
+          {
+            deletedAt: null,
+            completedAt: null,
+          },
+        ],
       },
       select: {
         questId: true,
