@@ -3,14 +3,34 @@ import {
   Grid,
   Card,
   CardMedia,
-  CardHeader,
+  CardContent,
   CardActions,
-  Button,
+  Typography,
+  Link as MuiLink,
 } from "@mui/material";
 import useSWR from "swr";
 import CircularProgress from "@mui/material/CircularProgress";
+import Link from "next/link";
+import { makeStyles } from "@mui/styles";
 
 export default function Articles({ category }) {
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      maxWidth: 345,
+      [theme.breakpoints.down("md")]: {
+        maxWidth: 200,
+      },
+    },
+    media: {
+      height: 140,
+    },
+    content: {
+      textAlign: "left",
+      padding: 3,
+    },
+  }));
+  const classes = useStyles();
+
   const { data: articles } = useSWR(
     category ? `/articles/${category}/articlelist` : null,
   );
@@ -27,23 +47,35 @@ export default function Articles({ category }) {
       </div>
     );
   }
-  console.log(articles);
 
   return (
     <Box>
       <Grid container spacing={2}>
         {articles.map((elem) => (
           <Grid item xs={3} key={articles.indexOf(elem)}>
-            <Card sx={{ maxWidth: 345 }}>
+            <Card className={classes.root}>
               <CardMedia
-                component="img"
-                height="140"
+                className={classes.media}
                 image={elem.image}
-                alt="green iguana"
+                alt={elem.provider}
               />
-              <CardHeader title={`${elem.title}`} />
+
+              <CardContent className={classes.content}>
+                <Typography variant="h6" sx={{ m: 2 }}>
+                  {elem.title}
+                </Typography>
+              </CardContent>
               <CardActions>
-                <Button>Read More</Button>
+                <MuiLink
+                  sx={{ cursor: "pointer", ml: 1 }}
+                  style={{ textDecoration: "none" }}
+                >
+                  <Link href={`${elem.url}`} passHref>
+                    <a href="replace" target="_blank">
+                      Read More
+                    </a>
+                  </Link>
+                </MuiLink>
               </CardActions>
             </Card>
           </Grid>
