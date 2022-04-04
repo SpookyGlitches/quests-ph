@@ -16,9 +16,9 @@ async function getPostFiles(req, res) {
         createdAt: true,
         post: {
           select: {
-            user: {
+            partyMember: {
               select: {
-                userId: true,
+                partyMemberId: true,
               },
             },
           },

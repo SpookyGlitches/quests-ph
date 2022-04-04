@@ -5,7 +5,6 @@ export default async function handler(req, res) {
   if (req.method === "GET") {
     try {
       const { user } = await getSession({ req });
-      console.log(user);
       const partyMember = await prisma.partyMember.findFirst({
         where: {
           userId: user.userId,
@@ -16,7 +15,6 @@ export default async function handler(req, res) {
       });
       return res.json(partyMember);
     } catch (error) {
-      console.error(error.constructor);
       switch (error.constructor) {
         default:
           return res.status(404).send();

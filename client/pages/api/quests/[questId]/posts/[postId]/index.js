@@ -7,9 +7,15 @@ async function getPost(req, res) {
         postId: Number(req.query.postId),
       },
       include: {
-        user: {
-          select: {
-            displayName: true,
+        partyMember: {
+          include: {
+            user: {
+              select: {
+                displayName: true,
+                image: true,
+                userId: true,
+              },
+            },
           },
         },
       },
@@ -45,28 +51,32 @@ async function editPost(req, res) {
 
 async function deletePost(req, res) {
   try {
-    // https://github.com/prisma/prisma/issues/3398
     const { postId } = req.query;
-    const post = prisma.post.delete({
+    await prisma.post.update({
       where: {
         postId: Number(postId),
       },
-    });
-    const fileDelete = prisma.postFile.deleteMany({
-      where: {
-        postId: Number(postId),
+      data: {
+        deletedAt: new Date(),
+        postFiles: {
+          updateMany: {
+            data: {
+              deletedAt: new Date(),
+            },
+            where: {},
+          },
+        },
       },
     });
-    await prisma.$transaction([post, fileDelete]);
     res.status(200).send();
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
+    console.log("here");
     res.status(500).send();
   }
 }
 export default async function handler(req, res) {
   switch (req.method) {
-    // todo: change userId in post schema to partyMemberId
     case "GET":
       return getPost(req, res);
     case "PUT":
