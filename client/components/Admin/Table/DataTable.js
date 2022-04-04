@@ -8,29 +8,36 @@ export default function DataGridDemo({ tableData, page, path }) {
     console.log(cellValues.row);
   };
   let columns;
+  let dataGrid;
   if (page === "users") {
     // eslint-disable-next-line
+
     columns = [
       {
-        field: "id",
-        headerName: "ID",
+        field: "userId",
+        headerName: "User ID",
         width: 150,
         headerAlign: "center",
       },
       {
-        field: "username",
+        field: "displayName",
         headerName: "Username",
         width: 150,
         headerAlign: "center",
       },
-      { field: "name", headerName: "Name", width: 150, headerAlign: "center" },
+      {
+        field: "fullName",
+        headerName: "Name",
+        width: 150,
+        headerAlign: "center",
+      },
       {
         field: "email",
         headerName: "Email",
         width: 200,
         headerAlign: "center",
       },
-      { field: "type", headerName: "Type", width: 150, headerAlign: "center" },
+      { field: "role", headerName: "Role", width: 150, headerAlign: "center" },
       {
         field: "Action",
         renderCell: (cellValues) => {
@@ -48,6 +55,18 @@ export default function DataGridDemo({ tableData, page, path }) {
         },
       },
     ];
+    dataGrid = (
+      <DataGrid
+        sx={{ m: 2 }}
+        rowHeight={120}
+        rows={tableData}
+        getRowId={(row) => row.userId}
+        // getRowId={getRowInput}
+        // eslint-disable next-line
+        columns={columns}
+        pageSize={5}
+      />
+    );
   } else if (page === "applications") {
     if (path === "new") {
       // eslint-disable-next-line
@@ -276,20 +295,32 @@ export default function DataGridDemo({ tableData, page, path }) {
     // eslint-disable-next-line
     columns = [
       {
-        field: "id",
-        headerName: "ID",
+        field: "questId",
+        headerName: "Quest ID",
         width: 100,
         headerAlign: "center",
       },
       {
-        field: "party_leader",
+        field: "userId",
         headerName: "Party Leader",
         width: 160,
         headerAlign: "center",
       },
       {
-        field: "status",
-        headerName: "Status",
+        field: "difficulty",
+        headerName: "Difficulty",
+        width: 150,
+        headerAlign: "center",
+      },
+      {
+        field: "visibility",
+        headerName: "Visibility",
+        width: 150,
+        headerAlign: "center",
+      },
+      {
+        field: "category",
+        headerName: "Category",
         width: 150,
         headerAlign: "center",
       },
@@ -320,6 +351,18 @@ export default function DataGridDemo({ tableData, page, path }) {
         },
       },
     ];
+    dataGrid = (
+      <DataGrid
+        sx={{ m: 2 }}
+        rowHeight={120}
+        rows={tableData}
+        getRowId={(row) => row.questId}
+        // getRowId={getRowInput}
+        // eslint-disable next-line
+        columns={columns}
+        pageSize={5}
+      />
+    );
   } else if (path === "new") {
     // eslint-disable-next-line
     columns = [
@@ -516,14 +559,17 @@ export default function DataGridDemo({ tableData, page, path }) {
         textAlign: "center",
       }}
     >
-      <DataGrid
+      {/* <DataGrid
         sx={{ m: 2 }}
         rowHeight={120}
         rows={tableData}
+        getRowId={(row) => row.userId}
+        // getRowId={getRowInput}
         // eslint-disable next-line
         columns={columns}
         pageSize={5}
-      />
+      /> */}
+      {dataGrid}
     </div>
   );
 }

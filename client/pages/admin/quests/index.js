@@ -2,6 +2,7 @@ import { Box, TextField } from "@mui/material";
 // import SearchBar from "../../../components/Admin/Search";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import useSWR from "swr";
 import * as React from "react";
 import DataTable from "../../../components/Admin/Table/DataTable";
 import AdminLayout from "../../../components/Layouts/AdminLayout";
@@ -12,38 +13,14 @@ export default function Index() {
     setSearch(event.target.value);
     console.log(search);
   };
-  const applicationsData = [
-    {
-      id: 1,
-      party_leader: "rjsubmit",
-      status: "Active",
-      wish: "Losing Weight",
-    },
-    {
-      id: 2,
-      party_leader: "rjsubmit",
-      status: "Active",
-      wish: "Make more friends",
-    },
-    {
-      id: 3,
-      party_leader: "rjsubmit",
-      status: "Active",
-      wish: "Become a good developer",
-    },
-    {
-      id: 4,
-      party_leader: "rjsubmit",
-      status: "Active",
-      wish: "Gaining weight",
-    },
-    {
-      id: 5,
-      party_leader: "rjsubmit",
-      status: "Active",
-      wish: "Lose more friends",
-    },
-  ];
+  const { data: questsData, error } = useSWR(`/admin/quests/getQuests`);
+
+  if (error) {
+    console.log(error);
+  }
+  if (!questsData) {
+    <div>Loading</div>;
+  }
 
   return (
     <AdminLayout>
@@ -85,7 +62,7 @@ export default function Index() {
           />
         </Box>
         <DataTable
-          tableData={applicationsData}
+          tableData={questsData}
           sx={{
             margin: "2rem",
           }}

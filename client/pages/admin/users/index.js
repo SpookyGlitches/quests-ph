@@ -3,6 +3,7 @@ import { Box, Grid, TextField } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import * as React from "react";
+import useSWR from "swr";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -22,43 +23,14 @@ export default function Index() {
     setSearch(event.target.value);
     console.log(search);
   };
-  const usersData = [
-    {
-      id: 1,
-      username: "grapejuice",
-      name: "Ninomae Inanis",
-      email: "ninomae@gmail.com",
-      type: "Admin",
-    },
-    {
-      id: 2,
-      username: "grapejuice",
-      name: "Ninomae Inanis",
-      email: "ninomae@gmail.com",
-      type: "Admin",
-    },
-    {
-      id: 3,
-      username: "grapejuice",
-      name: "Ninomae Inanis",
-      email: "ninomae@gmail.com",
-      type: "Admin",
-    },
-    {
-      id: 4,
-      username: "grapejuice",
-      name: "Ninomae Inanis",
-      email: "ninomae@gmail.com",
-      type: "Admin",
-    },
-    {
-      id: 5,
-      username: "grapejuice",
-      name: "Ainomae Inanis",
-      email: "ninomae@gmail.com",
-      type: "Admin",
-    },
-  ];
+  const { data: usersData, error } = useSWR(`/admin/users/getUsers`);
+
+  if (error) {
+    console.log(error);
+  }
+  if (!usersData) {
+    <div>Loading</div>;
+  }
 
   return (
     <AdminLayout>
