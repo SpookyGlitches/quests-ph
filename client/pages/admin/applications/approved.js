@@ -1,12 +1,12 @@
+// import SearchBar from "../../../components/Admin/Search";
 import { Box, TextField, Typography } from "@mui/material";
+import Link from "next/link";
+import useSWR from "swr";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import * as React from "react";
-import useSWR from "swr";
-// import SearchBar from "../../../components/Admin/Search";
-import Link from "next/link";
+import DataTable from "../../../components/Admin/Table/DataTable";
 import AdminLayout from "../../../components/Layouts/AdminLayout";
-import BasicTable from "../../../components/Admin/Table/DataTable";
 
 export default function Index() {
   const [search, setSearch] = React.useState("");
@@ -49,13 +49,13 @@ export default function Index() {
         <h2 style={{ color: "white" }}>You have 5 new applications!</h2>
         <Typography sx={{ mt: 2, color: "white", fontSize: "18px" }}>
           <Link href="/admin/applications" passHref>
-            <a href="replace">
-              <strong>New</strong>
-            </a>
+            <a href="replace">New</a>
           </Link>
           {"   "}
           <Link href="/admin/applications/approved" passHref>
-            <a href="replace">Approved</a>
+            <a href="replace">
+              <strong>Approved</strong>
+            </a>
           </Link>
           {"   "}
           <Link href="/admin/applications/rejected" passHref>
@@ -79,6 +79,7 @@ export default function Index() {
             flexDirection: "row",
           }}
         >
+          {/* <SearchBar /> */}
           <TextField
             label="Search"
             variant="outlined"
@@ -98,13 +99,13 @@ export default function Index() {
             }}
           />
         </Box>
-        <BasicTable
+        <DataTable
           tableData={applicationsData}
           sx={{
             margin: "2rem",
           }}
           page="applications"
-          path="new"
+          path="approved"
         />
       </Box>
     </AdminLayout>

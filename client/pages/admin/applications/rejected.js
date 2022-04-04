@@ -1,6 +1,7 @@
 // import SearchBar from "../../../components/Admin/Search";
 import { Box, TextField, Typography } from "@mui/material";
 import Link from "next/link";
+import useSWR from "swr";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import * as React from "react";
@@ -13,43 +14,17 @@ export default function Index() {
     setSearch(event.target.value);
     console.log(search);
   };
-  const applicationsData = [
-    {
-      id: 1,
-      username: "grapejuice",
-      name: "Ninomae Inanis",
-      email: "ninomae@gmail.com",
-      status: "Completed",
-    },
-    {
-      id: 2,
-      username: "grapejuice",
-      name: "Ninomae Inanis",
-      email: "ninomae@gmail.com",
-      status: "Completed",
-    },
-    {
-      id: 3,
-      username: "grapejuice",
-      name: "Ninomae Inanis",
-      email: "ninomae@gmail.com",
-      status: "Completed",
-    },
-    {
-      id: 4,
-      username: "grapejuice",
-      name: "Ninomae Inanis",
-      email: "ninomae@gmail.com",
-      status: "Completed",
-    },
-    {
-      id: 5,
-      username: "grapejuice",
-      name: "Ninomae Inanis",
-      email: "ninomae@gmail.com",
-      status: "Completed",
-    },
-  ];
+
+  const { data: applicationsData, error } = useSWR(
+    `/admin/applications/getApplications`,
+  );
+
+  if (error) {
+    console.log(error);
+  }
+  if (!applicationsData) {
+    <div>Loading</div>;
+  }
 
   return (
     <AdminLayout>
@@ -69,16 +44,21 @@ export default function Index() {
         }}
       >
         <Typography sx={{ mt: 3, color: "white", fontSize: "20px" }}>
-          Hello Admin
+          Applications Page
         </Typography>
         <h2 style={{ color: "white" }}>You have 5 new applications!</h2>
         <Typography sx={{ mt: 2, color: "white", fontSize: "18px" }}>
           <Link href="/admin/applications" passHref>
             <a href="replace">New</a>
-          </Link>{" "}
-          <Link href="/admin/applications/completed" passHref>
+          </Link>
+          {"   "}
+          <Link href="/admin/applications/approved" passHref>
+            <a href="replace">Approved</a>
+          </Link>
+          {"   "}
+          <Link href="/admin/applications/rejected" passHref>
             <a href="replace">
-              <strong>Completed</strong>
+              <strong>Rejected</strong>
             </a>
           </Link>
         </Typography>
@@ -125,7 +105,7 @@ export default function Index() {
             margin: "2rem",
           }}
           page="applications"
-          path="completed"
+          path="rejected"
         />
       </Box>
     </AdminLayout>
