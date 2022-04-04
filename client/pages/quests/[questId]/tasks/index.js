@@ -20,7 +20,7 @@ const index = ({ session }) => {
             padding: "0.5rem",
           }}
         >
-          <TaskLists session={session} />
+          <TaskLists />
         </Box>
       </Grid>
     </Grid>
