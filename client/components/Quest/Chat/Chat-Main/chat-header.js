@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Paper } from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
 
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 

@@ -3,11 +3,14 @@ import {
   ListItem,
   ListItemAvatar,
   Avatar,
+  Grid,
   Box,
   Typography,
+  Divider,
   ListItemText,
   Chip,
 } from "@mui/material";
+import ReactScrollableFeed from "react-scrollable-feed";
 
 const ChatContent = () => {
   return (

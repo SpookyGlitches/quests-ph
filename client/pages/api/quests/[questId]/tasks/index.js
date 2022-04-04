@@ -9,26 +9,13 @@ async function getAllTasks(req, res) {
 
     const [memberId, returnAllTask] = await prisma.$transaction([
       prisma.$queryRaw`SELECT partyMemberId FROM PartyMember WHERE userId = ${user.userId};`,
-      // prisma.$queryRaw`SELECT qt.questTaskid,  u.userId,  qt.questId, qt.title, qt.points ,qt.description, qt.dueAt, qt.deletedAt
-      // FROM QuestTask AS qt
-      // INNER JOIN QuestTaskFinisher AS qtf
-      // ON qtf.questTaskid = qt.questTaskid
-      // INNER JOIN User AS u
-      // ON qtf.userId = u.userId
-      // WHERE qtf.userId = ${user.userId} AND qtf.questTaskid = qt.questTaskid AND qt.questId = ${req.query.questId} AND qt.questTaskid = qtf.questTaskid; `,
-      /* 
-
-    // GOAL IS TO RETURN ALL TASKS WHICH USER ID HAS NO ENTRY YET ON QUEST TASK FINISHER 
-      1. Check userId and questTaskId on QuestTaskFinisher 
-      2. if both userid equal to current userid and questTaskid is present in questTaskfinsher table then do not return the task with that questTaskid 
-
-      
-        */
 
       prisma.questTask.findMany({
         where: {
           questTaskFinisher: {
-            none: {},
+            none: {
+              userId: user.userId,
+            },
           },
           deletedAt: null,
           questId: Number(req.query.questId),
