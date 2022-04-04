@@ -1,6 +1,5 @@
 import prisma from "../../../../../lib/prisma";
 import withQuestProtect from "../../../../../middlewares/withQuestProtect";
-
 async function editWoopStatement(req, res) {
   try {
     const { outcome, obstacle, plan } = req.body;
@@ -23,11 +22,72 @@ async function editWoopStatement(req, res) {
 
 async function removePartyMember(req, res) {
   try {
-    await prisma.partyMember.delete({
+    const partyMemberData = await prisma.partyMember.findFirst({
       where: {
         partyMemberId: Number(req.query.memberId),
       },
+      rejectOnNotFound: true,
+      select: {
+        partyMemberId: true,
+        posts: {
+          select: {
+            postId: true,
+            postFiles: {
+              select: {
+                postFileId: true,
+              },
+            },
+          },
+        },
+      },
     });
+    const postIds = [];
+    const postFileIds = [];
+
+    partyMemberData.posts.forEach((post) => {
+      postIds.push(post.postId);
+      post.postFiles.forEach((file) => postFileIds.push(file.postFileId));
+    });
+
+    const removePostFilesOperation = prisma.postFile.updateMany({
+      where: {
+        postFileId: {
+          in: postFileIds,
+        },
+        deletedAt: null,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+    const removePostsOperation = prisma.post.updateMany({
+      where: {
+        postId: {
+          in: postIds,
+        },
+        deletedAt: null,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+
+    // END USER CONTENT REMOVAL
+
+    const removeMemberOperation = prisma.partyMember.update({
+      where: {
+        partyMemberId: partyMemberData.partyMemberId,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+
+    await prisma.$transaction([
+      removePostFilesOperation,
+      removePostsOperation,
+      removeMemberOperation,
+    ]);
     return res.status(200).send();
   } catch (error) {
     console.error(error);

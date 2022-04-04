@@ -30,6 +30,7 @@ async function banPartyMember(req, res) {
     const { questId } = req.query;
     const { userId } = req.body;
     const parsedQuestId = Number(questId) || -1;
+
     const existingBan = await prisma.questPartyBan.findFirst({
       where: {
         questId: parsedQuestId,
@@ -37,10 +38,66 @@ async function banPartyMember(req, res) {
       },
     });
     if (existingBan) return res.status(200).send(existingBan);
-    const removeMemberOperation = prisma.partyMember.deleteMany({
+
+    // START REMOVING USER CONTENT
+
+    const partyMemberData = await prisma.partyMember.findFirst({
       where: {
         questId: parsedQuestId,
         userId,
+      },
+      rejectOnNotFound: true,
+      select: {
+        partyMemberId: true,
+        posts: {
+          select: {
+            postId: true,
+            postFiles: {
+              select: {
+                postFileId: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const postIds = [];
+    const postFileIds = [];
+
+    partyMemberData.posts.forEach((post) => {
+      postIds.push(post.postId);
+      post.postFiles.forEach((file) => postFileIds.push(file.postFileId));
+    });
+
+    const removePostFilesOperation = prisma.postFile.updateMany({
+      where: {
+        postFileId: {
+          in: postFileIds,
+        },
+        deletedAt: null,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+    const removePostsOperation = prisma.post.updateMany({
+      where: {
+        postId: {
+          in: postIds,
+        },
+        deletedAt: null,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+
+    // END USER CONTENT REMOVAL
+
+    const removeMemberOperation = prisma.partyMember.delete({
+      where: {
+        partyMemberId: partyMemberData.partyMemberId,
       },
     });
     const banMemberOperation = prisma.questPartyBan.create({
@@ -49,10 +106,16 @@ async function banPartyMember(req, res) {
         userId,
       },
     });
-    await prisma.$transaction([removeMemberOperation, banMemberOperation]);
-    return res.status(200).send(removeMemberOperation);
+    await prisma.$transaction([
+      removePostFilesOperation,
+      removePostsOperation,
+      removeMemberOperation,
+      banMemberOperation,
+    ]);
+
+    return res.status(200).send();
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
     return res.status(500).send();
   }
 }
