@@ -3,8 +3,9 @@ import { Box, TextField, Typography } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import * as React from "react";
+import useSWR from "swr";
 import Link from "next/link";
-import DataTable from "../../../components/Admin/Table/DataTable";
+import BasicTable from "../../../components/Admin/Table/DataTable";
 import AdminLayout from "../../../components/Layouts/AdminLayout";
 
 export default function Index() {
@@ -13,38 +14,15 @@ export default function Index() {
     setSearch(event.target.value);
     console.log(search);
   };
-  const applicationsData = [
-    {
-      id: 1,
-      username: "grapejuice",
-      category: "Health",
-      link: "haha.com",
-    },
-    {
-      id: 2,
-      username: "grapejuice",
-      category: "Career",
-      link: "haha.com",
-    },
-    {
-      id: 3,
-      username: "grapejuice",
-      category: "Social",
-      link: "haha.com",
-    },
-    {
-      id: 4,
-      username: "grapejuice",
-      category: "Social",
-      link: "haha.com",
-    },
-    {
-      id: 5,
-      username: "grapejuice",
-      category: "Health",
-      link: "haha.com",
-    },
-  ];
+
+  const { data: articlesData, error } = useSWR(`/admin/articles/getArticles`);
+
+  if (error) {
+    console.log(error);
+  }
+  if (!articlesData) {
+    <div>Loading</div>;
+  }
 
   return (
     <AdminLayout>
@@ -64,7 +42,7 @@ export default function Index() {
         }}
       >
         <Typography sx={{ mt: 3, color: "white", fontSize: "20px" }}>
-          Hello Admin
+          Articles Page
         </Typography>
         <h2 style={{ color: "white" }}>You have 5 new submissions!</h2>
         <Typography sx={{ mt: 2, color: "white", fontSize: "18px" }}>
@@ -73,8 +51,8 @@ export default function Index() {
               <strong>New</strong>
             </a>
           </Link>{" "}
-          <Link href="/admin/articles/completed" passHref>
-            <a href="replace">Completed</a>
+          <Link href="/admin/articles/approved" passHref>
+            <a href="replace">Approved</a>
           </Link>
         </Typography>
       </Box>
@@ -114,15 +92,9 @@ export default function Index() {
             }}
           />
         </Box>
-        <DataTable
-          tableData={applicationsData}
-          title="Hatdog"
-          sx={{
-            margin: "2rem",
-          }}
-          page="articles"
-          path="new"
-        />
+        <Box sx={{ marginTop: "0rem" }}>
+          <BasicTable tableData={articlesData} page="articles" path="new" />
+        </Box>
       </Box>
     </AdminLayout>
   );

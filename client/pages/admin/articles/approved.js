@@ -2,10 +2,11 @@ import { Box, TextField, Typography } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import * as React from "react";
+import useSWR from "swr";
 // import SearchBar from "../../../components/Admin/Search";
 import Link from "next/link";
 import AdminLayout from "../../../components/Layouts/AdminLayout";
-import DataTable from "../../../components/Admin/Table/DataTable";
+import BasicTable from "../../../components/Admin/Table/DataTable";
 
 export default function Index() {
   const [search, setSearch] = React.useState("");
@@ -13,43 +14,17 @@ export default function Index() {
     setSearch(event.target.value);
     console.log(search);
   };
-  const applicationsData = [
-    {
-      id: 1,
-      username: "grapejuice",
-      category: "Health",
-      link: "haha.com",
-      status: "Approved",
-    },
-    {
-      id: 2,
-      username: "grapejuice",
-      category: "Health",
-      link: "haha.com",
-      status: "Rejected",
-    },
-    {
-      id: 3,
-      username: "grapejuice",
-      category: "Health",
-      link: "haha.com",
-      status: "Rejected",
-    },
-    {
-      id: 4,
-      username: "grapejuice",
-      category: "Health",
-      link: "haha.com",
-      status: "Approved",
-    },
-    {
-      id: 5,
-      username: "grapejuice",
-      category: "Health",
-      link: "haha.com",
-      status: "Approved",
-    },
-  ];
+
+  const { data: approvedArticles, error } = useSWR(
+    `/admin/articles/getApprovedArticles`,
+  );
+
+  if (error) {
+    console.log(error);
+  }
+  if (!approvedArticles) {
+    <div>Loading</div>;
+  }
 
   return (
     <AdminLayout>
@@ -69,7 +44,7 @@ export default function Index() {
         }}
       >
         <Typography sx={{ mt: 3, color: "white", fontSize: "20px" }}>
-          Hello Admin
+          Articles Page
         </Typography>
         <h2 style={{ color: "white" }}>You have 5 new submissions!</h2>
         <Typography sx={{ mt: 2, color: "white", fontSize: "18px" }}>
@@ -78,7 +53,7 @@ export default function Index() {
           </Link>{" "}
           <Link href="/admin/articles/completed" passHref>
             <a href="replace">
-              <strong>Completed</strong>
+              <strong>Approved</strong>
             </a>
           </Link>
         </Typography>
@@ -119,8 +94,8 @@ export default function Index() {
             }}
           />
         </Box>
-        <DataTable
-          tableData={applicationsData}
+        <BasicTable
+          tableData={approvedArticles}
           sx={{
             margin: "2rem",
           }}
