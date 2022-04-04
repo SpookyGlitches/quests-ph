@@ -1,5 +1,6 @@
 import prisma from "../../../../../lib/prisma";
 import withQuestProtect from "../../../../../middlewares/withQuestProtect";
+
 async function editWoopStatement(req, res) {
   try {
     const { outcome, obstacle, plan } = req.body;
