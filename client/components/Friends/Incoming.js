@@ -2,6 +2,7 @@ import { Avatar, Typography, Box, IconButton } from "@mui/material";
 import { useSWRConfig } from "swr";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import GroupAddRoundedIcon from "@mui/icons-material/GroupAddRounded";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import axios from "axios";
 
@@ -9,10 +10,20 @@ const IncomingField = (item) => {
   const { mutate } = useSWRConfig();
   // eslint-disable-next-line
   const [incomingData] = useState(item.item);
-  // const router = useRouter();
-  // const handleProfileClick = (name) => () => {
-  //   router.push(`/profile/${name}`); // profile page url here
-  // };
+
+  const router = useRouter();
+
+  const handleProfileClick = () => {
+    axios
+      .get("/api/profile/friends/friendinfo", {
+        params: {
+          displayName: incomingData.requester.displayName,
+        },
+      })
+      .then((res) => {
+        router.push(`/profile/${res.data.userId}`); // profile page url here
+      });
+  };
 
   const handleDeleteFriendRequest = async () => {
     await axios({
@@ -71,6 +82,7 @@ const IncomingField = (item) => {
           justifyContent: "space-between",
           flexDirection: "row",
         }}
+        onClick={handleProfileClick}
       >
         <Avatar
           sx={{
