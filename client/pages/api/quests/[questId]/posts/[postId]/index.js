@@ -6,14 +6,43 @@ async function getPost(req, res) {
       where: {
         postId: Number(req.query.postId),
       },
-      include: {
+      select: {
+        createdAt: true,
+        title: true,
+        postId: true,
+        body: true,
+        partyMemberId: true,
         partyMember: {
-          include: {
+          select: {
             user: {
               select: {
-                displayName: true,
-                image: true,
                 userId: true,
+                displayName: true,
+              },
+            },
+            partyMemberId: true,
+          },
+        },
+        postReacts: {
+          where: {
+            deletedAt: null,
+            partyMember: {
+              deletedAt: null,
+              user: {
+                deletedAt: null,
+              },
+            },
+          },
+          select: {
+            postReactId: true,
+            type: true,
+            partyMember: {
+              select: {
+                user: {
+                  select: {
+                    userId: true,
+                  },
+                },
               },
             },
           },

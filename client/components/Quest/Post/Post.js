@@ -20,10 +20,9 @@ import Image from "next/image";
 import { useState } from "react";
 import useSWR from "swr";
 import { useSession } from "next-auth/react";
-import Laugh from "../../Icons/Emojis/Laugh";
-import Party from "../../Icons/Emojis/Party";
 
 import ReactOptions from "./ReactOptions";
+import Emoji from "./Emoji";
 
 const Post = ({ post }) => {
   const router = useRouter();
@@ -71,6 +70,13 @@ const Post = ({ post }) => {
     event.stopPropagation();
     setReactOptionsAnchor(event.currentTarget);
     setOpenReactOptions(!openReactOptions);
+  };
+
+  const renderEmojisSet = () => {
+    const emojiTypes = [...new Set(post.postReacts.map((item) => item.type))];
+    return emojiTypes.map((type) => (
+      <Emoji type={type} key={type} width="30" height="30" />
+    ));
   };
 
   return (
@@ -164,11 +170,11 @@ const Post = ({ post }) => {
           >
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <Stack direction="row" spacing={-1}>
-                <Laugh width="30" height="30" style={{ cursor: "pointer" }} />
-
-                <Party width="30" height="30" style={{ cursor: "pointer" }} />
+                {renderEmojisSet()}
               </Stack>
-              <Typography variant="body2">6 reacts</Typography>
+              <Typography variant="body2">
+                {post.postReacts?.length || null}
+              </Typography>
             </Box>
             <Typography variant="body2" onClick={navigateToPost}>
               3 comments
@@ -219,6 +225,9 @@ const Post = ({ post }) => {
         <MenuItem dense>Delete</MenuItem>
       </Menu>
       <ReactOptions
+        postId={post.postId}
+        questId={questId}
+        postReacts={post.postReacts}
         open={openReactOptions}
         anchor={reactOptionsAnchor}
         setOpen={setOpenReactOptions}

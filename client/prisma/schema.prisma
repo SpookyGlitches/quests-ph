@@ -354,6 +354,7 @@ model Post {
   deletedAt     DateTime?
   postFiles     PostFile[]
   comments      Comment[]
+  postReacts    PostReact[]
   partyMember   PartyMember @relation(fields: [partyMemberId], references: [partyMemberId])
 }
 
@@ -375,7 +376,9 @@ model PostReact {
   type          ReactType
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @default(now())
+  deletedAt     DateTime? 
   partyMember   PartyMember @relation(fields: [partyMemberId], references: [partyMemberId])
+  post          Post        @relation(fields: [postId], references: [postId])
 }
 
 model CommentReact {

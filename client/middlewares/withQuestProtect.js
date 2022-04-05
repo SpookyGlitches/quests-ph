@@ -14,6 +14,9 @@ const withQuestProtect = async (handler, req, res, allowedRoles) => {
     });
 
     if (partyMember && allowedRoles.includes(partyMember.role)) {
+      const { partyMemberId } = partyMember;
+      if (req.body) req.body = { ...req.body, partyMember: { partyMemberId } };
+      else req.body = { partyMember: { partyMemberId } };
       return handler(req, res);
     }
     return res.status(404).send();

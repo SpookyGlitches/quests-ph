@@ -12,7 +12,6 @@ async function editReact(req, res) {
         postReactId: Number(req.query.postReactId),
       },
     });
-    console.log(req.query);
     return res.json(postReact);
   } catch (err) {
     console.error(err);
@@ -20,10 +19,30 @@ async function editReact(req, res) {
   }
 }
 
+async function deleteReact(req, res) {
+  try {
+    const postReact = await prisma.postReact.delete({
+      where: {
+        postReactId: Number(req.query.postReactId),
+      },
+    });
+    return res.json(postReact);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send();
+  }
+}
 export default async function handler(req, res) {
   switch (req.method) {
+    // todo, ea: check if the current user is allowed to do modify the resource
     case "PUT":
       return withQuestProtect(editReact, req, res, [
+        "PARTY_LEADER",
+        "MENTOR",
+        "MENTEE",
+      ]);
+    case "DELETE":
+      return withQuestProtect(deleteReact, req, res, [
         "PARTY_LEADER",
         "MENTOR",
         "MENTEE",
