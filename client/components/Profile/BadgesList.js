@@ -1,14 +1,14 @@
 import { Box, IconButton, Typography, Popper, Fade } from "@mui/material";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useState } from "react";
+import useSWR from "swr";
+import CircularProgress from "@mui/material/CircularProgress";
 import StyledPaper from "../Common/StyledPaper";
 
 const itemsToDisplay = 3;
 
 export default function BadgesList() {
-  const [badges, setBadges] = useState([]);
   const [pagination, setPagination] = useState({
     start: 0,
     end: itemsToDisplay - 1,
@@ -20,26 +20,28 @@ export default function BadgesList() {
     setOpenPopper((prev) => !prev);
     event.stopPropagation();
   };
-
-  const initBadges = () => {
-    axios.get("/api/profile/userbadges").then((response) => {
-      if (response.status === 200) {
-        const temp = [];
-        for (let x = 0; x < response.data.length; x++) {
-          temp.push(response.data[x].name);
-        }
-        setBadges(temp);
-      }
-    });
-  };
-
-  useEffect(() => {
-    initBadges();
-  }, []);
+  const { data: myBadges } = useSWR(`/profile/userbadges`);
+  if (!myBadges) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <CircularProgress />
+      </div>
+    );
+  }
+  const temp = [];
+  for (let x = 0; x < myBadges.length; x++) {
+    temp.push(myBadges[x].name);
+  }
 
   const incrementPagination = () => {
-    if (pagination.end - (badges.length - 1) === 0) return;
-    if (pagination.end >= badges.length) return;
+    if (pagination.end - (temp.length - 1) === 0) return;
+    if (pagination.end >= temp.length) return;
     setPagination((prev) => {
       return { start: prev.end + 1, end: prev.end + itemsToDisplay };
     });
@@ -55,7 +57,7 @@ export default function BadgesList() {
   };
 
   const badgeItems = () => {
-    const preview = badges.slice(pagination.start, pagination.end + 1);
+    const preview = temp.slice(pagination.start, pagination.end + 1);
     return preview.map((item) => (
       <Box
         key={`${item}`}

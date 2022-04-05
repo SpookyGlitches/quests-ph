@@ -1,7 +1,7 @@
 import { getSession } from "next-auth/react";
 import prisma from "../../../lib/prisma";
 
-export default async function getAllFriends(req, res) {
+export default async function getUserBadges(req, res) {
   const returnArray = [];
   if (req.method === "GET") {
     try {
@@ -20,6 +20,9 @@ export default async function getAllFriends(req, res) {
           const badgeInfo = await prisma.badge.findFirst({
             where: {
               badgeId: getBadges[i].badgeId,
+            },
+            orderBy: {
+              badgeId: "asc",
             },
           });
           if (badgeInfo) {

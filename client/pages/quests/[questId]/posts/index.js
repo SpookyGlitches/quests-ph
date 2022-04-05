@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import PostsList from "../../../../components/Quest/Post/PostsList";
 import QuestLayout from "../../../../components/Layouts/QuestLayout";
+import AppLayout from "../../../../components/Layouts/AppLayout";
 
 const Index = () => {
   const router = useRouter();
@@ -60,5 +61,9 @@ const Index = () => {
 export default Index;
 
 Index.getLayout = function getLayout(page) {
-  return <QuestLayout>{page}</QuestLayout>;
+  return (
+    <AppLayout>
+      <QuestLayout>{page}</QuestLayout>
+    </AppLayout>
+  );
 };

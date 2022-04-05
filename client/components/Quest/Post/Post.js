@@ -21,6 +21,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { useState } from "react";
 import useSWR from "swr";
+import { useSession } from "next-auth/react";
 import Emoji1 from "../../Icons/Emoji1";
 import Emoji2 from "../../Icons/Emoji2";
 import Emoji3 from "../../Icons/Emoji3";
@@ -28,6 +29,8 @@ import Emoji3 from "../../Icons/Emoji3";
 const Post = ({ post }) => {
   const router = useRouter();
   const { questId } = router.query;
+  const session = useSession();
+  const userId = session.data?.user?.userId;
   const { data: postFiles } = useSWR(
     post.postId && questId
       ? `/quests/${questId}/posts/${post.postId}/postFiles`
@@ -68,10 +71,6 @@ const Post = ({ post }) => {
     router.push(`/quests/${questId}/posts/${post.postId}/edit`);
   };
 
-  if (!postFiles) {
-    return <div>Loading</div>;
-  }
-
   return (
     <>
       <Paper
@@ -86,18 +85,22 @@ const Post = ({ post }) => {
         {/* Post Header */}
         <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
           <Avatar sx={{ backgroundColor: "pink" }}>
-            {post.user.displayName}
+            {post.partyMember.user.displayName}
           </Avatar>
           <Box sx={{ flexGrow: 1 }}>
-            <Typography variant="body2">{post.user.displayName}</Typography>
+            <Typography variant="body2">
+              {post.partyMember.user.displayName}
+            </Typography>
             <Typography variant="subtitle2" sx={{ fontWeight: "regular" }}>
               {formatRelative(new Date(post.createdAt), new Date())}
             </Typography>
           </Box>
           <Box>
-            <IconButton size="small" onClick={handlePostOptionsClick}>
-              <MoreHorizRoundedIcon />
-            </IconButton>
+            {post.partyMember.user.userId === userId && (
+              <IconButton size="small" onClick={handlePostOptionsClick}>
+                <MoreHorizRoundedIcon />
+              </IconButton>
+            )}
           </Box>
         </Box>
 
@@ -112,7 +115,7 @@ const Post = ({ post }) => {
             </Typography>
           </Box>
           <Box style={{}}>
-            {postFiles.length !== 0 && (
+            {postFiles && postFiles.length !== 0 && (
               <Carousel
                 autoPlay={false}
                 sx={{

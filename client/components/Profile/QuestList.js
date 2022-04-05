@@ -3,42 +3,55 @@ import {
   Card,
   Typography,
   CardHeader,
+  CardContent,
   Box,
   InputLabel,
   MenuItem,
   FormControl,
   Select,
+  Grid,
 } from "@mui/material";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
+import { format } from "date-fns";
+import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 
-export default function QuestChart() {
+export default function MyQuestChart() {
   const [dataTable, setDataTable] = useState([]);
   const [category, setCategory] = useState(0);
-  const [categoryNum, setCategoryNum] = useState(0);
+  const questsArr = [];
+  let x = 0;
   const gatherData = (val) => {
     if (val === 0) {
       axios
-        .get("/api/profile/questlist", {
-          params: {
-            categoryNum: 0,
-          },
-        })
+        .get(`/api/profile/friendquestslistactive`)
         .then((res) => {
-          setDataTable(res.data);
+          const questsFriend = res.data;
+          questsFriend.forEach((item) => {
+            // eslint-disable-next-line
+            for (const key in item) {
+              questsArr[x] = item[key];
+              x++;
+            }
+          });
+          setDataTable(questsArr);
         })
         .catch((err) => {
           console.log(err);
         });
     } else {
       axios
-        .get("/api/profile/questlist", {
-          params: {
-            categoryNum: 1,
-          },
-        })
+        .get(`/api/profile/friendquestslistinactive`)
         .then((res) => {
-          setDataTable(res.data);
+          const questsFriend = res.data;
+          questsFriend.forEach((item) => {
+            // eslint-disable-next-line
+            for (const key in item) {
+              questsArr[x] = item[key];
+              x++;
+            }
+          });
+          setDataTable(questsArr);
         })
         .catch((err) => {
           console.log(err);
@@ -47,12 +60,11 @@ export default function QuestChart() {
   };
   const handleChange = (event) => {
     setCategory(event.target.value);
-    setCategoryNum(event.target.value);
     gatherData(event.target.value);
   };
 
   useEffect(() => {
-    gatherData(categoryNum);
+    gatherData(category);
     // eslint-disable-next-line
   }, []);
 
@@ -110,7 +122,6 @@ export default function QuestChart() {
           },
         }}
       >
-        {/* {filterData(category)} */}
         {dataTable.map((elem) => (
           <Stack
             item
@@ -124,6 +135,26 @@ export default function QuestChart() {
                 title={`${elem.wish}`}
                 subheader={`${elem.category}`}
               />
+              <CardContent>
+                <Grid container spacing={3} sx={{ ml: "0em" }}>
+                  <AccessTimeRoundedIcon sx={{ mr: 1 }} />
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ mt: "0.2em" }}
+                  >
+                    {format(
+                      new Date(`${elem.estimatedStartDate}`),
+                      "MMMM d, yyyy",
+                    )}{" "}
+                    -{" "}
+                    {format(
+                      new Date(`${elem.estimatedEndDate}`),
+                      "MMMM d, yyyy",
+                    )}
+                  </Typography>
+                </Grid>
+              </CardContent>
             </Card>
           </Stack>
         ))}
