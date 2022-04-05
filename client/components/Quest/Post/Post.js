@@ -5,8 +5,6 @@ import {
   Typography,
   Stack,
   Button,
-  Popper,
-  Fade,
   IconButton,
   Paper,
   Menu,
@@ -22,9 +20,10 @@ import Image from "next/image";
 import { useState } from "react";
 import useSWR from "swr";
 import { useSession } from "next-auth/react";
-import Emoji1 from "../../Icons/Emoji1";
-import Emoji2 from "../../Icons/Emoji2";
-import Emoji3 from "../../Icons/Emoji3";
+import Laugh from "../../Icons/Emojis/Laugh";
+import Party from "../../Icons/Emojis/Party";
+
+import ReactOptions from "./ReactOptions";
 
 const Post = ({ post }) => {
   const router = useRouter();
@@ -38,19 +37,16 @@ const Post = ({ post }) => {
   );
   const [postOptionsAnchor, setPostOptionsAnchor] = useState(null);
   const [openPostOptions, setOpenPostOptions] = useState(false);
-  const [reactAnchor, setReactAnchor] = useState(null);
-  const [openReact, setOpenReact] = useState(false);
+
+  const [reactOptionsAnchor, setReactOptionsAnchor] = useState(null);
+  const [openReactOptions, setOpenReactOptions] = useState(false);
 
   const handlePostOptionsClick = (event) => {
     event.stopPropagation();
     setPostOptionsAnchor(event.currentTarget);
     setOpenPostOptions(!openPostOptions);
   };
-  const handleReactClick = (event) => {
-    event.stopPropagation();
-    setReactAnchor(event.currentTarget);
-    setOpenReact(!openReact);
-  };
+
   const closePostOptions = () => {
     setOpenPostOptions(false);
   };
@@ -69,6 +65,12 @@ const Post = ({ post }) => {
 
   const navigateToEditPage = () => {
     router.push(`/quests/${questId}/posts/${post.postId}/edit`);
+  };
+
+  const handleReactClick = (event) => {
+    event.stopPropagation();
+    setReactOptionsAnchor(event.currentTarget);
+    setOpenReactOptions(!openReactOptions);
   };
 
   return (
@@ -161,10 +163,10 @@ const Post = ({ post }) => {
             }}
           >
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <Stack direction="row" spacing={-1.5}>
-                <Emoji1 width="30" height="30" />
-                <Emoji2 width="30" height="30" />
-                <Emoji3 width="30" height="30" />
+              <Stack direction="row" spacing={-1}>
+                <Laugh width="30" height="30" style={{ cursor: "pointer" }} />
+
+                <Party width="30" height="30" style={{ cursor: "pointer" }} />
               </Stack>
               <Typography variant="body2">6 reacts</Typography>
             </Box>
@@ -216,24 +218,11 @@ const Post = ({ post }) => {
         </MenuItem>
         <MenuItem dense>Delete</MenuItem>
       </Menu>
-
-      <Popper
-        open={openReact}
-        anchorEl={reactAnchor}
-        placement="top"
-        transition
-        style={{ zIndex: 1 }}
-      >
-        {({ TransitionProps }) => (
-          <Fade {...TransitionProps} timeout={350}>
-            <Paper>
-              <Emoji1 width="40" height="40" />
-              <Emoji2 width="40" height="40" />
-              <Emoji3 width="40" height="40" />
-            </Paper>
-          </Fade>
-        )}
-      </Popper>
+      <ReactOptions
+        open={openReactOptions}
+        anchor={reactOptionsAnchor}
+        setOpen={setOpenReactOptions}
+      />
     </>
   );
 };
