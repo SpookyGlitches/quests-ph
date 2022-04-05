@@ -22,7 +22,7 @@ import {
   DialogContentText,
   DialogActions,
 } from "@mui/material";
-import Notification from "../../components/Settings/Notification";
+import Notification from "../../components/Common/Notification";
 
 import { ChangePasswordValidations } from "../../validations/ChangePassword";
 import { EditMemberValidations } from "../../validations/UserEdit";
