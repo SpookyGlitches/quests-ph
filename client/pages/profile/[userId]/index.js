@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
+import { useSession, getSession } from "next-auth/react";
 import AppLayout from "../../../components/Layouts/AppLayout";
 import FriendBadgesList from "../../../components/Profile/Friends/FriendsBadgesList";
 import FriendsBasicInfo from "../../../components/Profile/Friends/FriendsBasicInfo";
@@ -14,6 +14,7 @@ export default function FriendsProfile() {
   const { userId } = router.query;
 
   const { data: session } = useSession();
+
   if (session) {
     return (
       <AppLayout>
@@ -36,7 +37,12 @@ export default function FriendsProfile() {
             }}
           >
             <FriendsBasicInfo userId={userId} />
-            <OptionsBar userId={userId} role={session.user.role} />
+            {userId !== session.user.userId ? (
+              <OptionsBar userId={userId} role={session.user.role} />
+            ) : (
+              // eslint-disable-next-line
+              <></>
+            )}
             <FriendBadgesList userId={userId} />
             <FriendsQuestChart userId={userId} />
             <FriendsQuestList userId={userId} />
@@ -46,4 +52,12 @@ export default function FriendsProfile() {
     );
   }
   return <AccessDenied />;
+}
+
+export async function getServerSideProps(context) {
+  return {
+    props: {
+      session: await getSession(context),
+    },
+  };
 }
