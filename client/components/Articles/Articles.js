@@ -11,8 +11,17 @@ import {
 import useSWR from "swr";
 import CircularProgress from "@mui/material/CircularProgress";
 import Link from "next/link";
+import { makeStyles } from "@mui/styles";
 
 export default function Articles({ category }) {
+  const useStyles = makeStyles(() => ({
+    media: {
+      height: 140,
+    },
+  }));
+
+  const classes = useStyles();
+
   const { data: articles } = useSWR(
     category ? `/articles/${category}/articlelist` : null,
   );
@@ -45,13 +54,13 @@ export default function Articles({ category }) {
             >
               {elem.image === undefined ? (
                 <CardMedia
-                  height="140"
+                  className={classes.media}
                   image="articles/quests-article.png"
                   alt={elem.provider}
                 />
               ) : (
                 <CardMedia
-                  height="140"
+                  className={classes.media}
                   image={elem.image}
                   alt={elem.provider}
                 />
