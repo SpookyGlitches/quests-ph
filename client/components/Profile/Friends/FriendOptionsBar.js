@@ -32,7 +32,6 @@ export default function FriendsOptionsBar({
   userId,
   friendshipId,
   friendInfo,
-  action,
   role,
 }) {
   const [open, setOpen] = React.useState(false);
@@ -43,6 +42,8 @@ export default function FriendsOptionsBar({
   const [openSbTwo, setOpenSbTwo] = React.useState(false);
   const [openRequest, setOpenRequest] = React.useState(false);
   const [questMentored, setQuestMentored] = React.useState("");
+  const [messageThree, setMessageThree] = React.useState("");
+  const [openSbThree, setOpenSbThree] = React.useState(false);
 
   const currentValidationSchema = UserReport[0];
   const methods = useForm({
@@ -154,8 +155,21 @@ export default function FriendsOptionsBar({
 
     setOpenSbTwo(false);
   };
+
+  const handleCloseSnackbarThree = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenSbThree(false);
+  };
   const handleRequest = () => {
-    setOpenRequest(true);
+    if (friendInfo.isActive !== "1") {
+      setMessageThree("This mentor is currently on the process of approval.");
+      setOpenSbThree(true);
+    } else {
+      setOpenRequest(true);
+    }
   };
 
   const handleCloseRequest = () => {
@@ -245,14 +259,18 @@ export default function FriendsOptionsBar({
         autoHideDuration={3000}
         onClose={handleCloseSnackbar}
         message={message}
-        action={action}
       />
       <Snackbar
         open={openSbTwo}
         autoHideDuration={3000}
         onClose={handleCloseSnackbarTwo}
         message={messageTwo}
-        action={action}
+      />
+      <Snackbar
+        open={openSbThree}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbarThree}
+        message={messageThree}
       />
       <Button
         variant="outlined"
