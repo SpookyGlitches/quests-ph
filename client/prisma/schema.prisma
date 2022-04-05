@@ -294,7 +294,7 @@ model PartyMember {
   postReacts    PostReact[]
   quest         Quest           @relation(fields: [questId], references: [questId])
   user          User            @relation(fields: [userId], references: [userId])
-  
+
   @@unique([questId, userId, deletedAt])
 }
 
@@ -369,13 +369,13 @@ model Comment {
 }
 
 model PostReact {
-  postReactId Int       @id @default(autoincrement())
-  postId      Int
-  partyMemberId      Int
-  type        ReactType
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now())
-  partyMember PartyMember      @relation(fields: [partyMemberId], references: [partyMemberId])
+  postReactId   Int         @id @default(autoincrement())
+  postId        Int
+  partyMemberId Int
+  type          ReactType
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now())
+  partyMember   PartyMember @relation(fields: [partyMemberId], references: [partyMemberId])
 }
 
 model CommentReact {
