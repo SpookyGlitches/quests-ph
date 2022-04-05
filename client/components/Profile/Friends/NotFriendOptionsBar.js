@@ -118,7 +118,7 @@ export default function MentorNotFriendOptionsBar({
   const handleAdd = () => {
     axios({
       method: "get",
-      url: `/api/profile/${userId}/outgoingfriend`,
+      url: `/api/profile/${userId}/checkrequest`,
       data: {
         userId,
       },
