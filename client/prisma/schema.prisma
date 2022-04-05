@@ -294,6 +294,7 @@ model PartyMember {
   posts         Post[]
   quest         Quest           @relation(fields: [questId], references: [questId])
   user          User            @relation(fields: [userId], references: [userId])
+  pointsLog     PointsLog[]
 
   @@unique([questId, userId, deletedAt])
 }

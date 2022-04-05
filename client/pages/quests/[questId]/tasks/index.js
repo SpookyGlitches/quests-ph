@@ -1,4 +1,5 @@
 import { Box, Grid } from "@mui/material";
+import { getSession } from "next-auth/react";
 import TaskLists from "../../../../components/Quest/Tasks/TasksLists";
 import QuestLayout from "../../../../components/Layouts/QuestLayout";
 import AppLayout from "../../../../components/Layouts/AppLayout";
@@ -35,3 +36,11 @@ index.getLayout = function getLayout(page) {
     </AppLayout>
   );
 };
+
+export async function getServerSideProps(context) {
+  return {
+    props: {
+      session: await getSession(context),
+    },
+  };
+}
