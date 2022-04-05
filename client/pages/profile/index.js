@@ -1,9 +1,11 @@
 import { Box } from "@mui/material";
-import { useSession, getSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import AppLayout from "../../components/Layouts/AppLayout";
 import BadgesList from "../../components/Profile/BadgesList";
 import BasicInfo from "../../components/Profile/BasicInfo";
 import QuestChart from "../../components/Profile/QuestChart";
+import AccessDenied from "../../components/Error/AccessDenied";
+import QuestList from "../../components/Profile/QuestList";
 
 import AccessDenied from "../../components/Error/AccessDenied";
 import QuestList from "../../components/Profile/QuestList";
@@ -44,12 +46,4 @@ export default function Profile() {
     );
   }
   return <AccessDenied />;
-}
-
-export async function getServerSideProps(context) {
-  return {
-    props: {
-      session: await getSession(context),
-    },
-  };
 }

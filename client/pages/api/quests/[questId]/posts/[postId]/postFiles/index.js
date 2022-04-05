@@ -1,4 +1,5 @@
 import prisma from "../../../../../../../lib/prisma";
+import withQuestProtect from "../../../../../../../middlewares/withQuestProtect";
 
 async function getPostFiles(req, res) {
   try {
@@ -15,9 +16,9 @@ async function getPostFiles(req, res) {
         createdAt: true,
         post: {
           select: {
-            user: {
+            partyMember: {
               select: {
-                userId: true,
+                partyMemberId: true,
               },
             },
           },
@@ -67,7 +68,11 @@ async function deletePostFiles(req, res) {
 export default async function handler(req, res) {
   switch (req.method) {
     case "GET":
-      return getPostFiles(req, res);
+      return withQuestProtect(getPostFiles, req, res, [
+        "PARTY_LEADER",
+        "MENTOR",
+        "MENTEE",
+      ]);
     case "POST":
       return addPostFile(req, res);
     case "DELETE":

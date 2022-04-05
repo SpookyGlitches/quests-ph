@@ -35,18 +35,18 @@ export default function WoopModal({ handleOk, handleCancel, okText, details }) {
   }, [details]);
 
   return (
-    <Dialog fullWidth open={details.open}>
+    <Dialog fullWidth open={details?.open}>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(handleOk)}>
           <DialogTitle color="primary">
-            {details.title || "Quest Overview"}
+            {details?.title || "Quest Overview"}
           </DialogTitle>
           <DialogContent>
             <Stack spacing={3}>
               <Box>
                 <Typography variant="h5">Wish</Typography>
                 <Typography variant="subtitle1">
-                  {details.statement.wish}
+                  {details?.statement?.wish}
                 </Typography>
               </Box>
               <Step1 />
@@ -57,7 +57,7 @@ export default function WoopModal({ handleOk, handleCancel, okText, details }) {
               <Button
                 autoFocus
                 onClick={handleCancel}
-                disabled={details.loading}
+                disabled={details?.loading}
               >
                 Cancel
               </Button>

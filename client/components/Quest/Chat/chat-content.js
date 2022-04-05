@@ -11,6 +11,7 @@ import {
   Grid,
   Divider,
 } from "@mui/material";
+import ReactScrollableFeed from "react-scrollable-feed";
 
 const ChatContent = () => {
   return (
@@ -25,137 +26,50 @@ const ChatContent = () => {
       <Divider>
         <Chip label="Unread Messages" />
       </Divider>
-      <List
-        sx={{
-          bgcolor: "background.paper",
-          overflow: "hidden",
-        }}
-      >
-        <ListItem alignItems="flex-start">
-          <ListItemAvatar>
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-          </ListItemAvatar>
+      <ReactScrollableFeed>
+        <List
+          sx={{
+            bgcolor: "background.paper",
+            overflow: "hidden",
+          }}
+        >
+          <ListItem alignItems="flex-start">
+            <ListItemAvatar>
+              <Avatar alt="Remy Sharp">R</Avatar>
+            </ListItemAvatar>
 
-          <ListItemText
-            primary={
-              <Grid sx={{ display: "flex", flexDirection: "row" }}>
-                <Typography sx={{ fontSize: "15px", marginRight: 1 }}>
-                  Monica
-                </Typography>
+            <ListItemText
+              primary={
+                <Grid sx={{ display: "flex", flexDirection: "row" }}>
+                  <Typography sx={{ fontSize: "15px", marginRight: 1 }}>
+                    ada
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    sx={{ color: "#d4d9d4", fontSize: "14px" }}
+                  >
+                    {/* {formatRelative(
+                      subDays(new Date(), 0),
+                      new Date(chat.createdAt),
+                    )} */}
+                    asdasd
+                  </Typography>
+                </Grid>
+              }
+              secondary={
                 <Typography
-                  variant="h6"
-                  sx={{ color: "#d4d9d4", fontSize: "14px" }}
+                  sx={{ display: "inline", fontSize: "15px" }}
+                  component="span"
+                  variant="body2"
+                  color="text.primary"
                 >
-                  Today at 4:50 PM
+                  dasda
                 </Typography>
-              </Grid>
-            }
-            secondary={
-              <Typography
-                sx={{ display: "inline", fontSize: "15px" }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                Hi, any idea how can i do x?
-              </Typography>
-            }
-          />
-        </ListItem>
-        <ListItem alignItems="flex-start">
-          <ListItemAvatar>
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-          </ListItemAvatar>
-
-          <ListItemText
-            primary={
-              <Grid sx={{ display: "flex", flexDirection: "row" }}>
-                <Typography sx={{ fontSize: "15px", marginRight: 1 }}>
-                  Monica
-                </Typography>
-                <Typography
-                  variant="h6"
-                  sx={{ color: "#d4d9d4", fontSize: "14px" }}
-                >
-                  Today at 4:50 PM
-                </Typography>
-              </Grid>
-            }
-            secondary={
-              <Typography
-                sx={{ display: "inline", fontSize: "15px" }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                Hi, any idea how can i do x?
-              </Typography>
-            }
-          />
-        </ListItem>
-        <ListItem alignItems="flex-start">
-          <ListItemAvatar>
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-          </ListItemAvatar>
-
-          <ListItemText
-            primary={
-              <Grid sx={{ display: "flex", flexDirection: "row" }}>
-                <Typography sx={{ fontSize: "15px", marginRight: 1 }}>
-                  Monica
-                </Typography>
-                <Typography
-                  variant="h6"
-                  sx={{ color: "#d4d9d4", fontSize: "14px" }}
-                >
-                  Today at 4:50 PM
-                </Typography>
-              </Grid>
-            }
-            secondary={
-              <Typography
-                sx={{ display: "inline", fontSize: "15px" }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                Hi, any idea how can i do x?
-              </Typography>
-            }
-          />
-        </ListItem>
-        <ListItem alignItems="flex-start">
-          <ListItemAvatar>
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-          </ListItemAvatar>
-
-          <ListItemText
-            primary={
-              <Grid sx={{ display: "flex", flexDirection: "row" }}>
-                <Typography sx={{ fontSize: "15px", marginRight: 1 }}>
-                  Monica
-                </Typography>
-                <Typography
-                  variant="h6"
-                  sx={{ color: "#d4d9d4", fontSize: "14px" }}
-                >
-                  Today at 4:50 PM
-                </Typography>
-              </Grid>
-            }
-            secondary={
-              <Typography
-                sx={{ display: "inline", fontSize: "15px" }}
-                component="span"
-                variant="body2"
-                color="text.primary"
-              >
-                Hi, any idea how can i do x?
-              </Typography>
-            }
-          />
-        </ListItem>
-      </List>
+              }
+            />
+          </ListItem>
+        </List>
+      </ReactScrollableFeed>
     </Box>
   );
 };
