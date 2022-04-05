@@ -36,6 +36,7 @@ export default function Options({ userId, role }) {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          overflow: "auto",
         }}
       />
     );

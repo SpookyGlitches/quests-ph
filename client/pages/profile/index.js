@@ -4,6 +4,7 @@ import AppLayout from "../../components/Layouts/AppLayout";
 import BadgesList from "../../components/Profile/BadgesList";
 import BasicInfo from "../../components/Profile/BasicInfo";
 import QuestChart from "../../components/Profile/QuestChart";
+
 import AccessDenied from "../../components/Error/AccessDenied";
 import QuestList from "../../components/Profile/QuestList";
 
