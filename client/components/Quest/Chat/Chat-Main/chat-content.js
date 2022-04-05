@@ -1,23 +1,24 @@
-import React from "react";
 import {
   List,
   ListItem,
   ListItemAvatar,
   Avatar,
+  Grid,
   Box,
   Typography,
+  Divider,
   ListItemText,
   Chip,
-  Grid,
-  Divider,
 } from "@mui/material";
 import ReactScrollableFeed from "react-scrollable-feed";
 
 const ChatContent = () => {
   return (
     <Box
+      border={1}
+      borderColor="#eeeee4"
       display="column"
-      height="400px"
+      height="490px"
       style={{
         overflow: "hidden",
         overflowY: "scroll",
@@ -63,7 +64,7 @@ const ChatContent = () => {
                   variant="body2"
                   color="text.primary"
                 >
-                  dasda
+                  Hello World
                 </Typography>
               }
             />

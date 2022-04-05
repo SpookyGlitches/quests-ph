@@ -36,7 +36,7 @@ export default async function (req, res) {
           html: `<div>
               This is an automated reply from Quests App University of San Carlos. Please do not reply.
               You are receiving this email because we received a request to reset the password for your account.
-              To proceed, reset your password through this <a href="http://localhost:3000/auth/reset-password/${createRecord.token}">link</a>.
+              To proceed, reset your password through this <a href="${process.env.NEXTAUTH_URL}/auth/reset-password/${createRecord.token}">link</a>.
               The link will only be available for 5 minutes and can only be used once.
 
           <div>`,
