@@ -45,8 +45,8 @@ export default async function GetFriendQuestsListInfo(req, res) {
           });
           questList.push(getFinalQuests);
         }
+        return res.status(200).json(questList);
       }
-      return res.status(200).json(questList);
     } catch (error) {
       console.log(error);
       return res.status(400).json({ message: "Something went wrong" });

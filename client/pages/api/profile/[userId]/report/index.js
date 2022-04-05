@@ -32,7 +32,9 @@ async function checkReport(req, res) {
         deletedAt: null, // if deletedAt has a date, user can report again
       },
     });
-    reportValues.push(checkSpamming);
+    if (checkSpamming) {
+      reportValues.push(checkSpamming);
+    }
     const checkHarassment = await prisma.userReport.findMany({
       where: {
         reporterId: user.userId,
@@ -41,7 +43,9 @@ async function checkReport(req, res) {
         deletedAt: null, // if deletedAt has a date, user can report again
       },
     });
-    reportValues.push(checkHarassment);
+    if (checkHarassment) {
+      reportValues.push(checkHarassment);
+    }
     const checkFraud = await prisma.userReport.findMany({
       where: {
         reporterId: user.userId,
@@ -50,7 +54,9 @@ async function checkReport(req, res) {
         deletedAt: null, // if deletedAt has a date, user can report again
       },
     });
-    reportValues.push(checkFraud);
+    if (checkFraud) {
+      reportValues.push(checkFraud);
+    }
     const checkOthers = await prisma.userReport.findMany({
       where: {
         reporterId: user.userId,
@@ -59,14 +65,13 @@ async function checkReport(req, res) {
         deletedAt: null, // if deletedAt has a date, user can report again
       },
     });
-    reportValues.push(checkOthers);
-
-    res.status(200).send(reportValues);
+    if (checkOthers) {
+      reportValues.push(checkOthers);
+    }
+    return res.status(200).send(reportValues);
   } catch (err) {
-    res.status(400).send({ message: "Error" });
+    return res.status(400).send({ message: "Error" });
   }
-
-  await prisma.$disconnect();
 }
 
 export default async function handler(req, res) {

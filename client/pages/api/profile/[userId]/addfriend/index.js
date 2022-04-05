@@ -11,7 +11,7 @@ export default async function (req, res) {
       },
     });
 
-    res.status(200).send(createFriendReq);
+    return res.status(200).send(createFriendReq);
   }
 
   await prisma.$disconnect();

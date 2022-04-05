@@ -25,12 +25,10 @@ async function checkAvailQuest(req, res) {
       },
     });
 
-    res.status(200).send(checkAvail);
+    return res.status(200).send(checkAvail);
   } catch (err) {
-    res.status(400).send({ message: "Error" });
+    return res.status(400).send({ message: "Error" });
   }
-
-  await prisma.$disconnect();
 }
 
 export default async function handler(req, res) {
