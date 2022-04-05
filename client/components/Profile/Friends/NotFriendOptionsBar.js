@@ -141,7 +141,7 @@ export default function MentorNotFriendOptionsBar({
             });
         } else {
           setMessage(
-            "You've already added this user. Please check your outgoing requests.",
+            "There is an existing request for this user. Please check your incoming/outgoing requests.",
           );
           setOpenSb(true);
         }
