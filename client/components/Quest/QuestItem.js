@@ -53,7 +53,7 @@ export default function QuestItem({ onJoinClick, quest, navigate }) {
             </Box>
           </Box>
         </Grid>
-        {!quest.isJoined && (
+        {quest.canJoin && (
           <Grid item xs={12} md={2}>
             <Box
               sx={{

@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Box,
-  Button,
   Typography,
   Table,
   TableBody,
@@ -12,47 +11,37 @@ import {
   CardHeader,
   Avatar,
   Stack,
+  IconButton,
 } from "@mui/material";
-import { tableCellClasses } from "@mui/material/TableCell";
 import { deepOrange } from "@mui/material/colors";
+import { useRouter } from "next/router";
+import useSWR from "swr";
+import RemoveCircleOutlineRoundedIcon from "@mui/icons-material/RemoveCircleOutlineRounded";
+import axios from "axios";
 
-function createData(num, name, button) {
-  return { num, name, button };
-}
+export default function BanList() {
+  const router = useRouter();
+  const { questId } = router.query;
+  const { data: partyBans, mutate: mutatePartyBans } = useSWR(
+    questId ? `/quests/${questId}/partyBans` : null,
+  );
 
-const rows = [
-  createData(
-    "1",
-    "watamesheep",
-    <Button
-      variant="outlined"
-      color="primary"
-      style={{
-        backgroundColor: "#E8E8E8",
-        borderColor: "#E8E8E8",
-        color: "#B0B0B0",
-      }}
-    >
-      Revoke
-    </Button>,
-  ),
-  createData(
-    "2",
-    "wewewew",
-    <Button
-      variant="outlined"
-      color="primary"
-      style={{
-        backgroundColor: "#E8E8E8",
-        borderColor: "#E8E8E8",
-        color: "#B0B0B0",
-      }}
-    >
-      Revoke
-    </Button>,
-  ),
-];
-const banList = () => {
+  if (!partyBans) {
+    return <div>Loading</div>;
+  }
+
+  const revokeBan = async (partyBanId) => {
+    try {
+      await axios.delete(`/api/quests/${questId}/partyBans/${partyBanId}`);
+      const filtered = partyBans.filter(
+        (item) => item.questPartyBanId !== partyBanId,
+      );
+      mutatePartyBans(filtered);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Box
@@ -69,26 +58,17 @@ const banList = () => {
         </Typography>
         <Stack spacing={2}>
           <TableContainer sx={{ mb: 0, mt: 0 }}>
-            <Table
-              sx={{
-                minWidth: 100,
-                [`& .${tableCellClasses.root}`]: {
-                  borderBottom: "none",
-                },
-              }}
-              size="small"
-              aria-label="ban table"
-            >
+            <Table size="small" aria-label="ban table">
               <TableHead>
                 <TableRow>
-                  <TableCell />
-                  <TableCell align="right" />
+                  <TableCell>User</TableCell>
+                  <TableCell align="right">Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
+                {partyBans.map((partyBan) => (
                   <TableRow
-                    key={row.num}
+                    key={partyBan.questPartyBanId}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row" padding="none">
@@ -100,10 +80,16 @@ const banList = () => {
                             }}
                           />
                         }
-                        title={row.name}
+                        title={partyBan.user.displayName}
                       />
                     </TableCell>
-                    <TableCell align="right">{row.button}</TableCell>
+                    <TableCell align="right">
+                      <IconButton
+                        onClick={() => revokeBan(partyBan.questPartyBanId)}
+                      >
+                        <RemoveCircleOutlineRoundedIcon />
+                      </IconButton>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -113,6 +99,4 @@ const banList = () => {
       </Box>
     </Box>
   );
-};
-
-export default banList;
+}

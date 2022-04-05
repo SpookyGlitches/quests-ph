@@ -1,3 +1,4 @@
+import AppLayout from "../../../../components/Layouts/AppLayout";
 import QuestLayout from "../../../../components/Layouts/QuestLayout";
 import Settings from "../../../../components/Quest/Overview/Settings";
 import Statements from "../../../../components/Quest/Overview/Statements";
@@ -12,5 +13,9 @@ export default function Overview() {
 }
 
 Overview.getLayout = function getLayout(page) {
-  return <QuestLayout>{page}</QuestLayout>;
+  return (
+    <AppLayout>
+      <QuestLayout>{page}</QuestLayout>
+    </AppLayout>
+  );
 };

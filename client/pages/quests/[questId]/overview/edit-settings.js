@@ -28,6 +28,7 @@ import {
   wishValidation,
 } from "../../../../validations/quest";
 import WishInput from "../../../../components/Quest/Create/WishInput";
+import AppLayout from "../../../../components/Layouts/AppLayout";
 
 const wishItem = <WishInput />;
 
@@ -176,5 +177,9 @@ export default function Edit() {
 }
 
 Edit.getLayout = function getLayout(page) {
-  return <QuestLayout>{page}</QuestLayout>;
+  return (
+    <AppLayout>
+      <QuestLayout>{page}</QuestLayout>
+    </AppLayout>
+  );
 };
