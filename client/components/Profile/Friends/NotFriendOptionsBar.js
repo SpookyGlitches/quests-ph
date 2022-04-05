@@ -12,6 +12,7 @@ import useSWR from "swr";
 import PersonAddAlt1RoundedIcon from "@mui/icons-material/PersonAddAlt1Rounded";
 import HelpCenterRounded from "@mui/icons-material/HelpCenterRounded";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useSnackbar } from "notistack";
 import {
   Box,
   Button,
@@ -24,7 +25,6 @@ import {
   FormHelperText,
   Typography,
 } from "@mui/material";
-import Snackbar from "@mui/material/Snackbar";
 import { UserReport } from "../../../validations/userReport";
 
 export default function MentorNotFriendOptionsBar({
@@ -33,15 +33,10 @@ export default function MentorNotFriendOptionsBar({
   role,
 }) {
   const [openReport, setOpenReport] = React.useState(false);
-  const [message, setMessage] = React.useState("");
-  const [openSb, setOpenSb] = React.useState(false);
-  const [messageTwo, setMessageTwo] = React.useState("");
-  const [openSbTwo, setOpenSbTwo] = React.useState(false);
   const [openRequest, setOpenRequest] = React.useState(false);
   const [questMentored, setQuestMentored] = React.useState("");
-  const [messageThree, setMessageThree] = React.useState("");
-  const [openSbThree, setOpenSbThree] = React.useState(false);
 
+  const { enqueueSnackbar } = useSnackbar();
   const currentValidationSchema = UserReport[0];
   const methods = useForm({
     resolver: yupResolver(currentValidationSchema),
@@ -70,26 +65,24 @@ export default function MentorNotFriendOptionsBar({
     })
       .then((response) => {
         if (response.data[0].length === 1 && values.category === "Spamming") {
-          setMessage("You've already reported this user for spamming.");
-          setOpenSb(true);
+          enqueueSnackbar("You have already reported this user for Spamming.");
         } else if (
           response.data[1].length === 1 &&
           values.category === "Harassment"
         ) {
-          setMessage("You've already reported this user for Harassment.");
-          setOpenSb(true);
+          enqueueSnackbar(
+            "You have already reported this user for Harassment.",
+          );
         } else if (
           response.data[2].length === 1 &&
           values.category === "Fraud"
         ) {
-          setMessage("You've already reported this user for Fraud.");
-          setOpenSb(true);
+          enqueueSnackbar("You have already reported this user for Fraud.");
         } else if (
           response.data[3].length === 1 &&
           values.category === "Others"
         ) {
-          setMessage("You've already reported this user.");
-          setOpenSb(true);
+          enqueueSnackbar("You have already reported this user!");
         } else {
           axios({
             method: "POST",
@@ -100,8 +93,7 @@ export default function MentorNotFriendOptionsBar({
             },
           }) // eslint-disable-next-line
             .then((res) => {
-              setMessage("You have reported this user!");
-              setOpenSb(true);
+              enqueueSnackbar("You have reported this user!");
             })
             .catch((error) => {
               console.log(error);
@@ -131,20 +123,17 @@ export default function MentorNotFriendOptionsBar({
             data: {
               userId,
             },
-          })
+          }) // eslint-disable-next-line
             .then((res) => {
-              setMessage("You have successfully sent a friend request!");
-              setOpenSb(true);
-              console.log(res);
+              enqueueSnackbar("You have successfully sent a friend request!");
             })
             .catch((error) => {
               console.log(error);
             });
         } else {
-          setMessage(
+          enqueueSnackbar(
             "There is an existing request for this user. Please check your incoming/outgoing requests.",
           );
-          setOpenSb(true);
         }
       })
       .catch((error) => {
@@ -152,32 +141,9 @@ export default function MentorNotFriendOptionsBar({
       });
   };
 
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpenSb(false);
-  };
-
-  const handleCloseSnackbarTwo = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpenSbTwo(false);
-  };
-  const handleCloseSnackbarThree = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpenSbThree(false);
-  };
   const handleRequest = () => {
     if (friendInfo.isActive !== "1") {
-      setMessageThree("This mentor is currently on the process of approval.");
-      setOpenSbThree(true);
+      enqueueSnackbar("This mentor is currently on the process of approval.");
     } else {
       setOpenRequest(true);
     }
@@ -204,9 +170,7 @@ export default function MentorNotFriendOptionsBar({
               },
             }) // eslint-disable-next-line
               .then((res) => {
-                console.log(res);
-                setMessageTwo("You have sent a request!");
-                setOpenSbTwo(true);
+                enqueueSnackbar("You have sent a request!");
                 setQuestMentored("");
               })
               .catch((error) => {
@@ -214,16 +178,14 @@ export default function MentorNotFriendOptionsBar({
               });
             setOpenRequest(false);
           } else {
-            setMessageTwo(
+            enqueueSnackbar(
               "This Quest is currently being requested to be mentored! Please choose another Quest!",
             );
-            setOpenSbTwo(true);
             setOpenRequest(true);
           }
         });
     } else {
-      setMessageTwo("Please choose a valid Quest!");
-      setOpenSbTwo(true);
+      enqueueSnackbar("Please choose a valid Quest!");
       setOpenRequest(true);
     }
   };
@@ -266,24 +228,6 @@ export default function MentorNotFriendOptionsBar({
         overflow: "auto",
       }}
     >
-      <Snackbar
-        open={openSb}
-        autoHideDuration={3000}
-        onClose={handleCloseSnackbar}
-        message={message}
-      />
-      <Snackbar
-        open={openSbTwo}
-        autoHideDuration={3000}
-        onClose={handleCloseSnackbarTwo}
-        message={messageTwo}
-      />
-      <Snackbar
-        open={openSbThree}
-        autoHideDuration={3000}
-        onClose={handleCloseSnackbarThree}
-        message={messageThree}
-      />
       <Button
         variant="outlined"
         style={{
