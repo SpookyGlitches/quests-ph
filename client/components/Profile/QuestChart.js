@@ -10,8 +10,8 @@ import {
 
 import { Bar } from "react-chartjs-2";
 import { Box, Typography } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import useSWR from "swr";
+import React from "react";
 
 ChartJS.register(
   CategoryScale,
@@ -22,8 +22,40 @@ ChartJS.register(
   Legend,
 );
 export default function QuestChart() {
-  const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up("md"));
+  // eslint-disable-next-line
+  const { data: myQuests } = useSWR(`/profile/questchart`);
+  if (!myQuests) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      />
+    );
+  }
+  const questsArrComplete = [];
+  let healthCount = 0;
+  let socialCount = 0;
+  let careerCount = 0;
+
+  myQuests.forEach((item) => {
+    // eslint-disable-next-line
+    for (const key in item) {
+      if (item[key].category === "HEALTH") {
+        healthCount++;
+      } else if (item[key].category === "SOCIAL") {
+        socialCount++;
+      } else {
+        careerCount++;
+      }
+    }
+  });
+  questsArrComplete.push(healthCount);
+  questsArrComplete.push(socialCount);
+  questsArrComplete.push(careerCount);
+
   return (
     <Box
       sx={{
@@ -82,14 +114,14 @@ export default function QuestChart() {
             labels: ["Health", "Social", "Career"],
             datasets: [
               {
-                data: [20, 40, 60],
+                data: questsArrComplete,
                 backgroundColor: [
-                  "rgba(255, 159, 64)",
-                  "rgb(37, 230, 230)",
-                  "rgb(235, 91, 91)",
+                  "rgb(21,136,25)",
+                  "rgb(101,19,223)",
+                  "rgb(218,83,83)",
                 ],
                 borderWidth: 0,
-                borderRadius: matches ? 20 : 10,
+                borderRadius: 10,
               },
             ],
           }}
