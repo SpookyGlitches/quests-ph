@@ -362,7 +362,7 @@ model Comment {
   commentId     Int         @id @default(autoincrement())
   postId        Int
   partyMemberId Int
-  content       String 
+  content       String
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @default(now())
   deletedAt     DateTime?
