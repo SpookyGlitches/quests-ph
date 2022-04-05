@@ -60,7 +60,6 @@ model User {
   notification       Notification[]
   conversationMember ConversationMember[]
   partyMembers       PartyMember[]
-  comment            Comment[]
   commentReact       CommentReact[]
   userBadge          UserBadge[]
   userReporter       UserReport[]             @relation("userReporter")
@@ -292,6 +291,7 @@ model PartyMember {
   pointsLog     PointsLog[]
   posts         Post[]
   postReacts    PostReact[]
+  comments      Comment[]
   quest         Quest           @relation(fields: [questId], references: [questId])
   user          User            @relation(fields: [userId], references: [userId])
 
@@ -359,14 +359,15 @@ model Post {
 }
 
 model Comment {
-  commentId Int       @id @default(autoincrement())
-  postId    Int
-  userId    String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now())
-  deletedAt DateTime?
-  post      Post      @relation(fields: [postId], references: [postId])
-  user      User      @relation(fields: [userId], references: [userId])
+  commentId     Int         @id @default(autoincrement())
+  postId        Int
+  partyMemberId Int
+  content       String 
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now())
+  deletedAt     DateTime?
+  post          Post        @relation(fields: [postId], references: [postId])
+  partyMember   PartyMember @relation(fields: [partyMemberId], references: [partyMemberId])
 }
 
 model PostReact {
@@ -376,7 +377,7 @@ model PostReact {
   type          ReactType
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @default(now())
-  deletedAt     DateTime? 
+  deletedAt     DateTime?
   partyMember   PartyMember @relation(fields: [partyMemberId], references: [partyMemberId])
   post          Post        @relation(fields: [postId], references: [postId])
 }
