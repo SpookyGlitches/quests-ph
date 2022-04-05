@@ -37,6 +37,11 @@ const theme = createTheme({
         placement: "bottom",
       },
     },
+    MuiButton: {
+      defaultProps: {
+        disableElevation: true,
+      },
+    },
     MuiButtonBase: {
       defaultProps: {
         disableRipple: true,

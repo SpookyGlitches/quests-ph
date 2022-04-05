@@ -128,14 +128,7 @@ export default function PostForm({
               }}
             >
               {isUpdating && <Button onClick={deletePost}>Delete</Button>}
-              <Button
-                color="primary"
-                variant="contained"
-                type="submit"
-                sx={{
-                  width: { xs: "100%", md: "auto" },
-                }}
-              >
+              <Button color="primary" variant="contained" type="submit">
                 {isUpdating ? "Edit" : "Submit "} Post
               </Button>
             </Box>

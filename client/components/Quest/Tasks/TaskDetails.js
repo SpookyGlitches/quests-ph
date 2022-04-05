@@ -6,7 +6,6 @@ import {
   DialogActions,
   DialogContent,
 } from "@mui/material";
-import { useRouter } from "next/router";
 
 const TaskDetails = ({
   handleOk,
@@ -18,8 +17,6 @@ const TaskDetails = ({
   memberId,
   title,
 }) => {
-  const router = useRouter();
-
   return (
     <form>
       <Dialog

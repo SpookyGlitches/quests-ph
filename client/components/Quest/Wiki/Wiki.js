@@ -56,6 +56,10 @@ const Wiki = () => {
     contentEditable: !isEditing,
   };
 
+  if (!quest) {
+    return <div>Loading</div>;
+  }
+
   return (
     <Box
       sx={{

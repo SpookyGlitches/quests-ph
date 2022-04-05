@@ -60,7 +60,6 @@ model User {
   notification       Notification[]
   conversationMember ConversationMember[]
   partyMembers       PartyMember[]
-  post               Post[]
   comment            Comment[]
   postReact          PostReact[]
   commentReact       CommentReact[]
@@ -150,7 +149,6 @@ model Quest {
   deletedAt              DateTime?
   partyMembers           PartyMember[]
   user                   User                     @relation(fields: [userId], references: [userId])
-  posts                  Post[]
   questTask              QuestTask[]
   questTaskFinisher      QuestTaskFinisher[]
   conversation           Conversation[]
@@ -292,6 +290,8 @@ model PartyMember {
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @default(now())
   deletedAt     DateTime?
+  pointsLog     PointsLog[]
+  posts         Post[]
   quest         Quest           @relation(fields: [questId], references: [questId])
   user          User            @relation(fields: [userId], references: [userId])
   pointsLog     PointsLog[]
@@ -346,18 +346,16 @@ enum PartyMemberRole {
 // did a workaround tungod ani https://github.com/prisma/prisma/issues/1644 kay ato react2 thingy
 
 model Post {
-  postId    Int        @id @default(autoincrement())
-  userId    String
-  questId   Int
-  title     String
-  body      String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @default(now())
-  deletedAt DateTime?
-  postFiles PostFile[]
-  comments  Comment[]
-  user      User       @relation(fields: [userId], references: [userId])
-  quest     Quest      @relation(fields: [questId], references: [questId])
+  postId        Int         @id @default(autoincrement())
+  partyMemberId Int
+  title         String
+  body          String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now())
+  deletedAt     DateTime?
+  postFiles     PostFile[]
+  comments      Comment[]
+  partyMember   PartyMember @relation(fields: [partyMemberId], references: [partyMemberId])
 }
 
 model Comment {

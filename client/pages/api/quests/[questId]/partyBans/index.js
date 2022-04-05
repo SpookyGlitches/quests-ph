@@ -1,31 +1,50 @@
 import prisma from "../../../../../lib/prisma";
 import withQuestProtect from "../../../../../middlewares/withQuestProtect";
 
-async function editWoopStatement(req, res) {
+async function getQuestPartyBans(req, res) {
   try {
-    const { outcome, obstacle, plan } = req.body;
-    const partyMemberWoop = await prisma.partyMember.update({
+    const { questId } = req.query;
+    const partyBans = await prisma.questPartyBan.findMany({
       where: {
-        partyMemberId: Number(req.query.memberId),
+        questId: Number(questId),
       },
-      data: {
-        outcome,
-        obstacle,
-        plan,
+      include: {
+        user: {
+          select: {
+            userId: true,
+            displayName: true,
+            image: true,
+          },
+        },
       },
     });
-    return res.status(200).json(partyMemberWoop);
+    return res.status(200).json(partyBans);
   } catch (error) {
     console.log(error);
     return res.status(500).send();
   }
 }
 
-async function removePartyMember(req, res) {
+async function banPartyMember(req, res) {
   try {
+    const { questId } = req.query;
+    const { userId } = req.body;
+    const parsedQuestId = Number(questId) || -1;
+
+    const existingBan = await prisma.questPartyBan.findFirst({
+      where: {
+        questId: parsedQuestId,
+        userId,
+      },
+    });
+    if (existingBan) return res.status(200).send(existingBan);
+
+    // START REMOVING USER CONTENT
+
     const partyMemberData = await prisma.partyMember.findFirst({
       where: {
-        partyMemberId: Number(req.query.memberId),
+        questId: parsedQuestId,
+        userId,
       },
       rejectOnNotFound: true,
       select: {
@@ -42,6 +61,7 @@ async function removePartyMember(req, res) {
         },
       },
     });
+
     const postIds = [];
     const postFileIds = [];
 
@@ -75,42 +95,38 @@ async function removePartyMember(req, res) {
 
     // END USER CONTENT REMOVAL
 
-    const removeMemberOperation = prisma.partyMember.update({
+    const removeMemberOperation = prisma.partyMember.delete({
       where: {
         partyMemberId: partyMemberData.partyMemberId,
       },
+    });
+    const banMemberOperation = prisma.questPartyBan.create({
       data: {
-        deletedAt: new Date(),
+        questId: parsedQuestId,
+        userId,
       },
     });
-
     await prisma.$transaction([
       removePostFilesOperation,
       removePostsOperation,
       removeMemberOperation,
+      banMemberOperation,
     ]);
+
     return res.status(200).send();
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return res.status(500).send();
   }
 }
 
 export default async function handler(req, res) {
   switch (req.method) {
-    // todo: check if the current user is really the one who owns the resource
-    case "PUT":
-      return withQuestProtect(editWoopStatement, req, res, [
-        "MENTEE",
-        "PARTY_LEADER",
-      ]);
-    case "DELETE":
-      return withQuestProtect(removePartyMember, req, res, [
-        "MENTOR",
-        "MENTEE",
-        "PARTY_LEADER",
-      ]);
+    case "GET":
+      return withQuestProtect(getQuestPartyBans, req, res, ["PARTY_LEADER"]);
+    case "POST":
+      return withQuestProtect(banPartyMember, req, res, ["PARTY_LEADER"]);
     default:
-      return res.status(404).send();
+      return res.status(405).send();
   }
 }
