@@ -49,7 +49,6 @@ export default function ReactOptions(props) {
       if (!selected) await addReact(type);
       else if (selected.type === type) await deleteReact(selected.postReactId);
       else await updateReact(type, selected);
-      // await addReact(type);
       // todo, ea: dont revalidate
       mutate(`/quests/${questId}/posts/${postId}`);
       mutate(`/quests/${questId}/posts`);
