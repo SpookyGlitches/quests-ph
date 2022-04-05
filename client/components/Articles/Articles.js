@@ -11,23 +11,8 @@ import {
 import useSWR from "swr";
 import CircularProgress from "@mui/material/CircularProgress";
 import Link from "next/link";
-import { makeStyles } from "@mui/styles";
 
 export default function Articles({ category }) {
-  const useStyles = makeStyles(() => ({
-    root: {
-      maxWidth: 345,
-    },
-    media: {
-      height: 140,
-    },
-    content: {
-      textAlign: "left",
-      padding: 3,
-    },
-  }));
-  const classes = useStyles();
-
   const { data: articles } = useSWR(
     category ? `/articles/${category}/articlelist` : null,
   );
@@ -44,27 +29,43 @@ export default function Articles({ category }) {
       </div>
     );
   }
-
   return (
     <Box>
       <Grid container spacing={2}>
         {articles.map((elem) => (
-          <Grid item xs={3} key={articles.indexOf(elem)}>
-            <Card className={classes.root}>
-              <CardMedia
-                className={classes.media}
-                image={elem.image}
-                alt={elem.provider}
-              />
+          <Grid item xs={4} key={articles.indexOf(elem)}>
+            <Card
+              sx={{
+                mb: "1em",
+                flexDirection: {
+                  xs: "column", // mobile
+                  sm: "row", // tablet and up
+                },
+              }}
+            >
+              {elem.image === undefined ? (
+                <CardMedia
+                  height="140"
+                  image="articles/quests-article.png"
+                  alt={elem.provider}
+                />
+              ) : (
+                <CardMedia
+                  height="140"
+                  image={elem.image}
+                  alt={elem.provider}
+                />
+              )}
 
-              <CardContent className={classes.content}>
-                <Typography variant="h6" sx={{ m: 2 }}>
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
                   {elem.title}
                 </Typography>
               </CardContent>
+
               <CardActions>
                 <MuiLink
-                  sx={{ cursor: "pointer", ml: 1 }}
+                  sx={{ cursor: "pointer", ml: 1, mb: 2 }}
                   style={{ textDecoration: "none" }}
                 >
                   <Link href={`${elem.url}`} passHref>
