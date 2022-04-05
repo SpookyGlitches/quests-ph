@@ -7,9 +7,6 @@ import QuestChart from "../../components/Profile/QuestChart";
 import AccessDenied from "../../components/Error/AccessDenied";
 import QuestList from "../../components/Profile/QuestList";
 
-import AccessDenied from "../../components/Error/AccessDenied";
-import QuestList from "../../components/Profile/QuestList";
-
 export default function Profile() {
   const { data: session } = useSession();
   if (session) {
