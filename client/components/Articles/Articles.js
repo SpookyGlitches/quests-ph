@@ -12,6 +12,7 @@ import useSWR from "swr";
 import CircularProgress from "@mui/material/CircularProgress";
 import Link from "next/link";
 import { makeStyles } from "@mui/styles";
+
 export default function Articles({ category }) {
   const useStyles = makeStyles(() => ({
     root: {
