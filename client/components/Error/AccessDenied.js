@@ -1,7 +1,7 @@
 import { Box, Stack, Typography, Link as MuiLink } from "@mui/material";
 import Link from "next/link";
 
-export default function Custom404() {
+export default function Custom403() {
   return (
     <Stack spacing={4}>
       <Box
@@ -15,7 +15,7 @@ export default function Custom404() {
         }}
       >
         <Typography variant="h1" sx={{}}>
-          Access Denied
+          Forbidden
         </Typography>
         <Typography variant="h5" sx={{ mt: "1rem" }}>
           You are unauthorized to view this page
