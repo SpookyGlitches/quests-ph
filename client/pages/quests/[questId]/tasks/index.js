@@ -1,8 +1,9 @@
 import { Box, Grid } from "@mui/material";
+import { getSession } from "next-auth/react";
 import TaskLists from "../../../../components/Quest/Tasks/TasksLists";
 import QuestLayout from "../../../../components/Layouts/QuestLayout";
 
-const index = () => {
+const index = ({ session }) => {
   return (
     <Grid
       container
@@ -30,3 +31,11 @@ export default index;
 index.getLayout = function getLayout(page) {
   return <QuestLayout>{page}</QuestLayout>;
 };
+
+export async function getServerSideProps(context) {
+  return {
+    props: {
+      session: await getSession(context),
+    },
+  };
+}

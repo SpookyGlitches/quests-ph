@@ -6,6 +6,8 @@ import {
   Grid,
   Button,
 } from "@mui/material";
+import Image from "next/image";
+import { useState } from "react";
 import Link from "next/link";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
@@ -13,10 +15,14 @@ import { format } from "date-fns";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 import StyledPaper from "../../Common/StyledPaper";
+import TaskModal from "./TaskModal";
+import TaskDone from "../../../public/images/tasks-all-done.svg";
 
 const TasksLists = () => {
   const router = useRouter();
+  const { data: session } = useSession();
 
   const { questId } = router.query;
 
@@ -36,12 +42,16 @@ const TasksLists = () => {
     }
   };
 
-  const { data, error } = useSWR(`/quests/${router.query.questId}/tasks`, {
-    refreshInterval: 1000,
-  });
+  const { data, error } = useSWR(`/quests/${router.query.questId}/tasks`);
+
   if (error) return <div>failed to load</div>;
   if (!data) return <CircularProgress />;
 
+  // const memberId = data.member.map((m) => m.partyMemberId);
+
+  const memberId = data.member[0].partyMemberId;
+
+  console.log(memberId);
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Box
@@ -51,94 +61,132 @@ const TasksLists = () => {
           display: "flex",
           justifyContent: "space-between",
         }}
-        spacing={3}
+        spacing={4}
       >
         <Typography variant="h5" sx={{ color: "#755cde" }}>
           Today
         </Typography>
+
         {/* show this button when current user is mentor */}
-        <Link href={createBtn} passHref>
-          <Button
-            sx={{ alignItems: "flex-end" }}
-            variant="contained"
-            startIcon={<AddRoundedIcon />}
-          >
-            New Task
-          </Button>
-        </Link>
+        {session.user.role === "mentor" ? (
+          <Link href={createBtn} passHref>
+            <Button
+              sx={{ alignItems: "flex-end" }}
+              variant="contained"
+              startIcon={<AddRoundedIcon />}
+            >
+              New Task
+            </Button>
+          </Link>
+        ) : (
+          []
+        )}
       </Box>
+
       <Box
         sx={{
           p: 1,
           m: 1,
         }}
       >
-        {data.map((task) => (
-          <StyledPaper
-            key={task.questTaskid}
-            sx={{ width: "100%", height: "auto", overflow: "hidden", mb: 2 }}
-          >
-            <Grid container sx={{ minHeight: "1rem" }}>
-              <Grid item xs={12} md={2}>
-                {/** only render this if mentor is using */}
-                <Link
-                  href={`/quests/${router.query.questId}/tasks/${task.questTaskid}`}
-                  passHref
-                >
-                  <Box
-                    sx={{
-                      backgroundColor: "primary.main",
-                      height: "100%",
-                      minHeight: "2rem",
-                    }}
-                  />
-                </Link>
-                {/* render another box for the user  */}
-              </Grid>
-              <Grid item xs={12} md={10}>
-                <Box
-                  sx={{
-                    paddingX: "0.8rem",
-                    paddingY: "0.8rem",
-                    display: "flex",
-                    flexDirection: "column",
-                    height: "100%",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Typography variant="h6">{task.title}</Typography>
+        {data.tasks.length > 0 ? (
+          data.tasks.map((task) => (
+            <StyledPaper
+              key={task.questTaskid}
+              sx={{ width: "100%", height: "auto", overflow: "hidden", mb: 2 }}
+            >
+              <Grid container sx={{ minHeight: "1rem" }}>
+                <Grid item xs={12} md={2}>
+                  {/** only render this if mentor is using */}
+                  {session.user.role === "mentor" ? (
+                    <Link
+                      href={`/quests/${router.query.questId}/tasks/${task.questTaskid}`}
+                      passHref
+                      disabled
+                    >
+                      <Box
+                        sx={{
+                          backgroundColor: "primary.main",
+                          height: "100%",
+                          minHeight: "2rem",
+                        }}
+                      />
+                    </Link>
+                  ) : (
+                    <Box
+                      sx={{
+                        backgroundColor: "primary.main",
+                        height: "100%",
+                        minHeight: "2rem",
+                      }}
+                    />
+                  )}
+                  {/* render another box for the user  */}
+                </Grid>
 
+                <Grid item xs={12} md={10}>
                   <Box
                     sx={{
+                      paddingX: "0.8rem",
+                      paddingY: "0.8rem",
                       display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      gap: 1,
+                      flexDirection: "column",
+                      height: "100%",
+                      justifyContent: "center",
                     }}
                   >
-                    <Typography variant="body2">
-                      {task.points}
-                      {" points"}
-                    </Typography>
+                    <Typography variant="h6">{task.title}</Typography>
 
-                    <Typography variant="body2">
-                      {" "}
-                      {format(new Date(task.dueAt), "MMMM dd")}
-                    </Typography>
-
-                    <IconButton
-                      onClick={() => deleteHandler(task.questTaskid)}
-                      size="small"
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        gap: 1,
+                      }}
                     >
-                      <DeleteRoundedIcon />
-                    </IconButton>
+                      <Typography variant="body2">
+                        {task.points}
+                        {" points"}
+                      </Typography>
+                      <Typography variant="body2">
+                        {format(new Date(task.dueAt), "MMMM dd")}
+                      </Typography>
+
+                      <Typography variant="body2">{"   "}</Typography>
+
+                      {session.user.role === "mentor" ? (
+                        <IconButton
+                          onClick={() => deleteHandler(task.questTaskid)}
+                          size="small"
+                        >
+                          <DeleteRoundedIcon />
+                        </IconButton>
+                      ) : (
+                        <TaskModal
+                          title={task.title}
+                          description={task.description}
+                          points={task.points}
+                          questTaskid={task.questTaskid}
+                          memberId={memberId}
+                        />
+                      )}
+                    </Box>
                   </Box>
-                </Box>
+                </Grid>
               </Grid>
-            </Grid>
-          </StyledPaper>
-        ))}
+            </StyledPaper>
+          ))
+        ) : (
+          <Box sx={{ textAlign: "center" }}>
+            <Image alt="tasks_done" src={TaskDone} width={240} height={240} />
+            <Typography variant="h6">Well Done</Typography>
+            <Typography variant="body2">
+              Your to do list is empty. Good job keep hustlin.
+            </Typography>
+          </Box>
+        )}
       </Box>
     </Box>
   );
