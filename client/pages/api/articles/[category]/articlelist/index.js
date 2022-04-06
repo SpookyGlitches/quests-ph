@@ -19,6 +19,9 @@ export default async function ShowArticles(req, res) {
         status: "APPROVED",
         deletedAt: null,
       },
+      orderBy: {
+        approvedAt: "desc",
+      },
     });
     for (let x = 0; x < findArticles.length; x++) {
       urlArr[x] = findArticles[x].link;

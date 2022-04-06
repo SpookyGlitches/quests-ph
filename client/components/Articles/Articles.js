@@ -28,10 +28,7 @@ export default function Articles({ category }) {
   const handleNavigation = useCallback(
     // eslint-disable-next-line
     (e) => {
-      if (y > window.scrollY) {
-        setScrollDirection("Scrolling Up");
-      } else if (y < window.scrollY) {
-        setScrollDirection("Scrolling Down");
+      if (y < window.scrollY) {
         setPagination((prev) => {
           return {
             start: 0,
