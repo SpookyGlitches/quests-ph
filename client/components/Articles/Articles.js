@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   Box,
   Grid,
@@ -8,19 +8,48 @@ import {
   CardActions,
   Typography,
   Link as MuiLink,
-  Button,
 } from "@mui/material";
 import useSWR from "swr";
 import CircularProgress from "@mui/material/CircularProgress";
 import Link from "next/link";
 import { makeStyles } from "@mui/styles";
+import KeyboardDoubleArrowDownRoundedIcon from "@mui/icons-material/KeyboardDoubleArrowDownRounded";
 
-const until = 3;
+const until = 6;
 export default function Articles({ category }) {
+  const [y, setY] = useState(document.scrollingElement.scrollHeight);
+  // eslint-disable-next-line
+  const [scrollDirection, setScrollDirection] = useState("Null Scroll");
   const [pagination, setPagination] = useState({
     start: 0,
     end: until,
   });
+
+  const handleNavigation = useCallback(
+    // eslint-disable-next-line
+    (e) => {
+      if (y > window.scrollY) {
+        setScrollDirection("Scrolling Up");
+      } else if (y < window.scrollY) {
+        setScrollDirection("Scrolling Down");
+        setPagination((prev) => {
+          return {
+            start: 0,
+            end: prev.end + 3,
+          };
+        });
+      }
+      setY(window.scrollY);
+    },
+    [y],
+  );
+  useEffect(() => {
+    window.addEventListener("scroll", handleNavigation);
+
+    return () => {
+      window.removeEventListener("scroll", handleNavigation);
+    };
+  }, [handleNavigation]);
 
   const useStyles = makeStyles(() => ({
     media: {
@@ -40,6 +69,7 @@ export default function Articles({ category }) {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          marginTop: "10em",
         }}
       >
         <CircularProgress />
@@ -47,15 +77,6 @@ export default function Articles({ category }) {
     );
   }
   const finalArticles = articles.slice(pagination.start, pagination.end);
-  const loadMore = () => {
-    setPagination((prev) => {
-      return {
-        start: 0,
-        end: prev.end + 3,
-      };
-    });
-  };
-
   return (
     <Box>
       <Grid container spacing={2}>
@@ -108,13 +129,10 @@ export default function Articles({ category }) {
       </Grid>
       {pagination.end !== articles.length &&
       pagination.end < articles.length ? (
-        <Button
-          onClick={loadMore}
-          variant="outlined"
+        <KeyboardDoubleArrowDownRoundedIcon
+          color="primary"
           style={{ margin: "0 auto", display: "flex" }}
-        >
-          Load More
-        </Button>
+        />
       ) : (
         <Typography
           textAlign="center"
