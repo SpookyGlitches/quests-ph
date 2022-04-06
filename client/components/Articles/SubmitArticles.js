@@ -16,15 +16,13 @@ import {
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Snackbar from "@mui/material/Snackbar";
 import axios from "axios";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
+import { useSnackbar } from "notistack";
 import { SubmitArticle } from "../../validations/SubmitArticle";
 
 export default function SubmitArticles() {
+  const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = React.useState(false);
-  const [message, setMessage] = React.useState("");
 
   const currentValidationSchema = SubmitArticle[0];
   const methods = useForm({
@@ -45,14 +43,6 @@ export default function SubmitArticles() {
     setOpen(false);
   };
 
-  const [openSb, setOpenSb] = React.useState(false);
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpenSb(false);
-  };
   const onSubmit = (values) => {
     console.log(values);
     axios({
@@ -73,18 +63,16 @@ export default function SubmitArticles() {
             },
           }) // eslint-disable-next-line
             .then((res) => {
-              setMessage("You have successfully submitted your article!");
-              setOpenSb(true);
+              enqueueSnackbar("You have successfully submitted your article!");
             })
             .catch((error) => {
               console.log(error);
             });
           setOpen(false);
         } else {
-          setMessage(
+          enqueueSnackbar(
             "You already have a pending submission of the same article!",
           );
-          setOpenSb(true);
         }
       })
       .catch((error) => {
@@ -93,17 +81,6 @@ export default function SubmitArticles() {
     reset();
     setOpen(false);
   };
-
-  const action = (
-    <IconButton
-      size="small"
-      aria-label="close"
-      color="inherit"
-      onClick={handleCloseSnackbar}
-    >
-      <CloseIcon fontSize="small" />
-    </IconButton>
-  );
 
   return (
     <>
@@ -115,14 +92,6 @@ export default function SubmitArticles() {
       >
         Submit Article
       </Button>
-      <Snackbar
-        open={openSb}
-        autoHideDuration={3000}
-        onClose={handleCloseSnackbar}
-        message={message}
-        action={action}
-      />
-
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>
           <Typography variant="h4" style={{ color: "#755cde" }}>
