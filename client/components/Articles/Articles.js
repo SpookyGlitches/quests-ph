@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Box,
   Grid,
@@ -7,13 +8,20 @@ import {
   CardActions,
   Typography,
   Link as MuiLink,
+  Button,
 } from "@mui/material";
 import useSWR from "swr";
 import CircularProgress from "@mui/material/CircularProgress";
 import Link from "next/link";
 import { makeStyles } from "@mui/styles";
 
+const until = 3;
 export default function Articles({ category }) {
+  const [pagination, setPagination] = useState({
+    start: 0,
+    end: until,
+  });
+
   const useStyles = makeStyles(() => ({
     media: {
       height: 140,
@@ -38,10 +46,20 @@ export default function Articles({ category }) {
       </div>
     );
   }
+  const finalArticles = articles.slice(pagination.start, pagination.end);
+  const loadMore = () => {
+    setPagination((prev) => {
+      return {
+        start: 0,
+        end: prev.end + 3,
+      };
+    });
+  };
+
   return (
     <Box>
       <Grid container spacing={2}>
-        {articles.map((elem) => (
+        {finalArticles.map((elem) => (
           <Grid item xs={4} key={articles.indexOf(elem)}>
             <Card
               sx={{
@@ -88,6 +106,20 @@ export default function Articles({ category }) {
           </Grid>
         ))}
       </Grid>
+      {pagination.end !== articles.length &&
+      pagination.end < articles.length ? (
+        <Button
+          onClick={loadMore}
+          variant="outlined"
+          style={{ margin: "0 auto", display: "flex" }}
+        >
+          Load More
+        </Button>
+      ) : (
+        <Typography textAlign="center" color="primary" variant="h6">
+          You have reached the end of the articles! &#127881;
+        </Typography>
+      )}
     </Box>
   );
 }
