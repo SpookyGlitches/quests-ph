@@ -8,7 +8,7 @@ import AccessDenied from "../../components/Error/AccessDenied";
 
 export default function Search() {
   const { data: session } = useSession();
-  const [category, setCategory] = React.useState("");
+  const [category, setCategory] = React.useState("Health");
 
   const handleChange = (event) => {
     setCategory(event.target.value);
@@ -16,13 +16,13 @@ export default function Search() {
 
   const showArticles = (val) => {
     switch (val) {
-      case 0:
+      case "Health":
         return <Articles category="HEALTH" />;
 
-      case 1:
+      case "Social":
         return <Articles category="SOCIAL" />;
 
-      case 2:
+      case "Career":
         return <Articles category="CAREER" />;
 
       default:
@@ -52,7 +52,7 @@ export default function Search() {
                 maxHeight: 60,
               }}
             >
-              <InputLabel id="demo-simple-select-label">Category</InputLabel>
+              <InputLabel id="demo-simple-select-label">{category}</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -61,9 +61,9 @@ export default function Search() {
                 onChange={handleChange}
                 style={{ background: "white" }}
               >
-                <MenuItem value={0}>Health</MenuItem>
-                <MenuItem value={1}>Social</MenuItem>
-                <MenuItem value={2}>Career</MenuItem>
+                <MenuItem value="Health">Health</MenuItem>
+                <MenuItem value="Social">Social</MenuItem>
+                <MenuItem value="Career">Career</MenuItem>
               </Select>
             </FormControl>
           </Box>
