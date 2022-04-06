@@ -16,7 +16,7 @@ const ChatHeader = () => {
           marginBottom: "10px",
         }}
       >
-        <Typography>Conversation Name</Typography>
+        <Typography>New Message</Typography>
         <MoreHorizRoundedIcon />
       </Paper>
     </Box>

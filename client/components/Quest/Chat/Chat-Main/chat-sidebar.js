@@ -6,6 +6,7 @@ import {
   ListItem,
   ListItemText,
   ListItemAvatar,
+  IconButton,
   Paper,
   Avatar,
   Typography,
@@ -27,7 +28,11 @@ const ChatSidebar = () => {
         }}
       >
         <Typography>Messaging</Typography>
-        <OpenInNewRoundedIcon />
+        <Link href={"/chats/new"} passHref>
+          <IconButton size="small">
+            <OpenInNewRoundedIcon sx={{ color: "#755cde" }} />
+          </IconButton>
+        </Link>
       </Paper>
       <Box
         borderRadius={1}
