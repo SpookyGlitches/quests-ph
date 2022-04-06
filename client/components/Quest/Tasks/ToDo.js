@@ -25,11 +25,10 @@ export default function CheckboxListSecondary() {
         borderRadius: 2,
       }}
     >
-      {!data && <CircularProgress />}
       <Typography variant="h6" color="primary" sx={{ m: 1, p: 1 }}>
         To Do
       </Typography>
-      {data.length !== 0 ? (
+      {data.tasks.length !== 0 ? (
         data.tasks.map((task) => (
           <List
             key={task.id}
