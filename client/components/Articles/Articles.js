@@ -52,6 +52,12 @@ export default function Articles({ category }) {
     media: {
       height: 140,
     },
+    content: {
+      padding: 20,
+    },
+    actions: {
+      padding: 12,
+    },
   }));
 
   const classes = useStyles();
@@ -102,13 +108,13 @@ export default function Articles({ category }) {
                 />
               )}
 
-              <CardContent>
+              <CardContent className={classes.content}>
                 <Typography gutterBottom variant="h5" component="div">
                   {elem.title}
                 </Typography>
               </CardContent>
 
-              <CardActions>
+              <CardActions className={classes.actions}>
                 <MuiLink
                   sx={{ cursor: "pointer", ml: 1, mb: 2 }}
                   style={{ textDecoration: "none" }}
