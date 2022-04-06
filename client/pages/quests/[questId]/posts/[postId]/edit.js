@@ -5,6 +5,7 @@ import useSWR from "swr";
 import QuestLayout from "../../../../../components/Layouts/QuestLayout";
 import PostForm from "../../../../../components/Quest/Post/PostForm";
 import FilesForm from "../../../../../components/Quest/Post/Files/FilesForm";
+import AppLayout from "../../../../../components/Layouts/AppLayout";
 
 const EditPostPage = () => {
   const router = useRouter();
@@ -75,5 +76,9 @@ const EditPostPage = () => {
 export default EditPostPage;
 
 EditPostPage.getLayout = function getLayout(page) {
-  return <QuestLayout>{page}</QuestLayout>;
+  return (
+    <AppLayout>
+      <QuestLayout>{page}</QuestLayout>
+    </AppLayout>
+  );
 };

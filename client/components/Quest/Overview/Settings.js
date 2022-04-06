@@ -23,13 +23,17 @@ export default function Settings() {
   const [anchorSettings, setAnchorSettings] = useState(null);
   const [openSettingsPopper, setOpenSettingsPopper] = useState(false);
 
+  const { data: quest } = useSWR(questId ? `/quests/${questId}` : null);
+  const { data: partyMember } = useSWR(
+    questId ? `/quests/${questId}/partyMembers/currentUser` : null,
+  );
+
   const handleSettingsPopperClick = (event) => {
     setAnchorSettings(event.currentTarget);
     setOpenSettingsPopper(!openSettingsPopper);
   };
-  const { data: quest } = useSWR(questId ? `/quests/${questId}` : null);
 
-  if (!quest) {
+  if (!quest || !partyMember) {
     return <div>Loading</div>;
   }
 
@@ -42,12 +46,14 @@ export default function Settings() {
       }}
     >
       <Box sx={{ position: "relative" }}>
-        <IconButton
-          sx={{ position: "absolute", right: 0 }}
-          onClick={handleSettingsPopperClick}
-        >
-          <MoreHorizRoundedIcon />
-        </IconButton>
+        {partyMember.role === "PARTY_LEADER" && (
+          <IconButton
+            sx={{ position: "absolute", right: 0 }}
+            onClick={handleSettingsPopperClick}
+          >
+            <MoreHorizRoundedIcon />
+          </IconButton>
+        )}
         <Grid container spacing={2}>
           <Grid item xs={12} lg={5}>
             <Box>
@@ -87,27 +93,29 @@ export default function Settings() {
         </Grid>
       </Box>
 
-      <Popper
-        open={openSettingsPopper}
-        anchorEl={anchorSettings}
-        placement="right-start"
-        transition
-      >
-        {({ TransitionProps }) => (
-          <Fade {...TransitionProps} timeout={350}>
-            <Paper>
-              <Typography variant="body1" color="black">
-                <Link
-                  href={`/quests/${questId}/overview/edit-settings`}
-                  passHref
-                >
-                  <Button>Edit</Button>
-                </Link>
-              </Typography>
-            </Paper>
-          </Fade>
-        )}
-      </Popper>
+      {partyMember.role === "PARTY_LEADER" && (
+        <Popper
+          open={openSettingsPopper}
+          anchorEl={anchorSettings}
+          placement="right-start"
+          transition
+        >
+          {({ TransitionProps }) => (
+            <Fade {...TransitionProps} timeout={350}>
+              <Paper>
+                <Typography variant="body1" color="black">
+                  <Link
+                    href={`/quests/${questId}/overview/edit-settings`}
+                    passHref
+                  >
+                    <Button>Edit</Button>
+                  </Link>
+                </Typography>
+              </Paper>
+            </Fade>
+          )}
+        </Popper>
+      )}
     </Box>
   );
 }

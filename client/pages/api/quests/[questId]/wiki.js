@@ -1,29 +1,31 @@
 import { PrismaClientValidationError } from "@prisma/client/runtime";
-import { ValidationError } from "yup";
 import prisma from "../../../../lib/prisma";
+import withQuestProtect from "../../../../middlewares/withQuestProtect";
 
+async function editWiki(req, res) {
+  try {
+    await prisma.quest.update({
+      where: {
+        questId: Number(req.query.questId),
+      },
+      data: {
+        wiki: req.body.wiki,
+      },
+    });
+    res.status(200).send();
+  } catch (err) {
+    switch (err.constructor) {
+      case PrismaClientValidationError:
+        res.status(400).send();
+        break;
+      default:
+        res.status(500).send();
+    }
+  }
+}
 export default async function handler(req, res) {
   if (req.method === "PUT") {
-    try {
-      await prisma.quest.update({
-        where: {
-          questId: Number(req.query.questId),
-        },
-        data: {
-          wiki: req.body.wiki,
-        },
-      });
-      res.status(200).send();
-    } catch (err) {
-      switch (err.constructor) {
-        case ValidationError:
-        case PrismaClientValidationError:
-          res.status(400).send();
-          break;
-        default:
-          res.status(500).send();
-      }
-    }
+    await withQuestProtect(editWiki, req, res, ["PARTY_LEADER"]);
   } else {
     res.status(405).send();
   }

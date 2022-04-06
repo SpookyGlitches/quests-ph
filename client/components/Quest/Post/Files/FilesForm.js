@@ -5,10 +5,10 @@ import {
   Typography,
   LinearProgress,
 } from "@mui/material";
+import useSWR from "swr";
 import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
 import { v4 as uuidv4 } from "uuid";
 import FilePreviewList from "./FilePreviewList";
 import FileDropzone from "../../../Common/FileDropzone";
@@ -23,7 +23,6 @@ function getFileExtension(filename) {
 
 export default function FilesForm({ uploadedFiles, setUploadedFiles }) {
   const router = useRouter();
-  const session = useSession();
 
   const [deleteAllChecked, setDeleteAllChecked] = useState(false);
   const [filesToDelete, setFilesToDelete] = useState([]);
@@ -31,7 +30,10 @@ export default function FilesForm({ uploadedFiles, setUploadedFiles }) {
   const [loading, setLoading] = useState(false);
 
   const { questId, postId } = router.query;
-  const userId = session?.data?.user?.userId;
+
+  const { data: partyMember } = useSWR(
+    questId ? `/quests/${questId}/partyMembers/currentUser` : null,
+  );
 
   const toggleDeleteAllCheckBox = () => {
     setDeleteAllChecked((prev) => !prev);
@@ -60,7 +62,7 @@ export default function FilesForm({ uploadedFiles, setUploadedFiles }) {
     const { name, type } = file;
     const id = uuidv4();
     const extension = getFileExtension(name);
-    const key = `quests/${questId}/userPosts/${userId}/${id}.${extension}`;
+    const key = `quests/${questId}/partyMembers/${partyMember.partyMemberId}/${id}.${extension}`;
     const apiPresignedURL = `/api/quests/${questId}/posts/upload?type=${encodeURIComponent(
       type,
     )}&key=${key}`;
@@ -157,6 +159,10 @@ export default function FilesForm({ uploadedFiles, setUploadedFiles }) {
     onDropRejected: handleRejectedFiles,
     disabled: loading,
   };
+
+  if (!partyMember) {
+    return <div>Loading</div>;
+  }
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
