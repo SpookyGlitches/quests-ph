@@ -116,7 +116,11 @@ export default function Articles({ category }) {
           Load More
         </Button>
       ) : (
-        <Typography textAlign="center" color="primary" variant="h6">
+        <Typography
+          textAlign="center"
+          color="primary"
+          style={{ fontSize: "20px" }}
+        >
           You have reached the end of the articles! &#127881;
         </Typography>
       )}
