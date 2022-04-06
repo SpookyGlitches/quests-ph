@@ -1,4 +1,5 @@
 import * as React from "react";
+import CircularProgress from "@mui/material/CircularProgress";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import VisibilityOffRoundedIcon from "@mui/icons-material/VisibilityOffRounded";
@@ -22,6 +23,7 @@ import {
   DialogContentText,
   DialogActions,
 } from "@mui/material";
+import NoDataPage from "../noData";
 import Notification from "../../components/Common/Notification";
 
 import { ChangePasswordValidations } from "../../validations/ChangePassword";
@@ -30,15 +32,6 @@ import DataFieldHolder from "../../components/Settings/DataFieldHolder";
 import AppLayout from "../../components/Layouts/AppLayout";
 
 const Index = () => {
-  const { mutate } = useSWRConfig();
-  const { data: userCredentials, error } = useSWR("/auth/getUserCredentials");
-
-  if (error) {
-    console.log(error);
-  }
-  if (!userCredentials) {
-    <div>Loading</div>;
-  }
   const [openProfileForm, setopenProfileForm] = React.useState(false);
   const [openResetPasswordForm, setopenResetPasswordForm] =
     React.useState(false);
@@ -85,6 +78,20 @@ const Index = () => {
     handleSubmit: handleSubmitPassword,
     formState: { errors: errorsPassword },
   } = useForm({ resolver: yupResolver(ChangePasswordValidations) });
+  const { mutate } = useSWRConfig();
+  const { data: userCredentials, error } = useSWR("/auth/getUserCredentials");
+
+  if (error) {
+    console.log(error);
+    return <NoDataPage />;
+  }
+  if (!userCredentials) {
+    return (
+      <div>
+        <CircularProgress />
+      </div>
+    );
+  }
 
   const onSubmitDetails = async (data) => {
     data.userId = userCredentials.userId; // eslint-disable-line no-param-reassign
