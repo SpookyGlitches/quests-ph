@@ -70,6 +70,7 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
   };
 
   const handleMenuClose = () => {
+    router.push("/settings");
     setAnchorEl(null);
     handleMobileMenuClose();
   };
