@@ -5,17 +5,45 @@ import { useState } from "react";
 import useSWR from "swr";
 import CircularProgress from "@mui/material/CircularProgress";
 import StyledPaper from "../Common/StyledPaper";
+import axios from "axios";
+import { format } from "date-fns";
 
 const itemsToDisplay = 3;
 
-export default function BadgesList() {
+export default function BadgesList({ userId }) {
   const [pagination, setPagination] = useState({
     start: 0,
     end: itemsToDisplay - 1,
   });
   const [openPopper, setOpenPopper] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [givenAt, setGivenAt] = useState("");
+
+  const getBadgeInfo = (value) => {
+    axios({
+      method: "get",
+      url: `/api/profile/${userId}/getbadges`,
+      params: {
+        name: value,
+      },
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          setDescription(res.data[0]);
+          setGivenAt(format(new Date(res.data[1]), "MMMM d, yyyy"));
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const handleBadgeClick = (event) => {
+    const badgeName = event.currentTarget.innerHTML;
+    setName(badgeName);
+    getBadgeInfo(badgeName);
     if (event.currentTarget) setAnchorEl(event.currentTarget);
     setOpenPopper((prev) => !prev);
     event.stopPropagation();
@@ -36,7 +64,7 @@ export default function BadgesList() {
   }
   const temp = [];
   for (let x = 0; x < myBadges.length; x++) {
-    temp.push(myBadges[x].name);
+    temp.push(myBadges[x]);
   }
 
   const incrementPagination = () => {
@@ -66,11 +94,14 @@ export default function BadgesList() {
           height: "5rem",
           cursor: "pointer",
           width: "5rem",
-          backgroundColor: item,
+          backgroundImage: "url('/auth/banana.jpg')", // img url goes here
           borderRadius: "50%",
+          fontSize: "12px",
+          color: "transparent", // to hide the item.name below cz im using innerhtml ehehe
+          textAlign: "center",
         }}
       >
-        {item}
+        {item.name}
       </Box>
     ));
   };
@@ -135,10 +166,8 @@ export default function BadgesList() {
                 }}
               />
               <Box sx={{ padding: 0.75 }}>
-                <Typography variant="subtitle2">Early Bird</Typography>
-                <Typography variant="caption">
-                  Given to the early users of the Quests application
-                </Typography>
+                <Typography variant="subtitle2">{name}</Typography>
+                <Typography variant="caption">{description}</Typography>
                 <Box
                   sx={{
                     display: "flex",
@@ -146,7 +175,7 @@ export default function BadgesList() {
                   }}
                 >
                   <Typography variant="caption" sx={{ color: "gray" }}>
-                    given March 2, 2021
+                    Given at {givenAt}
                   </Typography>
                 </Box>
               </Box>

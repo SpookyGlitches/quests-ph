@@ -68,10 +68,8 @@ export default function FriendsBadgesList({ userId }) {
   }
 
   const temp = [];
-  const badgeDetails = [];
   for (let x = 0; x < friendBadges.length; x++) {
     temp.push(friendBadges[x]);
-    badgeDetails.push(friendBadges[x]);
   }
 
   const incrementPagination = () => {
@@ -105,7 +103,7 @@ export default function FriendsBadgesList({ userId }) {
           backgroundImage: "url('/auth/banana.jpg')", // img url goes here
           borderRadius: "50%",
           fontSize: "12px",
-          color: "transparent", //to hide the item.name below cz im using innerhtml ehehe
+          color: "transparent", // to hide the item.name below cz im using innerhtml ehehe
           textAlign: "center",
         }}
       >
