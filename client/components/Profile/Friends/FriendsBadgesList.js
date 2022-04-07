@@ -105,6 +105,7 @@ export default function FriendsBadgesList({ userId }) {
           backgroundImage: "url('/auth/banana.jpg')", // img url goes here
           borderRadius: "50%",
           fontSize: "12px",
+          color: "transparent", //to hide the item.name below cz im using innerhtml ehehe
           textAlign: "center",
         }}
       >
