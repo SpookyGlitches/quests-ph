@@ -1,5 +1,6 @@
 import prisma from "../../../../../../../lib/prisma";
 import withQuestProtect from "../../../../../../../middlewares/withQuestProtect";
+
 async function addComment(req, res) {
   try {
     const { content, partyMember } = req.body;
