@@ -11,9 +11,7 @@ async function createRequest(req, res) {
     },
   });
 
-  res.status(200).send(createMentorshipRequest);
-
-  await prisma.$disconnect();
+  return res.status(200).send(createMentorshipRequest);
 }
 
 async function checkAvailQuest(req, res) {
@@ -22,6 +20,7 @@ async function checkAvailQuest(req, res) {
       where: {
         questId: Number(req.query.questMentored),
         status: "ACTIVE",
+        deletedAt: null,
       },
     });
 

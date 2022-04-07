@@ -10,6 +10,7 @@ export default async function GetQuestPartyLeader(req, res) {
         where: {
           userId: user.userId,
           completedAt: null,
+          deletedAt: null,
         },
       });
 
