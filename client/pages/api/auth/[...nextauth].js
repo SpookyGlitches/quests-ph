@@ -27,6 +27,7 @@ export default NextAuth({
         const findUser = await prisma.user.findFirst({
           where: {
             email: credentials.email,
+            deletedAt: null,
           },
         });
         if (findUser) {
