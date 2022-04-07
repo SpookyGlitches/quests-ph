@@ -1,9 +1,7 @@
-/* eslint-disable no-underscore-dangle */
 import {
   Box,
   Avatar,
   Typography,
-  Stack,
   Button,
   IconButton,
   Paper,
@@ -18,13 +16,13 @@ import { formatRelative } from "date-fns";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { useState } from "react";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { useSession } from "next-auth/react";
-
+import axios from "axios";
 import ReactOptions from "./ReactOptions";
-import Emoji from "./Emoji";
+import EmojiStack from "./EmojisStack";
 
-const Post = ({ post }) => {
+const Post = ({ post, children }) => {
   const router = useRouter();
   const { questId } = router.query;
   const session = useSession();
@@ -34,6 +32,8 @@ const Post = ({ post }) => {
       ? `/quests/${questId}/posts/${post.postId}/postFiles`
       : null,
   );
+
+  const { mutate } = useSWRConfig();
   const [postOptionsAnchor, setPostOptionsAnchor] = useState(null);
   const [openPostOptions, setOpenPostOptions] = useState(false);
 
@@ -66,17 +66,52 @@ const Post = ({ post }) => {
     router.push(`/quests/${questId}/posts/${post.postId}/edit`);
   };
 
-  const handleReactClick = (event) => {
+  const toggleReactOptions = (event) => {
     event.stopPropagation();
     setReactOptionsAnchor(event.currentTarget);
     setOpenReactOptions(!openReactOptions);
   };
 
-  const renderEmojisSet = () => {
-    const emojiTypes = [...new Set(post.postReacts.map((item) => item.type))];
-    return emojiTypes.map((type) => (
-      <Emoji type={type} key={type} width="30" height="30" />
-    ));
+  const addReact = async (type) => {
+    await axios.post(`/api/quests/${questId}/posts/${post.postId}/reacts`, {
+      type,
+    });
+  };
+
+  const updateReact = async (type, selected) => {
+    await axios.put(
+      `/api/quests/${questId}/posts/${post.postId}/reacts/${selected.postReactId}`,
+      {
+        type,
+      },
+    );
+  };
+
+  const deleteReact = async (postReactId) => {
+    await axios.delete(
+      `/api/quests/${questId}/posts/${post.postId}/reacts/${postReactId}`,
+    );
+  };
+
+  const getSelected = (postReacts) => {
+    const currentReact = postReacts.find(
+      (react) => react.partyMember?.user?.userId === userId,
+    );
+    return currentReact;
+  };
+
+  const handleReactClick = async (type, postReacts) => {
+    const selected = getSelected(postReacts);
+    try {
+      if (!selected) await addReact(type);
+      else if (selected.type === type) await deleteReact(selected.postReactId);
+      else await updateReact(type, selected);
+      // todo, ea: dont revalidate
+      mutate(`/quests/${questId}/posts/${post.postId}`);
+      mutate(`/quests/${questId}/posts`);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -169,15 +204,15 @@ const Post = ({ post }) => {
             }}
           >
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <Stack direction="row" spacing={-1}>
-                {renderEmojisSet()}
-              </Stack>
-              <Typography variant="body2">
-                {post.postReacts?.length || null}
-              </Typography>
+              <EmojiStack
+                spacing={-1}
+                height={30}
+                width={30}
+                reacts={post.postReacts}
+              />
             </Box>
-            <Typography variant="body2" onClick={navigateToPost}>
-              3 comments
+            <Typography variant="caption" onClick={navigateToPost}>
+              {post.comments?.length || 0} comments
             </Typography>
           </Box>
         </Box>
@@ -196,7 +231,7 @@ const Post = ({ post }) => {
           <Button
             variant="text"
             startIcon={<AddReactionRoundedIcon />}
-            onClick={handleReactClick}
+            onClick={toggleReactOptions}
             size="medium"
           >
             React
@@ -210,6 +245,9 @@ const Post = ({ post }) => {
             Comment
           </Button>
         </Box>
+
+        {/* Comments  Section */}
+        {children}
       </Paper>
 
       <Menu
@@ -225,9 +263,8 @@ const Post = ({ post }) => {
         <MenuItem dense>Delete</MenuItem>
       </Menu>
       <ReactOptions
-        postId={post.postId}
-        questId={questId}
-        postReacts={post.postReacts}
+        getSelected={() => getSelected(post.postReacts)}
+        handleReactClick={(type) => handleReactClick(type, post.postReacts)}
         open={openReactOptions}
         anchor={reactOptionsAnchor}
         setOpen={setOpenReactOptions}

@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import { Box, Grid, Stack } from "@mui/material";
 import QuestHeader from "../Quest/QuestHeader";
-import Todo from "../Quest/Tasks/ToDo";
+// import Todo from "../Quest/Tasks/ToDo";
 import EndQuest from "../Quest/EndQuest";
 import DateCard from "../Quest/Tasks/DateCard";
 import Suggestions from "../Common/Suggestions";
@@ -33,7 +33,7 @@ export default function QuestLayout({ children }) {
         <Box sx={{}}>
           <Stack spacing={4}>
             <DateCard />
-            <Todo />
+            {/* <Todo /> */}
             <Suggestions />
             <EndQuest />
           </Stack>

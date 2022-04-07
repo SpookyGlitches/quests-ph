@@ -60,7 +60,6 @@ model User {
   notification       Notification[]
   conversationMember ConversationMember[]
   partyMembers       PartyMember[]
-  commentReact       CommentReact[]
   userBadge          UserBadge[]
   userReporter       UserReport[]             @relation("userReporter")
   userRecipient      UserReport[]             @relation("userRecipient")
@@ -291,6 +290,7 @@ model PartyMember {
   pointsLog     PointsLog[]
   posts         Post[]
   postReacts    PostReact[]
+  commentReacts CommentReact[]
   comments      Comment[]
   quest         Quest           @relation(fields: [questId], references: [questId])
   user          User            @relation(fields: [userId], references: [userId])
@@ -359,15 +359,16 @@ model Post {
 }
 
 model Comment {
-  commentId     Int         @id @default(autoincrement())
+  commentId     Int            @id @default(autoincrement())
   postId        Int
   partyMemberId Int
   content       String
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @default(now())
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now())
   deletedAt     DateTime?
-  post          Post        @relation(fields: [postId], references: [postId])
-  partyMember   PartyMember @relation(fields: [partyMemberId], references: [partyMemberId])
+  post          Post           @relation(fields: [postId], references: [postId])
+  partyMember   PartyMember    @relation(fields: [partyMemberId], references: [partyMemberId])
+  commentReacts CommentReact[]
 }
 
 model PostReact {
@@ -383,13 +384,15 @@ model PostReact {
 }
 
 model CommentReact {
-  commentReactId Int       @id @default(autoincrement())
-  postId         Int
-  userId         String
+  commentReactId Int         @id @default(autoincrement())
+  commentId      Int
+  partyMemberId  Int
   type           ReactType // didnt follow convention since this will be used by 2 tables
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @default(now())
-  user           User      @relation(fields: [userId], references: [userId])
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @default(now())
+  deletedAt      DateTime?
+  partyMember    PartyMember @relation(fields: [partyMemberId], references: [partyMemberId])
+  comment        Comment     @relation(fields: [commentId], references: [commentId])
 }
 
 //  before kay positive emotions ra and not these, kani lang kay nice ang emojis and i think it's necessary sad ang negative emotions (Inside Out) :),
@@ -404,7 +407,7 @@ enum ReactType {
 }
 
 // NEW END
-
+ 
 model PostFile {
   postFileId Int       @id @default(autoincrement())
   postId     Int?

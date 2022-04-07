@@ -23,6 +23,14 @@ async function getPost(req, res) {
             partyMemberId: true,
           },
         },
+        comments: {
+          where: {
+            deletedAt: null,
+          },
+          select: {
+            deletedAt: true,
+          },
+        },
         postReacts: {
           where: {
             deletedAt: null,

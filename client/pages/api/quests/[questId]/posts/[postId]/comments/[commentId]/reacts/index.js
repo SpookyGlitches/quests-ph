@@ -1,26 +1,27 @@
-import prisma from "../../../../../../../lib/prisma";
-import withQuestProtect from "../../../../../../../middlewares/withQuestProtect";
+import prisma from "../../../../../../../../../lib/prisma";
+import withQuestProtect from "../../../../../../../../../middlewares/withQuestProtect";
 
 async function addReact(req, res) {
   try {
     const { type, partyMember } = req.body;
-    const { postId } = req.query;
-    const existingReact = await prisma.postReact.findFirst({
+    const { commentId } = req.query;
+    const parsedCommentId = Number(commentId);
+    const existingReact = await prisma.commentReact.findFirst({
       where: {
         partyMemberId: partyMember?.partyMemberId,
-        postId: Number(postId),
+        commentId: parsedCommentId,
       },
     });
     if (existingReact) return res.status(403).send();
 
-    const postReact = await prisma.postReact.create({
+    const commentReact = await prisma.commentReact.create({
       data: {
         type,
-        partyMemberId: partyMember?.partyMemberId,
-        postId: Number(postId),
+        partyMemberId: partyMember.partyMemberId,
+        commentId: parsedCommentId,
       },
     });
-    return res.json(postReact);
+    return res.json(commentReact);
   } catch (err) {
     console.error(err);
     return res.status(500).send();

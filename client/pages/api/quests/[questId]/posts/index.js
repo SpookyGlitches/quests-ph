@@ -2,8 +2,7 @@ import { getSession } from "next-auth/react";
 import postValidations from "../../../../../validations/post";
 
 import prisma from "../../../../../lib/prisma";
-// import { PrismaClient } from "@prisma/client";
-// const prisma = new PrismaClient();
+
 async function getPosts(req, res) {
   try {
     const posts = await prisma.post.findMany({
@@ -36,6 +35,14 @@ async function getPosts(req, res) {
             partyMemberId: true,
           },
         },
+        comments: {
+          where: {
+            deletedAt: null,
+          },
+          select: {
+            deletedAt: true,
+          },
+        },
         postReacts: {
           where: {
             deletedAt: null,
@@ -62,6 +69,7 @@ async function getPosts(req, res) {
         },
       },
     });
+
     return res.status(200).send(posts);
   } catch (err) {
     console.error(err);

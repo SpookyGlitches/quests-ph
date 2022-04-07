@@ -4,23 +4,19 @@ import Laugh from "../../Icons/Emojis/Laugh";
 import Sad from "../../Icons/Emojis/Sad";
 import Surprised from "../../Icons/Emojis/Surprised";
 
-const emojiProps = {
-  style: { cursor: "pointer" },
-};
-
 export default function Emoji({ type, ...rest }) {
   const renderEmoji = (emojiType) => {
     switch (emojiType) {
       case "LAUGH":
-        return <Laugh {...emojiProps} {...rest} />;
+        return <Laugh {...rest} />;
       case "SURPRISED":
-        return <Surprised {...emojiProps} {...rest} />;
+        return <Surprised {...rest} />;
       case "CRYING":
-        return <Crying {...emojiProps} {...rest} />;
+        return <Crying {...rest} />;
       case "PARTY":
-        return <Party {...emojiProps} {...rest} />;
+        return <Party {...rest} />;
       case "SAD":
-        return <Sad {...emojiProps} {...rest} />;
+        return <Sad {...rest} />;
       default:
         return null;
     }
