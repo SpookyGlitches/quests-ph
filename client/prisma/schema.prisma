@@ -209,7 +209,7 @@ model QuestPartyBan {
 model PointsLog {
   pointsLogId   Int             @id @default(autoincrement())
   partyMemberId Int
-  gainedPoints  Int
+  gainedPoints  Int // 1 -> when someone receives a comment react, 5 -> when someone receives a post react, 10 -> when someone receives a comment, x -> when completing a task
   action        PointsLogAction
   createdAt     DateTime        @default(now())
   partyMember   PartyMember     @relation(fields: [partyMemberId], references: [partyMemberId])

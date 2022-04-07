@@ -14,7 +14,8 @@ import { useSWRConfig } from "swr";
 import axios from "axios";
 import ReactOptions from "../ReactOptions";
 import EmojiStack from "../EmojisStack";
-
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 export default function CommentItem({
   comment,
   questId,
@@ -84,8 +85,10 @@ export default function CommentItem({
         sx={{
           display: "flex",
           gap: 1,
-          pr: 3,
           py: 1,
+          "&:hover .PostOptions": {
+            display: "flex",
+          },
         }}
         key={comment.commentId}
       >
@@ -95,13 +98,11 @@ export default function CommentItem({
         <Box
           sx={{
             display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-start",
             mt: 0,
             flexGrow: 1,
           }}
         >
-          <Box>
+          <Box sx={{ flexGrow: 1 }}>
             <Typography
               sx={{ fontWeight: "regular", mb: 0 }}
               variant="subtitle2"
@@ -132,44 +133,40 @@ export default function CommentItem({
               <Stack
                 spacing={1}
                 direction="row"
-                sx={{ alignItems: "center", mt: 1 }}
+                sx={{ alignItems: "center", mt: 0.5 }}
               >
-                {comment.partyMember.user.userId !== userId ? (
-                  <IconButton size="small" onClick={toggleReactOptions}>
-                    <AddReactionRoundedIcon fontSize="inherit" />
-                  </IconButton>
-                ) : (
-                  <>
-                    <Typography
-                      variant="caption"
-                      color="primary"
-                      sx={{
-                        cursor: "pointer",
-                        "&:hover": { textDecoration: "underline" },
-                      }}
-                      onClick={() =>
-                        editComment(comment.commentId, comment.content)
-                      }
-                    >
-                      Edit
-                    </Typography>
-
-                    <Typography
-                      variant="caption"
-                      color="primary"
-                      sx={{
-                        cursor: "pointer",
-                        "&:hover": { textDecoration: "underline" },
-                      }}
-                      onClick={() => deleteComment(comment.commentId)}
-                    >
-                      Delete
-                    </Typography>
-                  </>
-                )}
+                <IconButton size="small" onClick={toggleReactOptions}>
+                  <AddReactionRoundedIcon fontSize="inherit" />
+                </IconButton>
               </Stack>
             </Box>
           </Box>
+          {comment.partyMember.user.userId === userId && (
+            <Box
+              sx={{
+                display: {
+                  xs: "flex",
+                  lg: "none",
+                },
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              className="PostOptions"
+            >
+              <IconButton
+                size="small"
+                onClick={() => editComment(comment.commentId, comment.content)}
+              >
+                <EditRoundedIcon fontSize="inherit" />
+              </IconButton>
+              <IconButton
+                size="small"
+                onClick={() => deleteComment(comment.commentId)}
+              >
+                <DeleteRoundedIcon fontSize="inherit" />
+              </IconButton>
+            </Box>
+          )}
         </Box>
       </Box>
       <Divider light />

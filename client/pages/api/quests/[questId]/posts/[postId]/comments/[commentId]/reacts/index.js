@@ -14,14 +14,42 @@ async function addReact(req, res) {
     });
     if (existingReact) return res.status(403).send();
 
-    const commentReact = await prisma.commentReact.create({
+    const comment = await prisma.comment.findUnique({
+      where: {
+        commentId: parsedCommentId,
+      },
+      select: {
+        partyMemberId: true,
+      },
+      rejectOnNotFound: true,
+    });
+
+    const transactions = [];
+    const commentReactOperation = prisma.commentReact.create({
       data: {
         type,
         partyMemberId: partyMember.partyMemberId,
         commentId: parsedCommentId,
       },
     });
-    return res.json(commentReact);
+
+    transactions.push(commentReactOperation);
+
+    if (comment.partyMemberId !== partyMember.partyMemberId) {
+      // do not award when a post author comments on their own post
+      const awardPointsOperation = prisma.pointsLog.create({
+        data: {
+          partyMemberId: comment.partyMemberId, // the one who created the comment
+          gainedPoints: 1,
+          action: "RECEIVED_COMMENT_REACT",
+        },
+      });
+      transactions.push(awardPointsOperation);
+    }
+
+    const [react] = await prisma.$transaction(transactions);
+
+    return res.json(react);
   } catch (err) {
     console.error(err);
     return res.status(500).send();

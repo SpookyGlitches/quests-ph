@@ -1,17 +1,46 @@
 import prisma from "../../../../../../../lib/prisma";
 import withQuestProtect from "../../../../../../../middlewares/withQuestProtect";
-
 async function addComment(req, res) {
   try {
     const { content, partyMember } = req.body;
     const { postId } = req.query;
-    const comment = await prisma.comment.create({
+    const parsedPostId = Number(postId);
+
+    const post = await prisma.post.findUnique({
+      where: {
+        postId: parsedPostId,
+      },
+      select: {
+        // the user we will give points to
+        partyMemberId: true,
+      },
+      rejectOnNotFound: true,
+    });
+
+    const transactions = [];
+
+    const commentOperation = prisma.comment.create({
       data: {
         content,
         postId: Number(postId),
         partyMemberId: partyMember.partyMemberId,
       },
     });
+    transactions.push(commentOperation);
+
+    if (post.partyMemberId !== partyMember.partyMemberId) {
+      // do not award when a post author comments on their own post
+      const awardPointsOperation = prisma.pointsLog.create({
+        data: {
+          partyMemberId: post.partyMemberId, // the one who created the post
+          gainedPoints: 10,
+          action: "RECEIVED_POST_COMMENT",
+        },
+      });
+      transactions.push(awardPointsOperation);
+    }
+
+    const [comment] = await prisma.$transaction(transactions);
 
     return res.json(comment);
   } catch (err) {
@@ -29,11 +58,6 @@ async function getComments(req, res) {
         partyMember: {
           deletedAt: null,
           user: {
-            deletedAt: null,
-          },
-        },
-        commentReacts: {
-          every: {
             deletedAt: null,
           },
         },
@@ -68,10 +92,12 @@ async function getComments(req, res) {
               },
             },
           },
+          where: {
+            deletedAt: null,
+          },
         },
       },
     });
-    console.log(comments);
     return res.json(comments);
   } catch (err) {
     console.error(err);

@@ -130,11 +130,11 @@ const Post = ({ post, children }) => {
           <Avatar sx={{ backgroundColor: "pink" }}>
             {post.partyMember.user.displayName}
           </Avatar>
-          <Box sx={{ flexGrow: 1 }}>
-            <Typography variant="body2">
+          <Box sx={{ flexGrow: 1, alignItems: "flex-start" }}>
+            <Typography variant="body1" sx={{ m: 0, p: 0 }}>
               {post.partyMember.user.displayName}
             </Typography>
-            <Typography variant="subtitle2" sx={{ fontWeight: "regular" }}>
+            <Typography variant="body2" sx={{ fontWeight: "regular" }}>
               {formatRelative(new Date(post.createdAt), new Date())}
             </Typography>
           </Box>

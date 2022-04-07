@@ -10,7 +10,7 @@ const PostPage = () => {
     query: { questId, postId },
   } = useRouter();
 
-  const { data: post, error } = useSWR(
+  const { data: post } = useSWR(
     questId && postId ? `/quests/${questId}/posts/${postId}` : null,
   );
 
