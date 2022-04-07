@@ -5,6 +5,7 @@ import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
+// eslint-disable-next-line
 import Router from "next/router";
 import AuthHeader from "../../../components/Auth/AuthHeader";
 import AuthLayout from "../../../components/Layouts/AuthLayout";
@@ -49,10 +50,11 @@ const MentorRegistrationForm = () => {
       });
       console.log(res.status);
       if (res.status === 200) {
-        Router.push({
-          pathname: "/auth/verify-email/[emailAddress]",
-          query: { emailAddress: values.email },
-        });
+        console.log(res);
+        // Router.push({
+        //   pathname: "/auth/verify-email/[emailAddress]",
+        //   query: { emailAddress: values.email },
+        // });
       } else if (res.status === 403) {
         setMessage("Display Name is already in use.");
         setShow(true);

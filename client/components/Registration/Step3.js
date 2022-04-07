@@ -10,11 +10,14 @@ import {
 import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import FileUpload from "./FileUpload";
+// eslint-disable-next-line
+import FileDropzone from "../Common/FileDropzone";
 
 export default function Step2() {
   const {
     formState: { errors },
   } = useFormContext(); //
+
   return (
     <Stack spacing={1.5} sx={{ mt: "-1.5em" }}>
       <Controller
@@ -54,7 +57,19 @@ export default function Step2() {
         )}
       />
 
-      <FileUpload name="fileUpload" label="File Upload" />
+      <Controller
+        name="fileUpload"
+        // eslint-disable-next-line
+        render={({ field: { onChange, value } }) => (
+          // <FileDropzone
+          //   useDropzoneProps={dropzoneConfig}
+          //   dropzoneTitle="Drag and drop images here or click to add."
+          // />
+          <FileUpload name="fileUpload" label="File Upload" />
+        )}
+      />
+
+      {/* <FileUpload name="fileUpload" label="File Upload" /> */}
     </Stack>
   );
 }
