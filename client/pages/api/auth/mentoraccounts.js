@@ -53,14 +53,16 @@ export default async function (req, res) {
     <div>`,
     };
 
-    const checkEmail = await prisma.user.findUnique({
+    const checkEmail = await prisma.user.findFirst({
       where: {
         email: userDetails.email,
+        deletedAt: null,
       },
     });
-    const checkDisplayName = await prisma.user.findUnique({
+    const checkDisplayName = await prisma.user.findFirst({
       where: {
         displayName: userDetails.displayName,
+        deletedAt: null,
       },
     });
     if (checkDisplayName && checkEmail) {
