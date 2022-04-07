@@ -62,7 +62,7 @@ export default async function (req, res) {
       res.status(409).send({ message: "Email Exists" });
     } else if (!checkDisplayName && !checkEmail) {
       await prisma.user.create({ data: userDetails });
-      transporter.sendMail(mailData, (err, info) => {
+      await transporter.sendMail(mailData, (err, info) => {
         if (err) console.log(err);
         else console.log(info);
       });

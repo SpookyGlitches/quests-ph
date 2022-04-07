@@ -30,11 +30,10 @@ export default async function (req, res) {
     <div>`,
     };
 
-    transporter.sendMail(mailData, (err, info) => {
+    await transporter.sendMail(mailData, (err, info) => {
       if (err) console.log(err);
       else console.log(info);
     });
     res.status(200).send({ message: "Success!" });
-    await prisma.$disconnect();
   }
 }

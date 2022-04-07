@@ -110,11 +110,11 @@ export default async function (req, res) {
                   },
                 });
               }
-              transporter.sendMail(mailData, (err, info) => {
-                if (err) console.log(err);
-                else console.log(info);
-              });
             }
+            await transporter.sendMail(mailData, (err, info) => {
+              if (err) console.log(err);
+              else console.log(info);
+            });
           }
           res.status(200).send({ message: "Success!" });
         }
