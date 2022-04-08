@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { Box, Grid } from "@mui/material";
 import AppLayout from "../../../components/Layouts/AppLayout";
 import ChatMain from "../../../components/Quest/Chat/Chat-New/new-chat-main";
@@ -39,12 +38,3 @@ export async function getServerSideProps(context) {
     },
   };
 }
-=======
-import React from "react";
-
-const index = (req, res) => {
-  return <div>index</div>;
-};
-
-export default index;
->>>>>>> d8eb65dfbc78b1fc9a67e0ceadf1f4c1620217a2
