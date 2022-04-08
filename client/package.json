@@ -20,6 +20,7 @@
     "@mui/icons-material": "^5.4.2",
     "@mui/lab": "^5.0.0-alpha.70",
     "@mui/material": "^5.4.2",
+    "@mui/x-data-grid": "^5.7.0",
     "@next-auth/prisma-adapter": "^1.0.1",
     "@prisma/client": "^3.10.0",
     "@udecode/plate-basic-marks": "^10.1.2",
