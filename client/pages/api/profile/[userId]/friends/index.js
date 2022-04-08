@@ -24,10 +24,6 @@ export default async function GetFriendships(req, res) {
         ],
         deletedAt: null,
       },
-      include: {
-        userOne: { select: { displayName: true, fullName: true } },
-        userTwo: { select: { displayName: true, fullName: true } },
-      },
     });
     return res.status(200).json(checkFriendship);
   } catch (error) {

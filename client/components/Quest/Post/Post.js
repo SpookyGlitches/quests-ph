@@ -1,12 +1,8 @@
-/* eslint-disable no-underscore-dangle */
 import {
   Box,
   Avatar,
   Typography,
-  Stack,
   Button,
-  Popper,
-  Fade,
   IconButton,
   Paper,
   Menu,
@@ -20,13 +16,13 @@ import { formatRelative } from "date-fns";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { useState } from "react";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { useSession } from "next-auth/react";
-import Emoji1 from "../../Icons/Emoji1";
-import Emoji2 from "../../Icons/Emoji2";
-import Emoji3 from "../../Icons/Emoji3";
+import axios from "axios";
+import ReactOptions from "./ReactOptions";
+import EmojiStack from "./EmojisStack";
 
-const Post = ({ post }) => {
+const Post = ({ post, children }) => {
   const router = useRouter();
   const { questId } = router.query;
   const session = useSession();
@@ -36,21 +32,20 @@ const Post = ({ post }) => {
       ? `/quests/${questId}/posts/${post.postId}/postFiles`
       : null,
   );
+
+  const { mutate } = useSWRConfig();
   const [postOptionsAnchor, setPostOptionsAnchor] = useState(null);
   const [openPostOptions, setOpenPostOptions] = useState(false);
-  const [reactAnchor, setReactAnchor] = useState(null);
-  const [openReact, setOpenReact] = useState(false);
+
+  const [reactOptionsAnchor, setReactOptionsAnchor] = useState(null);
+  const [openReactOptions, setOpenReactOptions] = useState(false);
 
   const handlePostOptionsClick = (event) => {
     event.stopPropagation();
     setPostOptionsAnchor(event.currentTarget);
     setOpenPostOptions(!openPostOptions);
   };
-  const handleReactClick = (event) => {
-    event.stopPropagation();
-    setReactAnchor(event.currentTarget);
-    setOpenReact(!openReact);
-  };
+
   const closePostOptions = () => {
     setOpenPostOptions(false);
   };
@@ -71,6 +66,54 @@ const Post = ({ post }) => {
     router.push(`/quests/${questId}/posts/${post.postId}/edit`);
   };
 
+  const toggleReactOptions = (event) => {
+    event.stopPropagation();
+    setReactOptionsAnchor(event.currentTarget);
+    setOpenReactOptions(!openReactOptions);
+  };
+
+  const addReact = async (type) => {
+    await axios.post(`/api/quests/${questId}/posts/${post.postId}/reacts`, {
+      type,
+    });
+  };
+
+  const updateReact = async (type, selected) => {
+    await axios.put(
+      `/api/quests/${questId}/posts/${post.postId}/reacts/${selected.postReactId}`,
+      {
+        type,
+      },
+    );
+  };
+
+  const deleteReact = async (postReactId) => {
+    await axios.delete(
+      `/api/quests/${questId}/posts/${post.postId}/reacts/${postReactId}`,
+    );
+  };
+
+  const getSelected = (postReacts) => {
+    const currentReact = postReacts.find(
+      (react) => react.partyMember?.user?.userId === userId,
+    );
+    return currentReact;
+  };
+
+  const handleReactClick = async (type, postReacts) => {
+    const selected = getSelected(postReacts);
+    try {
+      if (!selected) await addReact(type);
+      else if (selected.type === type) await deleteReact(selected.postReactId);
+      else await updateReact(type, selected);
+      // todo, ea: dont revalidate
+      mutate(`/quests/${questId}/posts/${post.postId}`);
+      mutate(`/quests/${questId}/posts`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <Paper
@@ -87,11 +130,11 @@ const Post = ({ post }) => {
           <Avatar sx={{ backgroundColor: "pink" }}>
             {post.partyMember.user.displayName}
           </Avatar>
-          <Box sx={{ flexGrow: 1 }}>
-            <Typography variant="body2">
+          <Box sx={{ flexGrow: 1, alignItems: "flex-start" }}>
+            <Typography variant="body1" sx={{ m: 0, p: 0 }}>
               {post.partyMember.user.displayName}
             </Typography>
-            <Typography variant="subtitle2" sx={{ fontWeight: "regular" }}>
+            <Typography variant="body2" sx={{ fontWeight: "regular" }}>
               {formatRelative(new Date(post.createdAt), new Date())}
             </Typography>
           </Box>
@@ -161,15 +204,15 @@ const Post = ({ post }) => {
             }}
           >
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <Stack direction="row" spacing={-1.5}>
-                <Emoji1 width="30" height="30" />
-                <Emoji2 width="30" height="30" />
-                <Emoji3 width="30" height="30" />
-              </Stack>
-              <Typography variant="body2">6 reacts</Typography>
+              <EmojiStack
+                spacing={-1}
+                height={30}
+                width={30}
+                reacts={post.postReacts}
+              />
             </Box>
-            <Typography variant="body2" onClick={navigateToPost}>
-              3 comments
+            <Typography variant="caption" onClick={navigateToPost}>
+              {post.comments?.length || 0} comments
             </Typography>
           </Box>
         </Box>
@@ -188,7 +231,7 @@ const Post = ({ post }) => {
           <Button
             variant="text"
             startIcon={<AddReactionRoundedIcon />}
-            onClick={handleReactClick}
+            onClick={toggleReactOptions}
             size="medium"
           >
             React
@@ -202,6 +245,9 @@ const Post = ({ post }) => {
             Comment
           </Button>
         </Box>
+
+        {/* Comments  Section */}
+        {children}
       </Paper>
 
       <Menu
@@ -216,24 +262,13 @@ const Post = ({ post }) => {
         </MenuItem>
         <MenuItem dense>Delete</MenuItem>
       </Menu>
-
-      <Popper
-        open={openReact}
-        anchorEl={reactAnchor}
-        placement="top"
-        transition
-        style={{ zIndex: 1 }}
-      >
-        {({ TransitionProps }) => (
-          <Fade {...TransitionProps} timeout={350}>
-            <Paper>
-              <Emoji1 width="40" height="40" />
-              <Emoji2 width="40" height="40" />
-              <Emoji3 width="40" height="40" />
-            </Paper>
-          </Fade>
-        )}
-      </Popper>
+      <ReactOptions
+        getSelected={() => getSelected(post.postReacts)}
+        handleReactClick={(type) => handleReactClick(type, post.postReacts)}
+        open={openReactOptions}
+        anchor={reactOptionsAnchor}
+        setOpen={setOpenReactOptions}
+      />
     </>
   );
 };
