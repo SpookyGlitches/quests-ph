@@ -35,7 +35,7 @@ export default function Profile() {
               fullName={session.user.fullName}
               displayName={session.user.displayName}
             />
-            <BadgesList />
+            <BadgesList userId={session.user.userId} />
             <QuestChart />
             <QuestList />
           </Box>

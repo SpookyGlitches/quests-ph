@@ -1,7 +1,7 @@
 import { getSession } from "next-auth/react";
 import prisma from "../../../../../lib/prisma";
 
-export default async function getFriendOutgoing(req, res) {
+export default async function checkFriendReqs(req, res) {
   if (req.method !== "GET") {
     return res.status(404).json({ message: "Method not allowed " });
   }
