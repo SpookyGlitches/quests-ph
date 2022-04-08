@@ -41,7 +41,6 @@ export const stepTwoMentorValidations = object({
 
 export const stepThreeMentorValidations = object({
   experience: mixed().oneOf(["yes", "no"]).required(requiredMsg),
-  detailedExperience: string().required(requiredMsg),
 });
 
 export const MentorRegistration = [

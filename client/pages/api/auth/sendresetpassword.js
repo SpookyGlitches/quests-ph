@@ -9,6 +9,7 @@ export default async function (req, res) {
     const checkEmail = await prisma.user.findUnique({
       where: {
         email: userInfo.data.email,
+        deletedAt: null,
       },
     });
 
