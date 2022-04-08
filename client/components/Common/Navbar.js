@@ -78,7 +78,6 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
-
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };

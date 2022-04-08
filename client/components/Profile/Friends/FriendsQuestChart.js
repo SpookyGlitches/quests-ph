@@ -37,6 +37,26 @@ export default function FriendsQuestChart({ userId }) {
       />
     );
   }
+  const questsArrComplete = [];
+  let healthCount = 0;
+  let socialCount = 0;
+  let careerCount = 0;
+
+  friendQuests.forEach((item) => {
+    // eslint-disable-next-line
+    for (const key in item) {
+      if (item[key].category === "HEALTH") {
+        healthCount++;
+      } else if (item[key].category === "SOCIAL") {
+        socialCount++;
+      } else {
+        careerCount++;
+      }
+    }
+  });
+  questsArrComplete.push(healthCount);
+  questsArrComplete.push(socialCount);
+  questsArrComplete.push(careerCount);
 
   return (
     <Box
@@ -96,7 +116,7 @@ export default function FriendsQuestChart({ userId }) {
             labels: ["Health", "Social", "Career"],
             datasets: [
               {
-                data: friendQuests,
+                data: questsArrComplete,
                 backgroundColor: [
                   "rgb(21,136,25)",
                   "rgb(101,19,223)",
