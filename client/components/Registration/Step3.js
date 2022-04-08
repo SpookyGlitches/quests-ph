@@ -15,16 +15,14 @@ import {
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-// eslint-disable-next-line
-import FileUpload from "./FileUpload";
-// eslint-disable-next-line
+import { useSnackbar } from "notistack";
 import FileDropzone from "../Common/FileDropzone";
 
 export default function Step3({ uploadedFiles, setUploadedFiles }) {
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState("");
-
+  const { enqueueSnackbar } = useSnackbar();
   const {
     formState: { errors },
   } = useFormContext(); //
@@ -71,7 +69,7 @@ export default function Step3({ uploadedFiles, setUploadedFiles }) {
       "image/*, application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/msword",
     onDropAccepted: uploadFiles,
     onDropRejected: () => {
-      console.log("lol");
+      enqueueSnackbar("File type not accepted");
     },
     // disabled: loading,
   };
@@ -150,7 +148,6 @@ export default function Step3({ uploadedFiles, setUploadedFiles }) {
           >
             <Typography style={{ fontSize: "12px" }}>{elem.name}</Typography>
             <Button
-              sx={{ ml: "-1em" }}
               size="small"
               onClick={() => {
                 removeFile(uploadedFiles.indexOf(elem));
