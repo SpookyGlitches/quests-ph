@@ -4,26 +4,12 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export default async function getAllUser(req, res) {
+export default async function getAllConversation(req, res) {
   if (req.method === "GET") {
     const { searchVal } = req.body;
 
-    const fullname = "RJ Fajardo";
+    const conversations = await prisma.conversation.findMany();
 
-    const firstString = fullname.split(" ");
-
-    const firstName = firstString[0];
-
-    const secondName = firstString[1];
-
-    const users = await prisma.user.findMany({
-      where: {
-        fullName: firstName || secondName || fullname,
-
-        //lvalue  = RJ Fajardo
-      },
-    });
-
-    return res.status(200).json(users);
+    return res.status(200).json(conversations);
   }
 }

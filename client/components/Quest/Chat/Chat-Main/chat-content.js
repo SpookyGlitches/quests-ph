@@ -8,49 +8,98 @@ import {
   Typography,
   Divider,
   ListItemText,
+  CircularProgress,
   Chip,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { formatRelative, subDays } from "date-fns";
 import ReactScrollableFeed from "react-scrollable-feed";
+import useSWR, { mutate } from "swr";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 import Pusher from "pusher-js";
 
 const ChatContent = ({ username }) => {
+  const { data: session } = useSession();
   const router = useRouter();
   const [chats, setChats] = useState([]);
+  const [onlineUsersCount, setonlineUsersCount] = useState(0);
+  const [onlineUser, setOnlineUsers] = useState([]);
+
+  const pusher = new Pusher(process.env.NEXT_PUBLIC_key, {
+    cluster: "ap1",
+    encrypted: true,
+    authEndpoint: "/api/pusher/auth",
+  });
+
+  Pusher.logToConsole = true;
+
+  // const channel = pusher.subscribe("presence-chat", (data) => {
+  //   console.log("subscribed");
+  // });
+
+  // useEffect(() => {
+  //   channel.bind("chat-send", (data) => {
+  //     setChats(data);
+  //   });
+
+  //   channel.bind("pusher:subscription_succeeded", (data) => {
+  //     console.log(data);
+  //   });
+
+  //   channel.bind("pusher:subscription_error", (err) => {
+  //     console.log(err.error);
+  //   });
+
+  //   return () => {
+  //     pusher.unsubscribe("presence-chat");
+  //   };
+  // }, [chats]);
+
+  // console.log(channel);
 
   useEffect(() => {
-    const pusher = new Pusher(process.env.NEXT_PUBLIC_key, {
-      cluster: "eu",
-    });
-    const channel = pusher.subscribe("presence-channel");
+    let mounted = true;
+    if (mounted) {
+      const channel = pusher.subscribe("presence-chat");
 
-    channel.bind("chat-update", function (data) {
-      const { username, message } = data;
-      setChats((prevState) => [
-        ...prevState,
-        { username: data.username, message: data.message },
-      ]);
-    });
+      // when user subscribes
 
+      channel.bind("pusher:member_added", (member) => {
+        setonlineUsersCount(channel.members.count);
+        setonlineUsersCount((prevState) => [
+          ...prevState,
+          { username: member.info.username },
+        ]);
+      });
+
+      channel.bind("chat-send", (data) => {
+        const { message } = data;
+        setChats((prevState) => [
+          ...prevState,
+          { username: session.user.fullName, message: data.message },
+        ]);
+      });
+    }
     return () => {
-      pusher.unsubscribe("presence-channel");
+      pusher.unsubscribe("presence-chat");
     };
-  }, []);
+  }, [chats]);
+
+  const { data, error } = useSWR(`/chats/${router.query.conversationId}`, {
+    refreshInterval: 0,
+  });
+  mutate(`/chats/${router.query.conversationId}`);
+
+  if (error) return <p>Failed</p>;
+  if (!data) return <CircularProgress />;
+
+  console.log(data);
 
   return (
-    <Box
-      border={1}
-      borderColor="#eeeee4"
-      display="column"
-      height="435px"
-      style={{
-        overflow: "hidden",
-        overflowY: "scroll",
-      }}
-    >
+    <Box border={1} borderColor="#eeeee4" display="column" height="420px">
       <Divider>
-        <Chip label="Unread Messages" />
+        <Chip label="Unread Messsages" />
       </Divider>
       <ReactScrollableFeed>
         <List
@@ -59,7 +108,7 @@ const ChatContent = ({ username }) => {
             overflow: "hidden",
           }}
         >
-          {chats.map((chat, id) => (
+          {data.chats.map((chat) => (
             <ListItem alignItems="flex-start">
               <ListItemAvatar>
                 <Avatar alt="Remy Sharp">R</Avatar>
@@ -69,16 +118,13 @@ const ChatContent = ({ username }) => {
                 primary={
                   <Grid sx={{ display: "flex", flexDirection: "row" }}>
                     <Typography sx={{ fontSize: "15px", marginRight: 1 }}>
-                      {chat.username}
+                      {chat.userId}
                     </Typography>
                     <Typography
                       variant="h6"
                       sx={{ color: "#d4d9d4", fontSize: "14px" }}
                     >
-                      {/* {formatRelative(
-                        subDays(new Date(), 0),
-                        new Date(chat.createdAt),
-                      )} */}
+                      {chat.createdAt}
                     </Typography>
                   </Grid>
                 }
@@ -89,7 +135,7 @@ const ChatContent = ({ username }) => {
                     variant="body2"
                     color="text.primary"
                   >
-                    {chat.message}
+                    {chat.text}
                   </Typography>
                 }
               />

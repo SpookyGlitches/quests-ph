@@ -15,57 +15,13 @@ import {
   ListItemButton,
   ListItemAvatar,
   TextField,
+  CircularProgress,
 } from "@mui/material";
 
 import Image from "next/image";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
+import useSWR from "swr";
 import axios from "axios";
-
-//implement search here
-
-const dummy_data = [
-  {
-    id: 1,
-    name: "RJ",
-    image: "",
-  },
-  {
-    id: 2,
-    name: "JERBY",
-  },
-  {
-    id: 3,
-    name: "MONICA",
-  },
-  {
-    id: 4,
-    name: "MONICA",
-  },
-  {
-    id: 5,
-    name: "MONICA",
-  },
-  {
-    id: 1,
-    name: "RJ",
-  },
-  {
-    id: 2,
-    name: "JERBY",
-  },
-  {
-    id: 3,
-    name: "MONICA",
-  },
-  {
-    id: 4,
-    name: "MONICA",
-  },
-  {
-    id: 5,
-    name: "MONICA",
-  },
-];
 
 const newChatContent = () => {
   const [selectedValue, setSelectedValue] = useState();
@@ -82,6 +38,11 @@ const newChatContent = () => {
     setMessage("");
   };
 
+  const { data, error } = useSWR("/chats/new");
+
+  if (error) return <p>Failed to load</p>;
+  if (!data) return <CircularProgress />;
+
   console.log(selectedValue);
 
   return (
@@ -93,17 +54,20 @@ const newChatContent = () => {
             onChange={(e) => setSelectedValue(e.target.value)}
             fullWidth
           >
-            {dummy_data.map((item) => (
+            {data.map((user) => (
               <MenuItem
                 style={{
                   overflow: "hidden",
                   overflowY: "scroll",
                 }}
-                value={item.id}
+                value={user.userId}
               >
-                <ListItem key={item.id} alignItems="flex-start">
+                <ListItem key={user.userId} alignItems="flex-start">
                   <ListItemAvatar>
-                    <Avatar alt="Remy Sharp">R</Avatar>
+                    <Avatar alt="No">
+                      {user.fullName.charAt(0)}
+                      {user.fullName.split(" ")[1].charAt(0)}
+                    </Avatar>
                   </ListItemAvatar>
 
                   <ListItemText
@@ -123,7 +87,7 @@ const newChatContent = () => {
                             fontWeight: "bold",
                           }}
                         >
-                          {item.name}
+                          {user.fullName}
                         </Typography>
                       </Grid>
                     }
@@ -134,17 +98,16 @@ const newChatContent = () => {
           </Select>
         </Box>
 
-        <Box sx={{ marginTop: "300px" }}>
+        <Box sx={{ marginTop: "380px" }}>
           <Box
             sx={{
-              height: "125px",
               marginTop: 0.5,
               width: "100%",
               display: "flex",
 
               flexDirection: "row",
               padding: 1,
-              bgcolor: "#dce0e6",
+              bgcolor: "background.paper",
             }}
             spacing={3}
           >

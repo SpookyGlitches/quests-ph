@@ -1,6 +1,6 @@
 import { Box, Grid } from "@mui/material";
-import ChatScreen from "../../../../../components/Quest/Chat/chat-main";
-import QuestLayout from "../../../../../components/Layouts/QuestLayout";
+import ChatScreen from "../../../../components/Quest/Chat/chat-main";
+import QuestLayout from "../../../../components/Layouts/QuestLayout";
 
 const index = () => {
   return (

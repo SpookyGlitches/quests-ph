@@ -2,6 +2,7 @@ import React from "react";
 import { Avatar, Grid, Paper, Typography, IconButton } from "@mui/material";
 
 import VideocamRoundedIcon from "@mui/icons-material/VideocamRounded";
+import Link from "next/link";
 
 const ChatHeader = () => {
   return (
@@ -28,9 +29,13 @@ const ChatHeader = () => {
           </Grid>
         </Grid>
         <Grid xs={1} sx={{ marginLeft: "280px" }}>
-          <IconButton aria-label="delete" size="small">
-            <VideocamRoundedIcon sx={{ color: "#755cde", fontSize: "35px" }} />
-          </IconButton>
+          <Link href={"/friends"} passHref>
+            <IconButton aria-label="delete" size="small">
+              <VideocamRoundedIcon
+                sx={{ color: "#755cde", fontSize: "35px" }}
+              />
+            </IconButton>
+          </Link>
         </Grid>
       </Paper>
     </div>

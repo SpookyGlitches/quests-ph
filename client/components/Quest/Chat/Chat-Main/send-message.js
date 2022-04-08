@@ -6,28 +6,34 @@ import { useSession } from "next-auth/react";
 import Pusher from "pusher-js";
 import axios from "axios";
 
-const SendMessage = ({ username }) => {
+const SendMessage = () => {
+  const router = useRouter();
   const { data: session } = useSession();
   const [message, setMessage] = useState("");
 
   const sendMessageHandler = async (event) => {
     event.preventDefault();
     try {
-      const res = await axios.post("/api/pusher/chat-update", {
-        message,
-        username,
-      });
+      const res = await axios.post(
+        `/api/chats/${router.query.conversationId}`,
+        {
+          message,
+          username: session.user.fullName,
+        },
+      );
     } catch (err) {
       console.log(err);
     }
     setMessage("");
   };
 
+  console.log(message);
+
   return (
     <form onSubmit={(e) => sendMessageHandler(e)}>
       <Box
         sx={{
-          marginTop: 0.5,
+          marginTop: 4,
           width: "100%",
           display: "flex",
 
@@ -48,7 +54,11 @@ const SendMessage = ({ username }) => {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
-        {message !== "" && (
+        {message === "" ? (
+          <IconButton aria-label="delete" type="submit" disabled size="small">
+            <SendRoundedIcon sx={{ color: "#755cde" }} />
+          </IconButton>
+        ) : (
           <IconButton aria-label="delete" type="submit" size="small">
             <SendRoundedIcon sx={{ color: "#755cde" }} />
           </IconButton>

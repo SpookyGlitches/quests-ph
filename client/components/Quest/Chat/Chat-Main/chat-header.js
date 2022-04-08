@@ -3,7 +3,7 @@ import { Box, Paper, Typography } from "@mui/material";
 
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 
-const ChatHeader = () => {
+const ChatHeader = ({ conversationName }) => {
   return (
     <Box>
       <Paper
@@ -16,7 +16,7 @@ const ChatHeader = () => {
           marginBottom: "10px",
         }}
       >
-        <Typography>Conversation Name</Typography>
+        <Typography>{conversationName}</Typography>
         <MoreHorizRoundedIcon />
       </Paper>
     </Box>
