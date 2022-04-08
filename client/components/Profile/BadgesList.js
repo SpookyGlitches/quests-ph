@@ -4,9 +4,9 @@ import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRound
 import { useState } from "react";
 import useSWR from "swr";
 import CircularProgress from "@mui/material/CircularProgress";
-import StyledPaper from "../Common/StyledPaper";
 import axios from "axios";
 import { format } from "date-fns";
+import StyledPaper from "../Common/StyledPaper";
 
 const itemsToDisplay = 3;
 
@@ -175,7 +175,7 @@ export default function BadgesList({ userId }) {
                   }}
                 >
                   <Typography variant="caption" sx={{ color: "gray" }}>
-                    Given at {givenAt}
+                    Given on {givenAt}
                   </Typography>
                 </Box>
               </Box>

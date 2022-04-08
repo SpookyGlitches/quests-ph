@@ -181,7 +181,7 @@ export default function FriendsBadgesList({ userId }) {
                   }}
                 >
                   <Typography variant="caption" sx={{ color: "gray" }}>
-                    Given at {givenAt}
+                    Given on {givenAt}
                   </Typography>
                 </Box>
               </Box>
