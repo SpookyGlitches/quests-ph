@@ -18,20 +18,58 @@ async function getPosts(req, res) {
           },
         },
       },
-      include: {
+      select: {
+        createdAt: true,
+        title: true,
+        postId: true,
+        body: true,
+        partyMemberId: true,
         partyMember: {
-          include: {
+          select: {
             user: {
               select: {
-                displayName: true,
-                image: true,
                 userId: true,
+                displayName: true,
+              },
+            },
+            partyMemberId: true,
+          },
+        },
+        comments: {
+          where: {
+            deletedAt: null,
+          },
+          select: {
+            deletedAt: true,
+          },
+        },
+        postReacts: {
+          where: {
+            deletedAt: null,
+            partyMember: {
+              deletedAt: null,
+              user: {
+                deletedAt: null,
+              },
+            },
+          },
+          select: {
+            postReactId: true,
+            type: true,
+            partyMember: {
+              select: {
+                user: {
+                  select: {
+                    userId: true,
+                  },
+                },
               },
             },
           },
         },
       },
     });
+
     return res.status(200).send(posts);
   } catch (err) {
     console.error(err);
@@ -65,7 +103,6 @@ async function createPost(req, res) {
         },
       },
     });
-    console.log(post);
     return res.status(200).json(post);
   } catch (err) {
     console.error(err);

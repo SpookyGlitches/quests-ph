@@ -2,8 +2,7 @@ import { ELEMENT_PARAGRAPH } from "@udecode/plate-paragraph";
 import { ELEMENT_UL, ELEMENT_OL, toggleList } from "@udecode/plate-list";
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from "@udecode/plate-heading";
 import { ELEMENT_LINK, getAndUpsertLink } from "@udecode/plate-link";
-import { ToggleButtonGroup, ToggleButton, Box, Divider } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { ToggleButton, Box, Divider } from "@mui/material";
 
 import Looks3RoundedIcon from "@mui/icons-material/Looks3Rounded";
 import LooksOneRoundedIcon from "@mui/icons-material/LooksOneRounded";
@@ -31,24 +30,7 @@ import {
   MARK_ITALIC,
   MARK_UNDERLINE,
 } from "@udecode/plate-basic-marks";
-
-const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
-  "& .MuiToggleButtonGroup-grouped": {
-    margin: theme.spacing(0.5),
-    border: 0,
-    "&.Mui-disabled": {
-      border: 0,
-    },
-    "&:not(:first-of-type)": {
-      borderRadius: theme.shape.borderRadius,
-      padding: 3,
-    },
-    "&:first-of-type": {
-      borderRadius: theme.shape.borderRadius,
-      padding: 3,
-    },
-  },
-}));
+import StyledToggleButtonGroup from "../../Common/StyledToggleButtonGroup";
 
 const baseProps = {
   size: "small",
