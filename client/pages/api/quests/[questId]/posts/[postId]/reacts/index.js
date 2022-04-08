@@ -15,16 +15,6 @@ async function addReact(req, res) {
 
     if (existingReact) return res.status(400).send();
 
-    const post = await prisma.post.findUnique({
-      where: {
-        postId: parsedPostId,
-      },
-      select: {
-        partyMemberId: true,
-      },
-      rejectOnNotFound: true,
-    });
-
     const transactions = [];
 
     const postReactOperation = prisma.postReact.create({
@@ -34,10 +24,30 @@ async function addReact(req, res) {
         postId: parsedPostId,
       },
     });
+
     transactions.push(postReactOperation);
 
-    if (post.partyMemberId !== partyMember.partyMemberId) {
-      // do not award when a post author reacts on their own post
+    // award award points brother
+    const post = await prisma.post.findUnique({
+      where: {
+        postId: parsedPostId,
+      },
+      select: {
+        partyMemberId: true,
+        partyMember: {
+          select: {
+            role: true,
+          },
+        },
+      },
+      rejectOnNotFound: true,
+    });
+
+    if (
+      post.partyMemberId !== partyMember.partyMemberId &&
+      post.partyMember.role !== "MENTOR"
+    ) {
+      // do not award when a post author reacts on their own post or if they are a mentor
       const awardPointsOperation = prisma.pointsLog.create({
         data: {
           partyMemberId: post.partyMemberId,

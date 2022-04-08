@@ -20,6 +20,11 @@ async function addReact(req, res) {
       },
       select: {
         partyMemberId: true,
+        partyMember: {
+          select: {
+            role: true,
+          },
+        },
       },
       rejectOnNotFound: true,
     });
@@ -35,8 +40,11 @@ async function addReact(req, res) {
 
     transactions.push(commentReactOperation);
 
-    if (comment.partyMemberId !== partyMember.partyMemberId) {
-      // do not award when a post author comments on their own post
+    if (
+      comment.partyMemberId !== partyMember.partyMemberId &&
+      comment.partyMember.role !== "MENTOR"
+    ) {
+      // do not award when a post author comments on their own post and mentors
       const awardPointsOperation = prisma.pointsLog.create({
         data: {
           partyMemberId: comment.partyMemberId, // the one who created the comment
