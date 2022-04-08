@@ -123,7 +123,6 @@ model Article {
   userId     String
   category   QuestCategory @default(SOCIAL)
   link       String
-  image      String?
   status     ArticleStatus @default(DISAPPROVED)
   createdAt  DateTime      @default(now())
   updatedAt  DateTime?

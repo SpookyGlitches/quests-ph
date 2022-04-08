@@ -1,202 +1,150 @@
+import React, { useEffect, useState, useCallback } from "react";
 import {
   Box,
   Grid,
   Card,
-  CardContent,
   CardMedia,
+  CardContent,
+  CardActions,
   Typography,
+  Link as MuiLink,
 } from "@mui/material";
+import useSWR from "swr";
+import CircularProgress from "@mui/material/CircularProgress";
+import Link from "next/link";
+import { makeStyles } from "@mui/styles";
+import KeyboardDoubleArrowDownRoundedIcon from "@mui/icons-material/KeyboardDoubleArrowDownRounded";
 
-export default function Articles({ type }) {
-  console.log(type);
+const until = 6;
+export default function Articles({ category }) {
+  const [y, setY] = useState(document.scrollingElement.scrollHeight);
+  // eslint-disable-next-line
+  const [scrollDirection, setScrollDirection] = useState("Null Scroll");
+  const [pagination, setPagination] = useState({
+    start: 0,
+    end: until,
+  });
+
+  const handleNavigation = useCallback(
+    // eslint-disable-next-line
+    (e) => {
+      if (y < window.scrollY) {
+        setPagination((prev) => {
+          return {
+            start: 0,
+            end: prev.end + 3,
+          };
+        });
+      }
+      setY(window.scrollY);
+    },
+    [y],
+  );
+  useEffect(() => {
+    window.addEventListener("scroll", handleNavigation);
+
+    return () => {
+      window.removeEventListener("scroll", handleNavigation);
+    };
+  }, [handleNavigation]);
+
+  const useStyles = makeStyles(() => ({
+    media: {
+      height: 140,
+    },
+    content: {
+      padding: 20,
+    },
+    actions: {
+      padding: 12,
+    },
+  }));
+
+  const classes = useStyles();
+
+  const { data: articles } = useSWR(
+    category ? `/articles/${category}/articlelist` : null,
+  );
+  if (!articles) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: "10em",
+        }}
+      >
+        <CircularProgress />
+      </div>
+    );
+  }
+  const finalArticles = articles.slice(pagination.start, pagination.end);
   return (
     <Box>
       <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <Card
-            sx={{
-              mb: "1em",
-              flexDirection: {
-                xs: "column", // mobile
-                sm: "row", // tablet and up
-              },
-            }}
-          >
-            <CardMedia
-              component="img"
-              height="140"
-              image="/auth/banana.jpg"
-              alt="sample pic"
-            />
+        {finalArticles.map((elem) => (
+          <Grid item xs={4} key={articles.indexOf(elem)}>
+            <Card
+              sx={{
+                mb: "1em",
+                flexDirection: {
+                  xs: "column", // mobile
+                  sm: "row", // tablet and up
+                },
+              }}
+            >
+              {elem.image === undefined ? (
+                <CardMedia
+                  className={classes.media}
+                  image="articles/quests-article.png"
+                  alt={elem.provider}
+                />
+              ) : (
+                <CardMedia
+                  className={classes.media}
+                  image={elem.image}
+                  alt={elem.provider}
+                />
+              )}
 
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                Lorem Ipsum Dolor Sit Amet Tis Uni 1
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={6}>
-          <Card
-            sx={{
-              display: "flex",
-              mb: "1em",
-              flexDirection: {
-                xs: "column", // mobile
-                sm: "row", // tablet and up
-              },
-            }}
-          >
-            <CardMedia
-              component="img"
-              alt="banana"
-              src="/auth/banana.jpg"
-              sx={{
-                width: { xs: "100%", sm: 100 },
-              }}
-            />
-            <Box sx={{ alignSelf: "center", m: 2 }}>
-              <Typography
-                style={{
-                  fontSize: "14px",
-                  fontWeight: "bold",
-                  padding: 10,
-                }}
-              >
-                Lorem Ipsum Dolor Sit Amet Tis Uni
-              </Typography>
-            </Box>
-          </Card>
-          <Card
-            sx={{
-              display: "flex",
-              flexDirection: {
-                xs: "column", // mobile
-                sm: "row", // tablet and up
-              },
-            }}
-          >
-            <CardMedia
-              component="img"
-              alt="banana"
-              src="/auth/banana.jpg"
-              sx={{
-                width: { xs: "100%", sm: 100 },
-              }}
-            />
-            <Box sx={{ alignSelf: "center", m: 2 }}>
-              <Typography
-                style={{
-                  fontSize: "14px",
-                  fontWeight: "bold",
-                  padding: 10,
-                }}
-              >
-                Lorem Ipsum Dolor Sit Amet Tis Uni
-              </Typography>
-            </Box>
-          </Card>
-          <Card
-            sx={{
-              display: "flex",
-              mt: "1em",
-              flexDirection: {
-                xs: "column", // mobile
-                sm: "row", // tablet and up
-              },
-            }}
-          >
-            <CardMedia
-              component="img"
-              alt="banana"
-              src="/auth/banana.jpg"
-              sx={{
-                width: { xs: "100%", sm: 100 },
-              }}
-            />
-            <Box sx={{ alignSelf: "center", m: 2 }}>
-              <Typography
-                style={{
-                  fontSize: "14px",
-                  fontWeight: "bold",
-                  padding: 10,
-                }}
-              >
-                Lorem Ipsum Dolor Sit Amet Tis Uni 2
-              </Typography>
-            </Box>
-          </Card>
-        </Grid>
-        <Grid item xs={4}>
-          <Card
-            sx={{
-              mb: "1em",
-              flexDirection: {
-                xs: "column", // mobile
-                sm: "row", // tablet and up
-              },
-            }}
-          >
-            <CardMedia
-              component="img"
-              height="140"
-              image="/auth/banana.jpg"
-              alt="sample pic"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                Lorem Ipsum Dolor Sit Amet Tis Uni 1
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={4}>
-          <Card
-            sx={{
-              mb: "1em",
-              flexDirection: {
-                xs: "column", // mobile
-                sm: "row", // tablet and up
-              },
-            }}
-          >
-            <CardMedia
-              component="img"
-              height="140"
-              image="/auth/banana.jpg"
-              alt="sample pic"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                Lorem Ipsum Dolor Sit Amet Tis Uni 1
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={4}>
-          <Card
-            sx={{
-              mb: "1em",
-              flexDirection: {
-                xs: "column", // mobile
-                sm: "row", // tablet and up
-              },
-            }}
-          >
-            <CardMedia
-              component="img"
-              height="140"
-              image="/auth/banana.jpg"
-              alt="sample pic"
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                Lorem Ipsum Dolor Sit Amet Tis Uni 1
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+              <CardContent className={classes.content}>
+                <Typography gutterBottom variant="h5" component="div">
+                  {elem.title}
+                </Typography>
+              </CardContent>
+
+              <CardActions className={classes.actions}>
+                <MuiLink
+                  sx={{ cursor: "pointer", ml: 1, mb: 2 }}
+                  style={{ textDecoration: "none" }}
+                >
+                  <Link href={`${elem.url}`} passHref>
+                    <a href="replace" target="_blank">
+                      Read More
+                    </a>
+                  </Link>
+                </MuiLink>
+              </CardActions>
+            </Card>
+          </Grid>
+        ))}
       </Grid>
+      {pagination.end !== articles.length &&
+      pagination.end < articles.length ? (
+        <KeyboardDoubleArrowDownRoundedIcon
+          color="primary"
+          style={{ margin: "0 auto", display: "flex" }}
+        />
+      ) : (
+        <Typography
+          textAlign="center"
+          color="primary"
+          style={{ fontSize: "20px" }}
+        >
+          You have reached the end of the articles! &#127881;
+        </Typography>
+      )}
     </Box>
   );
 }
