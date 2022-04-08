@@ -5,7 +5,7 @@ export default function EmojiStack({ reacts, height, width, spacing }) {
   const emojiTypes = [...new Set(reacts.map((item) => item.type))];
   return (
     <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-      <Stack spacing={spacing}>
+      <Stack spacing={spacing} direction="row">
         {emojiTypes.map((type) => (
           <Emoji type={type} key={type} width={width} height={height} />
         ))}
