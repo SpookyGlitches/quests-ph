@@ -1,27 +1,28 @@
 import { Avatar, Typography, Box, IconButton } from "@mui/material";
+import { useSWRConfig } from "swr";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-// import { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import axios from "axios";
 
-// async function getUser() {
-//   try {
-//     const { data } = await axios.get("/api/friends");
-//     console.log(data);
-//   } catch (error) {
-//     console.error(error);
-//   }
-//   return data;
-// }
-
 const OutgoingField = (item) => {
+  const { mutate } = useSWRConfig();
   // eslint-disable-next-line
   const [outgoingData] = useState(item.item);
-  // const router = useRouter();
-  // const handleProfileClick = (name) => () => {
-  //   router.push(`/profile/${name}`); // profile page url here
-  // };
-  //   let firstIcon;
+
+  const router = useRouter();
+
+  const handleProfileClick = async () => {
+    axios
+      .get("/api/profile/friends/friendinfo", {
+        params: {
+          displayName: outgoingData.requestee.displayName,
+        },
+      })
+      .then((res) => {
+        router.push(`/profile/${res.data.userId}`); // profile page url here
+      });
+  };
 
   const handleDeleteFriendRequest = async () => {
     await axios({
@@ -30,6 +31,8 @@ const OutgoingField = (item) => {
       data: {
         friendRequestId: outgoingData.friendRequestId,
       },
+    }).then(() => {
+      mutate(`/api/friends/outgoing`);
     });
   };
 
@@ -55,6 +58,7 @@ const OutgoingField = (item) => {
           justifyContent: "space-between",
           flexDirection: "row",
         }}
+        onClick={handleProfileClick}
       >
         <Avatar
           sx={{
@@ -96,7 +100,6 @@ const OutgoingField = (item) => {
           marginRight: "1rem",
         }}
       >
-        {/* {firstIcon} */}
         {secondIcon}
       </Box>
     </Box>

@@ -1,33 +1,29 @@
 import { Avatar, Typography, Box, IconButton } from "@mui/material";
+import { useSWRConfig } from "swr";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import GroupAddRoundedIcon from "@mui/icons-material/GroupAddRounded";
-// import { FormProvider, useForm } from "react-hook-form";
-// import { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import axios from "axios";
-// import { yupResolver } from "@hookform/resolvers/yup";
-
-// const postData = async (values) => {
-//   try {
-//     setLoading(true);
-//     const {
-//       data: { quest },
-//     } = await axios.post("/api/quests/", values);
-//     router.push(`/quests/${quest.questId}/overview`);
-//   } catch (err) {
-//     console.error(err);
-//   } finally {
-//     setLoading(false);
-//   }
-// };
 
 const IncomingField = (item) => {
+  const { mutate } = useSWRConfig();
   // eslint-disable-next-line
   const [incomingData] = useState(item.item);
-  // const router = useRouter();
-  // const handleProfileClick = (name) => () => {
-  //   router.push(`/profile/${name}`); // profile page url here
-  // };
+
+  const router = useRouter();
+
+  const handleProfileClick = () => {
+    axios
+      .get("/api/profile/friends/friendinfo", {
+        params: {
+          displayName: incomingData.requester.displayName,
+        },
+      })
+      .then((res) => {
+        router.push(`/profile/${res.data.userId}`); // profile page url here
+      });
+  };
 
   const handleDeleteFriendRequest = async () => {
     await axios({
@@ -36,6 +32,8 @@ const IncomingField = (item) => {
       data: {
         friendRequestId: incomingData.friendRequestId,
       },
+    }).then(() => {
+      mutate(`/api/friends/incoming`);
     });
   };
 
@@ -48,7 +46,13 @@ const IncomingField = (item) => {
         requesterId: incomingData.requesterId,
         requesteeId: incomingData.requesteeId,
       },
-    });
+    })
+      .then(() => {
+        mutate(`/api/friends/incoming`);
+      })
+      .finally(() => {
+        mutate(`/api/friends/friends`);
+      });
   };
 
   const firstIcon = (
@@ -61,6 +65,7 @@ const IncomingField = (item) => {
       <GroupAddRoundedIcon />
     </IconButton>
   );
+
   return (
     <Box
       sx={{
@@ -77,6 +82,7 @@ const IncomingField = (item) => {
           justifyContent: "space-between",
           flexDirection: "row",
         }}
+        onClick={handleProfileClick}
       >
         <Avatar
           sx={{

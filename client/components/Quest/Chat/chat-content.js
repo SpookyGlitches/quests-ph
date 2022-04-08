@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   List,
   ListItem,
@@ -12,6 +12,7 @@ import {
   Divider,
 } from "@mui/material";
 import ReactScrollableFeed from "react-scrollable-feed";
+
 const ChatContent = () => {
   return (
     <Box

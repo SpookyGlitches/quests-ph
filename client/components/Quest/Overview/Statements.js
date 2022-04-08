@@ -10,7 +10,6 @@ import {
 } from "@mui/material";
 import useSWR from "swr";
 import axios from "axios";
-import { useSession } from "next-auth/react";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -27,19 +26,13 @@ const titleTypographyProps = {
 
 export default function Statements() {
   const router = useRouter();
-  const { query } = router;
-  const ses = useSession();
-  const session = ses?.data?.user;
-  const { data: quest } = useSWR(
-    query?.questId ? `/quests/${router.query.questId}` : null,
+  const { questId } = router.query;
+  const { data: quest } = useSWR(questId ? `/quests/${questId}` : null);
+  const { data: partyMembers, mutate: mutatePartyMembers } = useSWR(
+    quest ? `/quests/${questId}/partyMembers?excludeMentor=true` : null,
   );
-  const { data: partyMembers, mutate: mutateStatement } = useSWR(
-    quest ? `/quests/${query.questId}/partyMembers?excludeMentor=true` : null,
-  );
-  const { data: filteredPartyMembers } = useSWR(
-    quest && session?.userId && partyMembers
-      ? `/quests/${query.questId}/partyMembers?excludeMentor=true&memberId=${session.userId}`
-      : null,
+  const { data: partyMember, mutate: mutateStatement } = useSWR(
+    questId ? `/quests/${questId}/partyMembers/currentUser` : null,
   );
 
   const [anchorWoop, setAnchorWoop] = useState(null);
@@ -54,53 +47,42 @@ export default function Statements() {
       plan: "",
       wish: "",
     },
-    partyMemberId: null,
+    partyMemberId: partyMember?.partyMemberId,
   });
 
   useEffect(() => {
-    if (filteredPartyMembers && filteredPartyMembers.length !== 0) {
-      const member = filteredPartyMembers[0];
-      const { outcome, obstacle, plan, partyMemberId } = member;
-      setWoopModalDetails((prev) => ({
-        ...prev,
-        statement: {
-          ...prev.statement,
-          outcome,
-          obstacle,
-          plan,
-        },
-        partyMemberId,
-      }));
-    }
-  }, [filteredPartyMembers]);
-
-  useEffect(() => {
-    if (!quest) return;
+    if (!quest || !partyMember) return;
     setWoopModalDetails((prev) => ({
       ...prev,
       statement: {
-        ...prev.statement,
+        outcome: partyMember.outcome,
+        obstacle: partyMember.obstacle,
+        plan: partyMember.plan,
         wish: quest.wish,
       },
     }));
-  }, [quest]);
+  }, [quest, partyMember]);
 
   const handleWoopPopperClick = (event) => {
     setAnchorWoop(event.currentTarget);
     setOpenWoopPopper(!openWoopPopper);
   };
 
-  const updateUserStament = async (values) => {
-    await axios.put(
-      `/api/quests/${quest.questId}/partyMembers/${woopModalDetails.partyMemberId}`,
+  const updateUserStatement = async (values) => {
+    const { data } = await axios.put(
+      `/api/quests/${quest.questId}/partyMembers/${partyMember.partyMemberId}`,
       values,
     );
-    setWoopModalDetails((prev) => ({ ...prev, open: false }));
+    return data;
   };
 
   const submitForm = async (values) => {
     try {
-      await mutateStatement(updateUserStament(values));
+      mutateStatement(await updateUserStatement(values), {
+        revalidate: false,
+      });
+      mutatePartyMembers();
+      setWoopModalDetails((prev) => ({ ...prev, open: false }));
     } catch (error) {
       console.error(error);
     }
@@ -113,7 +95,7 @@ export default function Statements() {
     }));
   };
 
-  if (!quest || !partyMembers || !filteredPartyMembers) {
+  if (!quest || !partyMembers || !partyMember) {
     return <div>Loading</div>;
   }
 
@@ -148,7 +130,6 @@ export default function Statements() {
         </div>
         <div>
           <Typography {...titleTypographyProps}>🎁 Outcome</Typography>
-          {partyMembers.length}
           {partyMembers.map((item) => (
             <MemberStatement
               text={item.outcome}
