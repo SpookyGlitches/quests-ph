@@ -1,5 +1,5 @@
-import { pusher } from "../../../../lib/pusher";
 import { getSession } from "next-auth/react";
+import { pusher } from "../../../../lib/pusher";
 
 export default async function authenticatePusherHandler(req, res) {
   const { socket_id, channel_name } = req.body;

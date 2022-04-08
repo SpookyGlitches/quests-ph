@@ -1,8 +1,8 @@
-//chat here subscribe to the channel
-import { pusher } from "../../../../lib/pusher";
+// chat here subscribe to the channel
 import { getSession } from "next-auth/react";
 
 import { PrismaClient } from "@prisma/client";
+import { pusher } from "../../../../lib/pusher";
 
 const prisma = new PrismaClient();
 

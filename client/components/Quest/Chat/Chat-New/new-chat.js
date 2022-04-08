@@ -26,7 +26,7 @@ const ChatContent = ({ username }) => {
     });
     const channel = pusher.subscribe("presence-channel");
 
-    channel.bind("chat-update", function (data) {
+    channel.bind("chat-update", (data) => {
       const { username, message } = data;
       setChats((prevState) => [
         ...prevState,

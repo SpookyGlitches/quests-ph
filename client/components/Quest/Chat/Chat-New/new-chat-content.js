@@ -22,19 +22,25 @@ import Image from "next/image";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import useSWR from "swr";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 const newChatContent = () => {
   const [selectedValue, setSelectedValue] = useState();
   const [message, setMessage] = useState("");
-
+  const router = useRouter();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post("/api/chat", {
+    const chatroomId = await axios.post("/api/chat", {
       selectedValue,
       message,
     });
 
-    selectedValue();
+    if (chatroomId.status !== 400) {
+      router.push(`/chats/${chatroomId.data}`);
+    } else {
+      console.log(chatroomId);
+    }
+    setSelectedValue();
     setMessage("");
   };
 

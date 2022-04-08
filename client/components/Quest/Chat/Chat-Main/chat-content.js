@@ -59,7 +59,7 @@ const ChatContent = ({ username }) => {
   // console.log(channel);
 
   useEffect(() => {
-    let mounted = true;
+    const mounted = true;
     if (mounted) {
       const channel = pusher.subscribe("presence-chat");
 

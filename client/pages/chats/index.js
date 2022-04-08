@@ -1,9 +1,9 @@
 import { Box, Grid } from "@mui/material";
+import { getSession } from "next-auth/react";
 import AppLayout from "../../components/Layouts/AppLayout";
 
 import ChatSidebar from "../../components/Quest/Chat/Chat-Main/chat-sidebar";
 
-import { getSession } from "next-auth/react";
 export default function QuestLayout({ children }) {
   const data = 1;
   return (

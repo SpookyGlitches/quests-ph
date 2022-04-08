@@ -91,9 +91,8 @@ async function checkExistingChat(req, res) {
     }
     if (retVal) {
       return res.redirect(307, `/chats/${retVal}`);
-    } 
-      return res.send(retVal); // Returns false meaning there's no convo with the user you want to chat with and the logged in user.
-    
+    }
+    return res.send(retVal); // Returns false meaning there's no convo with the user you want to chat with and the logged in user.
   } catch (error) {
     console.log(error);
     return res.status(400).json({ message: "Something went wrong" });
@@ -111,12 +110,10 @@ async function createChat(req, res) {
     const newConvo = await prisma.conversation.create({
       data: {
         questId: null,
-        name: "New Conversation", // Placeholder rapud. Idk unsay default and sht
+        name: "With redirect", // Placeholder rapud. Idk unsay default and sht
       },
     });
-    let returnValue = newConvo;
-
-    if (newConvo) {
+    if (newConvo.conversationId !== null) {
       // Not sure if .length!==0 ang checking ani but since this works, kani lng sa for now.
       const newMembers = await prisma.ConversationMember.createMany({
         data: [
@@ -126,15 +123,28 @@ async function createChat(req, res) {
           },
           {
             conversationId: newConvo.conversationId,
-            userId: "cl1ncy1ca0008w0tabu40xnlz", // Made it static for now just to see if naay convo ma make
+            userId: req.body.selectedValue, // Made it static for now just to see if naay convo ma make
           },
         ],
       });
-      returnValue = newMembers;
-    } else {
-      res.status(400).json({ message: "Wa say convo dong" });
-    }
-    return res.status(200).json(returnValue);
+      if (newMembers.count > 1) {
+        // Checks if there were two rows inserted (One for each member of the chat)
+        const firstMessage = await prisma.message.create({
+          data: {
+            conversationId: newConvo.conversationId,
+            userId: user.userId,
+            text: req.body.message,
+          },
+        });
+        return res.send(newConvo.conversationId);
+      } 
+        return res
+          .status(400)
+          .json({ message: "Something wrong with populating chatroom" });
+      
+    } 
+      return res.status(400).json({ message: "Wa say convo dong" });
+    
   } catch (error) {
     console.log(error);
     return res

@@ -29,7 +29,7 @@ const ChatHeader = () => {
           </Grid>
         </Grid>
         <Grid xs={1} sx={{ marginLeft: "280px" }}>
-          <Link href={"/friends"} passHref>
+          <Link href="/friends" passHref>
             <IconButton aria-label="delete" size="small">
               <VideocamRoundedIcon
                 sx={{ color: "#755cde", fontSize: "35px" }}

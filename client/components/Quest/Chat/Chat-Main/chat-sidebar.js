@@ -35,7 +35,7 @@ const ChatSidebar = () => {
       >
         <Typography>Messaging</Typography>
 
-        <Link href={"/chats/new"} passHref>
+        <Link href="/chats/new" passHref>
           <Tooltip title="Create New Chat">
             <IconButton size="small">
               <OpenInNewRoundedIcon sx={{ color: "#755cde" }} />
