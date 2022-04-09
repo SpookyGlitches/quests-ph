@@ -31,11 +31,24 @@ async function sendMessageHandler(req, res) {
   }
 }
 async function getConversationChats(req, res) {
+  const { user } = await getSession({ req });
   const chats = await prisma.message.findMany({
     where: {
       conversationId: Number(req.query.conversationId),
     },
+    include: {
+      user: true,
+    },
   });
+  //   const chats =
+  //     await prisma.$queryRaw`select C.conversationId, CM.userId, U.fullName, M.text , M.createdAt
+  //     FROM Conversation AS C
+  //     INNER JOIN ConversationMember AS CM
+  //     ON C.conversationId = CM.conversationId
+  //     INNER JOIN User AS U ON U.userId = CM.userId
+  //     INNER JOIN Message AS M ON M.conversationId = ${req.query.conversationId}
+
+  //  ORDER BY M.createdAt ASC;`;
 
   res.status(200).json({ chats });
 }

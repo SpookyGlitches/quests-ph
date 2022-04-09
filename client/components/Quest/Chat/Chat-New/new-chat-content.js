@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import {
   Box,
-  Autocomplete,
-  Chip,
   IconButton,
-  List,
   ListItem,
   Select,
   MenuItem,
@@ -12,7 +9,6 @@ import {
   Typography,
   Grid,
   Avatar,
-  ListItemButton,
   ListItemAvatar,
   TextField,
   CircularProgress,
@@ -44,7 +40,7 @@ const newChatContent = () => {
     setMessage("");
   };
 
-  const { data, error } = useSWR("/chats/new");
+  const { data, error } = useSWR("/chats/new", { refreshInterval: 0 });
 
   if (error) return <p>Failed to load</p>;
   if (!data) return <CircularProgress />;
@@ -55,6 +51,7 @@ const newChatContent = () => {
     <form onSubmit={(e) => handleSubmit(e)}>
       <Box>
         <Box>
+          <Typography sx={{ marginLeft: 2 }}>To</Typography>
           <Select
             sx={{ height: "70px" }}
             onChange={(e) => setSelectedValue(e.target.value)}
@@ -104,7 +101,7 @@ const newChatContent = () => {
           </Select>
         </Box>
 
-        <Box sx={{ marginTop: "380px" }}>
+        <Box sx={{ marginTop: "425px" }}>
           <Box
             sx={{
               marginTop: 0.5,

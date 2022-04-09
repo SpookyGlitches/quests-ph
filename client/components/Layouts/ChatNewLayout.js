@@ -3,9 +3,9 @@ import AppLayout from "./AppLayout";
 import ChatMain from "../Quest/Chat/Chat-New/new-chat-main";
 import ChatSidebar from "../Quest/Chat/Chat-Main/chat-sidebar";
 import SendMessage from "../Quest/Chat/Chat-Main/send-message";
+import { useEffect } from "react";
 
 export default function QuestLayout({ children }) {
-  const data = 1;
   return (
     <AppLayout>
       <Grid container sx={{ paddingTop: "1rem" }} spacing={1}>

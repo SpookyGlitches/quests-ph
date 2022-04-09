@@ -63,16 +63,6 @@ const ChatContent = ({ username }) => {
     if (mounted) {
       const channel = pusher.subscribe("presence-chat");
 
-      // when user subscribes
-
-      channel.bind("pusher:member_added", (member) => {
-        setonlineUsersCount(channel.members.count);
-        setonlineUsersCount((prevState) => [
-          ...prevState,
-          { username: member.info.username },
-        ]);
-      });
-
       channel.bind("chat-send", (data) => {
         const { message } = data;
         setChats((prevState) => [
@@ -97,7 +87,7 @@ const ChatContent = ({ username }) => {
   console.log(data);
 
   return (
-    <Box border={1} borderColor="#eeeee4" display="column" height="420px">
+    <Box border={1} borderColor="#eeeee4" display="column" height="485px">
       <Divider>
         <Chip label="Unread Messsages" />
       </Divider>
@@ -108,39 +98,42 @@ const ChatContent = ({ username }) => {
             overflow: "hidden",
           }}
         >
-          {data.chats.map((chat) => (
-            <ListItem alignItems="flex-start">
-              <ListItemAvatar>
-                <Avatar alt="Remy Sharp">R</Avatar>
-              </ListItemAvatar>
+          {/* {data.chats.map((chat) => ( */}
+          <ListItem alignItems="flex-start">
+            <ListItemAvatar>
+              <Avatar alt="Remy Sharp">
+                {/* {chat[0].user.fullName.charAt(0)}
+                  {chat[1].user.fullName.split(" ")[1].charAt(0)} */}
+              </Avatar>
+            </ListItemAvatar>
 
-              <ListItemText
-                primary={
-                  <Grid sx={{ display: "flex", flexDirection: "row" }}>
-                    <Typography sx={{ fontSize: "15px", marginRight: 1 }}>
-                      {chat.userId}
-                    </Typography>
-                    <Typography
-                      variant="h6"
-                      sx={{ color: "#d4d9d4", fontSize: "14px" }}
-                    >
-                      {chat.createdAt}
-                    </Typography>
-                  </Grid>
-                }
-                secondary={
-                  <Typography
-                    sx={{ display: "inline", fontSize: "15px" }}
-                    component="span"
-                    variant="body2"
-                    color="text.primary"
-                  >
-                    {chat.text}
+            <ListItemText
+              primary={
+                <Grid sx={{ display: "flex", flexDirection: "row" }}>
+                  <Typography sx={{ fontSize: "15px", marginRight: 1 }}>
+                    {/* {chat.user.fullName} */}
                   </Typography>
-                }
-              />
-            </ListItem>
-          ))}
+                  <Typography
+                    variant="h6"
+                    sx={{ color: "#d4d9d4", fontSize: "14px" }}
+                  >
+                    {/* {chat.createdAt} */}
+                  </Typography>
+                </Grid>
+              }
+              secondary={
+                <Typography
+                  sx={{ display: "inline", fontSize: "15px" }}
+                  component="span"
+                  variant="body2"
+                  color="text.primary"
+                >
+                  {/* {chat.text} */}
+                </Typography>
+              }
+            />
+          </ListItem>
+          {/* ))} */}
         </List>
       </ReactScrollableFeed>
     </Box>

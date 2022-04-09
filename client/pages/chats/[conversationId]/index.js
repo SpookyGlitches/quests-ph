@@ -7,7 +7,7 @@ import SendMessage from "../../../components/Quest/Chat/Chat-Main/send-message";
 import ChatHeader from "../../../components/Quest/Chat/Chat-Main/chat-header";
 import ChatContent from "../../../components/Quest/Chat/Chat-Main/chat-content";
 
-export default function QuestLayout({ children, conversationName }) {
+export default function QuestLayout({ children }) {
   const data = 1;
   return (
     <AppLayout>
@@ -17,7 +17,7 @@ export default function QuestLayout({ children, conversationName }) {
           <Box sx={{ marginTop: "2rem", bgcolor: "#000000" }}>{children}</Box>
         </Grid>
         <Grid item xs={12} lg={7}>
-          <ChatHeader conversationName={conversationName} />
+          <ChatHeader />
           <ChatContent />
           <SendMessage />
           <Box sx={{ marginTop: "2rem", bgcolor: "#000000" }}>{children}</Box>
@@ -28,14 +28,9 @@ export default function QuestLayout({ children, conversationName }) {
 }
 
 export async function getServerSideProps(context) {
-  const res = await fetch(`http:localhost:3000/api/chats`);
-  const data = await res.json();
-
   return {
     props: {
       session: await getSession(context),
-      // not yet resolve
-      conversationName: data.filter((name) => name.name === data.name),
     },
   };
 }

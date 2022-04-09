@@ -1,5 +1,6 @@
 import { PrismaClientValidationError } from "@prisma/client/runtime";
 import { ValidationError } from "yup";
+import { getSession } from "next-auth/react";
 import prisma from "../../../../lib/prisma";
 import {
   step2Validations,

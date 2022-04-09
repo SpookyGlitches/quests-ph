@@ -39,7 +39,7 @@ const SendMessage = () => {
 
           flexDirection: "row",
           padding: 1,
-          bgcolor: "#f7f8fa",
+          bgcolor: "background.paper",
         }}
         spacing={3}
       >
