@@ -57,10 +57,10 @@ model User {
   questTask          QuestTask[]
   questTaskFinisher  QuestTaskFinisher[]
   message            Message[]
-  notification       Notification[]
+  notifications      Notification[]
+  userBadges         UserBadge[]
   conversationMember ConversationMember[]
   partyMembers       PartyMember[]
-  userBadge          UserBadge[]
   userReporter       UserReport[]             @relation("userReporter")
   userRecipient      UserReport[]             @relation("userRecipient")
   articles           Article[]

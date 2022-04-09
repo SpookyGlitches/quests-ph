@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 import nodemailer from "nodemailer";
 import prisma from "../../../lib/prisma";
-import { awardEarlyUser, isUserEarly } from "../../../helpers/earlyUser";
+import { awardEarlyUser, isUserEarly } from "../../../helpers/badges/earlyUser";
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
@@ -66,6 +66,9 @@ export default async function handler(req, res) {
       res.status(409).send({ message: "Email Exists" });
     } else if (!checkDisplayName && !checkEmail) {
       try {
+        const early = isUserEarly(new Date());
+        const awardOperations = early ? awardEarlyUser() : undefined;
+
         const userCreation = await prisma.user.create({
           data: {
             email: userDetails.email,
@@ -75,6 +78,7 @@ export default async function handler(req, res) {
             password: userDetails.password,
             role: userDetails.role,
             token: userDetails.token,
+            ...awardOperations,
           },
         });
         // can assume user already exists here since it would throw an error if theyre not yet created at this point
@@ -104,16 +108,6 @@ export default async function handler(req, res) {
               },
             }),
           );
-        }
-
-        // wow i can see my name haha
-        const early = isUserEarly(userCreation.createdAt);
-        if (early) {
-          const [awardOperation, notificationOperation] = awardEarlyUser(
-            userCreation.userId,
-          );
-          transactions.push(awardOperation);
-          transactions.push(notificationOperation);
         }
 
         await prisma.$transaction(transactions);

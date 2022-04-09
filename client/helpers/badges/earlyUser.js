@@ -1,6 +1,4 @@
-// returns a true or false
 import { differenceInYears } from "date-fns";
-import prisma from "../lib/prisma";
 
 export function isUserEarly(userCreatedAt) {
   // userCreatedAt should be of type Date
@@ -13,25 +11,22 @@ export function isUserEarly(userCreatedAt) {
     new Date(year, month, date),
     new Date(2022, 3, 18),
   );
-
-  return difference === 0;
+  return difference <= 0;
 }
 
-export function awardEarlyUser(userId) {
-  return [
-    prisma.userBadge.create({
-      data: {
-        userId,
+export function awardEarlyUser() {
+  return {
+    userBadges: {
+      create: {
         badgeId: 1,
       },
-    }),
-    prisma.notification.create({
-      data: {
-        userId,
+    },
+    notifications: {
+      create: {
         message: `Congratulations! You have received a badge for registering before ${"Quests'"} 1st anniversary.`,
         type: "RECEIVED_BADGE",
         metadata: JSON.stringify({ badgeId: 1 }),
       },
-    }),
-  ];
+    },
+  };
 }
