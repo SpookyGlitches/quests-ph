@@ -2,11 +2,12 @@ import { getSession } from "next-auth/react";
 import prisma from "../../../lib/prisma";
 
 // Returns the conversationIds that the logged in user is part of.
-async function getExistingChats(req, res) {
+async function getExistingChatIds(req, res) {
   if (req.method !== "GET") {
     return res.status(404).json({ message: "Method not allowed " });
   }
   try {
+    let retVal = 0;
     const { user } = await getSession({ req });
     const userChats = await prisma.ConversationMember.findMany({
       where: {
@@ -32,17 +33,14 @@ async function getExistingChats(req, res) {
 
 // Redirects to chat with user if there's a new chat.
 async function checkExistingChat(req, res) {
-  if (req.method !== "GET") {
-    return res.status(404).json({ message: "Method not allowed " });
-  }
   try {
     const { user } = await getSession({ req });
-    console.log(user);
     /* Change lng the name to unsay name sa userId variable sa client
       (Ang id gibutang is for testing to see if it works. Replace with a 
        userId that you want to check if naay existing chat with.)
     */
-    const userToChatWith = "cl1ncy1ca0008w0tabu40xnlz";
+    const userToChatWith = req.body.selectedValue;
+
     let retVal = false;
     const userChats = await prisma.ConversationMember.findMany({
       where: {
@@ -89,9 +87,6 @@ async function checkExistingChat(req, res) {
         console.log(retVal);
       }
     }
-    if (retVal) {
-      return res.redirect(307, `/chats/${retVal}`);
-    }
     return res.send(retVal); // Returns false meaning there's no convo with the user you want to chat with and the logged in user.
   } catch (error) {
     console.log(error);
@@ -100,14 +95,16 @@ async function checkExistingChat(req, res) {
 }
 
 // Makes a new conversation row and adds the two users as the members.
-async function createChat(req, res) {
-  if (req.method !== "POST") {
-    return res.status(404).json({ message: "Method not allowed " });
-  }
-
+async function createNewChat(req, res) {
+  let retVal = false;
   try {
     const { user } = await getSession({ req });
 
+<<<<<<< HEAD
+=======
+    const userToChatWith = req.body.selectedValue;
+
+>>>>>>> 187169dc7301046f68fac8082c7cc9a8554230bb
     const newConvo = await prisma.conversation.create({
       data: {
         questId: null,
@@ -139,25 +136,26 @@ async function createChat(req, res) {
         });
         return res.send(newConvo.conversationId);
       }
+<<<<<<< HEAD
       return res
         .status(400)
         .json({ message: "Something wrong with populating chatroom" });
     }
     return res.status(400).json({ message: "Wa say convo dong" });
+=======
+    }
+>>>>>>> 187169dc7301046f68fac8082c7cc9a8554230bb
   } catch (error) {
     console.log(error);
-    return res
-      .status(400)
-      .json({ message: "Something went wrong in making a convo" });
+    return res.status(400).json({ message: "Something went wrong" });
   }
 }
-
 export default async function handler(req, res) {
   switch (req.method) {
     case "GET":
-      return checkExistingChat(req, res);
+      return getExistingChatIds(req, res);
     case "POST":
-      return createChat(req, res);
+      return createNewChat(req, res);
     default:
       return res.status(404).send();
   }
