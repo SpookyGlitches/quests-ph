@@ -2,11 +2,12 @@ import { getSession } from "next-auth/react";
 import prisma from "../../../lib/prisma";
 
 // Returns the conversationIds that the logged in user is part of.
-async function getExistingChats(req, res) {
+async function getExistingChatIds(req, res) {
   if (req.method !== "GET") {
     return res.status(404).json({ message: "Method not allowed " });
   }
   try {
+    let retVal = 0;
     const { user } = await getSession({ req });
     const userChats = await prisma.ConversationMember.findMany({
       where: {
@@ -94,90 +95,43 @@ async function checkExistingChat(req, res) {
 }
 
 // Makes a new conversation row and adds the two users as the members.
-async function handleChat(req, res) {
+async function createNewChat(req, res) {
   let retVal = false;
   try {
     const { user } = await getSession({ req });
 
     const userToChatWith = req.body.selectedValue;
-    //Loads the user's conversationIds they're involved in.
-    const userChats = await prisma.ConversationMember.findMany({
-      where: {
-        userId: user.userId,
-        deletedAt: null,
-      },
-      select: {
-        conversationId: true,
+
+    const newConvo = await prisma.conversation.create({
+      data: {
+        questId: null,
+        name: "With redirect", // Placeholder rapud. Idk unsay default and sht
       },
     });
-
-    if (userChats.length !== 0) {
-      // Holds ids of the person logged in's chats
-      const convoIds = userChats.map((chat) => chat.conversationId);
-
-      let chatExists = false;
-      /* Loops through each row in the conversation members table 
-          based on the conversationIds (convoIds variable) of the logged in user.
-          We go through each conversationId and look for the userIds, other than
-          the already logged in user, and see if the user we want to start a new chat with
-          already exists.
-      */
-      for (let i = 0; i < convoIds.length && chatExists === false; i++) {
-        const queryRes = await prisma.ConversationMember.findFirst({
-          where: {
-            conversationId: convoIds[i],
-            NOT: {
-              userId: user.userId,
-            },
-            deletedAt: null,
+    if (newConvo.conversationId !== null) {
+      // Not sure if .length!==0 ang checking ani but since this works, kani lng sa for now.
+      const newMembers = await prisma.ConversationMember.createMany({
+        data: [
+          {
+            conversationId: newConvo.conversationId,
+            userId: user.userId,
           },
-          select: {
-            userId: true,
-            conversationId: true,
+          {
+            conversationId: newConvo.conversationId,
+            userId: req.body.selectedValue, // Made it static for now just to see if naay convo ma make
           },
-        });
-        // Checks if the user to chat with was found in one of the logged in user's convo rooms.
-        if (queryRes.userId === userToChatWith) {
-          retVal = queryRes.conversationId;
-          chatExists = true;
-        }
-        if (retVal !== false) {
-          return res.send(retVal); // Means the chat exists.
-        }
-      }
-    }
-    if (retVal === false) {
-      const newConvo = await prisma.conversation.create({
-        data: {
-          questId: null,
-          name: "With redirect", // Placeholder rapud. Idk unsay default and sht
-        },
+        ],
       });
-      if (newConvo.conversationId !== null) {
-        // Not sure if .length!==0 ang checking ani but since this works, kani lng sa for now.
-        const newMembers = await prisma.ConversationMember.createMany({
-          data: [
-            {
-              conversationId: newConvo.conversationId,
-              userId: user.userId,
-            },
-            {
-              conversationId: newConvo.conversationId,
-              userId: req.body.selectedValue, // Made it static for now just to see if naay convo ma make
-            },
-          ],
+      if (newMembers.count > 1) {
+        // Checks if there were two rows inserted (One for each member of the chat)
+        const firstMessage = await prisma.message.create({
+          data: {
+            conversationId: newConvo.conversationId,
+            userId: user.userId,
+            text: req.body.message,
+          },
         });
-        if (newMembers.count > 1) {
-          // Checks if there were two rows inserted (One for each member of the chat)
-          const firstMessage = await prisma.message.create({
-            data: {
-              conversationId: newConvo.conversationId,
-              userId: user.userId,
-              text: req.body.message,
-            },
-          });
-          return res.send(newConvo.conversationId);
-        }
+        return res.send(newConvo.conversationId);
       }
     }
   } catch (error) {
@@ -188,9 +142,9 @@ async function handleChat(req, res) {
 export default async function handler(req, res) {
   switch (req.method) {
     case "GET":
-      return getExistingChats(req, res);
+      return getExistingChatIds(req, res);
     case "POST":
-      return handleChat(req, res);
+      return createNewChat(req, res);
     default:
       return res.status(404).send();
   }
