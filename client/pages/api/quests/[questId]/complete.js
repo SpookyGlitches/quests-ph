@@ -1,18 +1,44 @@
+import { PrismaClient } from "@prisma/client";
 import { PrismaClientValidationError } from "@prisma/client/runtime";
-import prisma from "../../../../lib/prisma";
-
+import awardSomePartyMembersForCompletingQuest from "../../../../helpers/badges/completedQuest";
+// import prisma from "../../../../lib/prisma";
+const prisma = new PrismaClient();
 async function completeQuest(req, res) {
   try {
-    await prisma.quest.update({
+    const { questId } = req.query;
+    const parsedQuestId = Number(questId);
+
+    const { userBadgesData, notificationsData } =
+      await awardSomePartyMembersForCompletingQuest(parsedQuestId);
+    const transactions = [];
+
+    const updateQuest = prisma.quest.update({
       where: {
-        questId: Number(req.query.questId),
+        questId: parsedQuestId,
       },
       data: {
         completedAt: new Date(),
       },
     });
-    res.status(200).send();
+    transactions.push(updateQuest);
+
+    if (userBadgesData.length !== 0) {
+      const insertUserBadges = prisma.userBadge.createMany({
+        data: userBadgesData,
+      });
+
+      const insertNotifications = prisma.notification.createMany({
+        data: notificationsData,
+      });
+
+      transactions.push(insertUserBadges);
+      transactions.push(insertNotifications);
+    }
+    await prisma.$transaction(transactions);
+
+    res.status(200).send(transactions);
   } catch (err) {
+    console.log(err);
     switch (err.constructor) {
       case PrismaClientValidationError:
         res.status(400).send();
