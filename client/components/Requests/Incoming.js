@@ -16,7 +16,7 @@ import ImportContactsRoundedIcon from "@mui/icons-material/ImportContactsRounded
 // import { useRouter } from "next/router";
 import { useState } from "react";
 import axios from "axios";
-
+import { format } from "date-fns";
 const IncomingRequests = (item) => {
   const [open, setOpen] = useState(false);
   const handleQuestClick = () => {
@@ -150,7 +150,8 @@ const IncomingRequests = (item) => {
               <strong>{incomingData.quest.wish}</strong>.
             </Typography>
             <DialogContentText id="alert-dialog-description" sx={{ mt: 2 }}>
-              Requested on: {incomingData.createdAt}
+              Requested on:{" "}
+              {format(new Date(incomingData.createdAt), "MMMM d, yyyy")}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
