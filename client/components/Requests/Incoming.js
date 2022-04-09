@@ -1,29 +1,36 @@
-import { Avatar, Typography, Box, IconButton } from "@mui/material";
+import {
+  Typography,
+  Box,
+  IconButton,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 import { useSWRConfig } from "swr";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
+import ImportContactsRoundedIcon from "@mui/icons-material/ImportContactsRounded";
 // import { useRouter } from "next/router";
 import { useState } from "react";
 import axios from "axios";
 
 const IncomingRequests = (item) => {
+  const [open, setOpen] = useState(false);
+  const handleQuestClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const { mutate } = useSWRConfig();
   // eslint-disable-next-line
   const [incomingData] = useState(item.item);
-  // console.log(incomingData);
-  // const router = useRouter();
-
-  //   const handleProfileClick = () => {
-  //     axios
-  //       .get("/api/profile/friends/friendinfo", {
-  //         params: {
-  //           displayName: incomingData.requester.displayName,
-  //         },
-  //       })
-  //       .then((res) => {
-  //         router.push(`/profile/${res.data.userId}`); // profile page url here
-  //       });
-  //   };
+  console.log(incomingData);
 
   const handleRejectReq = async () => {
     console.log("delete req");
@@ -78,12 +85,13 @@ const IncomingRequests = (item) => {
           justifyContent: "space-between",
           flexDirection: "row",
         }}
-        // onClick={handleProfileClick}
       >
-        <Avatar
+        <ImportContactsRoundedIcon
+          style={{ height: 40, width: 40 }}
           sx={{
-            backgroundColor: "primary.main",
+            color: "primary.main",
           }}
+          onClick={handleQuestClick}
         />
         <Box
           sx={{ display: "flex", flexDirection: "column", marginLeft: "1rem" }}
@@ -123,6 +131,32 @@ const IncomingRequests = (item) => {
       >
         {firstIcon}
         {secondIcon}
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            <Typography variant="h5">{incomingData.quest.wish}</Typography>
+          </DialogTitle>
+          <DialogContent>
+            <Typography variant="h6">
+              Hello {incomingData.mentor.displayName} &#128075;
+            </Typography>
+            <Typography sx={{ mt: 1 }}>
+              <strong>{incomingData.partyLeader.displayName}</strong> wants you
+              to be their mentor for the Quest with the Wish{" "}
+              <strong>{incomingData.quest.wish}</strong>.
+            </Typography>
+            <DialogContentText id="alert-dialog-description" sx={{ mt: 2 }}>
+              Requested on: {incomingData.createdAt}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Close</Button>
+          </DialogActions>
+        </Dialog>
       </Box>
     </Box>
   );

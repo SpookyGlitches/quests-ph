@@ -15,8 +15,18 @@ export default async function getAllMentorRequests(req, res) {
         deletedAt: null,
       },
       include: {
-        partyLeader: { select: { displayName: true, fullName: true } },
-        quest: { select: { wish: true } },
+        partyLeader: {
+          select: {
+            displayName: true,
+            fullName: true,
+          },
+        },
+        mentor: {
+          select: { displayName: true },
+        },
+        quest: {
+          select: { wish: true },
+        },
       },
       orderBy: {
         createdAt: "desc",
