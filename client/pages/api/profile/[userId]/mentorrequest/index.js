@@ -20,6 +20,7 @@ async function checkAvailQuest(req, res) {
       where: {
         questId: Number(req.query.questMentored),
         status: "ACTIVE",
+        updatedAt: null,
         deletedAt: null,
       },
     });
