@@ -32,17 +32,14 @@ async function getExistingChats(req, res) {
 
 // Redirects to chat with user if there's a new chat.
 async function checkExistingChat(req, res) {
-  if (req.method !== "GET") {
-    return res.status(404).json({ message: "Method not allowed " });
-  }
   try {
     const { user } = await getSession({ req });
-    console.log(user);
     /* Change lng the name to unsay name sa userId variable sa client
       (Ang id gibutang is for testing to see if it works. Replace with a 
        userId that you want to check if naay existing chat with.)
     */
-    const userToChatWith = "cl1ncy1ca0008w0tabu40xnlz";
+    const userToChatWith = req.body.selectedValue;
+
     let retVal = false;
     const userChats = await prisma.ConversationMember.findMany({
       where: {
@@ -89,9 +86,6 @@ async function checkExistingChat(req, res) {
         console.log(retVal);
       }
     }
-    if (retVal) {
-      return res.redirect(307, `/chats/${retVal}`);
-    }
     return res.send(retVal); // Returns false meaning there's no convo with the user you want to chat with and the logged in user.
   } catch (error) {
     console.log(error);
@@ -100,65 +94,103 @@ async function checkExistingChat(req, res) {
 }
 
 // Makes a new conversation row and adds the two users as the members.
-async function createChat(req, res) {
-  if (req.method !== "POST") {
-    return res.status(404).json({ message: "Method not allowed " });
-  }
-
+async function handleChat(req, res) {
+  let retVal = false;
   try {
     const { user } = await getSession({ req });
-    const newConvo = await prisma.conversation.create({
-      data: {
-        questId: null,
-        name: "With redirect", // Placeholder rapud. Idk unsay default and sht
+
+    const userToChatWith = req.body.selectedValue;
+    //Loads the user's conversationIds they're involved in.
+    const userChats = await prisma.ConversationMember.findMany({
+      where: {
+        userId: user.userId,
+        deletedAt: null,
+      },
+      select: {
+        conversationId: true,
       },
     });
-    if (newConvo.conversationId !== null) {
-      // Not sure if .length!==0 ang checking ani but since this works, kani lng sa for now.
-      const newMembers = await prisma.ConversationMember.createMany({
-        data: [
-          {
-            conversationId: newConvo.conversationId,
-            userId: user.userId,
+
+    if (userChats.length !== 0) {
+      // Holds ids of the person logged in's chats
+      const convoIds = userChats.map((chat) => chat.conversationId);
+
+      let chatExists = false;
+      /* Loops through each row in the conversation members table 
+          based on the conversationIds (convoIds variable) of the logged in user.
+          We go through each conversationId and look for the userIds, other than
+          the already logged in user, and see if the user we want to start a new chat with
+          already exists.
+      */
+      for (let i = 0; i < convoIds.length && chatExists === false; i++) {
+        const queryRes = await prisma.ConversationMember.findFirst({
+          where: {
+            conversationId: convoIds[i],
+            NOT: {
+              userId: user.userId,
+            },
+            deletedAt: null,
           },
-          {
-            conversationId: newConvo.conversationId,
-            userId: req.body.selectedValue, // Made it static for now just to see if naay convo ma make
-          },
-        ],
-      });
-      if (newMembers.count > 1) {
-        // Checks if there were two rows inserted (One for each member of the chat)
-        const firstMessage = await prisma.message.create({
-          data: {
-            conversationId: newConvo.conversationId,
-            userId: user.userId,
-            text: req.body.message,
+          select: {
+            userId: true,
+            conversationId: true,
           },
         });
-        return res.send(newConvo.conversationId);
-      } 
-        return res
-          .status(400)
-          .json({ message: "Something wrong with populating chatroom" });
-      
-    } 
-      return res.status(400).json({ message: "Wa say convo dong" });
-    
+        // Checks if the user to chat with was found in one of the logged in user's convo rooms.
+        if (queryRes.userId === userToChatWith) {
+          retVal = queryRes.conversationId;
+          chatExists = true;
+        }
+        if (retVal !== false) {
+          return res.send(retVal); // Means the chat exists.
+        }
+      }
+    }
+    if (retVal === false) {
+      const newConvo = await prisma.conversation.create({
+        data: {
+          questId: null,
+          name: "With redirect", // Placeholder rapud. Idk unsay default and sht
+        },
+      });
+      if (newConvo.conversationId !== null) {
+        // Not sure if .length!==0 ang checking ani but since this works, kani lng sa for now.
+        const newMembers = await prisma.ConversationMember.createMany({
+          data: [
+            {
+              conversationId: newConvo.conversationId,
+              userId: user.userId,
+            },
+            {
+              conversationId: newConvo.conversationId,
+              userId: req.body.selectedValue, // Made it static for now just to see if naay convo ma make
+            },
+          ],
+        });
+        if (newMembers.count > 1) {
+          // Checks if there were two rows inserted (One for each member of the chat)
+          const firstMessage = await prisma.message.create({
+            data: {
+              conversationId: newConvo.conversationId,
+              userId: user.userId,
+              text: req.body.message,
+            },
+          });
+          return res.send(newConvo.conversationId);
+        }
+      }
+    }
   } catch (error) {
     console.log(error);
-    return res
-      .status(400)
-      .json({ message: "Something went wrong in making a convo" });
+    return res.status(400).json({ message: "Something went wrong" });
   }
 }
-
 export default async function handler(req, res) {
   switch (req.method) {
     case "GET":
-      return checkExistingChat(req, res);
+      return getExistingChats(req, res);
     case "POST":
-      return createChat(req, res);
+      return handleChat(req, res);
     default:
       return res.status(404).send();
   }
