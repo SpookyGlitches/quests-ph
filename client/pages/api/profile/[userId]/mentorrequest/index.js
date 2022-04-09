@@ -16,6 +16,7 @@ async function createRequest(req, res) {
 
 async function checkAvailQuest(req, res) {
   try {
+    // check if request has been submitted but not yet approved/rejected
     const checkAvail = await prisma.questMentorshipRequest.findMany({
       where: {
         questId: Number(req.query.questMentored),
@@ -24,8 +25,19 @@ async function checkAvailQuest(req, res) {
         deletedAt: null,
       },
     });
-
-    return res.status(200).send(checkAvail);
+    // check if request already has a mentor who accepted the quest
+    const checkHasMentor = await prisma.questMentorshipRequest.findMany({
+      where: {
+        questId: Number(req.query.questMentored),
+        status: "ACTIVE",
+        NOT: {
+          updatedAt: null,
+        },
+      },
+    });
+    return res
+      .status(200)
+      .send({ avail: checkAvail, hasMentor: checkHasMentor });
   } catch (err) {
     return res.status(400).send({ message: "Error" });
   }
