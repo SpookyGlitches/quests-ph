@@ -9,7 +9,7 @@ export const stepOneMentorValidations = object({
       /^[a-zA-Z0-9]+$/,
       "Your display name should not contain spaces or special characters",
     )
-    .min(4, "Display Name must be at least 6 characters")
+    .min(6, "Display Name must be at least 6 characters")
     .max(20)
     .required(requiredMsg),
   fullName: string().required(requiredMsg).max(20),
