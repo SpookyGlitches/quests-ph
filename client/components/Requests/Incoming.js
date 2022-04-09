@@ -107,8 +107,7 @@ const IncomingRequests = (item) => {
               marginTop: "0.5",
             }}
           >
-            Requested by
-            {incomingData.partyLeader.displayName}
+            Requested by {incomingData.partyLeader.displayName}
           </Typography>
         </Box>
       </Box>
