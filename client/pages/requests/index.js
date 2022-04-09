@@ -5,6 +5,7 @@ import { Box, Typography } from "@mui/material";
 import AppLayout from "../../components/Layouts/AppLayout";
 import AccessDenied from "../../components/Error/AccessDenied";
 import IncomingRequests from "../../components/Requests/Incoming";
+import axios from "axios";
 
 function ListHolder({ items, requestName }) {
   return (
@@ -30,12 +31,18 @@ function ListHolder({ items, requestName }) {
     </Box>
   );
 }
-export default function Requests() {
+
+const fetcher = (url) => axios.get(url).then((res) => res.data);
+
+const Index = () => {
   const { data: session } = useSession();
-
-  const { data: mentorrequests } = useSWR(`/requests/mentorrequests`);
-
-  if (!mentorrequests)
+  //const { data: mentorrequests } = useSWR(`/requests/mentorrequests`);
+  // eslint-disable-next-line
+  const { data: mentorrequests, error: one } = useSWR(
+    "/api/requests/mentorrequests",
+    fetcher,
+  );
+  if (!mentorrequests || one)
     return (
       <div
         style={{
@@ -56,4 +63,6 @@ export default function Requests() {
     );
   }
   return <AccessDenied />;
-}
+};
+
+export default Index;
