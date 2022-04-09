@@ -17,6 +17,7 @@ import ImportContactsRoundedIcon from "@mui/icons-material/ImportContactsRounded
 import { useState } from "react";
 import axios from "axios";
 import { format } from "date-fns";
+
 const IncomingRequests = (item) => {
   const [open, setOpen] = useState(false);
   const handleQuestClick = () => {
@@ -30,10 +31,8 @@ const IncomingRequests = (item) => {
   const { mutate } = useSWRConfig();
   // eslint-disable-next-line
   const [incomingData] = useState(item.item);
-  console.log(incomingData);
 
   const handleRejectReq = async () => {
-    console.log("delete req");
     await axios({
       method: "put",
       url: "/api/requests/deleterequest",
