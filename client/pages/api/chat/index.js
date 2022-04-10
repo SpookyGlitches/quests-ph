@@ -100,11 +100,6 @@ async function createNewChat(req, res) {
   try {
     const { user } = await getSession({ req });
 
-<<<<<<< HEAD
-=======
-    const userToChatWith = req.body.selectedValue;
-
->>>>>>> 187169dc7301046f68fac8082c7cc9a8554230bb
     const newConvo = await prisma.conversation.create({
       data: {
         questId: null,
@@ -136,15 +131,7 @@ async function createNewChat(req, res) {
         });
         return res.send(newConvo.conversationId);
       }
-<<<<<<< HEAD
-      return res
-        .status(400)
-        .json({ message: "Something wrong with populating chatroom" });
     }
-    return res.status(400).json({ message: "Wa say convo dong" });
-=======
-    }
->>>>>>> 187169dc7301046f68fac8082c7cc9a8554230bb
   } catch (error) {
     console.log(error);
     return res.status(400).json({ message: "Something went wrong" });
