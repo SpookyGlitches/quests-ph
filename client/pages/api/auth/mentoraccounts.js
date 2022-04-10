@@ -19,7 +19,6 @@ export default async function (req, res) {
     const bdate = dateObj.toISOString();
     const salt = bcrypt.genSaltSync(10);
     const tok = uuidv4();
-    // eslint-disable-next-line
     const userDetails = {
       email: userInfo.email,
       dateOfBirth: bdate,
@@ -32,15 +31,8 @@ export default async function (req, res) {
       detailedExperience: userInfo.detailedExperience,
       fileUpload: req.body.uploadedFiles,
     };
-    // // console.log(userInfo.fileUpload);
-    // res.status(200).send({ message: "Success!" });
-    // // let fileLength;
-    // // if (userDetails.fileUpload === undefined) {
-    // //   userDetails.fileUpload = 0;
-    // // } else {
-    // //   fileLength = userDetails.fileUpload.length;
-    // // }
 
+    // eslint-disable-next-line
     const transporter = nodemailer.createTransport({
       port: process.env.MAIL_PORT,
       host: process.env.MAIL_HOST,
@@ -115,7 +107,7 @@ export default async function (req, res) {
           }),
         );
       }
-      // //wow i can see my name haha
+      //wow i can see my name haha
       const early = isUserEarly(userCreation.createdAt);
       if (early) {
         const [awardOperation, notificationOperation] = awardEarlyUser(
@@ -127,7 +119,7 @@ export default async function (req, res) {
 
       await prisma.$transaction(transactions);
       await transporter.sendMail(mailData);
-      console.log("hi");
+
       res.status(200).send({ message: "Success" });
     }
   }
