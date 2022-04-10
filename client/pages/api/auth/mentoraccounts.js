@@ -10,7 +10,7 @@ import { awardEarlyUser, isUserEarly } from "../../../helpers/earlyUser";
 export default async function (req, res) {
   if (req.method === "POST") {
     // console.log(req.body.values);
-    // console.log(req.body.uploadedFiles);
+    console.log(req.body.uploadedFiles);
     // const uploads = req.body.uploadedFiles;
     // console.log(uploads.length);
     const userInfo = req.body.values;

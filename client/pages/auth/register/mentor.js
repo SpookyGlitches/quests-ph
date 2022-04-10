@@ -70,32 +70,8 @@ const MentorRegistrationForm = () => {
     //   newlyUploadedFiles.push({ key: item.key });
     //   //}
     // });
-    // eslint-disable-next-line
-    // try {
-    //   axios({
-    //     method: "POST",
-    //     url: "/api/auth/mentoraccounts",
-    //     data: {
-    //       values,
-    //       uploadedFiles,
-    //     },
-    //   })
-    //     .then((response) => {
-    //       console.log(response);
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // } catch (err) {
-    //   throw err;
-    // }
-    // eslint-disable-next-line
-    try {
-      // const res = await fetch("/api/auth/mentoraccounts", {
-      //   method: "POST",
-      //   body: JSON.stringify(values),
-      // });
 
+    try {
       axios({
         method: "POST",
         url: "/api/auth/mentoraccounts",
@@ -103,32 +79,29 @@ const MentorRegistrationForm = () => {
           values,
           uploadedFiles,
         },
-      })
-        .then((res) => {
-          // console.log(response.status);
-          if (res.status === 200) {
-            Router.push({
-              pathname: "/auth/verify-email/[emailAddress]",
-              query: { emailAddress: values.email },
-            });
-          } else if (res.status === 403) {
-            setMessage("Display Name is already in use.");
-            setShow(true);
-          } else if (res.status === 409) {
-            console.log("email");
-            setMessage("Email address is already in use.");
-            setShow(true);
-          } else if (res.status === 400) {
-            console.log("both");
-            setMessage("Display Name and Email Address are already in use.");
-            setShow(true);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      // console.log(res.status);
+      }).then((res) => {
+        // console.log(response.status);
+        if (res.status === 200) {
+          console.log("lmao");
+          // Router.push({
+          //   pathname: "/auth/verify-email/[emailAddress]",
+          //   query: { emailAddress: values.email },
+          // });
+        } else if (res.status === 403) {
+          setMessage("Display Name is already in use.");
+          setShow(true);
+        } else if (res.status === 409) {
+          console.log("email");
+          setMessage("Email address is already in use.");
+          setShow(true);
+        } else if (res.status === 400) {
+          console.log("both");
+          setMessage("Display Name and Email Address are already in use.");
+          setShow(true);
+        }
+      });
     } catch (err) {
+      console.log(err);
       throw err;
     }
   };
