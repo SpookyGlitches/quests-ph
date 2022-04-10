@@ -62,18 +62,21 @@ const ChatContent = ({ username }) => {
     const mounted = true;
     if (mounted) {
       const channel = pusher.subscribe("presence-chat");
-
       channel.bind("chat-send", (data) => {
-        const { message } = data;
-        setChats((prevState) => [
-          ...prevState,
-          { username: session.user.fullName, message: data.message },
-        ]);
+        // const { message } = data;
+        // setChats((prevState) => [
+        //   ...prevState,
+        //   { username: session.user.fullName, message: data.message },
+        // ]);
+
+        alert(JSON.stringify(data));
       });
     }
     return () => {
-      pusher.unsubscribe("presence-chat");
+      channel.unbind_all();
+      channel.unsubscribe();
     };
+    ``;
   }, [chats]);
 
   const { data, error } = useSWR(`/chats/${router.query.conversationId}`, {

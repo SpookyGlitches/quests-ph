@@ -46,7 +46,6 @@ const ChatSidebar = () => {
   // if (!data) return <CircularProgress />;
 
   console.log(convo);
-
   return (
     <Box>
       <Paper

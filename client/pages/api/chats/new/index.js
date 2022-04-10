@@ -1,28 +1,9 @@
-<<<<<<< HEAD
-// import { prisma } from "next-auth/react";
-import { PrismaClient } from "@prisma/client";
-=======
 import prisma from "../../../../lib/prisma";
->>>>>>> 187169dc7301046f68fac8082c7cc9a8554230bb
 import { getSession } from "next-auth/react";
 
 export default async function handler(req, res) {
   const { user } = await getSession({ req });
   if (req.method === "GET") {
-<<<<<<< HEAD
-    const users = await prisma.user.findMany({
-      //this is to not include the current user
-      where: {
-        NOT: {
-          userId: user.userId,
-        },
-      },
-      // select: {
-      //   password: false,
-      // },
-    });
-    res.status(200).json(users);
-=======
     const { user } = await getSession({ req });
 
     const usersCanChatWith =
@@ -38,6 +19,5 @@ export default async function handler(req, res) {
     */
 
     res.status(200).json(usersCanChatWith);
->>>>>>> 187169dc7301046f68fac8082c7cc9a8554230bb
   }
 }
