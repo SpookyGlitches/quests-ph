@@ -1,8 +1,7 @@
-import { PrismaClient } from "@prisma/client";
 import { PrismaClientValidationError } from "@prisma/client/runtime";
 import awardSomePartyMembersForCompletingQuest from "../../../../helpers/badges/completedQuest";
-// import prisma from "../../../../lib/prisma";
-const prisma = new PrismaClient();
+import prisma from "../../../../lib/prisma";
+
 async function completeQuest(req, res) {
   try {
     const { questId } = req.query;
@@ -34,6 +33,7 @@ async function completeQuest(req, res) {
       transactions.push(insertUserBadges);
       transactions.push(insertNotifications);
     }
+
     await prisma.$transaction(transactions);
 
     res.status(200).send(transactions);

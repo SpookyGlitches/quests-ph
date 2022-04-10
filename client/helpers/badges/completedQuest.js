@@ -6,7 +6,7 @@ function insertQueuePrisma(users, badge) {
 
   users.forEach((user) => {
     const meetsNecessaryCompleted =
-      user.partyMembers.length === necessaryCompletedQuests - 1; //
+      user.partyMembers.length >= necessaryCompletedQuests - 1; //
 
     const doesntHaveTheBadge = !user.userBadges.find(
       (userBadge) => userBadge.badgeId === badgeId,
@@ -114,6 +114,7 @@ export default async function awardSomePartyMembersForCompletingQuest(questId) {
           quest: {
             NOT: [{ completedAt: null }],
             visibility: "PUBLIC",
+            deletedAt: null,
           },
           deletedAt: null,
         },
@@ -123,8 +124,6 @@ export default async function awardSomePartyMembersForCompletingQuest(questId) {
       },
     },
   });
-
-  console.log(users[0]);
 
   const badges = {
     youngOne: {
