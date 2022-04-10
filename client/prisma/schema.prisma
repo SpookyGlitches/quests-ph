@@ -261,6 +261,8 @@ model Notification {
   user           User      @relation(fields: [userId], references: [userId])
   userId         String
   message        String
+  type           NotificationType
+  metadata       String?
   createdAt      DateTime  @default(now())
   deletedAt      DateTime?
 }
@@ -443,4 +445,8 @@ enum PointsLogAction {
   RECEIVED_POST_REACT
   RECEIVED_COMMENT_REACT
   RECEIVED_POST_COMMENT
+}
+
+enum NotificationType {
+  RECEIVED_BADGE
 }
