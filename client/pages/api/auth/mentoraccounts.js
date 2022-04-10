@@ -107,7 +107,7 @@ export default async function (req, res) {
           }),
         );
       }
-      //wow i can see my name haha
+      // wow i can see my name haha
       const early = isUserEarly(userCreation.createdAt);
       if (early) {
         const [awardOperation, notificationOperation] = awardEarlyUser(
