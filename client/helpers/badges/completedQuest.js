@@ -1,8 +1,44 @@
 import prisma from "../../lib/prisma";
 
-function insertQueuePrisma(users, badge) {
+const badges = {
+  youngOne: {
+    badgeId: 2,
+    necessaryCompletedQuests: 1,
+    message:
+      "Awesome! You have received a badge for completing a public Quest.",
+  },
+  achiever: {
+    badgeId: 3,
+    necessaryCompletedQuests: 10,
+    message:
+      "You have received a badge for completing 10 public Quests. You're an achiever!",
+  },
+  manOfAction: {
+    badgeId: 4,
+    necessaryCompletedQuests: 50,
+    message:
+      "A fine man of action. You have received a badge for completing 50 public Quests.",
+  },
+  paver: {
+    badgeId: 13,
+    necessaryCompletedQuests: 10, // alias for mentoredQuests
+    message: `You have received a badge for successfully mentoring 10 public Quests. ${"You're"} awesome!`,
+  },
+  pathfinder: {
+    badgeId: 14,
+    necessaryCompletedQuests: 50, // alias for mentoredQuests
+    message:
+      "The world needs pathfinders like you. You have received a badge for successfully mentoring 50 public Quests.",
+  },
+};
+
+function insertDataForPrisma(
+  users,
+  badge,
+  insertUserBadgeData,
+  insertNotificationData,
+) {
   const { badgeId, message, necessaryCompletedQuests } = badge;
-  const prismaLegibleUsersOperations = [];
 
   users.forEach((user) => {
     const meetsNecessaryCompleted =
@@ -14,48 +50,21 @@ function insertQueuePrisma(users, badge) {
 
     // get users who have this specific number of completed quests and if they dont have that badgeID
     if (meetsNecessaryCompleted && doesntHaveTheBadge) {
-      prismaLegibleUsersOperations.push({
-        userBadgeOperation: {
-          badgeId,
-          userId: user.userId,
-        },
-        notificationOperation: {
-          message,
-          userId: user.userId,
-          type: "RECEIVED_BADGE",
-          metadata: JSON.stringify({ badgeId }),
-        },
+      insertUserBadgeData.push({
+        badgeId,
+        userId: user.userId,
+      });
+      insertNotificationData.push({
+        message,
+        userId: user.userId,
+        type: "RECEIVED_BADGE",
+        metadata: JSON.stringify({ badgeId }),
       });
     }
   });
-
-  return prismaLegibleUsersOperations;
 }
 
-function combineForPrisma(x, y, z) {
-  const userBadgesData = [];
-  const notificationsData = [];
-
-  x.forEach(({ userBadgeOperation, notificationOperation }) => {
-    userBadgesData.push(userBadgeOperation);
-    notificationsData.push(notificationOperation);
-  });
-
-  y.forEach(({ userBadgeOperation, notificationOperation }) => {
-    userBadgesData.push(userBadgeOperation);
-    notificationsData.push(notificationOperation);
-  });
-
-  z.forEach(({ userBadgeOperation, notificationOperation }) => {
-    userBadgesData.push(userBadgeOperation);
-    notificationsData.push(notificationOperation);
-  });
-
-  return { userBadgesData, notificationsData };
-}
-
-export default async function awardSomePartyMembersForCompletingQuest(questId) {
-  // questId should be Number
+async function getPartyMembers(questId) {
   const quest = await prisma.quest.findUnique({
     where: {
       questId,
@@ -63,18 +72,14 @@ export default async function awardSomePartyMembersForCompletingQuest(questId) {
     select: {
       partyMembers: {
         where: {
-          deletedAt: null,
           user: {
             deletedAt: null,
           },
-          NOT: [
-            {
-              role: "MENTOR",
-            },
-          ],
+          deletedAt: null,
         },
         select: {
           partyMemberId: true,
+          role: true,
           user: {
             select: {
               userId: true,
@@ -97,11 +102,12 @@ export default async function awardSomePartyMembersForCompletingQuest(questId) {
       },
     },
     select: {
+      role: true,
       userId: true,
       userBadges: {
         where: {
           badgeId: {
-            in: [2, 3, 4],
+            in: [2, 3, 4, 13, 14],
           },
         },
         select: {
@@ -125,40 +131,39 @@ export default async function awardSomePartyMembersForCompletingQuest(questId) {
     },
   });
 
-  const badges = {
-    youngOne: {
-      badgeId: 2,
-      necessaryCompletedQuests: 1,
-      message:
-        "Awesome! You have received a badge for completing a public Quest.",
-    },
-    achiever: {
-      badgeId: 3,
-      necessaryCompletedQuests: 10,
-      message:
-        "You have received a badge for completing 10 public Quests. You're an achiever!",
-    },
-    manOfAction: {
-      badgeId: 4,
-      necessaryCompletedQuests: 50,
-      message:
-        "A fine man of action. You have received a badge for completing 50 public Quests.",
-    },
-  };
+  return users;
+}
 
-  const { youngOne, achiever, manOfAction } = badges;
+function groupUsers(users) {
+  const mentors = [];
+  const mentees = [];
 
-  //   inefficient since userslegibleforyoungone will be checked again for achievers and so on but im not making it efficient :)
-  // todo, ea: make this efficient
-  const toAwardYoungOne = insertQueuePrisma(users, youngOne);
-  const toAwardAchiever = insertQueuePrisma(users, achiever);
-  const toAwardManOfAction = insertQueuePrisma(users, manOfAction);
+  users.forEach((user) => {
+    if (user.role === "mentor") mentors.push(user);
+    else mentees.push(user);
+  });
 
-  const { userBadgesData, notificationsData } = combineForPrisma(
-    toAwardYoungOne,
-    toAwardAchiever,
-    toAwardManOfAction,
-  );
+  return { mentors, mentees };
+}
 
-  return { userBadgesData, notificationsData };
+export default async function awardSomePartyMembersForCompletingQuest(questId) {
+  // questId should be Number
+  const users = await getPartyMembers(questId);
+  const { mentors, mentees } = groupUsers(users);
+  const { youngOne, achiever, manOfAction, paver, pathfinder } = badges;
+
+  const userBadgeData = [];
+  const notificationData = [];
+
+  // inefficient :)
+  // kay check siya for young one award and check again if legible for achiever
+
+  insertDataForPrisma(mentees, youngOne, userBadgeData, notificationData);
+  insertDataForPrisma(mentees, achiever, userBadgeData, notificationData);
+  insertDataForPrisma(mentees, manOfAction, userBadgeData, notificationData);
+
+  insertDataForPrisma(mentors, paver, userBadgeData, notificationData);
+  insertDataForPrisma(mentors, pathfinder, userBadgeData, notificationData);
+
+  return { userBadgeData, notificationData };
 }

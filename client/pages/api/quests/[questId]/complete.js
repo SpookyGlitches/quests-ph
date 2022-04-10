@@ -7,7 +7,7 @@ async function completeQuest(req, res) {
     const { questId } = req.query;
     const parsedQuestId = Number(questId);
 
-    const { userBadgesData, notificationsData } =
+    const { userBadgeData, notificationData } =
       await awardSomePartyMembersForCompletingQuest(parsedQuestId);
     const transactions = [];
 
@@ -21,13 +21,13 @@ async function completeQuest(req, res) {
     });
     transactions.push(updateQuest);
 
-    if (userBadgesData.length !== 0) {
+    if (userBadgeData.length !== 0) {
       const insertUserBadges = prisma.userBadge.createMany({
-        data: userBadgesData,
+        data: userBadgeData,
       });
 
       const insertNotifications = prisma.notification.createMany({
-        data: notificationsData,
+        data: notificationData,
       });
 
       transactions.push(insertUserBadges);
