@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Box, IconButton, TextField } from "@mui/material";
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
-import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 

@@ -60,10 +60,6 @@ model User {
   notification       Notification[]
   conversationMember ConversationMember[]
   partyMembers       PartyMember[]
-  post               Post[]
-  comment            Comment[]
-  postReact          PostReact[]
-  commentReact       CommentReact[]
   userBadge          UserBadge[]
   userReporter       UserReport[]             @relation("userReporter")
   userRecipient      UserReport[]             @relation("userRecipient")
@@ -124,7 +120,6 @@ model Article {
   userId     String
   category   QuestCategory @default(SOCIAL)
   link       String
-  image      String?
   status     ArticleStatus @default(DISAPPROVED)
   createdAt  DateTime      @default(now())
   updatedAt  DateTime?
@@ -149,7 +144,6 @@ model Quest {
   deletedAt              DateTime?
   partyMembers           PartyMember[]
   user                   User                     @relation(fields: [userId], references: [userId])
-  posts                  Post[]
   questTask              QuestTask[]
   questTaskFinisher      QuestTaskFinisher[]
   conversation           Conversation[]
@@ -213,7 +207,7 @@ model QuestPartyBan {
 model PointsLog {
   pointsLogId   Int             @id @default(autoincrement())
   partyMemberId Int
-  gainedPoints  Int
+  gainedPoints  Int // 1 -> when someone receives a comment react, 5 -> when someone receives a post react, 10 -> when someone receives a comment, x -> when completing a task
   action        PointsLogAction
   createdAt     DateTime        @default(now())
   partyMember   PartyMember     @relation(fields: [partyMemberId], references: [partyMemberId])
@@ -293,9 +287,13 @@ model PartyMember {
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @default(now())
   deletedAt     DateTime?
+  pointsLog     PointsLog[]
+  posts         Post[]
+  postReacts    PostReact[]
+  commentReacts CommentReact[]
+  comments      Comment[]
   quest         Quest           @relation(fields: [questId], references: [questId])
   user          User            @relation(fields: [userId], references: [userId])
-  pointsLog     PointsLog[]
 
   @@unique([questId, userId, deletedAt])
 }
@@ -347,49 +345,54 @@ enum PartyMemberRole {
 // did a workaround tungod ani https://github.com/prisma/prisma/issues/1644 kay ato react2 thingy
 
 model Post {
-  postId    Int        @id @default(autoincrement())
-  userId    String
-  questId   Int
-  title     String
-  body      String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @default(now())
-  deletedAt DateTime?
-  postFiles PostFile[]
-  comments  Comment[]
-  user      User       @relation(fields: [userId], references: [userId])
-  quest     Quest      @relation(fields: [questId], references: [questId])
+  postId        Int         @id @default(autoincrement())
+  partyMemberId Int
+  title         String
+  body          String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now())
+  deletedAt     DateTime?
+  postFiles     PostFile[]
+  comments      Comment[]
+  postReacts    PostReact[]
+  partyMember   PartyMember @relation(fields: [partyMemberId], references: [partyMemberId])
 }
 
 model Comment {
-  commentId Int       @id @default(autoincrement())
-  postId    Int
-  userId    String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now())
-  deletedAt DateTime?
-  post      Post      @relation(fields: [postId], references: [postId])
-  user      User      @relation(fields: [userId], references: [userId])
+  commentId     Int            @id @default(autoincrement())
+  postId        Int
+  partyMemberId Int
+  content       String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now())
+  deletedAt     DateTime?
+  post          Post           @relation(fields: [postId], references: [postId])
+  partyMember   PartyMember    @relation(fields: [partyMemberId], references: [partyMemberId])
+  commentReacts CommentReact[]
 }
 
 model PostReact {
-  postReactId Int       @id @default(autoincrement())
-  postId      Int
-  userId      String
-  type        ReactType
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now())
-  user        User      @relation(fields: [userId], references: [userId])
+  postReactId   Int         @id @default(autoincrement())
+  postId        Int
+  partyMemberId Int
+  type          ReactType
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now())
+  deletedAt     DateTime?
+  partyMember   PartyMember @relation(fields: [partyMemberId], references: [partyMemberId])
+  post          Post        @relation(fields: [postId], references: [postId])
 }
 
 model CommentReact {
-  commentReactId Int       @id @default(autoincrement())
-  postId         Int
-  userId         String
+  commentReactId Int         @id @default(autoincrement())
+  commentId      Int
+  partyMemberId  Int
   type           ReactType // didnt follow convention since this will be used by 2 tables
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @default(now())
-  user           User      @relation(fields: [userId], references: [userId])
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @default(now())
+  deletedAt      DateTime?
+  partyMember    PartyMember @relation(fields: [partyMemberId], references: [partyMemberId])
+  comment        Comment     @relation(fields: [commentId], references: [commentId])
 }
 
 //  before kay positive emotions ra and not these, kani lang kay nice ang emojis and i think it's necessary sad ang negative emotions (Inside Out) :),
@@ -404,7 +407,7 @@ enum ReactType {
 }
 
 // NEW END
-
+ 
 model PostFile {
   postFileId Int       @id @default(autoincrement())
   postId     Int?

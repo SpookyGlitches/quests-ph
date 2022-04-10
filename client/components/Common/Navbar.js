@@ -16,6 +16,7 @@ import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import { styled, alpha } from "@mui/material/styles";
 import { useState } from "react";
+import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
 
 const Search = styled("div")(({ theme }) => ({
@@ -63,16 +64,21 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
+  const router = useRouter();
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
   };
 
   const handleMenuClose = () => {
+    router.push("/settings");
     setAnchorEl(null);
     handleMobileMenuClose();
   };
-
+  const handleProfile = () => {
+    router.push("/profile");
+    setAnchorEl(null);
+    handleMobileMenuClose();
+  };
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
@@ -98,7 +104,7 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handleProfile}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
       <MenuItem
         onClick={() =>

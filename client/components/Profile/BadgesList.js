@@ -1,50 +1,75 @@
 import { Box, IconButton, Typography, Popper, Fade } from "@mui/material";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import useSWR from "swr";
+import CircularProgress from "@mui/material/CircularProgress";
+import axios from "axios";
+import { format } from "date-fns";
 import StyledPaper from "../Common/StyledPaper";
 
 const itemsToDisplay = 3;
-const colors = [
-  "#EB5B5B",
-  "#28D4D4",
-  "#BCCF74",
-  "#25E6E6",
-  "#E8D5D5",
-  "#C4EB28",
-  "#D0F7F7",
-];
 
-export default function BadgesList() {
-  const [badges, setBadges] = useState([]);
+export default function BadgesList({ userId }) {
   const [pagination, setPagination] = useState({
     start: 0,
     end: itemsToDisplay - 1,
   });
   const [openPopper, setOpenPopper] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [givenAt, setGivenAt] = useState("");
+
+  const getBadgeInfo = (value) => {
+    axios({
+      method: "get",
+      url: `/api/profile/${userId}/getbadges`,
+      params: {
+        name: value,
+      },
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          setDescription(res.data[0]);
+          setGivenAt(format(new Date(res.data[1]), "MMMM d, yyyy"));
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const handleBadgeClick = (event) => {
+    const badgeName = event.currentTarget.innerHTML;
+    setName(badgeName);
+    getBadgeInfo(badgeName);
     if (event.currentTarget) setAnchorEl(event.currentTarget);
     setOpenPopper((prev) => !prev);
     event.stopPropagation();
   };
-
-  const initBadges = () => {
-    const temp = [];
-    for (let x = 0; x < 28; x++) {
-      temp.push(colors[Math.floor(Math.random() * colors.length)]);
-    }
-    setBadges(temp);
-  };
-
-  useEffect(() => {
-    initBadges();
-  }, []);
+  const { data: myBadges } = useSWR(`/profile/userbadges`);
+  if (!myBadges) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <CircularProgress />
+      </div>
+    );
+  }
+  const temp = [];
+  for (let x = 0; x < myBadges.length; x++) {
+    temp.push(myBadges[x]);
+  }
 
   const incrementPagination = () => {
-    if (pagination.end - (badges.length - 1) === 0) return;
-    if (pagination.end >= badges.length) return;
+    if (pagination.end - (temp.length - 1) === 0) return;
+    if (pagination.end >= temp.length) return;
     setPagination((prev) => {
       return { start: prev.end + 1, end: prev.end + itemsToDisplay };
     });
@@ -60,7 +85,7 @@ export default function BadgesList() {
   };
 
   const badgeItems = () => {
-    const preview = badges.slice(pagination.start, pagination.end + 1);
+    const preview = temp.slice(pagination.start, pagination.end + 1);
     return preview.map((item) => (
       <Box
         key={`${item}`}
@@ -69,11 +94,14 @@ export default function BadgesList() {
           height: "5rem",
           cursor: "pointer",
           width: "5rem",
-          backgroundColor: item,
+          backgroundImage: "url('/auth/banana.jpg')", // img url goes here
           borderRadius: "50%",
+          fontSize: "12px",
+          color: "transparent", // to hide the item.name below cz im using innerhtml ehehe
+          textAlign: "center",
         }}
       >
-        {" "}
+        {item.name}
       </Box>
     ));
   };
@@ -138,10 +166,8 @@ export default function BadgesList() {
                 }}
               />
               <Box sx={{ padding: 0.75 }}>
-                <Typography variant="subtitle2">Early Bird</Typography>
-                <Typography variant="caption">
-                  Given to the early users of the Quests application
-                </Typography>
+                <Typography variant="subtitle2">{name}</Typography>
+                <Typography variant="caption">{description}</Typography>
                 <Box
                   sx={{
                     display: "flex",
@@ -149,7 +175,7 @@ export default function BadgesList() {
                   }}
                 >
                   <Typography variant="caption" sx={{ color: "gray" }}>
-                    given March 2, 2021
+                    Given on {givenAt}
                   </Typography>
                 </Box>
               </Box>

@@ -7,7 +7,6 @@ import {
   Button,
 } from "@mui/material";
 import Image from "next/image";
-import { useState } from "react";
 import Link from "next/link";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";

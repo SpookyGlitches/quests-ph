@@ -1,6 +1,12 @@
 import { Box, Grid } from "@mui/material";
+<<<<<<< HEAD:client/pages/quests/[questId]/chat/index.js
 import ChatScreen from "../../../../components/Quest/Chat/chat-main";
 import QuestLayout from "../../../../components/Layouts/QuestLayout";
+=======
+import ChatScreen from "../../../../../components/Quest/Chat/chat-main";
+import AppLayout from "../../../../../components/Layouts/AppLayout";
+import QuestLayout from "../../../../../components/Layouts/QuestLayout";
+>>>>>>> 1b52cd68680fb6502baec83c673576ac86229b30:client/pages/quests/[questId]/chat/[conversationId]/index.js
 
 const index = () => {
   return (
@@ -22,5 +28,9 @@ const index = () => {
 
 export default index;
 index.getLayout = function getLayout(page) {
-  return <QuestLayout>{page}</QuestLayout>;
+  return (
+    <AppLayout>
+      <QuestLayout>{page}</QuestLayout>
+    </AppLayout>
+  );
 };

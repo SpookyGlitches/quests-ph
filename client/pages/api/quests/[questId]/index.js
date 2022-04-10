@@ -2,6 +2,7 @@ import { PrismaClientValidationError } from "@prisma/client/runtime";
 import { ValidationError } from "yup";
 import { getSession } from "next-auth/react";
 import prisma from "../../../../lib/prisma";
+import withQuestProtect from "../../../../middlewares/withQuestProtect";
 import {
   step2Validations,
   wishValidation,
@@ -80,11 +81,15 @@ async function deleteQuest(req, res) {
 
 export default async function handler(req, res) {
   if (req.method === "GET") {
-    await getQuest(req, res);
+    await withQuestProtect(getQuest, req, res, [
+      "MENTOR",
+      "MENTEE",
+      "PARTY_LEADER",
+    ]);
   } else if (req.method === "PUT") {
-    await updateQuest(req, res);
+    await withQuestProtect(updateQuest, req, res, ["PARTY_LEADER"]);
   } else if (req.method === "DELETE") {
-    await deleteQuest(req, res);
+    await withQuestProtect(deleteQuest, req, res, ["PARTY_LEADER"]);
   } else {
     res.status(405).send();
   }

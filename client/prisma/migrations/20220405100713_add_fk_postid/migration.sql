@@ -1,0 +1,2 @@
+-- AddForeignKey
+ALTER TABLE `PostReact` ADD CONSTRAINT `PostReact_postId_fkey` FOREIGN KEY (`postId`) REFERENCES `Post`(`postId`) ON DELETE RESTRICT ON UPDATE CASCADE;

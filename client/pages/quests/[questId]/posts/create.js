@@ -4,6 +4,7 @@ import axios from "axios";
 import PostForm from "../../../../components/Quest/Post/PostForm";
 import QuestLayout from "../../../../components/Layouts/QuestLayout";
 import FilesForm from "../../../../components/Quest/Post/Files/FilesForm";
+import AppLayout from "../../../../components/Layouts/AppLayout";
 
 export default function Create() {
   const router = useRouter();
@@ -41,5 +42,9 @@ export default function Create() {
 }
 
 Create.getLayout = function getLayout(page) {
-  return <QuestLayout>{page}</QuestLayout>;
+  return (
+    <AppLayout>
+      <QuestLayout>{page}</QuestLayout>
+    </AppLayout>
+  );
 };

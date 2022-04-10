@@ -5,12 +5,19 @@ import { getSession } from "next-auth/react";
 import prisma from "../../../lib/prisma";
 import { step1Validations, step2Validations } from "../../../validations/quest";
 
-function computeIfJoined(quests) {
-  const computed = quests.map((item) => {
-    return {
+function computeIfJoined(quests, role) {
+  const computed = [];
+  if (role === "mentor") {
+    return quests.map((quest) => ({ ...quest, canJoin: false }));
+  }
+
+  let canJoin;
+  quests.forEach((item) => {
+    canJoin = item.partyMembers.length === 0;
+    computed.push({
       ...item,
-      isJoined: item.partyMembers && item.partyMembers.length !== 0,
-    };
+      canJoin,
+    });
   });
   return computed;
 }
@@ -19,18 +26,48 @@ async function getQuests(req, res) {
   const { user } = await getSession({ req });
   try {
     const quests = await prisma.quest.findMany({
-      include: {
+      where: {
+        questPartyBan: {
+          every: {
+            deletedAt: null,
+            userId: user.userId,
+          },
+        },
+        OR: [
+          {
+            // used when searching
+            visibility: "PUBLIC",
+          },
+          {
+            partyMembers: {
+              every: {
+                userId: user.userId,
+              },
+            },
+          },
+        ],
+      },
+
+      select: {
+        wish: true,
+        estimatedStartDate: true,
+        estimatedEndDate: true,
+        questId: true,
         partyMembers: {
+          select: {
+            partyMemberId: true,
+            userId: true,
+          },
           where: {
             userId: user.userId,
           },
         },
       },
     });
-
-    const computed = computeIfJoined(quests);
+    const computed = computeIfJoined(quests, user.role);
     return res.status(200).json(computed);
   } catch (error) {
+    console.error(error);
     switch (error.constructor) {
       case ValidationError:
       case PrismaClientValidationError:
