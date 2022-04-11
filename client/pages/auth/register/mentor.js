@@ -59,19 +59,6 @@ const MentorRegistrationForm = () => {
 
   const { trigger, handleSubmit, control } = methods;
   const here = async (values) => {
-    console.log(uploadedFiles);
-    console.log(keyArr);
-    // console.log(uploadedFiles[0].type);
-    // newlyUploadedFiles.push(uploadedFiles);
-    // for (let i = 0; i < newlyUploadedFiles.length; i++) {
-    //   console.log(newlyUploadedFiles[i]);
-    // }
-    // uploadedFiles.forEach((item) => {
-    //   //if (Object.prototype.hasOwnProperty.call(item, "error") && !item.error) {
-    //   newlyUploadedFiles.push({ key: item.key });
-    //   //}
-    // });
-
     try {
       axios({
         method: "POST",
@@ -82,9 +69,7 @@ const MentorRegistrationForm = () => {
           keyArr,
         },
       }).then((res) => {
-        // console.log(response.status);
         if (res.status === 200) {
-          //console.log("lmao");
           Router.push({
             pathname: "/auth/verify-email/[emailAddress]",
             query: { emailAddress: values.email },

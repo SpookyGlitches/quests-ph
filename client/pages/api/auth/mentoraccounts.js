@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import nodemailer from "nodemailer";
 import prisma from "../../../lib/prisma";
 import { awardEarlyUser, isUserEarly } from "../../../helpers/earlyUser";
-
+// eslint-disable-next-line
 export default async function (req, res) {
   if (req.method === "POST") {
     const userInfo = req.body.values;
