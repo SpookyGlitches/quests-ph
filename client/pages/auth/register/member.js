@@ -6,7 +6,6 @@ import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import Router from "next/router";
-import axios from "axios";
 import AuthHeader from "../../../components/Auth/AuthHeader";
 import AuthLayout from "../../../components/Layouts/AuthLayout";
 import Step1 from "../../../components/Registration/Step1";
@@ -41,31 +40,30 @@ export default function Register() {
   const here = async (values) => {
     // eslint-disable-next-line
     try {
-      await axios({
+      const res = await fetch("/api/auth/memberaccounts", {
         method: "POST",
-        url: "/api/auth/memberaccounts",
-        data: {
-          values,
-        },
-      }).then(() => {
+        body: JSON.stringify(values),
+      });
+
+      if (res.status === 200) {
         Router.push({
           pathname: "/auth/verify-email/[emailAddress]",
           query: { emailAddress: values.email },
         });
-      });
-    } catch (err) {
-      if (err.response) {
-        if (err.response.status === 403) {
-          setMessage("Display Name is already in use.");
-          setShow(true);
-        } else if (err.response.status === 409) {
-          setMessage("Email address is already in use.");
-          setShow(true);
-        } else if (err.response.status === 400) {
-          setMessage("Display Name and Email Address are already in use.");
-          setShow(true);
-        }
+      } else if (res.status === 403) {
+        setMessage("Display Name is already in use.");
+        setShow(true);
+      } else if (res.status === 409) {
+        console.log("email");
+        setMessage("Email address is already in use.");
+        setShow(true);
+      } else if (res.status === 400) {
+        console.log("both");
+        setMessage("Display Name and Email Address are already in use.");
+        setShow(true);
       }
+    } catch (err) {
+      throw err;
     }
   };
 
