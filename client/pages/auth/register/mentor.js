@@ -78,11 +78,9 @@ const MentorRegistrationForm = () => {
           setMessage("Display Name is already in use.");
           setShow(true);
         } else if (err.response.status === 409) {
-          console.log("email");
           setMessage("Email address is already in use.");
           setShow(true);
         } else if (err.response.status === 400) {
-          console.log("both");
           setMessage("Display Name and Email Address are already in use.");
           setShow(true);
         }
