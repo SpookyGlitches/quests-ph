@@ -33,9 +33,7 @@ const steps = ["", "", ""];
 
 const MentorRegistrationForm = () => {
   const [activeStep, setActiveStep] = useState(0);
-  // eslint-disable-next-line
   const [message, setMessage] = useState("");
-  // eslint-disable-next-line
   const [show, setShow] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [keyArr, setKeyArr] = useState([]);
@@ -60,7 +58,7 @@ const MentorRegistrationForm = () => {
   const { trigger, handleSubmit, control } = methods;
   const here = async (values) => {
     try {
-      axios({
+      await axios({
         method: "POST",
         url: "/api/auth/mentoraccounts",
         data: {
@@ -68,28 +66,27 @@ const MentorRegistrationForm = () => {
           uploadedFiles,
           keyArr,
         },
-      }).then((res) => {
-        if (res.status === 200) {
-          Router.push({
-            pathname: "/auth/verify-email/[emailAddress]",
-            query: { emailAddress: values.email },
-          });
-        } else if (res.status === 403) {
+      }).then(() => {
+        Router.push({
+          pathname: "/auth/verify-email/[emailAddress]",
+          query: { emailAddress: values.email },
+        });
+      });
+    } catch (err) {
+      if (err.response) {
+        if (err.response.status === 403) {
           setMessage("Display Name is already in use.");
           setShow(true);
-        } else if (res.status === 409) {
+        } else if (err.response.status === 409) {
           console.log("email");
           setMessage("Email address is already in use.");
           setShow(true);
-        } else if (res.status === 400) {
+        } else if (err.response.status === 400) {
           console.log("both");
           setMessage("Display Name and Email Address are already in use.");
           setShow(true);
         }
-      });
-    } catch (err) {
-      console.log(err);
-      throw err;
+      }
     }
   };
   const handleNext = async () => {

@@ -6,6 +6,7 @@ import { awardEarlyUser, isUserEarly } from "../../../helpers/earlyUser";
 // eslint-disable-next-line
 export default async function (req, res) {
   if (req.method === "POST") {
+    console.log(req.body.values);
     const userInfo = req.body.values;
     const rawDate = userInfo.dateOfBirth;
     const dateObj = new Date(rawDate);
@@ -25,7 +26,6 @@ export default async function (req, res) {
       fileUpload: req.body.uploadedFiles,
       fileKeys: req.body.keyArr,
     };
-
     const transporter = nodemailer.createTransport({
       port: process.env.MAIL_PORT,
       host: process.env.MAIL_HOST,
@@ -35,7 +35,6 @@ export default async function (req, res) {
       },
       secure: true,
     });
-
     const mailData = {
       from: process.env.SMTP_USER,
       to: userDetails.email,
@@ -44,10 +43,8 @@ export default async function (req, res) {
         This is an automated reply from Quests App University of San Carlos. Please do not reply.
         You are receiving this email because your email was just registered to an account on Quests.
         Verify your account through this <a href="${process.env.NEXTAUTH_URL}/verify/${userDetails.token}">link</a>.
-
      <div>`,
     };
-
     const checkEmail = await prisma.user.findFirst({
       where: {
         email: userDetails.email,
@@ -110,10 +107,8 @@ export default async function (req, res) {
         transactions.push(awardOperation);
         transactions.push(notificationOperation);
       }
-
       await prisma.$transaction(transactions);
       await transporter.sendMail(mailData);
-
       res.status(200).send({ message: "Success" });
     }
   }
