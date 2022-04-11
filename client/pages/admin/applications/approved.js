@@ -58,9 +58,6 @@ export default function Index() {
             </a>
           </Link>
           {"   "}
-          <Link href="/admin/applications/rejected" passHref>
-            <a href="replace">Rejected</a>
-          </Link>
         </Typography>
       </Box>
       <Box
