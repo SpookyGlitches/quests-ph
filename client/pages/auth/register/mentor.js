@@ -38,6 +38,7 @@ const MentorRegistrationForm = () => {
   // eslint-disable-next-line
   const [show, setShow] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [keyArr, setKeyArr] = useState([]);
   // eslint-disable-next-line no-undef
   const currentValidationSchema = MentorRegistration[activeStep];
 
@@ -60,6 +61,7 @@ const MentorRegistrationForm = () => {
   const { trigger, handleSubmit, control } = methods;
   const here = async (values) => {
     console.log(uploadedFiles);
+    console.log(keyArr);
     // console.log(uploadedFiles[0].type);
     // newlyUploadedFiles.push(uploadedFiles);
     // for (let i = 0; i < newlyUploadedFiles.length; i++) {
@@ -78,6 +80,7 @@ const MentorRegistrationForm = () => {
         data: {
           values,
           uploadedFiles,
+          keyArr,
         },
       }).then((res) => {
         // console.log(response.status);
@@ -184,6 +187,8 @@ const MentorRegistrationForm = () => {
                 control={control}
                 uploadedFiles={uploadedFiles}
                 setUploadedFiles={setUploadedFiles}
+                keyArr={keyArr}
+                setKeyArr={setKeyArr}
               />
             ) : null}
           </Stack>

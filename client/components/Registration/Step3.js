@@ -20,16 +20,19 @@ import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import FileDropzone from "../Common/FileDropzone";
 
-export default function Step3({ uploadedFiles, setUploadedFiles }) {
-  // eslint-disable-next-line
+export default function Step3({
+  uploadedFiles,
+  setUploadedFiles,
+  keyArr,
+  setKeyArr,
+}) {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState("");
   const { enqueueSnackbar } = useSnackbar();
-  const [keyArr, setKeyArr] = useState([]);
   const [accept, setAccept] = useState([]);
   const {
     formState: { errors },
-  } = useFormContext(); //
+  } = useFormContext();
   let fileArr = [];
 
   function getFileExtension(filename) {
@@ -45,59 +48,42 @@ export default function Step3({ uploadedFiles, setUploadedFiles }) {
     const id = uuidv4();
     const extension = getFileExtension(name);
     const key = `${id}.${extension}`; // uuidv4()
-    // const key2 = `quests/${questId}/partyMembers/${partyMember.partyMemberId}/${id}.${extension}`;
     const signedURL = `/api/auth/mentorupload?type=${encodeURIComponent(
       type,
     )}&key=${key}`;
-    // const apiPresignedURL = `/api/auth/${questId}/posts/upload?type=${encodeURIComponent(
-    //   type,
-    // )}&key=${key}`;
+
     const keysArray = keyArr;
-    keysArray.push(signedURL);
-    setKeyArr(keysArray);
+    keysArray.push(key);
+    setKeyArr([...keysArray]);
     // eslint-disable-next-line
     const { data: awsURL } = await axios.get(signedURL);
+
+    await axios.put(awsURL, file, {
+      headers: {
+        "content-type": type,
+      },
+    });
   };
 
   const uploadFiles = async (acceptedFiles) => {
-    // setLoading(true);
-    // eslint-disable-next-line
+    setLoading(true);
     const fileUploadStatus = [];
-    // eslint-disable-next-line
-    const accepted = [];
-    // eslint-disable-next-line
-    const rejected = [];
-
     for (let x = 0; x < acceptedFiles.length; x++) {
       const acceptedArray = accept;
       acceptedArray.push(acceptedFiles[x]);
       setAccept(acceptedArray);
-
-      // fileArr.push(acceptedFiles[x]);
-      // callAPIs(acceptedFiles[x]);
+      fileUploadStatus.push(callAPIs(acceptedFiles[x]));
     }
 
-    // get only files that doesnt have an error
     try {
+      await Promise.all(fileUploadStatus);
       fileArr = accept;
-      console.log(fileArr);
       setUploadedFiles([...fileArr]);
-      // console.log(keyArr);
-      // console.log(fileArr[0].type);
-      // console.log(getFileExtension(fileArr[0].name));
-      // const promises = await Promise.all(fileUploadStatus);
-      // promises.forEach((item) => {
-      //   if (item.error) rejected.push(item);
-      //   else accepted.push(item);
-      // });
-      // setRejectedFiles((prev) => [...prev, ...rejected]);
-      // setUploadedFiles((prev) => [...prev, ...accepted]);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
-    // finally {
-    //   setLoading(false);
-    // }
   };
 
   const dropzoneConfig = {
@@ -109,18 +95,23 @@ export default function Step3({ uploadedFiles, setUploadedFiles }) {
     onDropRejected: () => {
       enqueueSnackbar("File type not accepted");
     },
-    // disabled: loading,
+    disabled: loading,
   };
 
-  const removeFile = (value) => {
+  const removeFile = async (value) => {
     const array = uploadedFiles;
-    const arraytwo = accept;
+    const arrayTwo = keyArr;
+    const valueToBeDeleted = arrayTwo[value];
     if (value >= -1) {
       array.splice(value, 1);
-      arraytwo.splice(value, 1);
+      arrayTwo.splice(value, 1);
+      const deleteURL = `/api/auth/mentordelete?key=${valueToBeDeleted}`;
+      await axios.get(deleteURL);
     }
+
     setAccept([...array]);
     setUploadedFiles([...array]);
+    setKeyArr([...arrayTwo]);
   };
 
   return (
@@ -177,7 +168,6 @@ export default function Step3({ uploadedFiles, setUploadedFiles }) {
         dropzoneTitle="Drag and drop files here or click to add."
       />
       {loading && <LinearProgress />}
-      {/* <Grid container spacing={1}> */}
       {uploadedFiles.map((elem) => (
         <Grid
           item
@@ -196,7 +186,6 @@ export default function Step3({ uploadedFiles, setUploadedFiles }) {
           </Button>
         </Grid>
       ))}
-      {/* </Grid> */}
     </Stack>
   );
 }
