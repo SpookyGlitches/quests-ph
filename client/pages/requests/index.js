@@ -6,7 +6,7 @@ import AppLayout from "../../components/Layouts/AppLayout";
 import AccessDenied from "../../components/Error/AccessDenied";
 import IncomingRequests from "../../components/Requests/Incoming";
 
-function ListHolder({ items, requestName }) {
+function ListHolder({ items, requestName = "Mentor Requests" }) {
   return (
     <Box
       sx={{
@@ -51,7 +51,7 @@ const Index = () => {
   if (session) {
     return (
       <AppLayout>
-        <ListHolder items={mentorrequests} requestName="Mentor Requests" />
+        <ListHolder items={mentorrequests} />
       </AppLayout>
     );
   }
