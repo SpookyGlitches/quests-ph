@@ -5,7 +5,7 @@ import useSWR from "swr";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import * as React from "react";
-import DataTable from "../../../components/Admin/Table/DataTable";
+import DataTable from "../../../components/Admin/Table/ApplicationTable";
 import AdminLayout from "../../../components/Layouts/AdminLayout";
 
 export default function Index() {
@@ -16,7 +16,7 @@ export default function Index() {
   };
 
   const { data: applicationsData, error } = useSWR(
-    `/admin/applications/getApplications`,
+    `/admin/applications/getApprovedApplications`,
   );
 
   if (error) {

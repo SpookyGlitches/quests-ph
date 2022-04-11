@@ -6,7 +6,7 @@ import useSWR from "swr";
 // import SearchBar from "../../../components/Admin/Search";
 import Link from "next/link";
 import AdminLayout from "../../../components/Layouts/AdminLayout";
-import BasicTable from "../../../components/Admin/Table/DataTable";
+import BasicTable from "../../../components/Admin/Table/ApplicationTable";
 
 export default function Index() {
   const [search, setSearch] = React.useState("");
