@@ -54,7 +54,6 @@ const MentorRegistrationForm = () => {
       confirmPassword: "",
       experience: " ",
       detailedExperience: "",
-      fileUpload: "",
     },
   });
 
@@ -85,11 +84,11 @@ const MentorRegistrationForm = () => {
       }).then((res) => {
         // console.log(response.status);
         if (res.status === 200) {
-          console.log("lmao");
-          // Router.push({
-          //   pathname: "/auth/verify-email/[emailAddress]",
-          //   query: { emailAddress: values.email },
-          // });
+          //console.log("lmao");
+          Router.push({
+            pathname: "/auth/verify-email/[emailAddress]",
+            query: { emailAddress: values.email },
+          });
         } else if (res.status === 403) {
           setMessage("Display Name is already in use.");
           setShow(true);
@@ -146,7 +145,7 @@ const MentorRegistrationForm = () => {
         })}
       </Stepper>
       {activeStep === 0 || activeStep === steps.length ? (
-        <>{console.log("no prev button")}</>
+        <>{console.log("")}</>
       ) : (
         <Button
           color="primary"

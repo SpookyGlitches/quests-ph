@@ -95,6 +95,7 @@ model MentorFile {
   mentorFileId   Int       @id @default(autoincrement())
   mentorUploadId String
   path           String
+  key            String?
   createdAt      DateTime? @default(now())
   deletedAt      DateTime?
   user           User      @relation(fields: [mentorUploadId], references: [userId])

@@ -5,7 +5,7 @@ import { s3Client } from "../../../lib/s3";
 export default async function handler(req, res) {
   try {
     const bucketParams = {
-      Bucket: process.env.AWS_BUCKET_NAME,
+      Bucket: process.env.AWS_BUCKET_NAME_MENTOR,
       Key: req.query.key,
       Body: "",
       ContentType: req.query.type,
