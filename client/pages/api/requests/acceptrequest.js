@@ -22,10 +22,10 @@ export default async function acceptMentorRequests(req, res) {
         data: {
           userId: user.userId,
           questId: req.body.questId,
-          role: "PARTY_LEADER",
-          outcome: "outcome", // default value if via accept
-          obstacle: "obstacle", // default value if via accept
-          plan: "plan", // default value if via accept
+          role: "MENTOR",
+          outcome: "", // default value if via accept
+          obstacle: "", // default value if via accept
+          plan: "", // default value if via accept
           createdAt: new Date(),
         },
       });

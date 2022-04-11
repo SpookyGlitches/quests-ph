@@ -2,7 +2,6 @@ import { useSession } from "next-auth/react";
 import useSWR from "swr";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Box, Typography } from "@mui/material";
-import axios from "axios";
 import AppLayout from "../../components/Layouts/AppLayout";
 import AccessDenied from "../../components/Error/AccessDenied";
 import IncomingRequests from "../../components/Requests/Incoming";
@@ -32,17 +31,11 @@ function ListHolder({ items, requestName }) {
   );
 }
 
-const fetcher = (url) => axios.get(url).then((res) => res.data);
-
 const Index = () => {
   const { data: session } = useSession();
-  // const { data: mentorrequests } = useSWR(`/requests/mentorrequests`);
-  // eslint-disable-next-line
-  const { data: mentorrequests, error: one } = useSWR(
-    "/api/requests/mentorrequests",
-    fetcher,
-  );
-  if (!mentorrequests || one)
+  const { data: mentorrequests } = useSWR(`/requests/mentorrequests`);
+
+  if (!mentorrequests)
     return (
       <div
         style={{
