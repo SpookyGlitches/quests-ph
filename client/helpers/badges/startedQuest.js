@@ -7,7 +7,6 @@ const badges = {
     message:
       "You have received a badge for starting a public Quest. Good luck on your journey!",
   },
-  // !! REMOVE TEMP NUMBER OF QUESTS
   fineMover: {
     badgeId: 6,
     necessaryStartedQuests: 10,
