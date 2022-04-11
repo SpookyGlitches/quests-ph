@@ -4,7 +4,6 @@ import { Box, Typography } from "@mui/material";
 import axios from "axios";
 import { useSession, getSession } from "next-auth/react";
 import AppLayout from "../../components/Layouts/AppLayout";
-import SearchBar from "../../components/Friends/Search";
 import FilterHolder from "../../components/Friends/FilterHolder";
 import Friends from "../../components/Friends/Friends";
 import Incoming from "../../components/Friends/Incoming";
@@ -112,8 +111,6 @@ const Index = () => {
     return (
       <AppLayout>
         <div>
-          <SearchBar />
-
           <FilterHolder />
 
           <ListHolder items={incoming} requestName="Incoming Requests" />
