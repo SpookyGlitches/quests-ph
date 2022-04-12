@@ -1,7 +1,7 @@
 import { Box, Avatar, Typography } from "@mui/material";
 
 export default function BasicInfo({ displayName, fullName }) {
-  const letter = displayName.charAt(0);
+  const letter = displayName.charAt(0).toUpperCase();
   return (
     <Box
       sx={{

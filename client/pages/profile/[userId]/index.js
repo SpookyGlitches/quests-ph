@@ -8,12 +8,15 @@ import FriendsQuestChart from "../../../components/Profile/Friends/FriendsQuestC
 import OptionsBar from "../../../components/Profile/Friends/OptionsBar";
 import FriendsQuestList from "../../../components/Profile/Friends/FriendsQuestsList";
 import AccessDenied from "../../../components/Error/AccessDenied";
+import prisma from "../../../lib/prisma";
 
-export default function FriendsProfile() {
+export default function FriendsProfile({ findEmail }) {
   const router = useRouter();
-  const { userId } = router.query;
-
   const { data: session } = useSession();
+  const { userId } = router.query;
+  if (findEmail === null) {
+    router.push("/noData");
+  }
 
   if (session) {
     return (
@@ -52,4 +55,14 @@ export default function FriendsProfile() {
     );
   }
   return <AccessDenied />;
+}
+export async function getServerSideProps({ params }) {
+  const { userId } = params;
+  const findEmail = await prisma.user.findFirst({
+    where: {
+      userId,
+      deletedAt: null,
+    },
+  });
+  return { props: { findEmail: JSON.parse(JSON.stringify(findEmail)) } };
 }
