@@ -79,6 +79,10 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
+
+  const navigateToSearchPage = () => {
+    router.push("/search");
+  };
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
@@ -187,7 +191,7 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
           >
             MUI
           </Typography>
-          <Search>
+          <Search onClick={navigateToSearchPage}>
             <SearchIconWrapper>
               <SearchRoundedIcon />
             </SearchIconWrapper>
