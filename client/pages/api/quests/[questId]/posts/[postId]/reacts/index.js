@@ -1,5 +1,31 @@
 import prisma from "../../../../../../../lib/prisma";
+// import { PrismaClient } from "@prisma/client";
 import withQuestProtect from "../../../../../../../middlewares/withQuestProtect";
+// const prisma = new PrismaClient();
+async function getReacts(req, res) {
+  try {
+    const reacts = await prisma.postReact.findMany({
+      where: {
+        postId: Number(req.query.postId),
+      },
+      select: {
+        postReactId: true,
+        postId: true,
+        type: true,
+        partyMemberId: true,
+        partyMember: {
+          select: {
+            userId: true,
+          },
+        },
+      },
+    });
+    return res.json(reacts);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send();
+  }
+}
 
 async function addReact(req, res) {
   try {
@@ -12,7 +38,7 @@ async function addReact(req, res) {
         postId: parsedPostId,
       },
     });
-
+    console.log(existingReact);
     if (existingReact) return res.status(400).send();
 
     const transactions = [];
@@ -58,7 +84,7 @@ async function addReact(req, res) {
       transactions.push(awardPointsOperation);
     }
     const [postReact] = await prisma.$transaction(transactions);
-
+    console.log(postReact);
     return res.json(postReact);
   } catch (err) {
     console.error(err);
@@ -68,6 +94,12 @@ async function addReact(req, res) {
 
 export default async function handler(req, res) {
   switch (req.method) {
+    case "GET":
+      return withQuestProtect(getReacts, req, res, [
+        "PARTY_LEADER",
+        "MENTOR",
+        "MENTEE",
+      ]);
     case "POST":
       return withQuestProtect(addReact, req, res, [
         "PARTY_LEADER",

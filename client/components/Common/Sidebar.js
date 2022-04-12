@@ -18,17 +18,58 @@ import {
   Toolbar,
 } from "@mui/material";
 
-const mentorSidebar = [
-  "Home",
-  "Quests",
-  "Requests",
-  "Articles",
-  "Friends",
-  "Chats",
+const memberlinks = [
+  {
+    label: "Home",
+    path: "/",
+  },
+  {
+    label: "Quests",
+    path: "/quests",
+  },
+  {
+    label: "Articles",
+    path: "/articles",
+  },
+  {
+    label: "Friends",
+    path: "/friends",
+  },
+  {
+    label: "Chats",
+    path: "/chats",
+  },
 ];
-const memberSidebar = ["Home", "Quests", "Articles", "Friends", "Chats"];
+
+const mentorLinks = [
+  {
+    label: "Home",
+    path: "/",
+  },
+  {
+    label: "Quests",
+    path: "/quests",
+  },
+  {
+    label: "Requests",
+    path: "/requests",
+  },
+  {
+    label: "Articles",
+    path: "/articles",
+  },
+  {
+    label: "Friends",
+    path: "/friends",
+  },
+  {
+    label: "Chats",
+    path: "/chats",
+  },
+];
 const Sidebar = (props) => {
-  const { window, drawerWidth, handleDrawerToggle, mobileOpen, role } = props;
+  const { window, drawerWidth, handleDrawerToggle, mobileOpen, userRole } =
+    props;
   // eslint-disable-next-line consistent-return
   const renderIcon = (text) => {
     switch (text) {
@@ -56,28 +97,20 @@ const Sidebar = (props) => {
       <Divider />
       {/* something app logo/profile should be here */}
       <List>
-        {role === "mentor"
-          ? mentorSidebar.map((text) => (
-              <Link
-                href={`/${text.replace(/ /g, "").toLowerCase()}`}
-                passHref
-                key={text}
-              >
-                <ListItem button key={text} component="a">
-                  <ListItemIcon>{renderIcon(text)}</ListItemIcon>
-                  <ListItemText primary={text} />
+        {userRole === "mentor"
+          ? mentorLinks.map(({ path, label }) => (
+              <Link href={path} passHref key={label}>
+                <ListItem button key={label} component="a">
+                  <ListItemIcon>{renderIcon(label)}</ListItemIcon>
+                  <ListItemText primary={label} />
                 </ListItem>
               </Link>
             ))
-          : memberSidebar.map((text) => (
-              <Link
-                href={`/${text.replace(/ /g, "").toLowerCase()}`}
-                passHref
-                key={text}
-              >
-                <ListItem button key={text} component="a">
-                  <ListItemIcon>{renderIcon(text)}</ListItemIcon>
-                  <ListItemText primary={text} />
+          : memberlinks.map(({ path, label }) => (
+              <Link href={path} passHref key={label}>
+                <ListItem button key={label} component="a">
+                  <ListItemIcon>{renderIcon(label)}</ListItemIcon>
+                  <ListItemText primary={label} />
                 </ListItem>
               </Link>
             ))}

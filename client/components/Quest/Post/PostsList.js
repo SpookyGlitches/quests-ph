@@ -3,13 +3,13 @@ import Post from "./Post";
 
 const PostsList = ({ posts }) => {
   return (
-    <div>
-      <Stack spacing={4}>
-        {posts.map((post) => {
-          return <Post key={post.postId} post={post} />;
-        })}
-      </Stack>
-    </div>
+    <Stack spacing={4}>
+      {posts.map(({ postId, partyMember }) => {
+        return (
+          <Post key={postId} postId={postId} questId={partyMember.questId} />
+        );
+      })}
+    </Stack>
   );
 };
 

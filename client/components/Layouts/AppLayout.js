@@ -24,7 +24,7 @@ const AppLayout = ({ children }) => {
         drawerWidth={drawerWidth}
         mobileOpen={mobileOpen}
         handleDrawerToggle={handleDrawerToggle}
-        role={session.user.role}
+        userRole={session?.user?.role}
       />
       <Box
         component="main"
