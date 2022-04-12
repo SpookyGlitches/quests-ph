@@ -30,6 +30,7 @@ export default NextAuth({
             deletedAt: null,
           },
         });
+
         if (findUser) {
           const checkPass = await bcrypt.compare(
             credentials.password,
@@ -39,6 +40,7 @@ export default NextAuth({
             const user = await prisma.user.findFirst({
               where: {
                 email: credentials.email,
+                deletedAt: null,
               },
             });
             if (user) {

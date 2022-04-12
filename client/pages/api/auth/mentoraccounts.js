@@ -63,7 +63,9 @@ export default async function (req, res) {
     } else if (checkEmail) {
       res.status(409).send({ message: "Email Exists" });
     } else if (!checkDisplayName && !checkEmail) {
-      // eslint-disable-next-line
+      const early = isUserEarly(new Date());
+      const awardOperations = early ? awardEarlyUser() : undefined;
+
       const userCreation = await prisma.user.create({
         data: {
           email: userDetails.email,
@@ -73,10 +75,12 @@ export default async function (req, res) {
           password: userDetails.password,
           role: userDetails.role,
           token: userDetails.token,
+          ...awardOperations,
         },
       });
       // can assume user already exists here since it would throw an error if theyre not yet created at this point
       const transactions = [];
+
       const mentorCreation = prisma.mentorApplication.create({
         data: {
           mentorId: userCreation.userId,
@@ -98,14 +102,7 @@ export default async function (req, res) {
         );
       }
       // wow i can see my name haha
-      const early = isUserEarly(userCreation.createdAt);
-      if (early) {
-        const [awardOperation, notificationOperation] = awardEarlyUser(
-          userCreation.userId,
-        );
-        transactions.push(awardOperation);
-        transactions.push(notificationOperation);
-      }
+
       await prisma.$transaction(transactions);
       await transporter.sendMail(mailData);
       res.status(200).send({ message: "Success" });

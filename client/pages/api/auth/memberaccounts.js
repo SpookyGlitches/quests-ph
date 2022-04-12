@@ -64,17 +64,13 @@ export default async function (req, res) {
     } else if (checkEmail) {
       res.status(409).send({ message: "Email Exists" });
     } else if (!checkDisplayName && !checkEmail) {
-      const transactions = [];
-      const memberCreation = await prisma.user.create({ data: userDetails });
-      const early = isUserEarly(memberCreation.createdAt);
-      if (early) {
-        const [awardOperation, notificationOperation] = awardEarlyUser(
-          memberCreation.userId,
-        );
-        transactions.push(awardOperation);
-        transactions.push(notificationOperation);
-      }
-      await prisma.$transaction(transactions);
+      const early = isUserEarly(new Date());
+      const awardOperations = early ? awardEarlyUser() : undefined;
+
+      // no need for pusher here
+      await prisma.user.create({
+        data: { ...userDetails, ...awardOperations },
+      });
       await transporter.sendMail(mailData);
       res.status(200).send({ message: "Success!" });
     }
