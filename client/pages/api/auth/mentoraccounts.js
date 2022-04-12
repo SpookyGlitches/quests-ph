@@ -6,7 +6,6 @@ import { awardEarlyUser, isUserEarly } from "../../../helpers/earlyUser";
 // eslint-disable-next-line
 export default async function (req, res) {
   if (req.method === "POST") {
-    console.log(req.body.values);
     const userInfo = req.body.values;
     const rawDate = userInfo.dateOfBirth;
     const dateObj = new Date(rawDate);
