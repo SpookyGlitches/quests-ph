@@ -29,11 +29,9 @@ export default function Step3({
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState("");
   const { enqueueSnackbar } = useSnackbar();
-  const [accept, setAccept] = useState([]);
   const {
     formState: { errors },
   } = useFormContext();
-  let fileArr = [];
 
   function getFileExtension(filename) {
     const a = filename.split(".");
@@ -69,16 +67,14 @@ export default function Step3({
     setLoading(true);
     const fileUploadStatus = [];
     for (let x = 0; x < acceptedFiles.length; x++) {
-      const acceptedArray = accept;
+      const acceptedArray = uploadedFiles;
       acceptedArray.push(acceptedFiles[x]);
-      setAccept(acceptedArray);
+      setUploadedFiles([...acceptedArray]);
       fileUploadStatus.push(callAPIs(acceptedFiles[x]));
     }
 
     try {
       await Promise.all(fileUploadStatus);
-      fileArr = accept;
-      setUploadedFiles([...fileArr]);
     } catch (err) {
       console.error(err);
     } finally {
@@ -108,8 +104,6 @@ export default function Step3({
       const deleteURL = `/api/auth/mentordelete?key=${valueToBeDeleted}`;
       await axios.get(deleteURL);
     }
-
-    setAccept([...array]);
     setUploadedFiles([...array]);
     setKeyArr([...arrayTwo]);
   };
@@ -159,7 +153,7 @@ export default function Step3({
       ) : (
         console.log("")
       )}
-
+      {console.log(uploadedFiles)}
       <Typography style={{ fontSize: "12px" }}>
         Upload supporting documents here (.pdf, .docx, .png, .jpg)
       </Typography>
@@ -168,6 +162,7 @@ export default function Step3({
         dropzoneTitle="Drag and drop files here or click to add."
       />
       {loading && <LinearProgress />}
+
       {uploadedFiles.map((elem) => (
         <Grid
           item
