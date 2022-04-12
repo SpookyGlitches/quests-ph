@@ -119,12 +119,12 @@ export default function MentorNotFriendOptionsBar({
         if (response.data.length !== 1) {
           axios({
             method: "POST",
-            url: `/api/profile/${userId}/addfriend`,
+            url: `/api/profile/${userId}/addFriend`,
             data: {
               userId,
             },
-          }) // eslint-disable-next-line
-            .then((res) => {
+          })
+            .then(() => {
               enqueueSnackbar("You have successfully sent a friend request!");
             })
             .catch((error) => {
