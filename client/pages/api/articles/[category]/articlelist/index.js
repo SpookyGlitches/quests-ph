@@ -8,8 +8,6 @@ export default async function ShowArticles(req, res) {
   async function scrape(url) {
     const data = await getMetaData(url);
     returnValue.push(data);
-
-    return returnValue;
   }
 
   if (req.method === "GET") {
