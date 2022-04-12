@@ -5,6 +5,8 @@ import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
+import ConnectWithoutContactRoundedIcon from "@mui/icons-material/ConnectWithoutContactRounded";
+
 import {
   List,
   ListItem,
@@ -16,7 +18,7 @@ import {
   Toolbar,
 } from "@mui/material";
 
-const links = [
+const memberlinks = [
   {
     label: "Home",
     path: "/",
@@ -38,9 +40,36 @@ const links = [
     path: "/chats",
   },
 ];
-const Sidebar = (props) => {
-  const { window, drawerWidth, handleDrawerToggle, mobileOpen } = props;
 
+const mentorLinks = [
+  {
+    label: "Home",
+    path: "/",
+  },
+  {
+    label: "Quests",
+    path: "/quests",
+  },
+  {
+    label: "Requests",
+    path: "/requests",
+  },
+  {
+    label: "Articles",
+    path: "/articles",
+  },
+  {
+    label: "Friends",
+    path: "/friends",
+  },
+  {
+    label: "Chats",
+    path: "/chats",
+  },
+];
+const Sidebar = (props) => {
+  const { window, drawerWidth, handleDrawerToggle, mobileOpen, userRole } =
+    props;
   // eslint-disable-next-line consistent-return
   const renderIcon = (text) => {
     switch (text) {
@@ -48,6 +77,8 @@ const Sidebar = (props) => {
         return <HomeRoundedIcon />;
       case "Quests":
         return <MapRoundedIcon />;
+      case "Requests":
+        return <ConnectWithoutContactRoundedIcon />;
       case "Articles":
         return <ArticleRoundedIcon />;
       case "Friends":
@@ -66,14 +97,23 @@ const Sidebar = (props) => {
       <Divider />
       {/* something app logo/profile should be here */}
       <List>
-        {links.map(({ path, label }) => (
-          <Link href={path} passHref key={label}>
-            <ListItem button key={label} component="a">
-              <ListItemIcon>{renderIcon(label)}</ListItemIcon>
-              <ListItemText primary={label} />
-            </ListItem>
-          </Link>
-        ))}
+        {userRole === "mentor"
+          ? mentorLinks.map(({ path, label }) => (
+              <Link href={path} passHref key={label}>
+                <ListItem button key={label} component="a">
+                  <ListItemIcon>{renderIcon(label)}</ListItemIcon>
+                  <ListItemText primary={label} />
+                </ListItem>
+              </Link>
+            ))
+          : memberlinks.map(({ path, label }) => (
+              <Link href={path} passHref key={label}>
+                <ListItem button key={label} component="a">
+                  <ListItemIcon>{renderIcon(label)}</ListItemIcon>
+                  <ListItemText primary={label} />
+                </ListItem>
+              </Link>
+            ))}
       </List>
     </div>
   );
