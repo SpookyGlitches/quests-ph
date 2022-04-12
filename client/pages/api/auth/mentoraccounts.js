@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 import nodemailer from "nodemailer";
 import prisma from "../../../lib/prisma";
-import { awardEarlyUser, isUserEarly } from "../../../helpers/earlyUser";
+import { awardEarlyUser, isUserEarly } from "../../../helpers/badges/earlyUser";
 // eslint-disable-next-line
 export default async function (req, res) {
   if (req.method === "POST") {

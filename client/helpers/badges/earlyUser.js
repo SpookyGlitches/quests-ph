@@ -1,6 +1,6 @@
 // returns a true or false
 import { differenceInYears } from "date-fns";
-import prisma from "../lib/prisma";
+import prisma from "../../lib/prisma";
 
 export function isUserEarly(userCreatedAt) {
   // userCreatedAt should be of type Date

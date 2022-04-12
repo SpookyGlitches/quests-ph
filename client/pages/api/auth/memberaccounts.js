@@ -2,6 +2,7 @@ import nodemailer from "nodemailer";
 import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 import prisma from "../../../lib/prisma";
+// import { awardEarlyUser, isUserEarly } from "../../../helpers/badges/earlyUser";
 // eslint-disable-next-line
 export default async function (req, res) {
   // eslint-disable-next-line
@@ -63,11 +64,34 @@ export default async function (req, res) {
     } else if (checkEmail) {
       res.status(409).send({ message: "Email Exists" });
     } else if (!checkDisplayName && !checkEmail) {
-      await prisma.user.create({ data: userDetails });
-      await transporter.sendMail(mailData, (err, info) => {
-        if (err) console.log(err);
-        else console.log(info);
+      // const early = isUserEarly(new Date());
+      // const awardOperations = early ? awardEarlyUser() : undefined;
+
+      // // no need for pusher here
+      // await prisma.user.create({
+      //   data: { ...userDetails, ...awardOperations },
+      // });
+      // await transporter.sendMail(mailData);
+      // res.status(200).send({ message: "Success!" });
+      // const transactions = [];
+      const memberCreation = await prisma.user.create({ data: userDetails });
+      // transactions.push(memberCreation);
+
+      await prisma.userBadge.create({
+        data: {
+          userId: memberCreation.userId,
+          badgeId: 1,
+        },
       });
+      await prisma.notification.create({
+        data: {
+          userId: memberCreation.userId,
+          message: `Congratulations! You have received a badge for registering before ${"Quests'"} 1st anniversary.`,
+          type: "RECEIVED_BADGE",
+          metadata: JSON.stringify({ badgeId: 1 }),
+        },
+      });
+      await transporter.sendMail(mailData);
       res.status(200).send({ message: "Success!" });
     }
 
