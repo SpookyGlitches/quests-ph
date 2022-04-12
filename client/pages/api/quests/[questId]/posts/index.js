@@ -1,5 +1,6 @@
 import { getSession } from "next-auth/react";
 import postValidations from "../../../../../validations/post";
+import maybeAwardUserForPost from "../../../../../helpers/badges/createdPost";
 
 import prisma from "../../../../../lib/prisma";
 
@@ -51,8 +52,9 @@ async function createPost(req, res) {
       },
       rejectOnNotFound: true,
     });
+    const transactions = [];
 
-    const post = await prisma.post.create({
+    const createPostOperation = prisma.post.create({
       data: {
         title,
         body,
@@ -62,6 +64,27 @@ async function createPost(req, res) {
         },
       },
     });
+    transactions.push(createPostOperation);
+
+    // award badge
+    const awardData = await maybeAwardUserForPost(user.userId);
+
+    if (awardData) {
+      const { insertUserBadgeData, insertNotificationData } = awardData;
+
+      const insertUserBadgeOperation = prisma.userBadge.create({
+        data: insertUserBadgeData,
+      });
+      const insertNotificationOperation = prisma.notification.create({
+        data: insertNotificationData,
+      });
+
+      transactions.push(insertUserBadgeOperation);
+      transactions.push(insertNotificationOperation);
+    }
+
+    const [post] = await prisma.$transaction(transactions);
+
     return res.status(200).json(post);
   } catch (err) {
     console.error(err);

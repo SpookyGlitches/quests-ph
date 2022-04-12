@@ -2,8 +2,9 @@ import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 import nodemailer from "nodemailer";
 import prisma from "../../../lib/prisma";
-// eslint-disable-next-line
-export default async function (req, res) {
+import { awardEarlyUser, isUserEarly } from "../../../helpers/badges/earlyUser";
+
+export default async function handler(req, res) {
   if (req.method === "POST") {
     const userInfo = JSON.parse(req.body);
     const rawDate = userInfo.dateOfBirth;
@@ -23,12 +24,6 @@ export default async function (req, res) {
       detailedExperience: userInfo.detailedExperience,
       fileUpload: userInfo.fileUpload,
     };
-    let fileLength;
-    if (userDetails.fileUpload === undefined) {
-      userDetails.fileUpload = 0;
-    } else {
-      fileLength = userDetails.fileUpload.length;
-    }
 
     // eslint-disable-next-line
     const transporter = nodemailer.createTransport({
@@ -70,57 +65,59 @@ export default async function (req, res) {
     } else if (checkEmail) {
       res.status(409).send({ message: "Email Exists" });
     } else if (!checkDisplayName && !checkEmail) {
-      // eslint-disable-next-line
-      const userCreation = await prisma.user.create({
-        data: {
-          email: userDetails.email,
-          dateOfBirth: userDetails.dateOfBirth,
-          displayName: userDetails.displayName,
-          fullName: userDetails.fullName,
-          password: userDetails.password,
-          role: userDetails.role,
-          token: userDetails.token,
-        },
-      });
-      if (userCreation) {
-        console.log("user created");
-        const findUser = await prisma.user.findFirst({
-          where: {
+      try {
+        const early = isUserEarly(new Date());
+        const awardOperations = early ? awardEarlyUser() : undefined;
+
+        const userCreation = await prisma.user.create({
+          data: {
             email: userDetails.email,
+            dateOfBirth: userDetails.dateOfBirth,
+            displayName: userDetails.displayName,
+            fullName: userDetails.fullName,
+            password: userDetails.password,
+            role: userDetails.role,
+            token: userDetails.token,
+            ...awardOperations,
           },
         });
-        if (findUser) {
-          console.log("user found");
-          const mentorCreation = await prisma.mentorApplication.create({
-            data: {
-              mentorId: findUser.userId,
-              experience: userDetails.experience,
-              detailedExperience: userDetails.detailedExperience,
-            },
-          });
-          if (mentorCreation) {
-            console.log("mentor created");
-            if (userDetails.fileUpload !== 0) {
-              for (let i = 0; i < fileLength; i++) {
-                // eslint-disable-next-line
-                const fileCreation = await prisma.mentorFile.create({
-                  data: {
-                    mentorUploadId: findUser.userId,
-                    path: userDetails.fileUpload[i].path,
-                  },
-                });
-              }
-              transporter.sendMail(mailData, (err, info) => {
-                if (err) console.log(err);
-                else console.log(info);
-              });
-            }
-          }
-          res.status(200).send({ message: "Success!" });
+        // can assume user already exists here since it would throw an error if theyre not yet created at this point
+        const transactions = [];
+
+        const mentorCreation = prisma.mentorApplication.create({
+          data: {
+            mentorId: userCreation.userId,
+            experience: userDetails.experience,
+            detailedExperience: userDetails.detailedExperience,
+          },
+        });
+
+        transactions.push(mentorCreation);
+
+        // if (userDetails.fileUpload === 0) {
+        //   return res.status(400).send({ message: "Upload files" });
+        // }
+        const filesLength = userDetails.fileUpload?.length || 0;
+
+        for (let i = 0; i < filesLength; i++) {
+          transactions.push(
+            prisma.mentorFile.create({
+              data: {
+                mentorUploadId: userCreation.userId,
+                path: userDetails.fileUpload[i].path,
+              },
+            }),
+          );
         }
+
+        await prisma.$transaction(transactions);
+        await transporter.sendMail(mailData);
+
+        res.status(200).send({ message: "Success" });
+      } catch (err) {
+        console.log(err);
+        res.status(500).send({ message: "Something went wrong" });
       }
     }
-
-    await prisma.$disconnect();
   }
 }
