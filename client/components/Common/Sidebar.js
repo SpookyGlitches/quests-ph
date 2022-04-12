@@ -16,6 +16,28 @@ import {
   Toolbar,
 } from "@mui/material";
 
+const links = [
+  {
+    label: "Home",
+    path: "/",
+  },
+  {
+    label: "Quests",
+    path: "/quests",
+  },
+  {
+    label: "Articles",
+    path: "/articles",
+  },
+  {
+    label: "Friends",
+    path: "/friends",
+  },
+  {
+    label: "Chats",
+    path: "/chats",
+  },
+];
 const Sidebar = (props) => {
   const { window, drawerWidth, handleDrawerToggle, mobileOpen } = props;
 
@@ -44,22 +66,11 @@ const Sidebar = (props) => {
       <Divider />
       {/* something app logo/profile should be here */}
       <List>
-        {[
-          // search, notifs, and profile i balhin nalang siguro sa app bar?
-          "Home",
-          "Quests",
-          "Articles",
-          "Friends",
-          "Chats",
-        ].map((text) => (
-          <Link
-            href={`/${text.replace(/ /g, "").toLowerCase()}`}
-            passHref
-            key={text}
-          >
-            <ListItem button key={text} component="a">
-              <ListItemIcon>{renderIcon(text)}</ListItemIcon>
-              <ListItemText primary={text} />
+        {links.map(({ path, label }) => (
+          <Link href={path} passHref key={label}>
+            <ListItem button key={label} component="a">
+              <ListItemIcon>{renderIcon(label)}</ListItemIcon>
+              <ListItemText primary={label} />
             </ListItem>
           </Link>
         ))}
