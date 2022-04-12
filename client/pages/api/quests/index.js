@@ -5,11 +5,8 @@ import { getSession } from "next-auth/react";
 import prisma from "../../../lib/prisma";
 import { step1Validations, step2Validations } from "../../../validations/quest";
 
-function computeIfJoined(quests, role) {
+function computeIfJoined(quests) {
   const computed = [];
-  if (role === "mentor") {
-    return quests.map((quest) => ({ ...quest, canJoin: false }));
-  }
 
   let canJoin;
   quests.forEach((item) => {
@@ -43,6 +40,7 @@ async function getQuests(req, res) {
             deletedAt: null,
           },
         },
+
         // OR: [
         //   // {
         //   //   visibility: "PUBLIC",
@@ -69,7 +67,7 @@ async function getQuests(req, res) {
         },
       },
     });
-    const computed = computeIfJoined(quests, user.role);
+    const computed = computeIfJoined(quests);
     return res.status(200).json(computed);
   } catch (error) {
     console.error(error);

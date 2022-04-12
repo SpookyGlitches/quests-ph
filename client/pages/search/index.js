@@ -4,6 +4,7 @@ import {
   Box,
   Container,
   IconButton,
+  Stack,
   TextField,
   ToggleButton,
   ToggleButtonGroup,
@@ -29,7 +30,7 @@ export default function Search() {
   const renderResults = () => {
     switch (selectedItem) {
       case "quests":
-        return <QuestsList hasJoined={false} />;
+        return <QuestsList url="/quests" />;
       default:
         return <div>😀</div>;
     }
@@ -37,75 +38,60 @@ export default function Search() {
 
   return (
     <Container maxWidth="md">
-      <Box
-        sx={{
-          display: "flex",
-          backgroundColor: "background.paper",
-          borderRadius: 1,
-        }}
-      >
-        <TextField
-          label="Search"
-          variant="outlined"
-          size="small"
-          sx={{ flexGrow: 1, display: "flex" }}
-          InputProps={{
-            endAdornment: (
-              <IconButton>
-                <SearchRoundedIcon />
-              </IconButton>
-            ),
-          }}
-        />
-      </Box>
-      <ToggleButtonGroup
-        color="primary"
-        value={selectedItem}
-        onChange={handleItemClick}
-        exclusive
-        fullWidth
-        sx={{ mt: 2 }}
-      >
-        {["Articles", "Quests", "Users", "Posts", "Mentors"].map((item) => (
-          <ToggleButton
-            key={item}
-            value={item.toLowerCase()}
-            sx={{
-              backgroundColor: "background.paper",
-              "&.Mui-selected .MuiTypography-body2": {
-                fontWeight: "medium",
-              },
-            }}
-            size="small"
-            fullWidth
-          >
-            <Typography variant="body2">{item}</Typography>
-          </ToggleButton>
-        ))}
-      </ToggleButtonGroup>
-
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          marginTop: "1rem",
-        }}
-      >
+      <Stack spacing={2}>
         <Box
           sx={{
-            width: {
-              xs: "100%",
-              md: "90%",
-            },
-            flexDirection: "column",
-            alignItems: "center",
             display: "flex",
-            gap: 2,
+            backgroundColor: "background.paper",
           }}
         >
-          {renderResults()}
+          <TextField
+            label="Search"
+            variant="outlined"
+            size="small"
+            sx={{ flexGrow: 1, display: "flex" }}
+            InputProps={{
+              endAdornment: (
+                <IconButton>
+                  <SearchRoundedIcon />
+                </IconButton>
+              ),
+            }}
+          />
         </Box>
-      </Box>
+        <ToggleButtonGroup
+          color="primary"
+          value={selectedItem}
+          onChange={handleItemClick}
+          exclusive
+          fullWidth
+          sx={{
+            flexWrap: {
+              xs: "wrap",
+              sm: "nowrap",
+            },
+          }}
+        >
+          {["Articles", "Quests", "Users", "Posts", "Mentors"].map((item) => (
+            <ToggleButton
+              key={item}
+              value={item.toLowerCase()}
+              sx={{
+                backgroundColor: "background.paper",
+                "&.Mui-selected .MuiTypography-body2": {
+                  fontWeight: "medium",
+                },
+              }}
+              size="small"
+              fullWidth
+            >
+              <Typography variant="body2">{item}</Typography>
+            </ToggleButton>
+          ))}
+        </ToggleButtonGroup>
+
+        <Box sx={{ py: 4 }}>{renderResults()}</Box>
+      </Stack>
     </Container>
   );
 }
