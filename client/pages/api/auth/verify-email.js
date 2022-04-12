@@ -7,6 +7,7 @@ export default async function (req, res) {
     const findToken = await prisma.user.findFirst({
       where: {
         email: userDetails.email,
+        deletedAt: null,
       },
     });
     const transporter = nodemailer.createTransport({
