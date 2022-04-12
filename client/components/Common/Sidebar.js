@@ -5,6 +5,8 @@ import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
+import ConnectWithoutContactRoundedIcon from "@mui/icons-material/ConnectWithoutContactRounded";
+
 import {
   List,
   ListItem,
@@ -16,9 +18,17 @@ import {
   Toolbar,
 } from "@mui/material";
 
+const mentorSidebar = [
+  "Home",
+  "Quests",
+  "Requests",
+  "Articles",
+  "Friends",
+  "Chats",
+];
+const memberSidebar = ["Home", "Quests", "Articles", "Friends", "Chats"];
 const Sidebar = (props) => {
-  const { window, drawerWidth, handleDrawerToggle, mobileOpen } = props;
-
+  const { window, drawerWidth, handleDrawerToggle, mobileOpen, role } = props;
   // eslint-disable-next-line consistent-return
   const renderIcon = (text) => {
     switch (text) {
@@ -26,6 +36,8 @@ const Sidebar = (props) => {
         return <HomeRoundedIcon />;
       case "Quests":
         return <MapRoundedIcon />;
+      case "Requests":
+        return <ConnectWithoutContactRoundedIcon />;
       case "Articles":
         return <ArticleRoundedIcon />;
       case "Friends":
@@ -44,25 +56,31 @@ const Sidebar = (props) => {
       <Divider />
       {/* something app logo/profile should be here */}
       <List>
-        {[
-          // search, notifs, and profile i balhin nalang siguro sa app bar?
-          "Home",
-          "Quests",
-          "Articles",
-          "Friends",
-          "Chats",
-        ].map((text) => (
-          <Link
-            href={`/${text.replace(/ /g, "").toLowerCase()}`}
-            passHref
-            key={text}
-          >
-            <ListItem button key={text} component="a">
-              <ListItemIcon>{renderIcon(text)}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          </Link>
-        ))}
+        {role === "mentor"
+          ? mentorSidebar.map((text) => (
+              <Link
+                href={`/${text.replace(/ /g, "").toLowerCase()}`}
+                passHref
+                key={text}
+              >
+                <ListItem button key={text} component="a">
+                  <ListItemIcon>{renderIcon(text)}</ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItem>
+              </Link>
+            ))
+          : memberSidebar.map((text) => (
+              <Link
+                href={`/${text.replace(/ /g, "").toLowerCase()}`}
+                passHref
+                key={text}
+              >
+                <ListItem button key={text} component="a">
+                  <ListItemIcon>{renderIcon(text)}</ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItem>
+              </Link>
+            ))}
       </List>
     </div>
   );
