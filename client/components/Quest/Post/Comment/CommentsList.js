@@ -4,7 +4,12 @@ import { useSession } from "next-auth/react";
 import axios from "axios";
 import CommentItem from "./CommentItem";
 
-export default function CommmentsList({ questId, postId, setUpdating }) {
+export default function CommmentsList({
+  questId,
+  postId,
+  commentFormRef,
+  setUpdating,
+}) {
   const { data: comments, mutate: mutateComments } = useSWR(
     questId && postId ? `/quests/${questId}/posts/${postId}/comments` : null,
   );
@@ -30,6 +35,8 @@ export default function CommmentsList({ questId, postId, setUpdating }) {
   };
 
   const editComment = (commentId, content) => {
+    commentFormRef.current.scrollIntoView();
+
     setUpdating({
       isUpdating: true,
       comment: {
