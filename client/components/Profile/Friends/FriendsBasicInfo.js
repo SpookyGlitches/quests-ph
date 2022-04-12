@@ -1,5 +1,6 @@
 import { Box, Avatar, Typography } from "@mui/material";
 import useSWR from "swr";
+import VerifiedUserRoundedIcon from "@mui/icons-material/VerifiedUserRounded";
 
 export default function FriendsBasicInfo({ userId }) {
   const { data: friendInfos } = useSWR(
@@ -16,6 +17,7 @@ export default function FriendsBasicInfo({ userId }) {
       />
     );
   }
+
   const letter = friendInfos.displayName.charAt(0);
   return (
     <Box
@@ -38,15 +40,27 @@ export default function FriendsBasicInfo({ userId }) {
       >
         {letter}
       </Avatar>
-      <Typography
-        color="primary"
-        variant="h5"
-        justifyContent="center"
-        align="center"
-        sx={{ wordBreak: "break-all" }}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          flexWrap: "wrap",
+        }}
       >
-        {friendInfos.displayName}
-      </Typography>
+        <Typography
+          color="primary"
+          variant="h5"
+          justifyContent="center"
+          align="center"
+          sx={{ wordBreak: "break-all", ml: 1 }}
+        >
+          {friendInfos.displayName}
+        </Typography>
+        {friendInfos.isActive === "1" && friendInfos.role === "mentor" ? (
+          <VerifiedUserRoundedIcon color="primary" sx={{ ml: 1 }} />
+        ) : null}
+      </div>
+
       <Typography variant="body2">{friendInfos.fullName}</Typography>
     </Box>
   );

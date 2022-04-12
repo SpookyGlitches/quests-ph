@@ -1,7 +1,23 @@
 import { Box, Avatar, Typography } from "@mui/material";
+import VerifiedUserRoundedIcon from "@mui/icons-material/VerifiedUserRounded";
+import useSWR from "swr";
+export default function BasicInfo({ userId }) {
+  const { data: myInfo } = useSWR(
+    userId ? `/profile/${userId}/friendInfo` : null,
+  );
+  if (!myInfo) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      />
+    );
+  }
 
-export default function BasicInfo({ displayName, fullName }) {
-  const letter = displayName.charAt(0).toUpperCase();
+  const letter = myInfo.displayName.charAt(0).toUpperCase();
   return (
     <Box
       sx={{
@@ -23,16 +39,28 @@ export default function BasicInfo({ displayName, fullName }) {
       >
         {letter}
       </Avatar>
-      <Typography
-        color="primary"
-        variant="h5"
-        justifyContent="center"
-        align="center"
-        sx={{ wordBreak: "break-all" }}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          flexWrap: "wrap",
+        }}
       >
-        {displayName}
-      </Typography>
-      <Typography variant="body2">{fullName}</Typography>
+        <Typography
+          color="primary"
+          variant="h5"
+          justifyContent="center"
+          align="center"
+          sx={{ wordBreak: "break-all", ml: 1 }}
+        >
+          {myInfo.displayName}
+        </Typography>
+        {myInfo.isActive === "1" && myInfo.role === "mentor" ? (
+          <VerifiedUserRoundedIcon color="primary" sx={{ ml: 1 }} />
+        ) : null}
+      </div>
+
+      <Typography variant="body2">{myInfo.fullName}</Typography>
     </Box>
   );
 }
