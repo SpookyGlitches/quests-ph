@@ -10,13 +10,10 @@ import FriendsQuestList from "../../../components/Profile/Friends/FriendsQuestsL
 import AccessDenied from "../../../components/Error/AccessDenied";
 import prisma from "../../../lib/prisma";
 
-export default function FriendsProfile({ findEmail }) {
+export default function FriendsProfile() {
   const router = useRouter();
   const { data: session } = useSession();
   const { userId } = router.query;
-  if (findEmail === null) {
-    router.push("/noData");
-  }
 
   if (session) {
     return (
@@ -64,5 +61,15 @@ export async function getServerSideProps({ params }) {
       deletedAt: null,
     },
   });
-  return { props: { findEmail: JSON.parse(JSON.stringify(findEmail)) } };
+
+  if (findEmail === null) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/noData",
+      },
+    };
+  }
+
+  return { props: { message: `Success` } };
 }
