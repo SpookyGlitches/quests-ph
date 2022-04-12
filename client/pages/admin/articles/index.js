@@ -5,7 +5,7 @@ import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import * as React from "react";
 import useSWR from "swr";
 import Link from "next/link";
-import BasicTable from "../../../components/Admin/Table/DataTable";
+import BasicTable from "../../../components/Admin/Table/ArticleTable";
 import AdminLayout from "../../../components/Layouts/AdminLayout";
 
 export default function Index() {
