@@ -10,7 +10,6 @@ export default async function handler(req, res) {
     const data = await s3Client.send(new DeleteObjectCommand(bucketParams));
     res.status(200).json(data);
   } catch (err) {
-    console.log("Error", err);
     res.status(500).send();
   }
 }

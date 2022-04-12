@@ -102,7 +102,13 @@ export default function Step3({
       array.splice(value, 1);
       arrayTwo.splice(value, 1);
       const deleteURL = `/api/auth/mentordelete?key=${valueToBeDeleted}`;
-      await axios.get(deleteURL);
+      try {
+        await axios.get(deleteURL);
+      } catch (err) {
+        if (err.response.status === 500) {
+          enqueueSnackbar("Error in deletion!");
+        }
+      }
     }
     setUploadedFiles([...array]);
     setKeyArr([...arrayTwo]);
@@ -153,7 +159,7 @@ export default function Step3({
       ) : (
         console.log("")
       )}
-      {console.log(uploadedFiles)}
+
       <Typography style={{ fontSize: "12px" }}>
         Upload supporting documents here (.pdf, .docx, .png, .jpg)
       </Typography>
