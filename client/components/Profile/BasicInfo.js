@@ -1,6 +1,7 @@
 import { Box, Avatar, Typography } from "@mui/material";
 import VerifiedUserRoundedIcon from "@mui/icons-material/VerifiedUserRounded";
 import useSWR from "swr";
+
 export default function BasicInfo({ userId }) {
   const { data: myInfo } = useSWR(
     userId ? `/profile/${userId}/friendInfo` : null,
