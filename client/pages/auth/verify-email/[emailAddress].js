@@ -2,6 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import { Button, Stack, Typography, Box, Link as MuiLink } from "@mui/material";
 import { useRouter } from "next/router";
+import { getSession } from "next-auth/react";
 import AuthLayout from "../../../components/Layouts/AuthLayout";
 import AuthHeader from "../../../components/Auth/AuthHeader";
 
@@ -59,4 +60,21 @@ export default function VerifyEmail() {
       </Stack>
     </AuthLayout>
   );
+}
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  if (session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: { session },
+  };
 }

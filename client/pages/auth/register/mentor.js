@@ -21,6 +21,7 @@ import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 // eslint-disable-next-line
 import Router from "next/router";
 import axios from "axios";
+import { getSession } from "next-auth/react";
 import AuthHeader from "../../../components/Auth/AuthHeader";
 import AuthLayout from "../../../components/Layouts/AuthLayout";
 import Step1 from "../../../components/Registration/Step1";
@@ -196,3 +197,20 @@ const MentorRegistrationForm = () => {
 };
 
 export default MentorRegistrationForm;
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  if (session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: { session },
+  };
+}
