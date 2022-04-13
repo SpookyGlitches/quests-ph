@@ -9,7 +9,7 @@ import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import BasicTable from "../../../components/Admin/Table/DataTable";
+import BasicTable from "../../../components/Admin/Table/UsersTable";
 import AdminLayout from "../../../components/Layouts/AdminLayout";
 
 export default function Index() {

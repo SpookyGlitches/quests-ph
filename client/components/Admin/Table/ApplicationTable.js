@@ -2,12 +2,8 @@ import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 import axios from "axios";
-import { useSWRConfig } from "swr";
-import { useRouter } from "next/router";
 
 export default function AdminDataGrid({ tableData, page, path }) {
-  const { mutate } = useSWRConfig();
-  const router = useRouter();
   // eslint-disable-next-line
   const handleClick = (event, cellValues) => {
     console.log(event);

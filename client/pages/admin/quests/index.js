@@ -5,7 +5,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import useSWR from "swr";
 import * as React from "react";
-import DataTable from "../../../components/Admin/Table/DataTable";
+import DataTable from "../../../components/Admin/Table/QuestsTable";
 import AdminLayout from "../../../components/Layouts/AdminLayout";
 
 export default function Index() {
