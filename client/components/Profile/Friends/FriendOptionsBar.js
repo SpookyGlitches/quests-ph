@@ -151,8 +151,6 @@ export default function FriendsOptionsBar({
           },
         })
         .then((response) => {
-          console.log(response.data.avail.length);
-          console.log(response.data.hasMentor.length);
           if (
             response.data.avail.length === 0 &&
             response.data.hasMentor.length === 0
