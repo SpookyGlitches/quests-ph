@@ -26,7 +26,7 @@ export default async function GetMyQuestsListActive(req, res) {
         const getPtMember = await prisma.partyMember.findMany({
           where: {
             userId: user.userId,
-            deletedAt: null, //user hasn't left the party
+            deletedAt: null, // user hasn't left the party
           },
         });
         if (getPtMember) {
