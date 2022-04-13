@@ -98,6 +98,7 @@ export default function Index() {
             margin: "2rem",
           }}
           page="quests"
+          path="new"
         />
       </Box>
     </AdminLayout>
