@@ -91,8 +91,8 @@ export default function MentorNotFriendOptionsBar({
               userId,
               values,
             },
-          }) // eslint-disable-next-line
-            .then((res) => {
+          })
+            .then(() => {
               enqueueSnackbar("You have reported this user!");
             })
             .catch((error) => {
