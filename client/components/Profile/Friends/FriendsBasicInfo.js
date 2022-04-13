@@ -18,7 +18,7 @@ export default function FriendsBasicInfo({ userId }) {
     );
   }
 
-  const letter = friendInfos.displayName.charAt(0);
+  const letter = friendInfos.displayName.charAt(0).toUpperCase();
   return (
     <Box
       sx={{
