@@ -1,17 +1,26 @@
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
+import axios from "axios";
+import { useRouter } from "next/router";
 
 export default function AdminDataGrid({ tableData, page }) {
-  // eslint-disable-next-line
-  const handleClick = (event, cellValues) => {
-    console.log(event);
-    console.log(cellValues);
+  const router = useRouter();
+  /* Users Mgmt */
+
+  const handleDeleteUser = async (event, cellValues) => {
+    try {
+      const res = await axios.put(
+        `/api/admin/users/${cellValues.row.userId}/deleteUser`,
+      );
+      router.reload();
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  // Users Mgmt
-
-  /* Applications Mgmt */
+  // Applications Mgmt
 
   // Articles Mgmt
 
@@ -58,7 +67,7 @@ export default function AdminDataGrid({ tableData, page }) {
               variant="contained"
               color="primary"
               onClick={(event) => {
-                handleClick(event, cellValues);
+                handleDeleteUser(event, cellValues);
               }}
             >
               Delete
