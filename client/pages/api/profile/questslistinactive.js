@@ -14,6 +14,7 @@ export default async function GetMyQuestsListInactive(req, res) {
       const getQuests = await prisma.quest.findMany({
         where: {
           userId: user.userId,
+          deletedAt: null,
           NOT: {
             completedAt: null,
           },
@@ -27,6 +28,7 @@ export default async function GetMyQuestsListInactive(req, res) {
         const getPtMember = await prisma.partyMember.findMany({
           where: {
             userId: user.userId,
+            deletedAt: null, //user hasn't left the party
           },
         });
         if (getPtMember) {
@@ -44,6 +46,7 @@ export default async function GetMyQuestsListInactive(req, res) {
           const getFinalQuests = await prisma.quest.findMany({
             where: {
               questId: uniqueQuestsId[x],
+              deletedAt: null,
               NOT: {
                 completedAt: null,
               },
