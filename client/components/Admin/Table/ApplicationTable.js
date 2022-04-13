@@ -2,8 +2,10 @@ import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 export default function AdminDataGrid({ tableData, page, path }) {
+  const router = useRouter();
   // eslint-disable-next-line
   const handleClick = (event, cellValues) => {
     console.log(event);
@@ -17,6 +19,7 @@ export default function AdminDataGrid({ tableData, page, path }) {
       const res = await axios.put(
         `/api/admin/applications/${cellValues.row.mentorId}/approveApplication`,
       );
+      router.reload();
       console.log(res);
     } catch (error) {
       console.log(error);
@@ -29,6 +32,7 @@ export default function AdminDataGrid({ tableData, page, path }) {
       const res = await axios.put(
         `/api/admin/applications/${cellValues.row.mentorId}/rejectApplication`,
       );
+      router.reload();
       // Probs gonna add something like sending an email then requiring them to send again.
       console.log(res);
     } catch (error) {
