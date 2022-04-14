@@ -12,11 +12,6 @@ export default async function ShowArticles(req, res) {
         approvedAt: "desc",
       },
     });
-    // for (let x = 0; x < findArticles.length; x++) {
-    //   urlArr[x] = findArticles[x].link;
-    //   // eslint-disable-next-line
-    //   await scrape(urlArr[x]);
-    // }
     return res.status(200).json(findArticles);
   }
   return res.status(404).json({ message: "Method not allowed " });
