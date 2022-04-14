@@ -84,7 +84,6 @@ async function getQuests(req, res) {
         },
       },
     });
-    console.log(quests);
     const computed = computeIfJoined(quests);
     return res.status(200).json(computed);
   } catch (error) {
