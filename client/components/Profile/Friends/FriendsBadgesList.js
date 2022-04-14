@@ -91,7 +91,6 @@ export default function FriendsBadgesList({ userId }) {
 
   const badgeItems = () => {
     const preview = temp.slice(pagination.start, pagination.end + 1);
-
     return preview.map((item) => (
       <Box
         key={`${item}`}
@@ -101,7 +100,7 @@ export default function FriendsBadgesList({ userId }) {
           height: "5rem",
           cursor: "pointer",
           width: "5rem",
-          backgroundImage: `url(${item.image})`, // img url goes here
+          backgroundImage: `url(/badges/${item.image})`, // img url goes here
           borderRadius: "50%",
           fontSize: "12px",
           color: "transparent", // to hide the item.name below cz im using innerhtml ehehe
