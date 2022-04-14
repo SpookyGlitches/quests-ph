@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { CssBaseline, Box, Toolbar, Container } from "@mui/material";
+import { useSession } from "next-auth/react";
 import Navbar from "../Common/Navbar";
 import Sidebar from "../Common/Sidebar";
 
@@ -7,7 +8,7 @@ const drawerWidth = 240;
 
 const AppLayout = ({ children }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
-
+  const { data: session } = useSession();
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -23,6 +24,7 @@ const AppLayout = ({ children }) => {
         drawerWidth={drawerWidth}
         mobileOpen={mobileOpen}
         handleDrawerToggle={handleDrawerToggle}
+        userRole={session?.user?.role}
       />
       <Box
         component="main"

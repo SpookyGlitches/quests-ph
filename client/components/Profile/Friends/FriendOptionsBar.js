@@ -153,15 +153,20 @@ export default function FriendsOptionsBar({
           },
         })
         .then((response) => {
-          if (response.data.length !== 1) {
+          console.log(response.data.avail.length);
+          console.log(response.data.hasMentor.length);
+          if (
+            response.data.avail.length === 0 &&
+            response.data.hasMentor.length === 0
+          ) {
             axios({
               method: "POST",
               url: `/api/profile/${userId}/mentorrequest`,
               data: {
                 questMentored,
               },
-            }) // eslint-disable-next-line
-              .then((res) => {
+            })
+              .then(() => {
                 enqueueSnackbar("You have sent a request!");
                 setQuestMentored("");
               })
@@ -169,11 +174,17 @@ export default function FriendsOptionsBar({
                 console.log(error);
               });
             setOpenRequest(false);
-          } else {
+          } else if (
+            response.data.avail.length === 1 &&
+            response.data.hasMentor.length === 0
+          ) {
             enqueueSnackbar(
               "This Quest is currently being requested to be mentored! Please choose another Quest!",
             );
-            setOpenRequest(true);
+          } else {
+            enqueueSnackbar(
+              "This Quest is already has a mentor! Please choose another Quest!",
+            );
           }
         });
     } else {
