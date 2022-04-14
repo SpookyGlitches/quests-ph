@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 import axios from "axios";
 import { useRouter } from "next/router";
 
-export default function AdminDataGrid({ tableData, page }) {
+export default function AdminDataGrid({ tableData, page, path }) {
   const router = useRouter();
   /* Users Mgmt */
 
@@ -31,63 +31,119 @@ export default function AdminDataGrid({ tableData, page }) {
   let columns;
   let dataGrid;
   if (page === "users") {
-    // eslint-disable-next-line
+    if (path === "all") {
+      // eslint-disable-next-line
 
-    columns = [
-      {
-        field: "userId",
-        headerName: "User ID",
-        width: 150,
-        headerAlign: "center",
-      },
-      {
-        field: "displayName",
-        headerName: "Username",
-        width: 150,
-        headerAlign: "center",
-      },
-      {
-        field: "fullName",
-        headerName: "Name",
-        width: 150,
-        headerAlign: "center",
-      },
-      {
-        field: "email",
-        headerName: "Email",
-        width: 200,
-        headerAlign: "center",
-      },
-      { field: "role", headerName: "Role", width: 150, headerAlign: "center" },
-      {
-        field: "Action",
-        renderCell: (cellValues) => {
-          return (
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={(event) => {
-                handleDeleteUser(event, cellValues);
-              }}
-            >
-              Delete
-            </Button>
-          );
+      columns = [
+        {
+          field: "userId",
+          headerName: "User ID",
+          width: 150,
+          headerAlign: "center",
         },
-      },
-    ];
-    dataGrid = (
-      <DataGrid
-        sx={{ m: 2 }}
-        rowHeight={120}
-        rows={tableData}
-        getRowId={(row) => row.userId}
-        // getRowId={getRowInput}
-        // eslint-disable next-line
-        columns={columns}
-        pageSize={5}
-      />
-    );
+        {
+          field: "displayName",
+          headerName: "Username",
+          width: 150,
+          headerAlign: "center",
+        },
+        {
+          field: "fullName",
+          headerName: "Name",
+          width: 150,
+          headerAlign: "center",
+        },
+        {
+          field: "email",
+          headerName: "Email",
+          width: 200,
+          headerAlign: "center",
+        },
+        {
+          field: "role",
+          headerName: "Role",
+          width: 150,
+          headerAlign: "center",
+        },
+        {
+          field: "Action",
+          renderCell: (cellValues) => {
+            return (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={(event) => {
+                  handleDeleteUser(event, cellValues);
+                }}
+              >
+                Delete
+              </Button>
+            );
+          },
+        },
+      ];
+      dataGrid = (
+        <DataGrid
+          sx={{ m: 2 }}
+          rowHeight={120}
+          rows={tableData}
+          getRowId={(row) => row.userId}
+          columns={columns}
+          pageSize={5}
+        />
+      );
+    } else {
+      // eslint-disable-next-line
+
+      columns = [
+        {
+          field: "userId",
+          headerName: "User ID",
+          width: 150,
+          headerAlign: "center",
+        },
+        {
+          field: "displayName",
+          headerName: "Username",
+          width: 150,
+          headerAlign: "center",
+        },
+        {
+          field: "fullName",
+          headerName: "Name",
+          width: 150,
+          headerAlign: "center",
+        },
+        {
+          field: "email",
+          headerName: "Email",
+          width: 200,
+          headerAlign: "center",
+        },
+        {
+          field: "role",
+          headerName: "Role",
+          width: 150,
+          headerAlign: "center",
+        },
+        {
+          field: "deletedAt",
+          headerName: "Date Deleted",
+          width: 150,
+          headerAlign: "center",
+        },
+      ];
+      dataGrid = (
+        <DataGrid
+          sx={{ m: 2 }}
+          rowHeight={120}
+          rows={tableData}
+          getRowId={(row) => row.userId}
+          columns={columns}
+          pageSize={5}
+        />
+      );
+    }
   }
 
   return (
@@ -98,16 +154,6 @@ export default function AdminDataGrid({ tableData, page }) {
         textAlign: "center",
       }}
     >
-      {/* <DataGrid
-        sx={{ m: 2 }}
-        rowHeight={120}
-        rows={tableData}
-        getRowId={(row) => row.userId}
-        // getRowId={getRowInput}
-        // eslint-disable next-line
-        columns={columns}
-        pageSize={5}
-      /> */}
       {dataGrid}
     </div>
   );
