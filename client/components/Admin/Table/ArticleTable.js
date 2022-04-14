@@ -6,15 +6,10 @@ import { useRouter } from "next/router";
 
 export default function AdminDataGrid({ tableData, page, path }) {
   const router = useRouter();
-  // eslint-disable-next-line
-  const handleClick = (event, cellValues) => {
-    console.log(event);
-    console.log(cellValues);
-  };
 
   // Users Mgmt
 
-  /* Applications Mgmt */
+  // Applications Mgmt
 
   /* Articles Mgmt */
   // Approve Article
@@ -132,8 +127,6 @@ export default function AdminDataGrid({ tableData, page, path }) {
           rowHeight={120}
           rows={tableData}
           getRowId={(row) => row.articleId}
-          // getRowId={getRowInput}
-          // eslint-disable next-line
           columns={columns}
           pageSize={5}
         />
@@ -191,8 +184,6 @@ export default function AdminDataGrid({ tableData, page, path }) {
           rowHeight={120}
           rows={tableData}
           getRowId={(row) => row.articleId}
-          // getRowId={getRowInput}
-          // eslint-disable next-line
           columns={columns}
           pageSize={5}
         />
@@ -207,16 +198,6 @@ export default function AdminDataGrid({ tableData, page, path }) {
           textAlign: "center",
         }}
       >
-        {/* <DataGrid
-        sx={{ m: 2 }}
-        rowHeight={120}
-        rows={tableData}
-        getRowId={(row) => row.userId}
-        // getRowId={getRowInput}
-        // eslint-disable next-line
-        columns={columns}
-        pageSize={5}
-      /> */}
         {dataGrid}
       </div>
     );

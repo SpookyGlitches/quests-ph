@@ -1,20 +1,11 @@
-// import SearchBar from "../../../components/Admin/Search";
-import { Box, TextField, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Link from "next/link";
 import useSWR from "swr";
-import InputAdornment from "@mui/material/InputAdornment";
-import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import * as React from "react";
 import DataTable from "../../../components/Admin/Table/ApplicationTable";
 import AdminLayout from "../../../components/Layouts/AdminLayout";
 
 export default function Index() {
-  const [search, setSearch] = React.useState("");
-  const handleSearch = (event) => {
-    setSearch(event.target.value);
-    console.log(search);
-  };
-
   const { data: applicationsData, error } = useSWR(
     `/admin/applications/getApprovedApplications`,
   );
@@ -69,33 +60,6 @@ export default function Index() {
           borderRadius: 2,
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "end",
-            flexDirection: "row",
-          }}
-        >
-          {/* <SearchBar /> */}
-          <TextField
-            label="Search"
-            variant="outlined"
-            name="search"
-            value={search}
-            onChange={handleSearch}
-            sx={{
-              borderRadius: 1,
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchRoundedIcon />
-                </InputAdornment>
-              ),
-              disableUnderline: true,
-            }}
-          />
-        </Box>
         <DataTable
           tableData={applicationsData}
           sx={{

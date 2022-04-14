@@ -1,7 +1,4 @@
-import { Box, TextField, Typography } from "@mui/material";
-// import SearchBar from "../../../components/Admin/Search";
-import InputAdornment from "@mui/material/InputAdornment";
-import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import { Box, Typography } from "@mui/material";
 import * as React from "react";
 import useSWR from "swr";
 import Link from "next/link";
@@ -9,12 +6,6 @@ import BasicTable from "../../../components/Admin/Table/ArticleTable";
 import AdminLayout from "../../../components/Layouts/AdminLayout";
 
 export default function Index() {
-  const [search, setSearch] = React.useState("");
-  const handleSearch = (event) => {
-    setSearch(event.target.value);
-    console.log(search);
-  };
-
   const { data: articlesData, error } = useSWR(`/admin/articles/getArticles`);
 
   if (error) {
@@ -65,33 +56,6 @@ export default function Index() {
           borderRadius: 2,
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "end",
-            flexDirection: "row",
-          }}
-        >
-          {/* <SearchBar /> */}
-          <TextField
-            label="Search"
-            variant="outlined"
-            name="search"
-            value={search}
-            onChange={handleSearch}
-            sx={{
-              borderRadius: 1,
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchRoundedIcon />
-                </InputAdornment>
-              ),
-              disableUnderline: true,
-            }}
-          />
-        </Box>
         <Box sx={{ marginTop: "0rem" }}>
           <BasicTable tableData={articlesData} page="articles" path="new" />
         </Box>

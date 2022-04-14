@@ -14,10 +14,15 @@ export default function AdminDataGrid({ tableData, page, path }) {
 
   // Users Mgmt
 
-  /* Applications Mgmt */
-  // Approve Application
+  // Applications Mgmt
+
+  // Articles Mgmt
+
+  // Quests Mgmt
+
+  /* Reports Mgmt */
+  // Approve Report
   const handleApproveReport = async (event, cellValues) => {
-    console.log(cellValues.row.userReportId);
     try {
       const res = await axios.put(
         `/api/admin/reports/${cellValues.row.userReportId}/approveReport`,
@@ -30,7 +35,7 @@ export default function AdminDataGrid({ tableData, page, path }) {
     }
   };
 
-  // Reject Application
+  // Reject Report
   const handleRejectReport = async (event, cellValues) => {
     try {
       const res = await axios.put(
@@ -44,7 +49,7 @@ export default function AdminDataGrid({ tableData, page, path }) {
     }
   };
 
-  // Reject Application
+  // Reject Report
   const handleRemoveBan = async (event, cellValues) => {
     try {
       const res = await axios.put(
@@ -57,11 +62,6 @@ export default function AdminDataGrid({ tableData, page, path }) {
       console.log(error);
     }
   };
-  // Articles Mgmt
-
-  // Quests Mgmt
-
-  // Reports Mgmt
 
   let columns;
   let dataGrid;
@@ -151,8 +151,6 @@ export default function AdminDataGrid({ tableData, page, path }) {
           rowHeight={120}
           rows={tableData}
           getRowId={(row) => row.userReportId}
-          // getRowId={getRowInput}
-          // eslint-disable next-line
           columns={columns}
           pageSize={5}
         />
@@ -241,8 +239,6 @@ export default function AdminDataGrid({ tableData, page, path }) {
           rowHeight={120}
           rows={tableData}
           getRowId={(row) => row.userReportId}
-          // getRowId={getRowInput}
-          // eslint-disable next-line
           columns={columns}
           pageSize={5}
         />
@@ -299,8 +295,6 @@ export default function AdminDataGrid({ tableData, page, path }) {
           rowHeight={120}
           rows={tableData}
           getRowId={(row) => row.userReportId}
-          // getRowId={getRowInput}
-          // eslint-disable next-line
           columns={columns}
           pageSize={5}
         />
@@ -315,16 +309,6 @@ export default function AdminDataGrid({ tableData, page, path }) {
         textAlign: "center",
       }}
     >
-      {/* <DataGrid
-        sx={{ m: 2 }}
-        rowHeight={120}
-        rows={tableData}
-        getRowId={(row) => row.userId}
-        // getRowId={getRowInput}
-        // eslint-disable next-line
-        columns={columns}
-        pageSize={5}
-      /> */}
       {dataGrid}
     </div>
   );

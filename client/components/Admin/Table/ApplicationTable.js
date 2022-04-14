@@ -122,8 +122,6 @@ export default function AdminDataGrid({ tableData, page, path }) {
           rowHeight={120}
           rows={tableData}
           getRowId={(row) => row.mentorApplicationid}
-          // getRowId={getRowInput}
-          // eslint-disable next-line
           columns={columns}
           pageSize={5}
         />
@@ -188,8 +186,6 @@ export default function AdminDataGrid({ tableData, page, path }) {
           rowHeight={120}
           rows={tableData}
           getRowId={(row) => row.mentorApplicationid}
-          // getRowId={getRowInput}
-          // eslint-disable next-line
           columns={columns}
           pageSize={5}
         />
