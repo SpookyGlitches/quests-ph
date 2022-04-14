@@ -4,6 +4,7 @@ import { PartyMemberRole } from "@prisma/client";
 import { getSession } from "next-auth/react";
 import prisma from "../../../lib/prisma";
 import { step1Validations, step2Validations } from "../../../validations/quest";
+import maybeAwardUser from "../../../helpers/badges/startedQuest";
 
 function computeIfJoined(quests, role) {
   const computed = [];
@@ -98,7 +99,8 @@ async function createQuest(req, res) {
     } = req.body;
     const { user } = await getSession({ req });
     await step1Validations.concat(step2Validations).validate({ ...req.body });
-    const quest = await prisma.quest.create({
+    const transactions = [];
+    const insertQuestWithMemberOperation = prisma.quest.create({
       data: {
         wish,
         difficulty,
@@ -118,6 +120,31 @@ async function createQuest(req, res) {
         },
       },
     });
+
+    transactions.push(insertQuestWithMemberOperation);
+
+    if (visibility === "PUBLIC") {
+      const awardData = await maybeAwardUser(user.userId);
+
+      if (awardData) {
+        console.log("User is awarded");
+        const { insertUserBadgeData, insertNotificationData } = awardData;
+        const insertUserBadgeOperation = prisma.userBadge.create({
+          data: insertUserBadgeData,
+        });
+
+        const insertNotificationOperation = prisma.notification.create({
+          data: insertNotificationData,
+        });
+        transactions.push(insertUserBadgeOperation);
+        transactions.push(insertNotificationOperation);
+      } else {
+        console.log("User is not awarded");
+      }
+    }
+
+    const [quest] = await prisma.$transaction(transactions);
+
     return res.status(200).json({ quest });
   } catch (err) {
     console.error(err);
