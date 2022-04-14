@@ -28,7 +28,7 @@ const StyledToggleButton = styled(ToggleButton)(({ theme }) => ({
 export default function Search() {
   const router = useRouter();
   const [text, setText] = useState("");
-  const [searchText] = useDebounce(text, 100);
+  const [searchText] = useDebounce(text, 2000);
   const [selectedItem, setSelectedItem] = useState("QUESTS");
   const [articlesCategory, setArticlesCategory] = useState("HEALTH");
 
