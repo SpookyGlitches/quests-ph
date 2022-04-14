@@ -22,15 +22,29 @@ import CreatePost from "../components/Quest/Post/CreatePost";
 import PostsList from "../components/Quest/Post/PostsList";
 
 function CreatePostModal({ open, setOpen }) {
-  const { data: quests } = useSWR("/quests");
+  const { data: quests } = useSWR(open ? "/quests?" : null);
   const router = useRouter();
   const { control, handleSubmit } = useForm();
-  if (!quests) {
-    return <div>Loading</div>;
-  }
   const navigateToQuest = (values) => {
     router.push(`/quests/${values.quest}/posts/create`);
   };
+
+  const renderMenuItems = () =>
+    quests.map((quest) => {
+      return (
+        <MenuItem
+          value={quest.questId}
+          sx={{
+            minWidth: "100%",
+            maxWidth: 320,
+          }}
+          key={quest.questId}
+        >
+          {quest.wish}
+        </MenuItem>
+      );
+    });
+
   return (
     <Dialog maxWidth="sm" fullWidth open={open}>
       <form onSubmit={handleSubmit(navigateToQuest)}>
@@ -54,20 +68,7 @@ function CreatePostModal({ open, setOpen }) {
                   >
                     <InputLabel>Quest</InputLabel>
                     <Select onChange={onChange} value={value} required>
-                      {quests.map((quest) => {
-                        return (
-                          <MenuItem
-                            value={quest.questId}
-                            sx={{
-                              minWidth: "100%",
-                              maxWidth: 320,
-                            }}
-                            key={quest.questId}
-                          >
-                            {quest.wish}
-                          </MenuItem>
-                        );
-                      })}
+                      {quests ? renderMenuItems() : null}
                     </Select>
                   </FormControl>
                 )}
@@ -85,12 +86,7 @@ function CreatePostModal({ open, setOpen }) {
 }
 
 export default function Home() {
-  const { data: postIds } = useSWR("/home");
   const [open, setOpen] = useState(false);
-
-  if (!postIds) {
-    return <div>Loading</div>;
-  }
 
   return (
     <>
@@ -104,7 +100,7 @@ export default function Home() {
         }}
       >
         <CreatePost onCreatePostClick={() => setOpen(true)} />
-        <PostsList posts={postIds} />
+        <PostsList url="/home" take={5} />
       </Box>
       <CreatePostModal open={open} setOpen={setOpen} />
     </>

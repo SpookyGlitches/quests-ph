@@ -1,11 +1,9 @@
 import {
   Button,
   Box,
-  Stack,
   Typography,
   TextField,
   FormControl,
-  Pagination,
   Select,
   MenuItem,
   Paper,
@@ -15,7 +13,7 @@ import AddIcon from "@mui/icons-material/Add";
 import AppLayout from "../../components/Layouts/AppLayout";
 import QuestsList from "../../components/Quest/QuestsList";
 
-const Index = () => {
+export default function Index() {
   return (
     <AppLayout>
       <Box p={{ xs: 1, sm: 2, md: 3 }}>
@@ -60,19 +58,10 @@ const Index = () => {
           </Box>
 
           <Box m={2} mp={{ sx: 1, sm: 2, md: 1 }}>
-            <QuestsList url="/quests" />
+            <QuestsList take={5} url="/quests" />
           </Box>
-
-          <Stack
-            p={{ xs: 1, sm: 2, md: 3 }}
-            style={{ width: "33%", margin: "auto" }}
-          >
-            <Pagination variant="outlined" shape="rounded" count={4} />
-          </Stack>
         </Paper>
       </Box>
     </AppLayout>
   );
-};
-
-export default Index;
+}

@@ -359,6 +359,7 @@ model Post {
   comments      Comment[]
   postReacts    PostReact[]
   partyMember   PartyMember @relation(fields: [partyMemberId], references: [partyMemberId])
+  @@fulltext([title,body])
 }
 
 model Comment {

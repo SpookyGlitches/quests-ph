@@ -22,6 +22,26 @@ function computeIfJoined(quests) {
 
 async function getQuests(req, res) {
   const { user } = await getSession({ req });
+  const { searching, search, take, skip, category } = req.query;
+  const parsedSkip = Number(skip) || undefined;
+  const parsedTake = Number(take) || undefined;
+  const filtered = {
+    OR: [
+      {
+        partyMembers: {
+          every: {
+            userId: user.userId,
+            deletedAt: null,
+          },
+        },
+      },
+    ],
+  };
+
+  if (searching === "true") {
+    filtered.OR.push({ visibility: "PUBLIC" });
+  }
+
   try {
     const quests = await prisma.quest.findMany({
       where: {
@@ -35,23 +55,18 @@ async function getQuests(req, res) {
             ],
           },
         },
-        partyMembers: {
-          every: {
-            userId: user.userId,
-            deletedAt: null,
-          },
+        wish: {
+          search,
         },
-
-        // OR: [
-        //   // {
-        //   //   visibility: "PUBLIC",
-        //   // },
-        //   {
-
-        //   },
-        // ],
+        category,
+        AND: [
+          {
+            ...filtered,
+          },
+        ],
       },
-
+      skip: parsedSkip,
+      take: parsedTake,
       select: {
         wish: true,
         estimatedStartDate: true,

@@ -5,14 +5,19 @@ import maybeAwardUserForPost from "../../../../../helpers/badges/createdPost";
 import prisma from "../../../../../lib/prisma";
 
 async function getPosts(req, res) {
+  const { questId, skip, take } = req.query;
+  const parsedSkip = Number(skip);
+  const parsedTake = Number(take);
   try {
     const posts = await prisma.post.findMany({
       orderBy: {
         createdAt: "desc",
       },
+      skip: parsedSkip * parsedTake || undefined,
+      take: parsedTake || undefined,
       where: {
         partyMember: {
-          questId: Number(req.query.questId),
+          questId: Number(questId),
           deletedAt: null, // means the partyMember is still active in the quest
           user: {
             deletedAt: null,

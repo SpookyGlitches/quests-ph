@@ -5,7 +5,8 @@ export default async function handler(req, res) {
   if (req.method !== "GET") {
     return res.status(405).send();
   }
-
+  const skip = Number(req.query.skip) || undefined;
+  const take = Number(req.query.take) || undefined;
   try {
     const { user } = await getSession({ req });
     const associatedQuests = await prisma.partyMember.findMany({
@@ -31,7 +32,25 @@ export default async function handler(req, res) {
           },
           deletedAt: null,
         },
+        AND: [
+          {
+            OR: [
+              {
+                title: {
+                  search: req.query.search,
+                },
+              },
+              {
+                body: {
+                  search: req.query.search,
+                },
+              },
+            ],
+          },
+        ],
       },
+      skip: skip * take,
+      take,
       select: {
         postId: true,
         partyMember: {
@@ -41,7 +60,6 @@ export default async function handler(req, res) {
         },
       },
     });
-
     return res.json(posts);
   } catch (err) {
     console.error(err);
