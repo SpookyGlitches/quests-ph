@@ -1,6 +1,20 @@
 import prisma from "../../lib/prisma";
+import AuthHeader from "../../components/Auth/AuthHeader";
+import AuthLayout from "../../components/Layouts/AuthLayout";
+import GoBackHome from "../../components/Reset/GoBack";
 
-const EmailVerificationPage = () => {
+const EmailVerificationPage = ({ data }) => {
+  if (data === null) {
+    return (
+      <>
+        <AuthLayout>
+          <AuthHeader subtitle="You seem to be lost." />
+          <GoBackHome />
+        </AuthLayout>
+        ;
+      </>
+    );
+  }
   return <div />;
 };
 export async function getServerSideProps({ res, params }) {
@@ -22,7 +36,8 @@ export async function getServerSideProps({ res, params }) {
     res.statusCode = 302;
     res.setHeader("Location", `/auth/login`); // Replace <link> with your url link
   }
-  return { props: { message: `Next.js is awesome` } };
+  const data = JSON.parse(JSON.stringify(findEmail));
+  return { props: { data } };
 }
 
 export default EmailVerificationPage;

@@ -7,13 +7,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import Router from "next/router";
 import { getSession } from "next-auth/react";
+import axios from "axios";
 import AuthHeader from "../../../components/Auth/AuthHeader";
 import AuthLayout from "../../../components/Layouts/AuthLayout";
 import Step1 from "../../../components/Registration/Step1";
 import Step2 from "../../../components/Registration/Step2";
 import { registerUserValidation } from "../../../validations/UserRegistration";
 import SignUpDisclaimer from "../../../components/Registration/SignUpDisclaimer";
-import axios from "axios";
 
 const steps = ["", ""];
 export default function Register() {
