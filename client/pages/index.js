@@ -17,6 +17,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import { useState } from "react";
+import { useSession, getSession } from "next-auth/react";
 import AppLayout from "../components/Layouts/AppLayout";
 import CreatePost from "../components/Quest/Post/CreatePost";
 import PostsList from "../components/Quest/Post/PostsList";
@@ -85,32 +86,49 @@ function CreatePostModal({ open, setOpen }) {
 }
 
 export default function Home() {
-  const { data: postIds } = useSWR("/home");
   const [open, setOpen] = useState(false);
-
-  if (!postIds) {
-    return <div>Loading</div>;
+  const router = useRouter();
+  const { data: session } = useSession();
+  if (session) {
+    // eslint-disable-next-line
+    const { data: postIds } = useSWR("/home");
+    if (!postIds) {
+      return <div>Loading</div>;
+    }
+    return (
+      <AppLayout>
+        <Box
+          sx={{
+            width: {
+              xs: "100%",
+              lg: "80%",
+              xl: "70%",
+            },
+          }}
+        >
+          <CreatePost onCreatePostClick={() => setOpen(true)} />
+          <PostsList posts={postIds} />
+        </Box>
+        <CreatePostModal open={open} setOpen={setOpen} />
+      </AppLayout>
+    );
   }
-
   return (
     <>
-      <Box
-        sx={{
-          width: {
-            xs: "100%",
-            lg: "80%",
-            xl: "70%",
-          },
-        }}
-      >
-        <CreatePost onCreatePostClick={() => setOpen(true)} />
-        <PostsList posts={postIds} />
-      </Box>
-      <CreatePostModal open={open} setOpen={setOpen} />
+      landing page ~ not signed in <br />
+      <Button onClick={() => router.push("/auth/login")}>Sign In</Button>
     </>
   );
 }
 
-Home.getLayout = function getLayout(page) {
-  return <AppLayout>{page}</AppLayout>;
-};
+// Home.getLayout = function getLayout(page) {
+//   return {page}</AppLayout>;
+// };
+
+export async function getServerSideProps(context) {
+  return {
+    props: {
+      session: await getSession(context),
+    },
+  };
+}
