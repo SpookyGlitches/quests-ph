@@ -39,9 +39,19 @@ export default function Search() {
   const renderResults = () => {
     switch (selectedItem) {
       case "QUESTS":
-        return <QuestsList url="/quests" take={2} search={searchText} />;
+        return (
+          <QuestsList
+            url="/quests"
+            searchParams={{ take: 5, search: searchText }}
+          />
+        );
       case "POSTS":
-        return <PostsList url="/home" take={2} search={searchText} />;
+        return (
+          <PostsList
+            url="/home"
+            searchParams={{ take: 5, search: searchText }}
+          />
+        );
       case "ARTICLES":
         return <Articles category={articlesCategory} search={searchText} />;
       default:

@@ -5,19 +5,16 @@ import Post from "./Post";
 import LoadMore from "../../Common/LoadMore";
 
 function PostPage(props) {
-  const { url, take, skip, search, setHasMore, setLoading } = props;
-  const withSearch = search ? `&search=${search}` : "";
-  const isValidUrl = url && take && skip >= 0;
-  const { data: posts } = useSWR(
-    isValidUrl ? `${url}?take=${take}&skip=${skip}${withSearch}` : null,
-  );
+  const { url, skip, setHasMore, setLoading, searchParams } = props;
+  const queryString = new URLSearchParams({ ...searchParams, skip }).toString();
+  const { data: posts } = useSWR(url ? `${url}?${queryString}` : null);
 
   if (!posts) {
     setLoading(true);
     return <div>Loading</div>;
   }
 
-  if (posts.length < take) {
+  if (posts.length < searchParams.take) {
     setHasMore(false);
   }
 
@@ -28,21 +25,19 @@ function PostPage(props) {
   });
 }
 
-const PostsList = ({ url, take, search }) => {
+const PostsList = ({ url, searchParams }) => {
   const [count, setCount] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(true);
-  const searchText = search && search.length ? search : undefined;
   const postPages = [];
 
   for (let i = 0; i < count; i++) {
     postPages.push(
       <PostPage
         url={url}
-        take={take}
-        search={searchText}
         setHasMore={setHasMore}
         skip={i}
+        searchParams={searchParams}
         key={i}
         setLoading={setLoading}
       />,
@@ -56,7 +51,7 @@ const PostsList = ({ url, take, search }) => {
   useEffect(() => {
     setHasMore(true);
     setCount(1);
-  }, [search, url]);
+  }, [searchParams]);
 
   return (
     <>

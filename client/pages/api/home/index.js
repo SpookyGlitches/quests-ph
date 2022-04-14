@@ -5,8 +5,11 @@ export default async function handler(req, res) {
   if (req.method !== "GET") {
     return res.status(405).send();
   }
-  const skip = Number(req.query.skip) || undefined;
-  const take = Number(req.query.take) || undefined;
+
+  const { take, skip, search } = req.query;
+  const parsedTake = Number(take) || undefined;
+  const parsedSkip = parsedTake * Number(skip) || undefined;
+
   try {
     const { user } = await getSession({ req });
     const associatedQuests = await prisma.partyMember.findMany({
@@ -37,20 +40,20 @@ export default async function handler(req, res) {
             OR: [
               {
                 title: {
-                  search: req.query.search,
+                  search: search || undefined,
                 },
               },
               {
                 body: {
-                  search: req.query.search,
+                  search: search || undefined,
                 },
               },
             ],
           },
         ],
       },
-      skip: skip * take,
-      take,
+      skip: parsedSkip,
+      take: parsedTake,
       select: {
         postId: true,
         partyMember: {

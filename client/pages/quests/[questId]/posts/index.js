@@ -16,7 +16,7 @@ const Index = () => {
   return (
     <div>
       <CreatePost onCreatePostClick={onCreatePostClick} />
-      <PostsList url={url} take={2} />
+      <PostsList url={url} searchParams={{ take: 5 }} />
     </div>
   );
 };

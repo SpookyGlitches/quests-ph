@@ -6,15 +6,17 @@ import prisma from "../../../../../lib/prisma";
 
 async function getPosts(req, res) {
   const { questId, skip, take } = req.query;
-  const parsedSkip = Number(skip);
-  const parsedTake = Number(take);
+
+  const parsedTake = Number(take) || undefined;
+  const parsedSkip = parsedTake * Number(skip) || undefined;
+
   try {
     const posts = await prisma.post.findMany({
       orderBy: {
         createdAt: "desc",
       },
-      skip: parsedSkip * parsedTake || undefined,
-      take: parsedTake || undefined,
+      skip: parsedSkip,
+      take: parsedTake,
       where: {
         partyMember: {
           questId: Number(questId),

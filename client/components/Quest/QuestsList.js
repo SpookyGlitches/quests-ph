@@ -7,27 +7,26 @@ import QuestItem from "./QuestItem";
 import WoopModal from "./WoopModal";
 import LoadMore from "../Common/LoadMore";
 
-function QuestPage({
-  url,
-  take,
-  skip,
-  search,
-  setHasMore,
-  toggleModal,
-  navigateToQuest,
-  setLoading,
-}) {
-  const withSearch = search ? `&search=${search}` : "";
-  const isValidUrl = url && take && skip >= 0;
-  const fullUrl = `${url}?take=${take}&skip=${skip}${withSearch}`;
-  const { data: quests } = useSWR(isValidUrl ? fullUrl : null);
+function QuestPage(props) {
+  const {
+    url,
+    skip,
+    searchParams,
+    setHasMore,
+    toggleModal,
+    navigateToQuest,
+    setLoading,
+  } = props;
+
+  const queryString = new URLSearchParams({ ...searchParams, skip }).toString();
+  const { data: quests } = useSWR(url ? `${url}?${queryString}` : null);
 
   if (!quests) {
     setLoading(true);
     return <div>Loading</div>;
   }
 
-  if (quests.length < take) {
+  if (quests.length < searchParams.take) {
     setHasMore(false);
   }
   setLoading(false);
@@ -44,8 +43,7 @@ function QuestPage({
   });
 }
 
-export default function QuestsList({ url, take, search }) {
-  const searchText = search && search.length ? search : undefined;
+export default function QuestsList({ url, searchParams }) {
   const router = useRouter();
   const [count, setCount] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -106,8 +104,7 @@ export default function QuestsList({ url, take, search }) {
           return (
             <QuestPage
               url={url}
-              take={take}
-              search={searchText}
+              searchParams={searchParams}
               setLoading={setLoading}
               setHasMore={setHasMore}
               toggleModal={toggleModal}

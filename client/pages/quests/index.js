@@ -58,7 +58,7 @@ export default function Index() {
           </Box>
 
           <Box m={2} mp={{ sx: 1, sm: 2, md: 1 }}>
-            <QuestsList take={5} url="/quests" />
+            <QuestsList searchParams={{ take: 5 }} url="/quests" />
           </Box>
         </Paper>
       </Box>

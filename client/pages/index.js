@@ -100,7 +100,7 @@ export default function Home() {
         }}
       >
         <CreatePost onCreatePostClick={() => setOpen(true)} />
-        <PostsList url="/home" take={5} />
+        <PostsList url="/home" searchParams={{ take: 5 }} />
       </Box>
       <CreatePostModal open={open} setOpen={setOpen} />
     </>

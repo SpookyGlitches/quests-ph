@@ -23,8 +23,9 @@ function computeIfJoined(quests) {
 async function getQuests(req, res) {
   const { user } = await getSession({ req });
   const { searching, search, take, skip, category } = req.query;
-  const parsedSkip = Number(skip) || undefined;
   const parsedTake = Number(take) || undefined;
+  const parsedSkip = parsedTake * Number(skip) || undefined;
+  console.log(req.query);
   const filtered = {
     OR: [
       {
@@ -56,7 +57,7 @@ async function getQuests(req, res) {
           },
         },
         wish: {
-          search,
+          search: search || undefined,
         },
         category,
         AND: [
@@ -83,6 +84,7 @@ async function getQuests(req, res) {
         },
       },
     });
+    console.log(quests);
     const computed = computeIfJoined(quests);
     return res.status(200).json(computed);
   } catch (error) {
