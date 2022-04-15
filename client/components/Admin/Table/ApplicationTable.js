@@ -1,15 +1,64 @@
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import axios from "axios";
 import { useRouter } from "next/router";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+
+const openFile = (key) => {
+  const newWindow = window.open(
+    `${process.env.NEXT_PUBLIC_MENTORFILES_BASE_LINK}/${key}`,
+    "_blank",
+    "noopener,noreferrer",
+  );
+  if (newWindow) newWindow.opener = null;
+};
+
+const ListItem = ({ array }) => {
+  const List = array;
+  const listItems = List.map((file) => (
+    <li key={file.mentorApplicationId}>
+      <Button onClick={() => openFile(file.key)}>{file.path}</Button>
+    </li>
+  ));
+  return (
+    <div>
+      <ul>{listItems}</ul>
+    </div>
+  );
+};
 
 export default function AdminDataGrid({ tableData, page, path }) {
+  const [open, setOpen] = React.useState(false);
   const router = useRouter();
+  const [fileArr, setFileArr] = React.useState([]);
+  const [expArr, setExpArr] = React.useState([]);
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   // eslint-disable-next-line
-  const handleClick = (event, cellValues) => {
-    console.log(event);
-    console.log(cellValues);
+  const handleClick = async (event, cellValues) => {
+    try {
+      await axios({
+        method: "get",
+        url: `/api/admin/applications/${cellValues.row.mentorId}/getFiles`,
+      })
+        .then((res) => {
+          setExpArr(res.data.experience);
+          setFileArr(res.data.files);
+          setOpen(true);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   /* Applications Mgmt */
@@ -201,6 +250,31 @@ export default function AdminDataGrid({ tableData, page, path }) {
         textAlign: "center",
       }}
     >
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          Application Information
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <Typography>Experience: {expArr[0]?.experience}</Typography>
+            <Typography>
+              Detailed Experience: {expArr[0]?.detailedExperience}
+            </Typography>
+            <Typography>Supporting Documents:</Typography>
+            <ListItem array={fileArr} />
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} autoFocus>
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
       {dataGrid}
     </div>
   );
