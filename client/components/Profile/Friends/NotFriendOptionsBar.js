@@ -91,8 +91,8 @@ export default function MentorNotFriendOptionsBar({
               userId,
               values,
             },
-          }) // eslint-disable-next-line
-            .then((res) => {
+          })
+            .then(() => {
               enqueueSnackbar("You have reported this user!");
             })
             .catch((error) => {
@@ -119,12 +119,12 @@ export default function MentorNotFriendOptionsBar({
         if (response.data.length !== 1) {
           axios({
             method: "POST",
-            url: `/api/profile/${userId}/addfriend`,
+            url: `/api/profile/${userId}/addFriend`,
             data: {
               userId,
             },
-          }) // eslint-disable-next-line
-            .then((res) => {
+          })
+            .then(() => {
               enqueueSnackbar("You have successfully sent a friend request!");
             })
             .catch((error) => {
@@ -161,8 +161,6 @@ export default function MentorNotFriendOptionsBar({
           },
         })
         .then((response) => {
-          console.log(response.data.avail.length);
-          console.log(response.data.hasMentor.length);
           if (
             response.data.avail.length === 0 &&
             response.data.hasMentor.length === 0

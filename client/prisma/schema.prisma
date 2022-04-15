@@ -124,6 +124,9 @@ model Article {
   category   QuestCategory @default(SOCIAL)
   link       String
   status     ArticleStatus @default(DISAPPROVED)
+  title      String
+  image      String
+  url        String
   createdAt  DateTime      @default(now())
   updatedAt  DateTime?
   approvedAt DateTime?
