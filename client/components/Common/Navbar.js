@@ -109,7 +109,7 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
       <MenuItem
         onClick={() =>
           signOut({
-            callbackUrl: `${window.location.origin}`,
+            callbackUrl: "/landing",
           })
         }
       >

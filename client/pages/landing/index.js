@@ -16,13 +16,13 @@ export default function Index() {
               flexDirection: "column",
             }}
           >
-            <Typography variant="h4">
-              We help individuals achieve their goals through socialization and
-              chu.
+            <Typography variant="h3">
+              We help individuals achieve their goals.
             </Typography>
             <Typography variant="body1" sx={{ marginTop: 6, marginBottom: 4 }}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              We give our users the chance to collaborate with others by either
+              being a mentor or a mentee through the WOOP (Wish, Outcome,
+              Obstacle, Plan) method.
             </Typography>
             <Box
               sx={{
