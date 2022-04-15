@@ -73,6 +73,8 @@ model User {
   requester          FriendRequest[]          @relation("requester")
   requestee          FriendRequest[]          @relation("requestee")
   forgotPassword     ForgotPassword[]
+
+  @@fulltext([displayName, fullName])
 }
 
 model ForgotPassword {

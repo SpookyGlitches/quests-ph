@@ -39,12 +39,12 @@ export default async function handler(req, res) {
           {
             OR: [
               {
-                title: {
+                body: {
                   search: search || undefined,
                 },
               },
               {
-                body: {
+                title: {
                   search: search || undefined,
                 },
               },
@@ -54,6 +54,9 @@ export default async function handler(req, res) {
       },
       skip: parsedSkip,
       take: parsedTake,
+      orderBy: {
+        createdAt: "desc",
+      },
       select: {
         postId: true,
         partyMember: {

@@ -6,31 +6,31 @@ import {
   IconButton,
   Stack,
   TextField,
-  ToggleButton,
   ToggleButtonGroup,
-  Typography,
 } from "@mui/material";
 import { useDebounce } from "use-debounce";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
-import { styled } from "@mui/material/styles";
 import AppLayout from "../../components/Layouts/AppLayout";
 import QuestsList from "../../components/Quest/QuestsList";
 import PostsList from "../../components/Quest/Post/PostsList";
 import Articles from "../../components/Articles/Articles";
+import UsersList from "../../components/Search/UsersList";
+import StyledToggleButton from "../../components/Common/StyledToggleButton";
+import QuestFilters from "../../components/Search/QuestFilters";
+import ArticleFilters from "../../components/Search/ArticleFilters";
 
-const StyledToggleButton = styled(ToggleButton)(({ theme }) => ({
-  backgroundColor: theme.palette.background.paper,
-  "&.Mui-selected .MuiTypography-body2": {
-    fontWeight: "bold",
-  },
-}));
+const questsFilterDefaultValues = {
+  category: ["HEALTH", "SOCIAL", "CAREER"],
+  status: ["ACTIVE", "COMPLETED"],
+};
+const articlesFilterDefaultValues = "HEALTH";
 
 export default function Search() {
   const router = useRouter();
   const [text, setText] = useState("");
   const [searchText] = useDebounce(text, 2000);
   const [selectedItem, setSelectedItem] = useState("QUESTS");
-  const [articlesCategory, setArticlesCategory] = useState("HEALTH");
+  const [filterParams, setFilterParams] = useState(questsFilterDefaultValues);
 
   useEffect(() => {
     if (router.query.selected) setSelectedItem(router.query.selected);
@@ -42,7 +42,12 @@ export default function Search() {
         return (
           <QuestsList
             url="/quests"
-            searchParams={{ take: 5, search: searchText }}
+            searchParams={{
+              take: 5,
+              search: searchText,
+              searching: true,
+              ...filterParams,
+            }}
           />
         );
       case "POSTS":
@@ -53,24 +58,70 @@ export default function Search() {
           />
         );
       case "ARTICLES":
-        return <Articles category={articlesCategory} search={searchText} />;
+        return <Articles category={filterParams} search={searchText} />;
+      case "MENTEES":
+        return (
+          <UsersList
+            url="/users"
+            searchParams={{ take: 5, search: searchText, role: "member" }}
+          />
+        );
+      case "MENTORS":
+        return (
+          <UsersList
+            url="/users"
+            searchParams={{ take: 5, search: searchText, role: "mentor" }}
+          />
+        );
       default:
         return null;
     }
   };
 
+  const resetDefaultValues = (newItem) => {
+    switch (newItem) {
+      case "ARTICLES":
+        setFilterParams(articlesFilterDefaultValues);
+        break;
+      case "QUESTS":
+        setFilterParams(questsFilterDefaultValues);
+        break;
+
+      default:
+        setFilterParams({});
+    }
+  };
   const handleItemClick = (event, newItem) => {
     event.preventDefault();
-    if (newItem) setSelectedItem(newItem);
+    if (!newItem) return;
+    resetDefaultValues(newItem);
+    setSelectedItem(newItem);
   };
 
   const handleSearchChange = (event) => {
     setText(event.target.value);
   };
 
-  const handleCategoryClick = (event, newCategory) => {
-    event.preventDefault();
-    if (newCategory) setArticlesCategory(newCategory);
+  const renderFilters = () => {
+    switch (selectedItem) {
+      case "ARTICLES":
+        return (
+          <ArticleFilters
+            filterParams={filterParams}
+            setFilterParams={setFilterParams}
+          />
+        );
+      case "QUESTS":
+        return (
+          <QuestFilters
+            rootStyles={{ display: "flex", gap: 2, flexWrap: "wrap" }}
+            filterParams={filterParams}
+            setFilterParams={setFilterParams}
+          />
+        );
+      default:
+        return null;
+    }
   };
 
   return (
@@ -114,37 +165,12 @@ export default function Search() {
               size="small"
               fullWidth
             >
-              <Typography variant="body2">{item}</Typography>
+              {item}
             </StyledToggleButton>
           ))}
         </ToggleButtonGroup>
-        {selectedItem === "ARTICLES" && (
-          <ToggleButtonGroup
-            exclusive
-            value={articlesCategory}
-            selected={articlesCategory}
-            color="primary"
-            onChange={handleCategoryClick}
-            sx={{
-              flexWrap: {
-                xs: "wrap",
-                sm: "nowrap",
-              },
-            }}
-          >
-            {["Career", "Health", "Social"].map((category) => {
-              return (
-                <StyledToggleButton
-                  value={category.toUpperCase()}
-                  key={category}
-                  size="small"
-                >
-                  <Typography variant="body2">{category}</Typography>
-                </StyledToggleButton>
-              );
-            })}
-          </ToggleButtonGroup>
-        )}
+
+        {renderFilters()}
 
         <Box sx={{ pt: 3 }}>{renderResults()}</Box>
       </Stack>
