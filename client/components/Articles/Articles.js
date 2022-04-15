@@ -15,7 +15,7 @@ import Link from "next/link";
 import KeyboardDoubleArrowDownRoundedIcon from "@mui/icons-material/KeyboardDoubleArrowDownRounded";
 
 const until = 6;
-export default function Articles({ category }) {
+export default function Articles({ category, search }) {
   const [y, setY] = useState(document.scrollingElement.scrollHeight);
   const [pagination, setPagination] = useState({
     start: 0,
@@ -46,7 +46,9 @@ export default function Articles({ category }) {
   }, [handleNavigation]);
 
   const { data: articles } = useSWR(
-    category ? `/articles/${category}/articlelist` : null,
+    category
+      ? `/articles/${category}/articlelist?search=${search || ""}`
+      : null,
   );
 
   if (!articles) {

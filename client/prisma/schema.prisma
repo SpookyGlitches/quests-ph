@@ -132,6 +132,7 @@ model Article {
   approvedAt DateTime?
   deletedAt  DateTime?
   user       User          @relation(fields: [userId], references: [userId])
+  @@fulltext([title])
 }
 
 model Quest {
