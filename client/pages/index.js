@@ -110,9 +110,9 @@ export default function Home() {
   );
 }
 
-// Home.getLayout = function getLayout(page) {
-//   return {page}</AppLayout>;
-// };
+Home.getLayout = function getLayout(page) {
+  return <AppLayout>{page}</AppLayout>;
+};
 
 export async function getServerSideProps(context) {
   return {

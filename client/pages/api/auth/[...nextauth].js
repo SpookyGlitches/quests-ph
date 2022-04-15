@@ -9,7 +9,6 @@ export default NextAuth({
   cookie: {
     secure: process.env.NODE_ENV && process.env.NODE_ENV === "production",
   },
-  secret: "test",
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60,
