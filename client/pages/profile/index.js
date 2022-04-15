@@ -31,10 +31,7 @@ export default function Profile() {
               gap: 2,
             }}
           >
-            <BasicInfo
-              fullName={session.user.fullName}
-              displayName={session.user.displayName}
-            />
+            <BasicInfo userId={session.user.userId} />
             <BadgesList userId={session.user.userId} />
             <QuestChart />
             <QuestList />

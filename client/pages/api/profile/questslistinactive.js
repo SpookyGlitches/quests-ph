@@ -1,7 +1,7 @@
 import { getSession } from "next-auth/react";
 import prisma from "../../../lib/prisma";
 
-export default async function GetMyQuestsListActive(req, res) {
+export default async function GetMyQuestsListInactive(req, res) {
   const questsVal = [];
   const ptVal = [];
   const questList = [];
@@ -14,7 +14,10 @@ export default async function GetMyQuestsListActive(req, res) {
       const getQuests = await prisma.quest.findMany({
         where: {
           userId: user.userId,
-          completedAt: null,
+          deletedAt: null,
+          NOT: {
+            completedAt: null,
+          },
         },
       });
 
@@ -25,6 +28,7 @@ export default async function GetMyQuestsListActive(req, res) {
         const getPtMember = await prisma.partyMember.findMany({
           where: {
             userId: user.userId,
+            deletedAt: null, // user hasn't left the party
           },
         });
         if (getPtMember) {
@@ -42,7 +46,10 @@ export default async function GetMyQuestsListActive(req, res) {
           const getFinalQuests = await prisma.quest.findMany({
             where: {
               questId: uniqueQuestsId[x],
-              completedAt: null,
+              deletedAt: null,
+              NOT: {
+                completedAt: null,
+              },
             },
           });
           questList.push(getFinalQuests);

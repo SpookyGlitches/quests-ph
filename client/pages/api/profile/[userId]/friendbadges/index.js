@@ -8,6 +8,7 @@ export default async function getFriendBadges(req, res) {
       const getBadges = await prisma.userBadge.findMany({
         where: {
           userId: req.query.userId,
+          deletedAt: null,
         },
       });
       // find badge depending on getBadges.badgeId
