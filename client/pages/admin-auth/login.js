@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { signIn } from "next-auth/react";
+import { signIn, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import AuthHeader from "../../components/Auth/AuthHeader";
 
@@ -122,4 +122,19 @@ export default function AdminLogin() {
       </Stack>
     </Box>
   );
+}
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  if (session.user.role !== "admin") {
+    return {
+      redirect: {
+        destination: "/",
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 }
