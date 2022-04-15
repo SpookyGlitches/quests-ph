@@ -115,9 +115,16 @@ Home.getLayout = function getLayout(page) {
 };
 
 export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/landing",
+      },
+    };
+  }
+
   return {
-    props: {
-      session: await getSession(context),
-    },
+    props: {},
   };
 }
