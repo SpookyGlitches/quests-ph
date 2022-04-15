@@ -61,8 +61,9 @@ export default function SubmitArticles() {
               category: values.category,
               link: values.link,
             },
-          }) // eslint-disable-next-line
-            .then((res) => {
+          })
+            .then(() => {
+              console.log("hello");
               enqueueSnackbar("You have successfully submitted your article!");
             })
             .catch((error) => {
