@@ -12,14 +12,11 @@ import {
 import useSWR from "swr";
 import CircularProgress from "@mui/material/CircularProgress";
 import Link from "next/link";
-import { makeStyles } from "@mui/styles";
 import KeyboardDoubleArrowDownRoundedIcon from "@mui/icons-material/KeyboardDoubleArrowDownRounded";
 
 const until = 6;
 export default function Articles({ category }) {
   const [y, setY] = useState(document.scrollingElement.scrollHeight);
-  // eslint-disable-next-line
-  const [scrollDirection, setScrollDirection] = useState("Null Scroll");
   const [pagination, setPagination] = useState({
     start: 0,
     end: until,
@@ -48,23 +45,10 @@ export default function Articles({ category }) {
     };
   }, [handleNavigation]);
 
-  const useStyles = makeStyles(() => ({
-    media: {
-      height: 140,
-    },
-    content: {
-      padding: 20,
-    },
-    actions: {
-      padding: 12,
-    },
-  }));
-
-  const classes = useStyles();
-
   const { data: articles } = useSWR(
     category ? `/articles/${category}/articlelist` : null,
   );
+
   if (!articles) {
     return (
       <div
@@ -96,25 +80,24 @@ export default function Articles({ category }) {
             >
               {elem.image === undefined ? (
                 <CardMedia
-                  className={classes.media}
                   image="articles/quests-article.png"
                   alt={elem.provider}
                 />
               ) : (
                 <CardMedia
-                  className={classes.media}
+                  sx={{ height: 140 }}
                   image={elem.image}
                   alt={elem.provider}
                 />
               )}
 
-              <CardContent className={classes.content}>
+              <CardContent style={{ padding: 20 }}>
                 <Typography gutterBottom variant="h5" component="div">
                   {elem.title}
                 </Typography>
               </CardContent>
 
-              <CardActions className={classes.actions}>
+              <CardActions style={{ padding: 12 }}>
                 <MuiLink
                   sx={{ cursor: "pointer", ml: 1, mb: 2 }}
                   style={{ textDecoration: "none" }}

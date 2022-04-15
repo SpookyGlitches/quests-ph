@@ -29,24 +29,29 @@ async function getQuests(req, res) {
     const quests = await prisma.quest.findMany({
       where: {
         questPartyBan: {
-          every: {
-            deletedAt: null,
+          none: {
             userId: user.userId,
+            NOT: [
+              {
+                deletedAt: null,
+              },
+            ],
           },
         },
-        OR: [
-          {
-            // used when searching
-            visibility: "PUBLIC",
+        partyMembers: {
+          every: {
+            userId: user.userId,
+            deletedAt: null,
           },
-          {
-            partyMembers: {
-              every: {
-                userId: user.userId,
-              },
-            },
-          },
-        ],
+        },
+        // OR: [
+        //   // {
+        //   //   visibility: "PUBLIC",
+        //   // },
+        //   {
+
+        //   },
+        // ],
       },
 
       select: {

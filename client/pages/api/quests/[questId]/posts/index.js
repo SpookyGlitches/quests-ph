@@ -13,59 +13,18 @@ async function getPosts(req, res) {
       where: {
         partyMember: {
           questId: Number(req.query.questId),
-          deletedAt: null,
+          deletedAt: null, // means the partyMember is still active in the quest
           user: {
             deletedAt: null,
           },
         },
+        deletedAt: null,
       },
       select: {
-        createdAt: true,
-        title: true,
         postId: true,
-        body: true,
-        partyMemberId: true,
         partyMember: {
           select: {
-            user: {
-              select: {
-                userId: true,
-                displayName: true,
-              },
-            },
-            partyMemberId: true,
-          },
-        },
-        comments: {
-          where: {
-            deletedAt: null,
-          },
-          select: {
-            deletedAt: true,
-          },
-        },
-        postReacts: {
-          where: {
-            deletedAt: null,
-            partyMember: {
-              deletedAt: null,
-              user: {
-                deletedAt: null,
-              },
-            },
-          },
-          select: {
-            postReactId: true,
-            type: true,
-            partyMember: {
-              select: {
-                user: {
-                  select: {
-                    userId: true,
-                  },
-                },
-              },
-            },
+            questId: true,
           },
         },
       },

@@ -14,9 +14,9 @@ async function getPost(req, res) {
         partyMemberId: true,
         partyMember: {
           select: {
+            userId: true,
             user: {
               select: {
-                userId: true,
                 displayName: true,
               },
             },
@@ -29,6 +29,15 @@ async function getPost(req, res) {
           },
           select: {
             deletedAt: true,
+          },
+        },
+        postFiles: {
+          select: {
+            key: true,
+            postFileId: true,
+          },
+          where: {
+            deletedAt: null,
           },
         },
         postReacts: {
