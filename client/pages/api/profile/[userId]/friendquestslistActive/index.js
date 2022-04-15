@@ -13,6 +13,7 @@ export default async function GetFriendQuestsListInfo(req, res) {
         where: {
           userId: req.query.userId,
           completedAt: null,
+          deletedAt: null,
         },
       });
 
@@ -23,6 +24,7 @@ export default async function GetFriendQuestsListInfo(req, res) {
         const getPtMember = await prisma.partyMember.findMany({
           where: {
             userId: req.query.userId,
+            deletedAt: null, // user hasn't left the party
           },
         });
         if (getPtMember) {
@@ -41,6 +43,7 @@ export default async function GetFriendQuestsListInfo(req, res) {
             where: {
               questId: uniqueQuestsId[x],
               completedAt: null,
+              deletedAt: null,
             },
           });
           questList.push(getFinalQuests);

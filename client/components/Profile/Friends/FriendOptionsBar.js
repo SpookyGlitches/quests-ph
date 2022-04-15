@@ -120,7 +120,6 @@ export default function FriendsOptionsBar({
     setOpen(false);
   };
   const handleDelete = async () => {
-    // axios here
     setOpen(false);
     await axios({
       method: "put",
@@ -128,8 +127,7 @@ export default function FriendsOptionsBar({
       data: {
         friendshipId,
       },
-      // eslint-disable-next-line
-    }).then((res) => {
+    }).then(() => {
       Router.reload();
     });
   };
@@ -153,15 +151,18 @@ export default function FriendsOptionsBar({
           },
         })
         .then((response) => {
-          if (response.data.length !== 1) {
+          if (
+            response.data.avail.length === 0 &&
+            response.data.hasMentor.length === 0
+          ) {
             axios({
               method: "POST",
               url: `/api/profile/${userId}/mentorrequest`,
               data: {
                 questMentored,
               },
-            }) // eslint-disable-next-line
-              .then((res) => {
+            })
+              .then(() => {
                 enqueueSnackbar("You have sent a request!");
                 setQuestMentored("");
               })
@@ -169,11 +170,17 @@ export default function FriendsOptionsBar({
                 console.log(error);
               });
             setOpenRequest(false);
-          } else {
+          } else if (
+            response.data.avail.length === 1 &&
+            response.data.hasMentor.length === 0
+          ) {
             enqueueSnackbar(
               "This Quest is currently being requested to be mentored! Please choose another Quest!",
             );
-            setOpenRequest(true);
+          } else {
+            enqueueSnackbar(
+              "This Quest is already has a mentor! Please choose another Quest!",
+            );
           }
         });
     } else {
@@ -266,7 +273,7 @@ export default function FriendsOptionsBar({
         <ErrorRoundedIcon sx={{ mr: 1 }} />
         Report
       </Button>
-      <Dialog open={openReport} onClose={handleCloseReport}>
+      <Dialog open={openReport} onClose={handleCloseReport} fullWidth>
         <DialogTitle>Report User</DialogTitle>
 
         <form onSubmit={handleSubmit(onSubmit)}>

@@ -58,6 +58,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
+
 const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
@@ -78,6 +79,10 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
     router.push("/profile");
     setAnchorEl(null);
     handleMobileMenuClose();
+  };
+
+  const navigateToSearchPage = () => {
+    router.push("/search");
   };
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
@@ -109,7 +114,7 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
       <MenuItem
         onClick={() =>
           signOut({
-            callbackUrl: `${window.location.origin}`,
+            callbackUrl: "/landing",
           })
         }
       >
@@ -187,11 +192,17 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
           >
             MUI
           </Typography>
-          <Search>
+          <Search onClick={navigateToSearchPage}>
             <SearchIconWrapper>
               <SearchRoundedIcon />
             </SearchIconWrapper>
             <StyledInputBase
+              sx={{
+                input: {
+                  cursor: "pointer",
+                },
+              }}
+              readOnly
               placeholder="Search…"
               inputProps={{ "aria-label": "search" }}
             />

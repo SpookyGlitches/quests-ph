@@ -12,12 +12,14 @@ import VisibilityOffRoundedIcon from "@mui/icons-material/VisibilityOffRounded";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Router from "next/router";
 import axios from "axios";
+import { getSession } from "next-auth/react";
 import { resetUserPassword } from "../../../validations/ResetPassword";
 import AuthHeader from "../../../components/Auth/AuthHeader";
 import AuthLayout from "../../../components/Layouts/AuthLayout";
 import prisma from "../../../lib/prisma";
 import FilledOut from "../../../components/Reset/FilledOut";
 import LinkExpired from "../../../components/Reset/LinkExpired";
+import GoBackHome from "../../../components/Reset/GoBack";
 
 export default function Reset({ data }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -159,11 +161,26 @@ export default function Reset({ data }) {
       return <FilledOut />;
     }
   } else {
-    return <h2>hi</h2>;
+    return (
+      <AuthLayout>
+        <AuthHeader subtitle="You seem to be lost." />
+        <GoBackHome />
+      </AuthLayout>
+    );
   }
 }
 
-export async function getServerSideProps({ params }) {
+export async function getServerSideProps({ req, params }) {
+  const session = await getSession({ req });
+  if (session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
   const findAccount = await prisma.forgotPassword.findFirst({
     where: {
       token: params.resetToken,

@@ -13,6 +13,7 @@ export default async function getUserQuestList(req, res) {
           where: {
             userId: user.userId,
             completedAt: null,
+            deletedAt: null,
           },
         });
         return res.status(200).json(getQuests);
@@ -21,7 +22,7 @@ export default async function getUserQuestList(req, res) {
       const getQuests = await prisma.quest.findMany({
         where: {
           userId: user.userId,
-          visibility: "PUBLIC",
+          deletedAt: null,
           NOT: {
             completedAt: null,
           },

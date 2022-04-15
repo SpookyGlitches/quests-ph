@@ -9,7 +9,7 @@ export const stepOneMentorValidations = object({
       /^[a-zA-Z0-9]+$/,
       "Your display name should not contain spaces or special characters",
     )
-    .min(4, "Display Name must be at least 6 characters")
+    .min(6, "Display Name must be at least 6 characters")
     .max(20)
     .required(requiredMsg),
   fullName: string().required(requiredMsg).max(20),
@@ -41,7 +41,6 @@ export const stepTwoMentorValidations = object({
 
 export const stepThreeMentorValidations = object({
   experience: mixed().oneOf(["yes", "no"]).required(requiredMsg),
-  detailedExperience: string().required(requiredMsg),
 });
 
 export const MentorRegistration = [

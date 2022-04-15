@@ -1,11 +1,27 @@
 import * as React from "react";
-import { Box, StepLabel, Stack, Stepper, Button, Step } from "@mui/material";
+import {
+  Box,
+  StepLabel,
+  Stack,
+  Stepper,
+  Button,
+  Step,
+  // eslint-disable-next-line
+  Snackbar,
+  // eslint-disable-next-line
+  IconButton,
+  // eslint-disable-next-line
+  CloseIcon,
+} from "@mui/material";
 import Alert from "@mui/material/Alert";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
+// eslint-disable-next-line
 import Router from "next/router";
+import axios from "axios";
+import { getSession } from "next-auth/react";
 import AuthHeader from "../../../components/Auth/AuthHeader";
 import AuthLayout from "../../../components/Layouts/AuthLayout";
 import Step1 from "../../../components/Registration/Step1";
@@ -20,6 +36,8 @@ const MentorRegistrationForm = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [message, setMessage] = useState("");
   const [show, setShow] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [keyArr, setKeyArr] = useState([]);
   // eslint-disable-next-line no-undef
   const currentValidationSchema = MentorRegistration[activeStep];
 
@@ -35,38 +53,41 @@ const MentorRegistrationForm = () => {
       confirmPassword: "",
       experience: " ",
       detailedExperience: "",
-      fileUpload: "",
     },
   });
 
   const { trigger, handleSubmit, control } = methods;
   const here = async (values) => {
-    // eslint-disable-next-line
     try {
-      const res = await fetch("/api/auth/mentoraccounts", {
+      await axios({
         method: "POST",
-        body: JSON.stringify(values),
-      });
-      console.log(res.status);
-      if (res.status === 200) {
+        url: "/api/auth/mentoraccounts",
+        data: {
+          values,
+          uploadedFiles,
+          keyArr,
+        },
+      }).then(() => {
         Router.push({
           pathname: "/auth/verify-email/[emailAddress]",
           query: { emailAddress: values.email },
         });
-      } else if (res.status === 403) {
-        setMessage("Display Name is already in use.");
-        setShow(true);
-      } else if (res.status === 409) {
-        console.log("email");
-        setMessage("Email address is already in use.");
-        setShow(true);
-      } else if (res.status === 400) {
-        console.log("both");
-        setMessage("Display Name and Email Address are already in use.");
-        setShow(true);
-      }
+      });
     } catch (err) {
-      throw err;
+      if (err.response) {
+        if (err.response.status === 403) {
+          setMessage("Display Name is already in use.");
+          setShow(true);
+        } else if (err.response.status === 409) {
+          console.log("email");
+          setMessage("Email address is already in use.");
+          setShow(true);
+        } else if (err.response.status === 400) {
+          console.log("both");
+          setMessage("Display Name and Email Address are already in use.");
+          setShow(true);
+        }
+      }
     }
   };
   const handleNext = async () => {
@@ -107,7 +128,7 @@ const MentorRegistrationForm = () => {
         })}
       </Stepper>
       {activeStep === 0 || activeStep === steps.length ? (
-        <>{console.log("no prev button")}</>
+        <>{console.log("")}</>
       ) : (
         <Button
           color="primary"
@@ -143,7 +164,15 @@ const MentorRegistrationForm = () => {
               <Step1 control={control} memberType="mentor" />
             ) : null}
             {activeStep === 1 ? <Step2 control={control} /> : null}
-            {activeStep === 2 ? <Step3 control={control} /> : null}
+            {activeStep === 2 ? (
+              <Step3
+                control={control}
+                uploadedFiles={uploadedFiles}
+                setUploadedFiles={setUploadedFiles}
+                keyArr={keyArr}
+                setKeyArr={setKeyArr}
+              />
+            ) : null}
           </Stack>
         </form>
       </FormProvider>
@@ -168,3 +197,20 @@ const MentorRegistrationForm = () => {
 };
 
 export default MentorRegistrationForm;
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  if (session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: { session },
+  };
+}
