@@ -7,8 +7,10 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "cd .. && husky install client/.husky",
-    "pre-commit": "yarn eslint . --ext .js --ext .jsx --fix && yarn pretty-quick --staged"
+    "pre-commit": "yarn eslint . --ext .js --ext .jsx --fix && yarn pretty-quick --staged",
+    "seed":"node prisma/seed.js"
   },
+
   "dependencies": {
     "@aws-sdk/client-s3": "^3.55.0",
     "@aws-sdk/s3-request-presigner": "^3.55.0",

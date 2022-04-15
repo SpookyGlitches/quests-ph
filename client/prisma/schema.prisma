@@ -57,10 +57,10 @@ model User {
   questTask          QuestTask[]
   questTaskFinisher  QuestTaskFinisher[]
   message            Message[]
-  notification       Notification[]
+  notifications      Notification[]
+  userBadges         UserBadge[]
   conversationMember ConversationMember[]
   partyMembers       PartyMember[]
-  userBadge          UserBadge[]
   userReporter       UserReport[]             @relation("userReporter")
   userRecipient      UserReport[]             @relation("userRecipient")
   articles           Article[]
@@ -260,11 +260,13 @@ model Conversation {
 }
 
 model Notification {
-  notificationId Int       @id @default(autoincrement())
-  user           User      @relation(fields: [userId], references: [userId])
+  notificationId Int              @id @default(autoincrement())
+  user           User             @relation(fields: [userId], references: [userId])
   userId         String
   message        String
-  createdAt      DateTime  @default(now())
+  type           NotificationType
+  metadata       String?
+  createdAt      DateTime         @default(now())
   deletedAt      DateTime?
 }
 
@@ -409,7 +411,7 @@ enum ReactType {
 }
 
 // NEW END
- 
+
 model PostFile {
   postFileId Int       @id @default(autoincrement())
   postId     Int?
@@ -446,4 +448,8 @@ enum PointsLogAction {
   RECEIVED_POST_REACT
   RECEIVED_COMMENT_REACT
   RECEIVED_POST_COMMENT
+}
+
+enum NotificationType {
+  RECEIVED_BADGE
 }
