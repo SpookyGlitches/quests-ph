@@ -14,6 +14,7 @@ import Step1 from "../../../components/Registration/Step1";
 import Step2 from "../../../components/Registration/Step2";
 import { registerUserValidation } from "../../../validations/UserRegistration";
 import SignUpDisclaimer from "../../../components/Registration/SignUpDisclaimer";
+import HaveAnAccount from "../../../components/Registration/HaveAnAccount";
 
 const steps = ["", ""];
 export default function Register() {
@@ -164,6 +165,7 @@ export default function Register() {
           {activeStep === steps.length - 1 ? <SignUpDisclaimer /> : ""}
         </Stack>
       </Box>
+      <HaveAnAccount />
     </AuthLayout>
   );
 }

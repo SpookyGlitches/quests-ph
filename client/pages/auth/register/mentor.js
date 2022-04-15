@@ -1,24 +1,10 @@
 import * as React from "react";
-import {
-  Box,
-  StepLabel,
-  Stack,
-  Stepper,
-  Button,
-  Step,
-  // eslint-disable-next-line
-  Snackbar,
-  // eslint-disable-next-line
-  IconButton,
-  // eslint-disable-next-line
-  CloseIcon,
-} from "@mui/material";
+import { Box, StepLabel, Stack, Stepper, Button, Step } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
-// eslint-disable-next-line
 import Router from "next/router";
 import axios from "axios";
 import { getSession } from "next-auth/react";
@@ -29,6 +15,7 @@ import Step2 from "../../../components/Registration/Step2";
 import Step3 from "../../../components/Registration/Step3";
 import { MentorRegistration } from "../../../validations/MentorRegistration";
 import SignUpDisclaimer from "../../../components/Registration/SignUpDisclaimer";
+import HaveAnAccount from "../../../components/Registration/HaveAnAccount";
 
 const steps = ["", "", ""];
 
@@ -192,6 +179,7 @@ const MentorRegistrationForm = () => {
           {activeStep === steps.length - 1 ? <SignUpDisclaimer /> : ""}
         </Stack>
       </Box>
+      <HaveAnAccount />
     </AuthLayout>
   );
 };
