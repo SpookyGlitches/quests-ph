@@ -13,6 +13,7 @@ export default async function getFriendQuestChart(req, res) {
       const getQuests = await prisma.quest.findMany({
         where: {
           userId: req.query.userId,
+          deletedAt: null,
           NOT: {
             completedAt: null,
           },
@@ -52,6 +53,7 @@ export default async function getFriendQuestChart(req, res) {
           const getFinalQuests = await prisma.quest.findMany({
             where: {
               questId: uniqueQuestsId[x],
+              deletedAt: null,
               NOT: {
                 completedAt: null,
               },

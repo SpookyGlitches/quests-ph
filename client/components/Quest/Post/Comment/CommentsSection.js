@@ -1,5 +1,5 @@
 import { Divider, Stack } from "@mui/material";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import CommentInput from "./CommentInput";
 import CommentsList from "./CommentsList";
 
@@ -8,6 +8,8 @@ export default function CommentsSection({ postId, questId }) {
     isUpdating: false,
     comment: null,
   });
+  const commentFormRef = useRef(null);
+
   return (
     <Stack spacing={3}>
       <Divider />
@@ -15,10 +17,12 @@ export default function CommentsSection({ postId, questId }) {
         questId={questId}
         postId={postId}
         updating={updating}
+        commentFormRef={commentFormRef}
         setUpdating={setUpdating}
       />
       <CommentInput
         questId={questId}
+        commentFormRef={commentFormRef}
         postId={postId}
         updating={updating}
         setUpdating={setUpdating}

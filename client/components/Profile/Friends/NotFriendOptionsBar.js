@@ -91,8 +91,8 @@ export default function MentorNotFriendOptionsBar({
               userId,
               values,
             },
-          }) // eslint-disable-next-line
-            .then((res) => {
+          })
+            .then(() => {
               enqueueSnackbar("You have reported this user!");
             })
             .catch((error) => {
@@ -119,12 +119,12 @@ export default function MentorNotFriendOptionsBar({
         if (response.data.length !== 1) {
           axios({
             method: "POST",
-            url: `/api/profile/${userId}/addfriend`,
+            url: `/api/profile/${userId}/addFriend`,
             data: {
               userId,
             },
-          }) // eslint-disable-next-line
-            .then((res) => {
+          })
+            .then(() => {
               enqueueSnackbar("You have successfully sent a friend request!");
             })
             .catch((error) => {
@@ -161,15 +161,18 @@ export default function MentorNotFriendOptionsBar({
           },
         })
         .then((response) => {
-          if (response.data.length !== 1) {
+          if (
+            response.data.avail.length === 0 &&
+            response.data.hasMentor.length === 0
+          ) {
             axios({
               method: "POST",
               url: `/api/profile/${userId}/mentorrequest`,
               data: {
                 questMentored,
               },
-            }) // eslint-disable-next-line
-              .then((res) => {
+            })
+              .then(() => {
                 enqueueSnackbar("You have sent a request!");
                 setQuestMentored("");
               })
@@ -177,11 +180,17 @@ export default function MentorNotFriendOptionsBar({
                 console.log(error);
               });
             setOpenRequest(false);
-          } else {
+          } else if (
+            response.data.avail.length === 1 &&
+            response.data.hasMentor.length === 0
+          ) {
             enqueueSnackbar(
               "This Quest is currently being requested to be mentored! Please choose another Quest!",
             );
-            setOpenRequest(true);
+          } else {
+            enqueueSnackbar(
+              "This Quest is already has a mentor! Please choose another Quest!",
+            );
           }
         });
     } else {

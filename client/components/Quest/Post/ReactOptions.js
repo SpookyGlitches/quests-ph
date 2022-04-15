@@ -3,7 +3,7 @@ import StyledToggleButtonGroup from "../../Common/StyledToggleButtonGroup";
 import Emoji from "./Emoji";
 
 export default function ReactOptions(props) {
-  const { open, anchor, setOpen, getSelected, handleReactClick } = props;
+  const { open, anchor, setOpen, selected, handleReactClick } = props;
 
   const closeReactOptions = () => {
     setOpen(false);
@@ -26,7 +26,7 @@ export default function ReactOptions(props) {
       <StyledToggleButtonGroup
         size="small"
         sx={{ margin: 0 }}
-        value={getSelected()?.type}
+        value={selected?.type}
         color="primary"
         exclusive
       >
