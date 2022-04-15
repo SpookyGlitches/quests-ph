@@ -17,21 +17,37 @@ import { Controller, useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import { useState } from "react";
+// eslint-disable-next-line
 import { useSession, getSession } from "next-auth/react";
+// eslint-disable-next-line
 import AppLayout from "../components/Layouts/AppLayout";
 import CreatePost from "../components/Quest/Post/CreatePost";
 import PostsList from "../components/Quest/Post/PostsList";
 
 function CreatePostModal({ open, setOpen }) {
-  const { data: quests } = useSWR("/quests");
+  const { data: quests } = useSWR(open ? "/quests?" : null);
   const router = useRouter();
   const { control, handleSubmit } = useForm();
-  if (!quests) {
-    return <div>Loading</div>;
-  }
   const navigateToQuest = (values) => {
     router.push(`/quests/${values.quest}/posts/create`);
   };
+
+  const renderMenuItems = () =>
+    quests.map((quest) => {
+      return (
+        <MenuItem
+          value={quest.questId}
+          sx={{
+            minWidth: "100%",
+            maxWidth: 320,
+          }}
+          key={quest.questId}
+        >
+          {quest.wish}
+        </MenuItem>
+      );
+    });
+
   return (
     <Dialog maxWidth="sm" fullWidth open={open}>
       <form onSubmit={handleSubmit(navigateToQuest)}>
@@ -55,20 +71,7 @@ function CreatePostModal({ open, setOpen }) {
                   >
                     <InputLabel>Quest</InputLabel>
                     <Select onChange={onChange} value={value} required>
-                      {quests.map((quest) => {
-                        return (
-                          <MenuItem
-                            value={quest.questId}
-                            sx={{
-                              minWidth: "100%",
-                              maxWidth: 320,
-                            }}
-                            key={quest.questId}
-                          >
-                            {quest.wish}
-                          </MenuItem>
-                        );
-                      })}
+                      {quests ? renderMenuItems() : null}
                     </Select>
                   </FormControl>
                 )}
@@ -87,36 +90,22 @@ function CreatePostModal({ open, setOpen }) {
 
 export default function Home() {
   const [open, setOpen] = useState(false);
-  const router = useRouter();
-  const { data: session } = useSession();
-  if (session) {
-    // eslint-disable-next-line
-    const { data: postIds } = useSWR("/home");
-    if (!postIds) {
-      return <div>Loading</div>;
-    }
-    return (
-      <AppLayout>
-        <Box
-          sx={{
-            width: {
-              xs: "100%",
-              lg: "80%",
-              xl: "70%",
-            },
-          }}
-        >
-          <CreatePost onCreatePostClick={() => setOpen(true)} />
-          <PostsList posts={postIds} />
-        </Box>
-        <CreatePostModal open={open} setOpen={setOpen} />
-      </AppLayout>
-    );
-  }
+
   return (
     <>
-      landing page ~ not signed in <br />
-      <Button onClick={() => router.push("/auth/login")}>Sign In</Button>
+      <Box
+        sx={{
+          width: {
+            xs: "100%",
+            lg: "80%",
+            xl: "70%",
+          },
+        }}
+      >
+        <CreatePost onCreatePostClick={() => setOpen(true)} />
+        <PostsList url="/home" searchParams={{ take: 5 }} />
+      </Box>
+      <CreatePostModal open={open} setOpen={setOpen} />
     </>
   );
 }

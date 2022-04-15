@@ -8,15 +8,15 @@ import maybeAwardUser from "../../../helpers/badges/startedQuest";
 
 function computeIfJoined(quests, role) {
   const computed = [];
-  if (role === "mentor") {
-    return quests.map((quest) => ({ ...quest, canJoin: false }));
-  }
 
-  let canJoin;
+  let joined = false;
+  let canJoin = false;
   quests.forEach((item) => {
-    canJoin = item.partyMembers.length === 0;
+    joined = item.partyMembers.length !== 0;
+    canJoin = !joined && role !== "mentor";
     computed.push({
       ...item,
+      joined,
       canJoin,
     });
   });
@@ -25,35 +25,77 @@ function computeIfJoined(quests, role) {
 
 async function getQuests(req, res) {
   const { user } = await getSession({ req });
+  const { searching, search, take, skip, category, status } = req.query;
+
+  const parsedTake = Number(take) || undefined;
+  const parsedSkip = parsedTake * Number(skip) || undefined;
+
+  let withCategory;
+  let withStatus;
+
+  if (category && category.length > 0) {
+    withCategory = {
+      category: {
+        in: category.split(","),
+      },
+    };
+  }
+
+  if (status) {
+    if (status === "COMPLETED") {
+      withStatus = {
+        NOT: [
+          {
+            completedAt: null,
+          },
+        ],
+      };
+    } else if (status === "ACTIVE") {
+      withStatus = {
+        completedAt: null,
+      };
+    }
+  }
+
+  const filtered = {
+    OR: [
+      {
+        partyMembers: {
+          some: {
+            userId: user.userId,
+            deletedAt: null,
+          },
+        },
+      },
+    ],
+  };
+
+  if (searching === "true") {
+    filtered.OR.push({ visibility: "PUBLIC" });
+  }
+
   try {
     const quests = await prisma.quest.findMany({
       where: {
         questPartyBan: {
           none: {
             userId: user.userId,
-            NOT: [
-              {
-                deletedAt: null,
-              },
-            ],
-          },
-        },
-        partyMembers: {
-          every: {
-            userId: user.userId,
             deletedAt: null,
           },
         },
-        // OR: [
-        //   // {
-        //   //   visibility: "PUBLIC",
-        //   // },
-        //   {
-
-        //   },
-        // ],
+        wish: {
+          search: search || undefined,
+        },
+        ...withCategory,
+        ...withStatus,
+        AND: [
+          {
+            ...filtered,
+          },
+        ],
       },
-
+      skip: parsedSkip,
+      take: parsedTake,
       select: {
         wish: true,
         estimatedStartDate: true,
@@ -66,6 +108,7 @@ async function getQuests(req, res) {
           },
           where: {
             userId: user.userId,
+            deletedAt: null,
           },
         },
       },

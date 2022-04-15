@@ -1,19 +1,18 @@
 import { format } from "date-fns";
-import { Typography, Box, Button, Grid } from "@mui/material";
+import { Typography, Box, Paper, Button, Grid } from "@mui/material";
 import ScheduleRoundedIcon from "@mui/icons-material/ScheduleRounded";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
-import StyledPaper from "../Common/StyledPaper";
 
-export default function QuestItem({ onJoinClick, quest, navigate }) {
+export default function QuestItem({ onJoinClick, quest, onClick }) {
   return (
-    <StyledPaper
+    <Paper
       sx={{
         width: "100%",
         height: "auto",
         overflow: "hidden",
         cursor: "pointer",
       }}
-      onClick={navigate}
+      onClick={onClick}
     >
       <Grid container sx={{ minHeight: "6rem" }}>
         <Grid item xs={12} md={2}>
@@ -77,6 +76,6 @@ export default function QuestItem({ onJoinClick, quest, navigate }) {
           </Grid>
         )}
       </Grid>
-    </StyledPaper>
+    </Paper>
   );
 }

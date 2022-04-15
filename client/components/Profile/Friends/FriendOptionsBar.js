@@ -120,7 +120,6 @@ export default function FriendsOptionsBar({
     setOpen(false);
   };
   const handleDelete = async () => {
-    // axios here
     setOpen(false);
     await axios({
       method: "put",
@@ -128,8 +127,7 @@ export default function FriendsOptionsBar({
       data: {
         friendshipId,
       },
-      // eslint-disable-next-line
-    }).then((res) => {
+    }).then(() => {
       Router.reload();
     });
   };
@@ -153,8 +151,6 @@ export default function FriendsOptionsBar({
           },
         })
         .then((response) => {
-          console.log(response.data.avail.length);
-          console.log(response.data.hasMentor.length);
           if (
             response.data.avail.length === 0 &&
             response.data.hasMentor.length === 0

@@ -6,6 +6,7 @@ export default async function getFriendInfo(req, res) {
       const getUserInfo = await prisma.user.findFirst({
         where: {
           userId: req.query.userId,
+          deletedAt: null,
         },
       });
 
