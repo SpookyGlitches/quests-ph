@@ -8,7 +8,6 @@ import {
   MenuItem,
 } from "@mui/material";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
-import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import { useState } from "react";
 import { signOut } from "next-auth/react";
@@ -32,10 +31,6 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -51,12 +46,12 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
         horizontal: "right",
       }}
       open={isMenuOpen}
-      onClick={handleMenuClose}
+      onClose={handleMenuClose}
     >
       <MenuItem
         onClick={() =>
           signOut({
-            callbackUrl: "/admin/login",
+            callbackUrl: "/admin-auth/login",
           })
         }
       >
@@ -81,7 +76,17 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
       }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
-    />
+    >
+      <MenuItem
+        onClick={() =>
+          signOut({
+            callbackUrl: "/admin-auth/login",
+          })
+        }
+      >
+        Log Out
+      </MenuItem>
+    </Menu>
   );
 
   return (
@@ -116,17 +121,15 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
 
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label=""
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
+            <MenuItem
+              onClick={() =>
+                signOut({
+                  callbackUrl: "/admin-auth/login",
+                })
+              }
             >
-              <AccountCircleRoundedIcon />
-            </IconButton>
+              Log Out
+            </MenuItem>
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton

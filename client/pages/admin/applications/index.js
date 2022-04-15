@@ -38,7 +38,7 @@ export default function Index() {
           Applications Page
         </Typography>
         <h2 style={{ color: "white" }}>
-          You have {applicationsData.length} new applications!
+          You have {applicationsData?.length} new applications!
         </h2>
         <Typography sx={{ mt: 2, color: "white", fontSize: "18px" }}>
           <Link href="/admin/applications" passHref>
