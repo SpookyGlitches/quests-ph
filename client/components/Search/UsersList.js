@@ -1,39 +1,37 @@
-import { useEffect, useState } from "react";
-import { Stack } from "@mui/material";
 import useSWR from "swr";
-import Post from "./Post";
-import LoadMore from "../../Common/LoadMore";
+import { Stack } from "@mui/material";
+import { useEffect, useState } from "react";
+import LoadMore from "../Common/LoadMore";
+import User from "./User";
 
-function PostPage(props) {
-  const { url, skip, setHasMore, setLoading, searchParams } = props;
+function UserPage({ url, setHasMore, searchParams, setLoading, skip }) {
   const queryString = new URLSearchParams({ ...searchParams, skip }).toString();
-  const { data: posts } = useSWR(url ? `${url}?${queryString}` : null);
+  const { data: users } = useSWR(url ? `${url}?${queryString}` : null);
 
-  if (!posts) {
+  if (!users) {
     setLoading(true);
     return <div>Loading</div>;
   }
 
-  if (posts.length < searchParams.take) {
+  if (users.length < searchParams.take) {
     setHasMore(false);
   }
-
   setLoading(false);
 
-  return posts.map(({ postId, partyMember }) => {
-    return <Post key={postId} postId={postId} questId={partyMember.questId} />;
+  return users.map((user) => {
+    return <User user={user} key={user.userId} />;
   });
 }
 
-const PostsList = ({ url, searchParams }) => {
+export default function UsersList({ url, searchParams }) {
   const [count, setCount] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(true);
-  const postPages = [];
 
+  const userPages = [];
   for (let i = 0; i < count; i++) {
-    postPages.push(
-      <PostPage
+    userPages.push(
+      <UserPage
         url={url}
         setHasMore={setHasMore}
         skip={i}
@@ -55,10 +53,8 @@ const PostsList = ({ url, searchParams }) => {
 
   return (
     <>
-      <Stack spacing={4}>{postPages}</Stack>
+      <Stack spacing={4}>{userPages}</Stack>
       <LoadMore hasMore={hasMore} loading={loading} onClick={loadMore} />
     </>
   );
-};
-
-export default PostsList;
+}

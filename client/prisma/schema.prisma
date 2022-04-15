@@ -5,7 +5,8 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 model Account {
@@ -72,6 +73,8 @@ model User {
   requester          FriendRequest[]          @relation("requester")
   requestee          FriendRequest[]          @relation("requestee")
   forgotPassword     ForgotPassword[]
+
+  @@fulltext([displayName, fullName])
 }
 
 model ForgotPassword {
@@ -129,6 +132,7 @@ model Article {
   approvedAt DateTime?
   deletedAt  DateTime?
   user       User          @relation(fields: [userId], references: [userId])
+  @@fulltext([title])
 }
 
 model Quest {
@@ -153,6 +157,7 @@ model Quest {
   conversation           Conversation[]
   questPartyBan          QuestPartyBan[]
   questMentorshipRequest QuestMentorshipRequest[]
+  @@fulltext([wish])
 }
 
 model QuestTask {
@@ -360,6 +365,7 @@ model Post {
   comments      Comment[]
   postReacts    PostReact[]
   partyMember   PartyMember @relation(fields: [partyMemberId], references: [partyMemberId])
+  @@fulltext([title,body])
 }
 
 model Comment {

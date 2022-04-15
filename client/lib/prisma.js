@@ -54,7 +54,8 @@ prisma.$use(async (params, next) => {
     params.model == "Post" ||
     params.model == "PostReact" ||
     params.model == "Comment" ||
-    params.model == "CommentReact"
+    params.model == "CommentReact" ||
+    params.model == "User"
   ) {
     if (params.action == "findMany" || params.action == "findFirst") {
       params.args["where"] = { ...params.args.where, deletedAt: null };

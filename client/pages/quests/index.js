@@ -1,78 +1,94 @@
 import {
   Button,
   Box,
-  Stack,
   Typography,
-  TextField,
-  FormControl,
-  Pagination,
-  Select,
-  MenuItem,
   Paper,
+  TextField,
+  IconButton,
 } from "@mui/material";
 import Link from "next/link";
-import AddIcon from "@mui/icons-material/Add";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import { useDebounce } from "use-debounce";
+import { useState } from "react";
+import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import QuestFilters from "../../components/Search/QuestFilters";
 import AppLayout from "../../components/Layouts/AppLayout";
 import QuestsList from "../../components/Quest/QuestsList";
 
-const Index = () => {
+export default function Index() {
+  const [text, setText] = useState("");
+  const [searchText] = useDebounce(text, 2000);
+
+  const [filterParams, setFilterParams] = useState(() => ({
+    category: ["HEALTH", "SOCIAL", "CAREER"],
+    status: ["ACTIVE", "COMPLETED"],
+  }));
+
+  const handleSearchChange = (event) => {
+    setText(event.target.value);
+  };
+
   return (
-    <AppLayout>
-      <Box p={{ xs: 1, sm: 2, md: 3 }}>
-        <Paper>
-          <Box p={3}>
-            <Typography variant="h3" sx={{ color: "#755cde" }}>
-              Quests
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              p: 2,
-              m: 2,
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-            spacing={3}
-          >
-            <TextField
-              sx={{ flexGrow: 1 }}
-              id="standard-basic"
-              label="Search for Quest"
-              variant="standard"
-            />
-
-            <Link href="/quests/create" passHref>
-              <Button
-                sx={{ maxHeight: "45px", marginRight: 2 }}
-                variant="contained"
-                startIcon={<AddIcon />}
-              >
-                Quest{" "}
-              </Button>
-            </Link>
-
-            <FormControl sx={{ minWidth: 80 }}>
-              <Select sx={{ height: "80%" }} displayEmpty>
-                <MenuItem>Health</MenuItem>
-                <MenuItem>Health</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-
-          <Box m={2} mp={{ sx: 1, sm: 2, md: 1 }}>
-            <QuestsList url="/quests" />
-          </Box>
-
-          <Stack
-            p={{ xs: 1, sm: 2, md: 3 }}
-            style={{ width: "33%", margin: "auto" }}
-          >
-            <Pagination variant="outlined" shape="rounded" count={4} />
-          </Stack>
-        </Paper>
+    <Paper sx={{ p: 3, display: "flex", gap: 5, flexDirection: "column" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+        }}
+      >
+        <Typography variant="h4" color="primary">
+          Quests
+        </Typography>
+        <Link href="/quests/create" passHref>
+          <Button variant="contained" startIcon={<AddRoundedIcon />}>
+            New Quest
+          </Button>
+        </Link>
       </Box>
-    </AppLayout>
-  );
-};
+      <Box sx={{}}>
+        <TextField
+          fullWidth
+          label="Search"
+          variant="outlined"
+          size="small"
+          value={text}
+          onChange={handleSearchChange}
+          sx={{
+            backgroundColor: "background.paper",
+            borderRadius: 1,
+            flexGrow: 1,
+          }}
+          InputProps={{
+            startAdornment: (
+              <IconButton size="small">
+                <SearchRoundedIcon />
+              </IconButton>
+            ),
+          }}
+        />
+        <QuestFilters
+          filterParams={filterParams}
+          rootStyles={{
+            display: "flex",
+            columnGap: 3,
+            rowGap: 1,
+            mt: 3,
+            flexWrap: "wrap",
+          }}
+          setFilterParams={setFilterParams}
+        />
+      </Box>
 
-export default Index;
+      <QuestsList
+        searchParams={{ ...filterParams, take: 5, search: searchText }}
+        url="/quests"
+      />
+    </Paper>
+  );
+}
+
+Index.getLayout = function getLayout(page) {
+  return <AppLayout>{page}</AppLayout>;
+};
