@@ -13,6 +13,7 @@ export default async function approveReport(req, res) {
       data: {
         status: "INACTIVE",
         banEnd: new Date(),
+        deletedAt: new Date(),
       },
     });
     return res.status(200).json(removeBan);

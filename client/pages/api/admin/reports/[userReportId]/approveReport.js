@@ -6,6 +6,8 @@ export default async function approveReport(req, res) {
   }
 
   try {
+    const obj = JSON.stringify(req.body.duration);
+    const num = Number(obj.charAt(obj.length - 2));
     const approvedReport = await prisma.UserReport.update({
       where: {
         userReportId: Number(req.query.userReportId),
@@ -13,7 +15,7 @@ export default async function approveReport(req, res) {
       data: {
         status: "ACTIVE",
         banStart: new Date(),
-        banEnd: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Made default 7days for now.
+        banEnd: new Date(Date.now() + num * 24 * 60 * 60 * 1000),
       },
     });
     return res.status(200).json(approvedReport);

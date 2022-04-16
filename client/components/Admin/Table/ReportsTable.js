@@ -1,38 +1,67 @@
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Button } from "@mui/material";
+import {
+  Button,
+  Typography,
+  Stack,
+  InputLabel,
+  FormControl,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import axios from "axios";
 import { useRouter } from "next/router";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import { useForm, Controller } from "react-hook-form";
 
 export default function AdminDataGrid({ tableData, page, path }) {
   const router = useRouter();
+  const [open, setOpen] = React.useState(false);
+  const [displayName, setDisplayName] = React.useState("");
+  const [category, setCategory] = React.useState("");
+  const [reportId, setReportId] = React.useState("");
+  const [description, setDescription] = React.useState("");
+
+  const methods = useForm({
+    mode: "onChange",
+    defaultValues: {
+      duration: 1,
+    },
+  });
+  const { control, handleSubmit } = methods;
+
   // eslint-disable-next-line
   const handleClick = (event, cellValues) => {
-    console.log(event);
-    console.log(cellValues);
+    setOpen(true);
+    setReportId(cellValues.row.userReportId);
+    setDisplayName(cellValues.row.recipientFullName);
+    setCategory(cellValues.row.category);
+    setDescription(cellValues.row.description);
+  };
+  const handleClose = () => {
+    setOpen(false);
   };
 
-  // Users Mgmt
-
-  // Applications Mgmt
-
-  // Articles Mgmt
-
-  // Quests Mgmt
-
-  /* Reports Mgmt */
-  // Approve Report
-  const handleApproveReport = async (event, cellValues) => {
+  const onSubmit = async (values) => {
     try {
-      const res = await axios.put(
-        `/api/admin/reports/${cellValues.row.userReportId}/approveReport`,
-      );
-      // Probs gonna add something like sending an email then requiring them to send again.
-      router.reload();
-      console.log(res);
+      await axios
+        .put(`/api/admin/reports/${reportId}/approveReport`, {
+          duration: values,
+        })
+        .then(() => {
+          setOpen(false);
+          router.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } catch (error) {
       console.log(error);
     }
+    console.log(values);
   };
 
   // Reject Report
@@ -118,29 +147,16 @@ export default function AdminDataGrid({ tableData, page, path }) {
           width: 200,
           renderCell: (cellValues) => {
             return (
-              <>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  color="success"
-                  sx={{ mr: 2 }}
-                  onClick={(event) => {
-                    handleApproveReport(event, cellValues);
-                  }}
-                >
-                  Approve
-                </Button>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  color="error"
-                  onClick={(event) => {
-                    handleRejectReport(event, cellValues);
-                  }}
-                >
-                  Reject
-                </Button>
-              </>
+              <Button
+                fullWidth
+                variant="contained"
+                color="error"
+                onClick={(event) => {
+                  handleRejectReport(event, cellValues);
+                }}
+              >
+                Reject
+              </Button>
             );
           },
         },
@@ -309,6 +325,45 @@ export default function AdminDataGrid({ tableData, page, path }) {
         textAlign: "center",
       }}
     >
+      <Dialog open={open} onClose={handleClose} fullWidth>
+        <DialogTitle>Report Details</DialogTitle>
+
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Stack spacing={1.5} sx={{ mt: "-1.5em" }}>
+            <DialogContent>
+              <Typography>Display Name: {displayName}</Typography>
+              <Typography>Category: {category}</Typography>
+              <Typography>Description: {description}</Typography>
+              {path === "ongoing" ? null : (
+                <FormControl fullWidth variant="outlined">
+                  <Controller
+                    control={control}
+                    name="duration"
+                    render={({ field: { onChange, value } }) => (
+                      <FormControl variant="filled" sx={{ mt: 2 }}>
+                        <InputLabel>Ban Duration</InputLabel>
+
+                        <Select onChange={onChange} value={value}>
+                          <MenuItem value={1}>1 day</MenuItem>
+                          <MenuItem value={3}>3 days</MenuItem>
+                          <MenuItem value={7}>7 days</MenuItem>
+                        </Select>
+                      </FormControl>
+                    )}
+                  />
+                </FormControl>
+              )}
+            </DialogContent>
+          </Stack>
+          <DialogActions>
+            <Button onClick={handleClose}>Close</Button>
+            {path === "ongoing" ? null : (
+              <Button type="submit">Approve Report</Button>
+            )}
+          </DialogActions>
+        </form>
+      </Dialog>
+
       {dataGrid}
     </div>
   );

@@ -14,7 +14,7 @@ export default function Index() {
   if (!reportsData) {
     <div>Loading</div>;
   }
-
+  console.log(reportsData);
   return (
     <AdminLayout>
       <Box
