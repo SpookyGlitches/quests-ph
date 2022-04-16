@@ -1,5 +1,5 @@
-import prisma from "../../../../../lib/prisma";
 import nodemailer from "nodemailer";
+import prisma from "../../../../../lib/prisma";
 
 export default async function approveReport(req, res) {
   if (req.method !== "PUT") {
