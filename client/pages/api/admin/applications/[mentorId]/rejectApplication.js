@@ -51,7 +51,7 @@ export default async function rejectApplication(req, res) {
     const mailData = {
       from: process.env.SMTP_USER,
       to: getUser.email,
-      subject: `Verification`,
+      subject: `Mentor Application`,
       html: `<div>
       Greetings, ${getUser.displayName}!
         This is an automated reply from Quests App University of San Carlos. Please do not reply.

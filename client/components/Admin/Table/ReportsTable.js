@@ -24,7 +24,7 @@ export default function AdminDataGrid({ tableData, page, path }) {
   const [category, setCategory] = React.useState("");
   const [reportId, setReportId] = React.useState("");
   const [description, setDescription] = React.useState("");
-
+  const [recipient, setRecipient] = React.useState("");
   const methods = useForm({
     mode: "onChange",
     defaultValues: {
@@ -36,6 +36,7 @@ export default function AdminDataGrid({ tableData, page, path }) {
   // eslint-disable-next-line
   const handleClick = (event, cellValues) => {
     setOpen(true);
+    setRecipient(cellValues.row.recipientId);
     setReportId(cellValues.row.userReportId);
     setDisplayName(cellValues.row.recipientFullName);
     setCategory(cellValues.row.category);
@@ -50,6 +51,7 @@ export default function AdminDataGrid({ tableData, page, path }) {
       await axios
         .put(`/api/admin/reports/${reportId}/approveReport`, {
           duration: values,
+          recipient: recipient,
         })
         .then(() => {
           setOpen(false);
