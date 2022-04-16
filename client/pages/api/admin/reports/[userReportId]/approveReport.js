@@ -1,5 +1,6 @@
-import prisma from "../../../../../lib/prisma";
 import nodemailer from "nodemailer";
+import prisma from "../../../../../lib/prisma";
+
 export default async function approveReport(req, res) {
   if (req.method !== "PUT") {
     return res.status(404).json({ message: "Method not allowed " });
@@ -14,6 +15,15 @@ export default async function approveReport(req, res) {
         userId: req.body.recipient,
       },
     });
+    const updateUser = prisma.user.update({
+      where: {
+        userId: req.body.recipient,
+      },
+      data: {
+        isBanned: true,
+      },
+    });
+    transactions.push(updateUser);
     const approvedReport = prisma.UserReport.update({
       where: {
         userReportId: Number(req.query.userReportId),
@@ -27,8 +37,8 @@ export default async function approveReport(req, res) {
     transactions.push(approvedReport);
 
     const transporter = nodemailer.createTransport({
-      port: 465,
-      host: "smtp.gmail.com",
+      port: process.env.MAIL_PORT,
+      host: process.env.MAIL_HOST,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD,
@@ -38,7 +48,7 @@ export default async function approveReport(req, res) {
     const mailData = {
       from: process.env.SMTP_USER,
       to: getUser.email,
-      subject: `Verification`,
+      subject: `User Report`,
       html: `<div>
       Greetings ${getUser.displayName}! We have recently received a report about your account. Here in Quests,
       our users' welfare is one of the most important things we consider here. After careful review of the report

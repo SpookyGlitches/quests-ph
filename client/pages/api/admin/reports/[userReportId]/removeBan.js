@@ -1,4 +1,5 @@
 import prisma from "../../../../../lib/prisma";
+import nodemailer from "nodemailer";
 
 export default async function approveReport(req, res) {
   if (req.method !== "PUT") {
@@ -6,7 +7,13 @@ export default async function approveReport(req, res) {
   }
 
   try {
-    const removeBan = await prisma.UserReport.update({
+    const getUser = await prisma.user.findFirst({
+      where: {
+        userId: req.body.userId,
+      },
+    });
+    const transactions = [];
+    const removeBan = prisma.UserReport.update({
       where: {
         userReportId: Number(req.query.userReportId),
       },
@@ -16,31 +23,42 @@ export default async function approveReport(req, res) {
         deletedAt: new Date(),
       },
     });
-    return res.status(200).json(removeBan);
+    transactions.push(removeBan);
+    const updateUserBan = prisma.user.update({
+      where: {
+        userId: req.body.userId,
+      },
+      data: {
+        isBanned: false,
+      },
+    });
+    transactions.push(updateUserBan);
+    const transporter = nodemailer.createTransport({
+      port: process.env.MAIL_PORT,
+      host: process.env.MAIL_HOST,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASSWORD,
+      },
+      secure: true,
+    });
+    const mailData = {
+      from: process.env.SMTP_USER,
+      to: getUser.email,
+      subject: `User Report Status`,
+      html: `<div>
+      Greetings ${getUser.displayName}! We are pleased to inform you that your account ban has been lifted. You may
+      now continue using the Quests application.
+
+      Thank you and have a great day!
+
+      <div>`,
+    };
+    await prisma.$transaction(transactions);
+    await transporter.sendMail(mailData);
+    return res.status(200).json();
   } catch (error) {
     console.log(error);
     return res.status(400).json({ message: "Something went wrong" });
   }
 }
-
-// const nodemailer = require("nodemailer");
-// const transporter = nodemailer.createTransport({
-//   port: 465,
-//   host: "smtp.gmail.com",
-//   auth: {
-//     user: process.env.SMTP_USER,
-//     pass: process.env.SMTP_PASSWORD,
-//   },
-//   secure: true,
-// });
-// const mailData = {
-//   from: process.env.SMTP_USER,
-//   to: userDetails.email,
-//   subject: `Verification`,
-//   html: `<div>
-//     This is an automated reply from Quests App University of San Carlos. Please do not reply.
-//     You are receiving this email because your email was just registered to an account on Quests.
-//     Verify your account through this link. http://localhost:8080/verify/${userDetails.token}
-
-// <div>`,
-// };

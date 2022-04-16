@@ -51,7 +51,7 @@ export default function AdminDataGrid({ tableData, page, path }) {
       await axios
         .put(`/api/admin/reports/${reportId}/approveReport`, {
           duration: values,
-          recipient: recipient,
+          recipient,
         })
         .then(() => {
           setOpen(false);
@@ -63,7 +63,6 @@ export default function AdminDataGrid({ tableData, page, path }) {
     } catch (error) {
       console.log(error);
     }
-    console.log(values);
   };
 
   // Reject Report
@@ -72,7 +71,6 @@ export default function AdminDataGrid({ tableData, page, path }) {
       const res = await axios.put(
         `/api/admin/reports/${cellValues.row.userReportId}/rejectReport`,
       );
-      // Probs gonna add something like sending an email then requiring them to send again.
       router.reload();
       console.log(res);
     } catch (error) {
@@ -80,15 +78,19 @@ export default function AdminDataGrid({ tableData, page, path }) {
     }
   };
 
-  // Reject Report
+  // Remove Ban
   const handleRemoveBan = async (event, cellValues) => {
     try {
-      const res = await axios.put(
-        `/api/admin/reports/${cellValues.row.userReportId}/removeBan`,
-      );
-      // Probs gonna add something like sending an email then requiring them to send again.
-      router.reload();
-      console.log(res);
+      await axios
+        .put(`/api/admin/reports/${cellValues.row.userReportId}/removeBan`, {
+          userId: cellValues.row.recipientId,
+        })
+        .then(() => {
+          router.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } catch (error) {
       console.log(error);
     }

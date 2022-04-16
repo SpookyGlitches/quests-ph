@@ -50,6 +50,7 @@ model User {
   deletedAt          DateTime?
   isActive           String                   @default("0") @db.Char(1)
   token              String
+  isBanned           Boolean                 @default(false)
   mentorApplication  MentorApplication[]
   mentorFile         MentorFile[]
   accounts           Account[]
