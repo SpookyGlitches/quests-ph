@@ -140,14 +140,6 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton size="large" aria-label="" color="inherit">
-          <Badge badgeContent={17} color="error">
-            <NotificationsRoundedIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"

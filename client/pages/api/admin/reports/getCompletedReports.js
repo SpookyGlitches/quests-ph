@@ -6,28 +6,29 @@ export default async function getCompletedReports(req, res) {
   }
 
   try {
-    const reports = await prisma.UserReport.findMany({
-      where: {
-        status: "INACTIVE",
-        deletedAt: null,
-        NOT: [
-          {
-            banStart: null,
-            banEnd: null,
-          },
-        ],
-      },
-      select: {
-        userReportId: true,
-        recipientId: true,
-        category: true,
-        description: true,
-        status: true,
-        createdAt: true,
-        banStart: true,
-        banEnd: true,
-      },
-    });
+    // const reports = await prisma.UserReport.findMany({
+    //   where: {
+    //     deletedAt: null,
+    //     NOT: [
+    //       {
+    //         banStart: null,
+    //         banEnd: null,
+    //       },
+    //     ],
+    //   },
+    //   select: {
+    //     userReportId: true,
+    //     recipientId: true,
+    //     category: true,
+    //     description: true,
+    //     status: true,
+    //     createdAt: true,
+    //     banStart: true,
+    //     banEnd: true,
+    //   },
+    // });
+    const reports =
+      await prisma.$queryRaw`SELECT userReportId, reporter.fullName AS reporterFullName, recipient.fullName AS recipientFullName, recipient.email AS recipientEmail, reporter.email AS reporterEmail, reporterId, recipientId, category, description, status, userreport.createdAt, SUBSTRING(banStart, 1, 10) AS banStart, SUBSTRING(banEnd, 1, 10) AS banEnd FROM userreport INNER JOIN user reporter ON (reporter.userId = userreport.reporterId) INNER JOIN user recipient ON (recipient.userId = userreport.recipientId) WHERE userreport.deletedAt IS NOT NULL AND banStart IS NOT NULL AND banEnd < NOW()`;
     return res.status(200).json(reports);
   } catch (error) {
     console.log(error);
