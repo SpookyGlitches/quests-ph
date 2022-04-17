@@ -284,12 +284,7 @@ export default function AdminDataGrid({ tableData, page, path }) {
           width: 160,
           headerAlign: "center",
         },
-        {
-          field: "recipientId",
-          headerName: "Username",
-          width: 150,
-          headerAlign: "center",
-        },
+
         {
           field: "status",
           headerName: "Status",

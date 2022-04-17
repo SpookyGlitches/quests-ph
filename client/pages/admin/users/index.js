@@ -35,7 +35,9 @@ export default function Index() {
         <Typography sx={{ mt: 3, color: "white", fontSize: "20px" }}>
           Users Page
         </Typography>
-        <h2 style={{ color: "white" }}>You have 5 new applications!</h2>
+        <h2 style={{ color: "white" }}>
+          You have {usersData?.length} active users!
+        </h2>
         <Typography sx={{ mt: 2, color: "white", fontSize: "18px" }}>
           <Link href="/admin/users" passHref>
             <a href="replace">

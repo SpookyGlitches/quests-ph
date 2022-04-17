@@ -37,7 +37,9 @@ export default function Index() {
         <Typography sx={{ mt: 3, color: "white", fontSize: "20px" }}>
           Articles Page
         </Typography>
-        <h2 style={{ color: "white" }}>You have 5 new submissions!</h2>
+        <h2 style={{ color: "white" }}>
+          You have {approvedArticles?.length} approved articles!
+        </h2>
         <Typography sx={{ mt: 2, color: "white", fontSize: "18px" }}>
           <Link href="/admin/articles" passHref>
             <a href="replace">New</a>
