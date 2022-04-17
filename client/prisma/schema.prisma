@@ -359,7 +359,7 @@ model Post {
   title         String
   body          String
   createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
   deletedAt     DateTime?
   postFiles     PostFile[]
   comments      Comment[]
@@ -374,7 +374,7 @@ model Comment {
   partyMemberId Int
   content       String
   createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
   deletedAt     DateTime?
   post          Post           @relation(fields: [postId], references: [postId])
   partyMember   PartyMember    @relation(fields: [partyMemberId], references: [partyMemberId])

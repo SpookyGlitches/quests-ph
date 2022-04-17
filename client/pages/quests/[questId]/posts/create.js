@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { Paper } from "@mui/material";
 import PostForm from "../../../../components/Quest/Post/PostForm";
 import QuestLayout from "../../../../components/Layouts/QuestLayout";
 import FilesForm from "../../../../components/Quest/Post/Files/FilesForm";
@@ -32,12 +33,14 @@ export default function Create() {
   };
 
   return (
-    <PostForm onSubmit={onSubmit} isUpdating={false}>
-      <FilesForm
-        uploadedFiles={uploadedFiles}
-        setUploadedFiles={setUploadedFiles}
-      />
-    </PostForm>
+    <Paper>
+      <PostForm onSubmit={onSubmit} isUpdating={false}>
+        <FilesForm
+          uploadedFiles={uploadedFiles}
+          setUploadedFiles={setUploadedFiles}
+        />
+      </PostForm>
+    </Paper>
   );
 }
 

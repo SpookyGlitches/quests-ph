@@ -98,6 +98,7 @@ async function getQuests(req, res) {
       take: parsedTake,
       select: {
         wish: true,
+        category: true,
         estimatedStartDate: true,
         estimatedEndDate: true,
         questId: true,

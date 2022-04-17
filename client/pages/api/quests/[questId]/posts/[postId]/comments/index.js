@@ -66,7 +66,6 @@ async function addComment(req, res) {
     }
 
     const [comment] = await prisma.$transaction(transactions);
-
     return res.json(comment);
   } catch (err) {
     console.error(err);
@@ -91,6 +90,7 @@ async function getComments(req, res) {
         content: true,
         commentId: true,
         createdAt: true,
+        updatedAt: true,
         partyMemberId: true,
         partyMember: {
           select: {

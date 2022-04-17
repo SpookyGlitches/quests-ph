@@ -99,7 +99,10 @@ export default function Home() {
           },
         }}
       >
-        <CreatePost onCreatePostClick={() => setOpen(true)} />
+        <CreatePost
+          onCreatePostClick={() => setOpen(true)}
+          rootStyles={{ marginBottom: 4 }}
+        />
         <PostsList url="/home" searchParams={{ take: 5 }} />
       </Box>
       <CreatePostModal open={open} setOpen={setOpen} />

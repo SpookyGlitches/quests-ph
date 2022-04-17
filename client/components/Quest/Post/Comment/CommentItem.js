@@ -4,9 +4,10 @@ import {
   Typography,
   Stack,
   Divider,
+  Tooltip,
   IconButton,
 } from "@mui/material";
-import { formatRelative } from "date-fns";
+import { formatDistance, format } from "date-fns";
 import AddReactionRoundedIcon from "@mui/icons-material/AddReactionRounded";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
@@ -104,9 +105,34 @@ export default function CommentItem({
               variant="subtitle2"
             >
               {comment.partyMember.user.displayName}
-              <Typography variant="caption" sx={{ color: "grey.700" }}>
-                {` ${formatRelative(new Date(comment.createdAt), new Date())}`}
-              </Typography>
+
+              <Tooltip
+                title={
+                  <div>
+                    <div>
+                      Created at{" "}
+                      {format(
+                        new Date(comment.createdAt),
+                        "MMMM d, yyyy HH:mm:ss",
+                      )}
+                    </div>
+                    <div>
+                      Updated at{" "}
+                      {format(
+                        new Date(comment.updatedAt),
+                        "MMMM d, yyyy HH:mm:ss",
+                      )}
+                    </div>
+                  </div>
+                }
+                describeChild
+              >
+                <Typography variant="caption" sx={{ color: "grey.700" }}>
+                  {` ${formatDistance(new Date(comment.createdAt), new Date(), {
+                    addSuffix: true,
+                  })}`}
+                </Typography>
+              </Tooltip>
             </Typography>
 
             <Box

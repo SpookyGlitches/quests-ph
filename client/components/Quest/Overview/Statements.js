@@ -3,9 +3,8 @@ import {
   Stack,
   Typography,
   IconButton,
-  Popper,
-  Fade,
-  Button,
+  Menu,
+  MenuItem,
   Paper,
 } from "@mui/material";
 import useSWR from "swr";
@@ -18,25 +17,26 @@ import WoopModal from "../WoopModal";
 
 const titleTypographyProps = {
   sx: {
-    marginBottom: "0.5rem",
+    marginBottom: 1,
   },
-  variant: "h5",
-  fontWeight: "medium",
+  variant: "h6",
 };
 
 export default function Statements() {
-  const router = useRouter();
-  const { questId } = router.query;
+  const { query } = useRouter();
+  const { questId } = query;
+
+  const [anchorWoop, setAnchorWoop] = useState(null);
+  const [openWoopPopper, setOpenWoopPopper] = useState(false);
+
   const { data: quest } = useSWR(questId ? `/quests/${questId}` : null);
   const { data: partyMembers, mutate: mutatePartyMembers } = useSWR(
-    quest ? `/quests/${questId}/partyMembers?excludeMentor=true` : null,
+    questId ? `/quests/${questId}/partyMembers?excludeMentor=true` : null,
   );
   const { data: partyMember, mutate: mutateStatement } = useSWR(
     questId ? `/quests/${questId}/partyMembers/currentUser` : null,
   );
 
-  const [anchorWoop, setAnchorWoop] = useState(null);
-  const [openWoopPopper, setOpenWoopPopper] = useState(false);
   const [woopModalDetails, setWoopModalDetails] = useState({
     loading: false,
     title: "Edit Quest Overview",
@@ -47,7 +47,6 @@ export default function Statements() {
       plan: "",
       wish: "",
     },
-    partyMemberId: partyMember?.partyMemberId,
   });
 
   useEffect(() => {
@@ -73,17 +72,32 @@ export default function Statements() {
       `/api/quests/${quest.questId}/partyMembers/${partyMember.partyMemberId}`,
       values,
     );
-    return data;
+    mutateStatement(data);
+
+    mutatePartyMembers((questPartyMembers) => {
+      const partyMemberIndex = questPartyMembers.findIndex((x) => {
+        return x.partyMemberId === partyMember.partyMemberId;
+      });
+
+      const copiedPartyMembers = [...partyMembers];
+
+      if (partyMemberIndex >= 0) {
+        copiedPartyMembers[partyMemberIndex] = {
+          ...copiedPartyMembers[partyMemberIndex],
+          ...data,
+        };
+      }
+
+      return copiedPartyMembers;
+    });
   };
 
   const submitForm = async (values) => {
     try {
-      mutateStatement(await updateUserStatement(values), {
-        revalidate: false,
-      });
-      mutatePartyMembers();
-      setWoopModalDetails((prev) => ({ ...prev, open: false }));
+      await updateUserStatement(values);
+      setWoopModalDetails((prev) => ({ ...prev, open: false, loading: false }));
     } catch (error) {
+      setWoopModalDetails((prev) => ({ ...prev, loading: false }));
       console.error(error);
     }
   };
@@ -95,90 +109,101 @@ export default function Statements() {
     }));
   };
 
+  const closeWoopPopper = () => {
+    setOpenWoopPopper(false);
+  };
+
   if (!quest || !partyMembers || !partyMember) {
     return <div>Loading</div>;
   }
+  const outcomes = [];
+  const obstacles = [];
+  const plans = [];
+
+  partyMembers.forEach((member) => {
+    outcomes.push(
+      <MemberStatement
+        text={member.outcome}
+        user={member.user}
+        key={member.partyMemberId}
+      />,
+    );
+    obstacles.push(
+      <MemberStatement
+        text={member.obstacle}
+        user={member.user}
+        key={member.partyMemberId}
+      />,
+    );
+    plans.push(
+      <MemberStatement
+        text={member.plan}
+        user={member.user}
+        key={member.partyMemberId}
+      />,
+    );
+  });
 
   return (
-    <Box
-      sx={{
-        backgroundColor: "background.paper",
-        padding: "2rem",
-        borderRadius: 2,
-        marginBottom: "1.3rem",
-      }}
-    >
-      <Box
+    <>
+      <Paper
         sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          padding: 3,
         }}
       >
-        <Typography variant="h4" color="primary">
-          Overview
-        </Typography>
-        <IconButton onClick={handleWoopPopperClick}>
-          <MoreHorizRoundedIcon />
-        </IconButton>
-      </Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h4" color="primary">
+            Overview
+          </Typography>
+          {partyMember.role !== "MENTOR" && (
+            <IconButton onClick={handleWoopPopperClick}>
+              <MoreHorizRoundedIcon />
+            </IconButton>
+          )}
+        </Box>
 
-      <Stack spacing={4} sx={{ marginTop: "1rem" }}>
-        <div>
-          <Typography {...titleTypographyProps}>⭐ Wish</Typography>
-          <Typography variant="body1">{quest.wish}</Typography>
-        </div>
-        <div>
-          <Typography {...titleTypographyProps}>🎁 Outcome</Typography>
-          {partyMembers.map((item) => (
-            <MemberStatement
-              text={item.outcome}
-              name={item.user.displayName}
-              key={item.partyMemberId}
-            />
-          ))}
-        </div>
-        <div>
-          <Typography {...titleTypographyProps}>🗻 Obstacle</Typography>
-          {partyMembers.map((item) => (
-            <MemberStatement
-              text={item.obstacle}
-              name={item.user.displayName}
-              key={item.partyMemberId}
-            />
-          ))}
-        </div>
-        <div>
-          <Typography {...titleTypographyProps}>📒 Plan</Typography>
-          {partyMembers.map((item) => (
-            <MemberStatement
-              text={item.plan}
-              name={item.user.displayName}
-              key={item.partyMemberId}
-            />
-          ))}
-        </div>
-      </Stack>
-      <WoopModal
-        handleOk={submitForm}
-        handleCancel={toggleWoopModal}
-        okText="Edit"
-        details={woopModalDetails}
-      />
-      <Popper
+        <Stack spacing={3} sx={{ marginTop: 2 }}>
+          <div>
+            <Typography {...titleTypographyProps}>Wish</Typography>
+            <Typography variant="body1">{quest.wish}</Typography>
+          </div>
+          <div>
+            <Typography {...titleTypographyProps}>Outcome</Typography>
+            {outcomes}
+          </div>
+          <div>
+            <Typography {...titleTypographyProps}>Obstacle</Typography>
+            {obstacles}
+          </div>
+          <div>
+            <Typography {...titleTypographyProps}>Plan</Typography>
+            {plans}
+          </div>
+        </Stack>
+        <WoopModal
+          handleOk={submitForm}
+          handleCancel={toggleWoopModal}
+          okText="Edit"
+          details={woopModalDetails}
+        />
+      </Paper>
+      <Menu
+        dense
         open={openWoopPopper}
         anchorEl={anchorWoop}
-        placement="right-start"
+        onClose={closeWoopPopper}
         transition
       >
-        {({ TransitionProps }) => (
-          <Fade {...TransitionProps} timeout={350}>
-            <Paper>
-              <Button onClick={toggleWoopModal}>Edit</Button>
-            </Paper>
-          </Fade>
-        )}
-      </Popper>
-    </Box>
+        <MenuItem dense onClick={toggleWoopModal} color="primary">
+          Edit
+        </MenuItem>
+      </Menu>
+    </>
   );
 }

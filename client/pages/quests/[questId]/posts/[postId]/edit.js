@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import useSWR from "swr";
+import { Paper } from "@mui/material";
 import QuestLayout from "../../../../../components/Layouts/QuestLayout";
 import PostForm from "../../../../../components/Quest/Post/PostForm";
 import FilesForm from "../../../../../components/Quest/Post/Files/FilesForm";
 import AppLayout from "../../../../../components/Layouts/AppLayout";
 
-const EditPostPage = () => {
+export default function EditPostPage() {
   const router = useRouter();
   const { questId, postId } = router.query;
 
@@ -58,7 +59,7 @@ const EditPostPage = () => {
   }
 
   return (
-    <div>
+    <Paper>
       <PostForm
         post={post}
         onSubmit={onSubmit}
@@ -70,10 +71,9 @@ const EditPostPage = () => {
           setUploadedFiles={setUploadedFiles}
         />
       </PostForm>
-    </div>
+    </Paper>
   );
-};
-export default EditPostPage;
+}
 
 EditPostPage.getLayout = function getLayout(page) {
   return (

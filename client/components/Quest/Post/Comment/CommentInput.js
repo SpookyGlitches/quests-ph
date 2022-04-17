@@ -4,12 +4,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import { useSWRConfig } from "swr";
 import { useEffect } from "react";
-import { useRouter } from "next/router";
 import commentValidation from "../../../../validations/comment";
 
 export default function CommentInput(props) {
-  const { questId, postId, updating, setUpdating, commentFormRef } = props;
-  const router = useRouter();
+  const { questId, postId, updating, setUpdating } = props;
   const {
     handleSubmit,
     control,
@@ -17,7 +15,6 @@ export default function CommentInput(props) {
     reset,
     setValue,
   } = useForm({
-    mode: "onSubmit",
     resolver: yupResolver(commentValidation),
     defaultValues: {
       content: "",
@@ -70,13 +67,6 @@ export default function CommentInput(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updating]);
 
-  useEffect(() => {
-    if (router.isReady && router.query.comment) {
-      commentFormRef.current.scrollIntoView();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router]);
-
   const cancelEditing = () => {
     reset();
     setUpdating({ isUpdating: false, comment: null });
@@ -84,7 +74,7 @@ export default function CommentInput(props) {
 
   // todo, ea: when user wants to edit, scroll to this input
   return (
-    <form onSubmit={handleSubmit(onSubmit)} ref={commentFormRef}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Controller
         name="content"
         control={control}
