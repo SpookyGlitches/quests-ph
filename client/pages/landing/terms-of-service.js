@@ -40,7 +40,7 @@ export default function TermsOfService() {
           }}
         >
           These terms and conditions outline the rules and regulations for the
-          use of Quests Group's Website, located at quests-ph.com.
+          use of Quests Group&rsquo;s Website, located at quests-ph.com.
         </Typography>
         <Typography
           variant="body1"
@@ -60,19 +60,21 @@ export default function TermsOfService() {
           }}
         >
           The following terminology applies to these Terms and Conditions,
-          Privacy Statement and Disclaimer Notice and all Agreements: "Client",
-          "You" and "Your" refers to you, the person log on this website and
-          compliant to the Company’s terms and conditions. "The Company",
-          "Ourselves", "We", "Our" and "Us", refers to our Company. "Party",
-          "Parties", or "Us", refers to both the Client and ourselves. All terms
-          refer to the offer, acceptance and consideration of payment necessary
-          to undertake the process of our assistance to the Client in the most
-          appropriate manner for the express purpose of meeting the Client’s
-          needs in respect of provision of the Company’s stated services, in
-          accordance with and subject to, prevailing law of the Philippines. Any
-          use of the above terminology or other words in the singular, plural,
-          capitalization and/or he/she or they, are taken as interchangeable and
-          therefore as referring to same.
+          Privacy Statement and Disclaimer Notice and all Agreements:
+          &quot;Client&quot;, &quot;You&quot; and &quot;Your&quot; refers to
+          you, the person log on this website and compliant to the
+          Company&rsquo;s terms and conditions. &quot;The Company&quot;,
+          &quot;Ourselves&quot;, &quot;We&quot;, &quot;Our&quot; and
+          &quot;Us&quot;, refers to our Company. &quot;Party&quot;,
+          &quot;Parties&quot;, or &quot;Us&quot;, refers to both the Client and
+          ourselves. All terms refer to the offer, acceptance and consideration
+          of payment necessary to undertake the process of our assistance to the
+          Client in the most appropriate manner for the express purpose of
+          meeting the Client&rsquo;s needs in respect of provision of the
+          Company&rsquo;s stated services, in accordance with and subject to,
+          prevailing law of the Philippines. Any use of the above terminology or
+          other words in the singular, plural, capitalization and/or he/she or
+          they, are taken as interchangeable and therefore as referring to same.
         </Typography>
         <Typography
           variant="h5"
@@ -90,7 +92,7 @@ export default function TermsOfService() {
           }}
         >
           We employ the use of cookies. By accessing Quests, you agreed to use
-          cookies in agreement with the Quests Group's Privacy Policy.
+          cookies in agreement with the Quests Group&rsquo;s Privacy Policy.
         </Typography>
         <Typography
           variant="body1"
@@ -98,11 +100,11 @@ export default function TermsOfService() {
             mt: 2,
           }}
         >
-          Most interactive websites use cookies to let us retrieve the user’s
-          details for each visit. Cookies are used by our website to enable the
-          functionality of certain areas to make it easier for people visiting
-          our website. Some of our affiliate/advertising partners may also use
-          cookies.
+          Most interactive websites use cookies to let us retrieve the
+          user&rsquo;s details for each visit. Cookies are used by our website
+          to enable the functionality of certain areas to make it easier for
+          people visiting our website. Some of our affiliate/advertising
+          partners may also use cookies.
         </Typography>
 
         <Typography
@@ -284,7 +286,7 @@ export default function TermsOfService() {
           other Website information so long as the link: (a) is not in any way
           deceptive; (b) does not falsely imply sponsorship, endorsement or
           approval of the linking party and its products and/or services; and
-          (c) fits within the context of the linking party’s site.
+          (c) fits within the context of the linking party&rsquo;s site.
         </Typography>
         <Typography
           variant="body1"
@@ -335,7 +337,8 @@ export default function TermsOfService() {
           These organizations may link to our home page so long as the link: (a)
           is not in any way deceptive; (b) does not falsely imply sponsorship,
           endorsement or approval of the linking party and its products or
-          services; and (c) fits within the context of the linking party’s site.
+          services; and (c) fits within the context of the linking party&rsquo;s
+          site.
         </Typography>
         <Typography
           variant="body1"
@@ -371,7 +374,7 @@ export default function TermsOfService() {
             <li>
               By use of any other description of our Website being linked to
               that makes sense within the context and format of content on the
-              linking party’s site.
+              linking party&rsquo;s site.
             </li>
           </ul>
         </Typography>
@@ -381,8 +384,8 @@ export default function TermsOfService() {
             mt: 2,
           }}
         >
-          No use of Quests Group's logo or other artwork will be allowed for
-          linking absent a trademark license agreement.
+          No use of Quests Group&rsquo;s logo or other artwork will be allowed
+          for linking absent a trademark license agreement.
         </Typography>
         <Typography
           variant="h5"
@@ -463,8 +466,8 @@ export default function TermsOfService() {
           We reserve the right to request that you remove all links or any
           particular link to our Website. You approve to immediately remove all
           links to our Website upon request. We also reserve the right to amen
-          these terms and conditions and it’s linking policy at any time. By
-          continuously linking to our Website, you agree to be bound to and
+          these terms and conditions and it&rsquo;s linking policy at any time.
+          By continuously linking to our Website, you agree to be bound to and
           follow these linking terms and conditions.
         </Typography>
         <Typography
