@@ -6,12 +6,18 @@ import {
   Stack,
   InputAdornment,
   IconButton,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
 import AuthHeader from "../../components/Auth/AuthHeader";
 
 export default function AdminLogin() {
@@ -21,7 +27,28 @@ export default function AdminLogin() {
   const [loginError, setLoginError] = useState("");
   const [hasError, setHasError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState("");
+  const { enqueueSnackbar } = useSnackbar();
   const handleClickShowPassword = () => setShowPassword(!showPassword);
+  // eslint-disable-next-line
+  const handleClose = (event, reason) => {
+    if (reason && reason === "backdropClick") return;
+    if (value === process.env.NEXT_PUBLIC_ADMIN_SECRET_KEY) {
+      enqueueSnackbar("You may now login, admin");
+      setOpen(false);
+    } else {
+      enqueueSnackbar("Wrong Key");
+    }
+  };
+
+  const handleChange = (e) => {
+    setValue(e.target.value);
+  };
+
+  useEffect(() => {
+    setOpen(true);
+  }, []);
 
   const handleLogin = (event) => {
     event.preventDefault();
@@ -54,6 +81,7 @@ export default function AdminLogin() {
   return (
     <Box
       sx={{
+        alignItems: "center",
         display: "flex",
         justifyContent: "center",
         flexDirection: "column",
@@ -66,6 +94,51 @@ export default function AdminLogin() {
         },
       }}
     >
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        style={{
+          backdropFilter: "blur(5px)",
+          backgroundColor: "rgba(0,0,20,0.3)",
+        }}
+      >
+        <DialogTitle id="alert-dialog-title">
+          This page is off limits &#128683;
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            This page can only be accessed by authorized users. To proceed,
+            enter the admin key.
+          </DialogContentText>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <TextField
+              fullWidth
+              name="adminkey"
+              id="adminkey"
+              placeholder="Input here"
+              label="Admin key"
+              value={value}
+              onChange={handleChange}
+              type="password"
+              sx={{ textAlign: "center" }}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          {/* <Button onClick={handleClose}>Disagree</Button> */}
+          <Button onClick={handleClose} autoFocus>
+            Submit
+          </Button>
+        </DialogActions>
+      </Dialog>
       <AuthHeader subtitle="Admin Sign In" />
       <Stack direction="column" spacing={2}>
         <form onSubmit={handleLogin}>
@@ -123,19 +196,3 @@ export default function AdminLogin() {
     </Box>
   );
 }
-
-// export async function getServerSideProps(context) {
-//   const session = await getSession(context);
-
-//   if (session.user?.role !== "admin") {
-//     return {
-//       redirect: {
-//         destination: "/",
-//       },
-//     };
-//   }
-
-//   return {
-//     props: {},
-//   };
-// }
