@@ -53,7 +53,7 @@ export default function UsersList({ url, searchParams }) {
 
   return (
     <>
-      <Stack spacing={4}>{userPages}</Stack>
+      <Stack spacing={3}>{userPages}</Stack>
       <LoadMore hasMore={hasMore} loading={loading} onClick={loadMore} />
     </>
   );

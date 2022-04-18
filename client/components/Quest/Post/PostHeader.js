@@ -4,15 +4,24 @@ import {
   Typography,
   IconButton,
   Menu,
+  Tooltip,
   MenuItem,
 } from "@mui/material";
-import { formatRelative } from "date-fns";
+import { format, formatDistance } from "date-fns";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import { useState } from "react";
 import { useRouter } from "next/router";
 
 export default function PostHeader(props) {
-  const { isAuthor, image, displayName, postId, questId, createdAt } = props;
+  const {
+    isAuthor,
+    image,
+    displayName,
+    postId,
+    questId,
+    createdAt,
+    updatedAt,
+  } = props;
 
   const router = useRouter();
   const [postOptionsAnchor, setPostOptionsAnchor] = useState(null);
@@ -39,12 +48,37 @@ export default function PostHeader(props) {
           {image || displayName.charAt(0)}
         </Avatar>
         <Box sx={{ flexGrow: 1, alignItems: "flex-start" }}>
-          <Typography variant="body2" sx={{ m: 0, p: 0 }}>
+          <Typography variant="body2" sx={{ m: 0, p: 0 }} fontWeight="medium">
             {displayName}
           </Typography>
-          <Typography variant="body2" sx={{ fontWeight: "regular" }}>
-            {formatRelative(new Date(createdAt), new Date())}
-          </Typography>
+          <Tooltip
+            title={
+              <div>
+                <div>
+                  Created at{" "}
+                  {format(new Date(createdAt), "MMMM d, yyyy HH:mm:ss")}
+                </div>
+                <div>
+                  Updated at{" "}
+                  {format(new Date(updatedAt), "MMMM d, yyyy HH:mm:ss")}
+                </div>
+              </div>
+            }
+            describeChild
+          >
+            <Typography
+              variant="body2"
+              component="span"
+              sx={{
+                fontWeight: "regular",
+                flexGrow: 0,
+              }}
+            >
+              {formatDistance(new Date(createdAt), new Date(), {
+                addSuffix: true,
+              })}
+            </Typography>
+          </Tooltip>
         </Box>
         <div>
           {isAuthor && (

@@ -120,7 +120,7 @@ export default function QuestsList({ url, searchParams }) {
       <WoopModal
         handleOk={submitForm}
         handleCancel={toggleModal}
-        okText="Join Quest"
+        okText="Join"
         details={modalDetails}
       />
     </>

@@ -1,6 +1,5 @@
 export default function Index() {
-  // eslint-disable-next-line react/jsx-no-useless-fragment
-  return <>Hello</>;
+  return null;
 }
 
 export async function getServerSideProps(context) {
