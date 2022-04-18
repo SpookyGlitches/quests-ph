@@ -70,7 +70,7 @@ export default function Articles({ category, search }) {
     <Box>
       <Grid container spacing={2}>
         {finalArticles.map((elem) => (
-          <Grid item xs={4} key={articles.indexOf(elem)}>
+          <Grid item xs={4} key={finalArticles.indexOf(elem)}>
             <Card
               sx={{
                 mb: "1em",

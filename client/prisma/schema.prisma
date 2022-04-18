@@ -37,9 +37,9 @@ model Session {
 
 model User {
   userId             String                   @id @default(cuid())
-  displayName        String                   @unique
+  displayName        String                   
   fullName           String?
-  email              String                   @unique
+  email              String                   
   password           String
   dateOfBirth        DateTime
   role               String
@@ -48,8 +48,9 @@ model User {
   createdAt          DateTime                 @default(now())
   updatedAt          DateTime?
   deletedAt          DateTime?
-  isActive           String                   @default("1") @db.Char(1)
+  isActive           String                   @default("0") @db.Char(1)
   token              String
+  isBanned           Boolean                 @default(false)
   mentorApplication  MentorApplication[]
   mentorFile         MentorFile[]
   accounts           Account[]
@@ -91,6 +92,7 @@ model MentorApplication {
   mentorId            String
   experience          String
   detailedExperience  String
+  deletedAt           DateTime?
   user                User   @relation(fields: [mentorId], references: [userId])
 }
 
@@ -98,6 +100,7 @@ model MentorFile {
   mentorFileId   Int       @id @default(autoincrement())
   mentorUploadId String
   path           String
+  key            String?
   createdAt      DateTime? @default(now())
   deletedAt      DateTime?
   user           User      @relation(fields: [mentorUploadId], references: [userId])

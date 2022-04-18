@@ -1,19 +1,11 @@
-import { Box, TextField, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Link from "next/link";
-// import SearchBar from "../../../components/Admin/Search";
-import InputAdornment from "@mui/material/InputAdornment";
-import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import useSWR from "swr";
 import * as React from "react";
-import DataTable from "../../../components/Admin/Table/DataTable";
+import DataTable from "../../../components/Admin/Table/QuestsTable";
 import AdminLayout from "../../../components/Layouts/AdminLayout";
 
 export default function Index() {
-  const [search, setSearch] = React.useState("");
-  const handleSearch = (event) => {
-    setSearch(event.target.value);
-    console.log(search);
-  };
   const { data: questsData, error } = useSWR(
     `/admin/quests/getCompletedQuests`,
   );
@@ -45,7 +37,9 @@ export default function Index() {
         <Typography sx={{ mt: 3, color: "white", fontSize: "20px" }}>
           Quests Page
         </Typography>
-        <h2 style={{ color: "white" }}>You have 5 new reports!</h2>
+        <h2 style={{ color: "white" }}>
+          You have {questsData?.length} completed Quests!
+        </h2>
         <Typography sx={{ mt: 2, color: "white", fontSize: "18px" }}>
           <Link href="/admin/quests" passHref>
             <a href="replace">New</a>
@@ -67,39 +61,13 @@ export default function Index() {
           margin: "1rem",
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "end",
-            flexDirection: "row",
-          }}
-        >
-          {/* <SearchBar /> */}
-          <TextField
-            label="Search"
-            variant="outlined"
-            name="search"
-            value={search}
-            onChange={handleSearch}
-            sx={{
-              borderRadius: 1,
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchRoundedIcon />
-                </InputAdornment>
-              ),
-              disableUnderline: true,
-            }}
-          />
-        </Box>
         <DataTable
           tableData={questsData}
           sx={{
             margin: "2rem",
           }}
           page="quests"
+          path="completed"
         />
       </Box>
     </AdminLayout>

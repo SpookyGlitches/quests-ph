@@ -6,7 +6,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import ErrorRoundedIcon from "@mui/icons-material/ErrorRounded";
-import CommentRoundedIcon from "@mui/icons-material/CommentRounded";
 import axios from "axios";
 import useSWR from "swr";
 import PersonAddAlt1RoundedIcon from "@mui/icons-material/PersonAddAlt1Rounded";
@@ -405,18 +404,6 @@ export default function MentorNotFriendOptionsBar({
         // eslint-disable-next-line
         <></>
       )}
-      <Button
-        variant="outlined"
-        style={{
-          backgroundColor: "#E8E8E8",
-          borderColor: "#E8E8E8",
-          color: "black",
-          float: "right",
-        }}
-      >
-        <CommentRoundedIcon sx={{ mr: 1 }} />
-        Chat
-      </Button>
     </Box>
   );
 }

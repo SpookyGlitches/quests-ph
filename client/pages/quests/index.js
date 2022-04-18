@@ -43,7 +43,7 @@ export default function Index() {
         </Typography>
         <Link href="/quests/create" passHref>
           <Button variant="contained" startIcon={<AddRoundedIcon />}>
-            New
+            New Quest
           </Button>
         </Link>
       </Box>

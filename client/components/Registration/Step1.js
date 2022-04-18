@@ -4,7 +4,6 @@ import { Controller, useFormContext } from "react-hook-form";
 import moment from "moment";
 
 export default function Step1({ memberType }) {
-  console.log(memberType);
   const {
     control,
     formState: { errors },
