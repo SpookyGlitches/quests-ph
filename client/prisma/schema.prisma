@@ -37,9 +37,9 @@ model Session {
 
 model User {
   userId             String                   @id @default(cuid())
-  displayName        String                   
+  displayName        String
   fullName           String?
-  email              String                   
+  email              String
   password           String
   dateOfBirth        DateTime
   role               String
@@ -50,7 +50,7 @@ model User {
   deletedAt          DateTime?
   isActive           String                   @default("0") @db.Char(1)
   token              String
-  isBanned           Boolean                 @default(false)
+  isBanned           Boolean                  @default(false)
   mentorApplication  MentorApplication[]
   mentorFile         MentorFile[]
   accounts           Account[]
@@ -88,12 +88,12 @@ model ForgotPassword {
 }
 
 model MentorApplication {
-  mentorApplicationid Int    @id @default(autoincrement())
+  mentorApplicationid Int       @id @default(autoincrement())
   mentorId            String
   experience          String
   detailedExperience  String
   deletedAt           DateTime?
-  user                User   @relation(fields: [mentorId], references: [userId])
+  user                User      @relation(fields: [mentorId], references: [userId])
 }
 
 model MentorFile {
@@ -135,6 +135,7 @@ model Article {
   approvedAt DateTime?
   deletedAt  DateTime?
   user       User          @relation(fields: [userId], references: [userId])
+
   @@fulltext([title])
 }
 
@@ -145,7 +146,7 @@ model Quest {
   difficulty             QuestDifficulty          @default(EASY)
   visibility             QuestVisibility          @default(PRIVATE)
   category               QuestCategory            @default(SOCIAL)
-  wiki                   String                   @default("[{\"type\":\"h1\",\"children\":[{\"text\":\"Welcome\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"This is our Wiki where you can find tips, resources, and strategies to increase the success of us achieving our wishes. If you want to add here, just send me a message in our chat and I'll do it for you!\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"},{\"type\":\"a\",\"url\":\"https://www.youtube.com/watch?v=dQw4w9WgXcQ\",\"children\":[{\"text\":\"watch this awesome tip!\"}]},{\"text\":\"\"}]},{\"type\":\"p\",\"children\":[{\"text\":\" \"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"}]}]") @db.LongText
+  wiki                   String?                  @db.LongText
   mentorMessage          String?
   estimatedStartDate     DateTime                 @db.Date
   estimatedEndDate       DateTime                 @db.Date
@@ -160,6 +161,7 @@ model Quest {
   conversation           Conversation[]
   questPartyBan          QuestPartyBan[]
   questMentorshipRequest QuestMentorshipRequest[]
+
   @@fulltext([wish])
 }
 
@@ -198,7 +200,7 @@ model QuestMentorshipRequest {
   questId                  Int
   status                   MentorshipStatus @default(ACTIVE)
   createdAt                DateTime         @default(now())
-  updatedAt                DateTime?
+  updatedAt                DateTime         @updatedAt
   deletedAt                DateTime?
   partyLeader              User             @relation(name: "partyLeader", fields: [partyLeaderId], references: [userId])
   mentor                   User             @relation(name: "mentor", fields: [mentorId], references: [userId])
@@ -297,7 +299,7 @@ model PartyMember {
   obstacle      String
   plan          String
   createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
   deletedAt     DateTime?
   pointsLog     PointsLog[]
   posts         Post[]
@@ -368,7 +370,8 @@ model Post {
   comments      Comment[]
   postReacts    PostReact[]
   partyMember   PartyMember @relation(fields: [partyMemberId], references: [partyMemberId])
-  @@fulltext([title,body])
+
+  @@fulltext([title, body])
 }
 
 model Comment {
