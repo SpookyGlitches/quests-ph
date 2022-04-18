@@ -6,22 +6,25 @@ export default async function getRemovedUsers(req, res) {
   }
 
   try {
-    const users = await prisma.user.findMany({
-      where: {
-        NOT: [
-          {
-            deletedAt: null,
-          },
-        ],
-      },
-      select: {
-        userId: true,
-        displayName: true,
-        fullName: true,
-        email: true,
-        role: true,
-      },
-    });
+    // const users = await prisma.user.findMany({
+    //   where: {
+    //     NOT: [
+    //       {
+    //         deletedAt: null,
+    //       },
+    //     ],
+    //   },
+    //   select: {
+    //     userId: true,
+    //     displayName: true,
+    //     fullName: true,
+    //     email: true,
+    //     role: true,
+    //     deletedAt: true,
+    //   },
+    // });
+    const users =
+      await prisma.$queryRaw`SELECT userId, displayName, fullName, email, role, SUBSTRING(deletedAt, 1, 10) AS deletedAt FROM user WHERE deletedAt IS NOT NULL`;
     return res.status(200).json(users);
   } catch (error) {
     console.log(error);

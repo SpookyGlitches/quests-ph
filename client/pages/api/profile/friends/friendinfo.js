@@ -1,11 +1,13 @@
+import { getSession } from "next-auth/react";
 import prisma from "../../../../lib/prisma";
 
 export default async function getFriendInfo(req, res) {
   if (req.method === "GET") {
     try {
+      const { user } = await getSession({ req });
       const getUserInfo = await prisma.user.findFirst({
         where: {
-          displayName: req.query.displayName,
+          userId: user.userId,
         },
       });
 

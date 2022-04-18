@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Typography, Button, Box, Grid } from "@mui/material";
+import { getSession } from "next-auth/react";
 import LandingLayout from "../../components/Layouts/LandingLayout";
 
 export default function Index() {
@@ -16,13 +17,13 @@ export default function Index() {
               flexDirection: "column",
             }}
           >
-            <Typography variant="h4">
-              We help individuals achieve their goals through socialization and
-              chu.
+            <Typography variant="h3">
+              We help individuals achieve their goals.
             </Typography>
             <Typography variant="body1" sx={{ marginTop: 6, marginBottom: 4 }}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              We give our users the chance to collaborate with others by either
+              being a mentor or a mentee through the WOOP (Wish, Outcome,
+              Obstacle, Plan) method.
             </Typography>
             <Box
               sx={{
@@ -55,4 +56,18 @@ export default function Index() {
       </Grid>
     </LandingLayout>
   );
+}
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  if (session) {
+    return {
+      redirect: {
+        destination: "/",
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 }

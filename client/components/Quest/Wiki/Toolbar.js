@@ -2,7 +2,7 @@ import { ELEMENT_PARAGRAPH } from "@udecode/plate-paragraph";
 import { ELEMENT_UL, ELEMENT_OL, toggleList } from "@udecode/plate-list";
 import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3 } from "@udecode/plate-heading";
 import { ELEMENT_LINK, getAndUpsertLink } from "@udecode/plate-link";
-import { ToggleButton, Box, Divider } from "@mui/material";
+import { ToggleButton, Box, Divider, Tooltip } from "@mui/material";
 
 import Looks3RoundedIcon from "@mui/icons-material/Looks3Rounded";
 import LooksOneRoundedIcon from "@mui/icons-material/LooksOneRounded";
@@ -114,16 +114,24 @@ export default function Toolbar() {
     >
       <StyledToggleButtonGroup color="primary" sx={{}}>
         <ToggleButton {...getMarkProps(MARK_BOLD)}>
-          <FormatBoldRoundedIcon />
+          <Tooltip title="Bold">
+            <FormatBoldRoundedIcon />
+          </Tooltip>
         </ToggleButton>
         <ToggleButton {...getMarkProps(MARK_ITALIC)}>
-          <FormatItalicRoundedIcon />
+          <Tooltip title="Italic">
+            <FormatItalicRoundedIcon />
+          </Tooltip>
         </ToggleButton>
         <ToggleButton {...getMarkProps(MARK_UNDERLINE)}>
-          <FormatUnderlinedRoundedIcon />
+          <Tooltip title="Underline">
+            <FormatUnderlinedRoundedIcon />
+          </Tooltip>
         </ToggleButton>
         <ToggleButton {...getMarkProps(MARK_STRIKETHROUGH)}>
-          <StrikethroughSRoundedIcon />
+          <Tooltip title="Strikethrough">
+            <StrikethroughSRoundedIcon />
+          </Tooltip>
         </ToggleButton>
       </StyledToggleButtonGroup>
 
@@ -131,10 +139,14 @@ export default function Toolbar() {
 
       <StyledToggleButtonGroup color="primary">
         <ToggleButton {...getListProps(ELEMENT_UL)}>
-          <FormatListBulletedRoundedIcon />
+          <Tooltip title="Bulleted List">
+            <FormatListBulletedRoundedIcon />
+          </Tooltip>
         </ToggleButton>
         <ToggleButton {...getListProps(ELEMENT_OL)}>
-          <FormatListNumberedRoundedIcon />
+          <Tooltip title="Numbered List">
+            <FormatListNumberedRoundedIcon />
+          </Tooltip>
         </ToggleButton>
       </StyledToggleButtonGroup>
 
@@ -142,13 +154,19 @@ export default function Toolbar() {
 
       <StyledToggleButtonGroup color="primary">
         <ToggleButton {...getNodeProps(ELEMENT_H1)}>
-          <LooksOneRoundedIcon />
+          <Tooltip title="Heading 1">
+            <LooksOneRoundedIcon />
+          </Tooltip>
         </ToggleButton>
         <ToggleButton {...getNodeProps(ELEMENT_H2)}>
-          <LooksTwoRoundedIcon />
+          <Tooltip title="Heading 2">
+            <LooksTwoRoundedIcon />
+          </Tooltip>
         </ToggleButton>
         <ToggleButton {...getNodeProps(ELEMENT_H3)}>
-          <Looks3RoundedIcon />
+          <Tooltip title="Heading 3">
+            <Looks3RoundedIcon />
+          </Tooltip>
         </ToggleButton>
       </StyledToggleButtonGroup>
 
@@ -156,7 +174,9 @@ export default function Toolbar() {
 
       <StyledToggleButtonGroup color="primary">
         <ToggleButton {...getLinkProps(ELEMENT_LINK)}>
-          <InsertLinkRoundedIcon />
+          <Tooltip title="Link">
+            <InsertLinkRoundedIcon />
+          </Tooltip>
         </ToggleButton>
       </StyledToggleButtonGroup>
     </Box>

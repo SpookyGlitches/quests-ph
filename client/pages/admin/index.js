@@ -1,6 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
-import { Typography, Button, Box, Grid } from "@mui/material";
+import { Typography, Box, Grid } from "@mui/material";
 import AdminLayout from "../../components/Layouts/AdminLayout";
 
 export default function Users() {
@@ -14,30 +13,17 @@ export default function Users() {
               display: "flex",
               justifyContent: "center",
               flexDirection: "column",
+              mt: 10,
             }}
           >
             <Typography variant="h4">
-              We help individuals achieve their goals through socialization and
-              chu.
+              We help individuals achieve their goals.
             </Typography>
             <Typography variant="body1" sx={{ marginTop: 6, marginBottom: 4 }}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              We give our users the chance to collaborate with others by either
+              being a mentor or a mentee through the WOOP (Wish, Outcome,
+              Obstacle, Plan) method.
             </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: ["column", null, "row"],
-                gap: 2,
-              }}
-            >
-              <Link href="/auth/register/member" passHref>
-                <Button variant="contained">Join as Member</Button>
-              </Link>
-              <Link href="/auth/register/mentor" passHref>
-                <Button variant="contained">Join as Mentor</Button>
-              </Link>
-            </Box>
           </Box>
         </Grid>
         <Grid item xs={12} md={6}>

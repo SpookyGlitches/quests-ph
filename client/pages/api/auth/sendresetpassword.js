@@ -6,9 +6,10 @@ export default async function (req, res) {
   if (req.method === "POST") {
     const userInfo = req.body;
     const tok = uuidv4();
-    const checkEmail = await prisma.user.findUnique({
+    const checkEmail = await prisma.user.findFirst({
       where: {
         email: userInfo.data.email,
+        deletedAt: null,
       },
     });
 
@@ -34,6 +35,7 @@ export default async function (req, res) {
           to: userInfo.data.email,
           subject: `Reset Password`,
           html: `<div>
+              Hello ${checkEmail.displayName}!
               This is an automated reply from Quests App University of San Carlos. Please do not reply.
               You are receiving this email because we received a request to reset the password for your account.
               To proceed, reset your password through this <a href="${process.env.NEXTAUTH_URL}/auth/reset-password/${createRecord.token}">link</a>.
@@ -42,10 +44,7 @@ export default async function (req, res) {
           <div>`,
         };
 
-        transporter.sendMail(mailData, (err, info) => {
-          if (err) console.log(err);
-          else console.log(info);
-        });
+        await transporter.sendMail(mailData);
         res.status(200).send({ message: "Success!" });
       }
     } else {

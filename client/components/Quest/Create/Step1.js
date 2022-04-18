@@ -24,7 +24,7 @@ export default function Step1({ wishItem }) {
             helperText={
               errors.outcome
                 ? errors.outcome.message
-                : "What positive impact can your wish bring to you?"
+                : "What positive impact would the wish bring to you?"
             }
           />
         )}

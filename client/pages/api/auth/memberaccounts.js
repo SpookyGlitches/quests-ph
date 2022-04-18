@@ -8,7 +8,7 @@ export default async function (req, res) {
   // eslint-disable-next-line
 
   if (req.method === "POST") {
-    const userInfo = JSON.parse(req.body);
+    const userInfo = req.body.values;
     const rawDate = userInfo.dateOfBirth;
     const dateObj = new Date(rawDate);
     const bdate = dateObj.toISOString();
@@ -45,14 +45,16 @@ export default async function (req, res) {
     <div>`,
     };
 
-    const checkEmail = await prisma.user.findUnique({
+    const checkEmail = await prisma.user.findFirst({
       where: {
         email: userDetails.email,
+        deletedAt: null,
       },
     });
-    const checkDisplayName = await prisma.user.findUnique({
+    const checkDisplayName = await prisma.user.findFirst({
       where: {
         displayName: userDetails.displayName,
+        deletedAt: null,
       },
     });
     if (checkDisplayName && checkEmail) {

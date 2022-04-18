@@ -6,7 +6,7 @@ const requiredMsg = "This field is required";
 
 export const wishValidation = object({
   wish: string()
-    .max(32, "Maximum length of 32 characters")
+    .max(64, "Maximum length of 64 characters")
     .required(requiredMsg),
 });
 
@@ -32,3 +32,13 @@ export const step2Validations = object({
 export const step1Validations = wishValidation.concat(oopValidations);
 
 export const createQuestValidation = [step1Validations, step2Validations];
+
+export const completeQuestValidation = object({
+  text: string()
+    .test(
+      "matches-everyones-completed",
+      `Please enter "everyone's completed" without the double quotes.`,
+      (value) => value === "everyone's completed",
+    )
+    .required(),
+});

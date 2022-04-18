@@ -2,16 +2,14 @@ import {
   Box,
   Typography,
   IconButton,
-  Popper,
   Grid,
-  Fade,
-  Button,
+  Menu,
+  MenuItem,
   Paper,
 } from "@mui/material";
 import useSWR from "swr";
 
 import { format } from "date-fns";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
@@ -20,6 +18,7 @@ import capitalizeFirstLetterOnly from "../../../helpers/strings";
 export default function Settings() {
   const router = useRouter();
   const { questId } = router.query;
+
   const [anchorSettings, setAnchorSettings] = useState(null);
   const [openSettingsPopper, setOpenSettingsPopper] = useState(false);
 
@@ -33,89 +32,86 @@ export default function Settings() {
     setOpenSettingsPopper(!openSettingsPopper);
   };
 
+  const navigateToSettingsPage = () => {
+    router.push(`/quests/${questId}/overview/edit-settings`);
+  };
+
+  const closePopper = () => {
+    setOpenSettingsPopper(false);
+  };
+
   if (!quest || !partyMember) {
     return <div>Loading</div>;
   }
 
   return (
-    <Box
-      sx={{
-        backgroundColor: "background.paper",
-        padding: "2rem",
-        borderRadius: 2,
-      }}
-    >
-      <Box sx={{ position: "relative" }}>
-        {partyMember.role === "PARTY_LEADER" && (
-          <IconButton
-            sx={{ position: "absolute", right: 0 }}
-            onClick={handleSettingsPopperClick}
-          >
-            <MoreHorizRoundedIcon />
-          </IconButton>
-        )}
-        <Grid container spacing={2}>
-          <Grid item xs={12} lg={5}>
-            <Box>
-              <Typography variant="body2">
-                Category: {capitalizeFirstLetterOnly(quest.category)}
-              </Typography>
-              <Typography variant="body2">
-                Visibility: {capitalizeFirstLetterOnly(quest.visibility)}
-              </Typography>
-              <Typography variant="body2">
-                Difficulty: {capitalizeFirstLetterOnly(quest.difficulty)}
-              </Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={12} lg={7}>
-            {quest && (
+    <>
+      <Paper
+        sx={{
+          padding: 3,
+        }}
+      >
+        <Box sx={{ position: "relative" }}>
+          {partyMember.role === "PARTY_LEADER" && (
+            <IconButton
+              sx={{ position: "absolute", right: 0 }}
+              onClick={handleSettingsPopperClick}
+            >
+              <MoreHorizRoundedIcon />
+            </IconButton>
+          )}
+          <Grid container spacing={2}>
+            <Grid item xs={12} lg={5}>
               <Box>
                 <Typography variant="body2">
-                  Estimated Start:{" "}
-                  {format(new Date(quest.estimatedStartDate), "MMMM d, yyyy")}
+                  Category: {capitalizeFirstLetterOnly(quest.category)}
                 </Typography>
                 <Typography variant="body2">
-                  Estimated End:{" "}
-                  {format(new Date(quest.estimatedEndDate), "MMMM d, yyyy")}
+                  Visibility: {capitalizeFirstLetterOnly(quest.visibility)}
                 </Typography>
                 <Typography variant="body2">
-                  {quest.completedAt
-                    ? `Completed At: ${format(
-                        new Date(quest.completedAt),
-                        "MMMM d, yyyy",
-                      )}`
-                    : ""}
+                  Difficulty: {capitalizeFirstLetterOnly(quest.difficulty)}
                 </Typography>
               </Box>
-            )}
+            </Grid>
+            <Grid item xs={12} lg={7}>
+              {quest && (
+                <Box>
+                  <Typography variant="body2">
+                    Estimated Start:{" "}
+                    {format(new Date(quest.estimatedStartDate), "MMMM d, yyyy")}
+                  </Typography>
+                  <Typography variant="body2">
+                    Estimated End:{" "}
+                    {format(new Date(quest.estimatedEndDate), "MMMM d, yyyy")}
+                  </Typography>
+                  <Typography variant="body2">
+                    {quest.completedAt
+                      ? `Completed At: ${format(
+                          new Date(quest.completedAt),
+                          "MMMM d, yyyy",
+                        )}`
+                      : ""}
+                  </Typography>
+                </Box>
+              )}
+            </Grid>
           </Grid>
-        </Grid>
-      </Box>
-
+        </Box>
+      </Paper>
       {partyMember.role === "PARTY_LEADER" && (
-        <Popper
+        <Menu
+          MenuListProps={{
+            dense: true,
+          }}
           open={openSettingsPopper}
           anchorEl={anchorSettings}
-          placement="right-start"
+          onClose={closePopper}
           transition
         >
-          {({ TransitionProps }) => (
-            <Fade {...TransitionProps} timeout={350}>
-              <Paper>
-                <Typography variant="body1" color="black">
-                  <Link
-                    href={`/quests/${questId}/overview/edit-settings`}
-                    passHref
-                  >
-                    <Button>Edit</Button>
-                  </Link>
-                </Typography>
-              </Paper>
-            </Fade>
-          )}
-        </Popper>
+          <MenuItem onClick={navigateToSettingsPage}>Edit</MenuItem>
+        </Menu>
       )}
-    </Box>
+    </>
   );
 }

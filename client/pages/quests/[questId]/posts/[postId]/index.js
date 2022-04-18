@@ -4,7 +4,7 @@ import Post from "../../../../../components/Quest/Post/Post";
 import AppLayout from "../../../../../components/Layouts/AppLayout";
 import CommentsSection from "../../../../../components/Quest/Post/Comment/CommentsSection";
 
-const PostPage = () => {
+export default function PostPage() {
   const {
     query: { questId, postId },
   } = useRouter();
@@ -16,8 +16,7 @@ const PostPage = () => {
       </Post>
     </div>
   );
-};
-export default PostPage;
+}
 
 PostPage.getLayout = function getLayout(page) {
   return (

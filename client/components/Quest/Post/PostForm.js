@@ -47,7 +47,7 @@ export default function PostForm({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "background.paper",
+
         borderRadius: 2,
       }}
     >

@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Paper, Typography } from "@mui/material";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -15,11 +15,18 @@ const initialValue = [
 ];
 
 const Wiki = () => {
-  const router = useRouter();
-  const { questId } = router.query;
+  const { query } = useRouter();
+  const { questId } = query;
+
   const [plateValue, setPlateValue] = useState(initialValue);
   const [isEditing, setIsEditing] = useState(false);
-  const { data: quest } = useSWR(questId ? `/quests/${questId}` : null);
+  const { data: quest, mutate: mutateQuest } = useSWR(
+    questId ? `/quests/${questId}` : null,
+  );
+
+  const { data: partyMember } = useSWR(
+    questId ? `/quests/${questId}/partyMembers/currentUser` : null,
+  );
 
   useEffect(() => {
     if (quest && quest.wiki) {
@@ -34,8 +41,12 @@ const Wiki = () => {
     event.preventDefault();
     if (isEditing) {
       try {
+        const stringifiedValue = JSON.stringify(plateValue);
         await axios.put(`/api/quests/${quest.questId}/wiki`, {
-          wiki: JSON.stringify(plateValue),
+          wiki: stringifiedValue,
+        });
+        mutateQuest((questData) => ({ ...questData, wiki: stringifiedValue }), {
+          revalidate: false,
         });
       } catch (err) {
         console.error(err);
@@ -56,19 +67,16 @@ const Wiki = () => {
     contentEditable: !isEditing,
   };
 
-  if (!quest) {
+  if (!quest || !partyMember) {
     return <div>Loading</div>;
   }
 
   return (
-    <Box
+    <Paper
       sx={{
-        width: "100%",
-        backgroundColor: "background.paper",
-        borderRadius: 2,
         overflow: "hidden",
         minHeight: "30rem",
-        padding: "2rem",
+        padding: 3,
       }}
     >
       <Box
@@ -82,9 +90,11 @@ const Wiki = () => {
         <Typography variant="h4" color="primary" sx={{}}>
           Wiki
         </Typography>
-        <Button onClick={toggleEditButton} sx={{ height: "auto" }}>
-          {isEditing ? "Save" : "Edit"}
-        </Button>
+        {partyMember.role !== "MENTEE" && (
+          <Button onClick={toggleEditButton} sx={{ height: "auto" }}>
+            {isEditing ? "Save" : "Edit"}
+          </Button>
+        )}
       </Box>
 
       <Plate
@@ -94,9 +104,9 @@ const Wiki = () => {
         plugins={plugins}
         onChange={onChangeDebug}
       >
-        {isEditing && <Toolbar isEditing={isEditing} />}
+        {isEditing && <Toolbar />}
       </Plate>
-    </Box>
+    </Paper>
   );
 };
 

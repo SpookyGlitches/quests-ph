@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { add } from "date-fns";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR from "swr";
 
 import {
   Box,
@@ -12,6 +12,7 @@ import {
   DialogActions,
   Stack,
   Typography,
+  Paper,
 } from "@mui/material";
 import {
   QuestDifficulty,
@@ -60,11 +61,12 @@ const DialogItem = ({ handleOk, handleCancel, open, loading }) => {
 
 export default function Edit() {
   const router = useRouter();
-  const { mutate } = useSWRConfig();
   const {
     query: { questId },
   } = router;
-  const { data: quest } = useSWR(questId ? `/quests/${questId}` : null);
+  const { data: quest, mutate: mutateQuest } = useSWR(
+    questId ? `/quests/${questId}` : null,
+  );
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const methods = useForm({
@@ -93,13 +95,13 @@ export default function Edit() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quest]);
 
-  const updateSettings = async (values) => {
-    await axios.put(`/api/quests/${quest.questId}`, values);
-  };
-
   const submitForm = async (values) => {
     try {
-      await mutate(`/quests/${quest.questId}`, updateSettings(values));
+      await axios.put(`/api/quests/${quest.questId}`, values);
+      mutateQuest((questData) => ({
+        ...questData,
+        ...values,
+      }));
     } catch (err) {
       console.error(err);
     }
@@ -123,17 +125,11 @@ export default function Edit() {
   };
 
   if (!quest) {
-    return <div>Loading</div>;
+    return <div>Loading here</div>;
   }
 
   return (
-    <Box
-      sx={{
-        backgroundColor: "background.paper",
-        borderRadius: 2,
-        padding: "1.5rem",
-      }}
-    >
+    <Paper sx={{ padding: 3 }}>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(submitForm)}>
           <Typography variant="h5" color="primary" marginBottom={4}>
@@ -142,10 +138,7 @@ export default function Edit() {
           <Stack
             spacing={4}
             sx={{
-              paddingX: {
-                sm: 0,
-                md: "1rem ",
-              },
+              paddingX: {},
             }}
           >
             <Step2 wishItem={wishItem} />
@@ -172,7 +165,7 @@ export default function Edit() {
         handleCancel={toggleDeleteModal}
         loading={loading}
       />
-    </Box>
+    </Paper>
   );
 }
 

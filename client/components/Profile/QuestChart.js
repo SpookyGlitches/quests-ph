@@ -12,6 +12,7 @@ import { Bar } from "react-chartjs-2";
 import { Box, Typography } from "@mui/material";
 import useSWR from "swr";
 import React from "react";
+import getCategoryColor from "../../helpers/categoryColor";
 
 ChartJS.register(
   CategoryScale,
@@ -116,9 +117,9 @@ export default function QuestChart() {
               {
                 data: questsArrComplete,
                 backgroundColor: [
-                  "rgb(21,136,25)",
-                  "rgb(101,19,223)",
-                  "rgb(218,83,83)",
+                  getCategoryColor("HEALTH"),
+                  getCategoryColor("SOCIAL"),
+                  getCategoryColor("CAREER"),
                 ],
                 borderWidth: 0,
                 borderRadius: 10,

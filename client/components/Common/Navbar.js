@@ -123,7 +123,7 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
       <MenuItem
         onClick={() =>
           signOut({
-            callbackUrl: `${window.location.origin}`,
+            callbackUrl: "/landing",
           })
         }
       >
@@ -149,6 +149,7 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
+<<<<<<< HEAD
       <Link href={"/notifications"} passHref>
         <MenuItem>
           <IconButton size="large" aria-label="" color="inherit">
@@ -160,6 +161,8 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
           <p>Notifications</p>
         </MenuItem>
       </Link>
+=======
+>>>>>>> 9fd3b4a5b7694094e256dfafd873ed4f182e8dcc
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"

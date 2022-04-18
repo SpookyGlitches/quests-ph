@@ -24,10 +24,10 @@ export default function QuestLayout({ children }) {
   }
 
   return (
-    <Grid container sx={{ paddingTop: "1rem" }} spacing={6}>
+    <Grid container spacing={6}>
       <Grid item xs={12} lg={8}>
         <QuestHeader />
-        <Box sx={{ marginTop: "2rem" }}>{children}</Box>
+        <Box sx={{ marginTop: 4 }}>{children}</Box>
       </Grid>
       <Grid item xs={12} lg={4}>
         <Box sx={{}}>
@@ -35,7 +35,7 @@ export default function QuestLayout({ children }) {
             <DateCard />
             <Todo />
             <Suggestions />
-            <EndQuest />
+            {partyMember.role === "PARTY_LEADER" && <EndQuest />}
           </Stack>
         </Box>
       </Grid>

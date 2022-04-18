@@ -1,4 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
+require("dotenv").config();
+const bcrypt = require("bcryptjs");
+const cuid = require("cuid");
 
 const prisma = new PrismaClient();
 // no need to use our own prisma lib thingy since this is outside
@@ -146,6 +149,91 @@ async function main() {
       name: "Educator",
       description: "Successfully submitted 50 articles",
       image: "educator.svg",
+    },
+  });
+  await prisma.user.upsert({
+    where: { userId: cuid() },
+    update: {},
+    create: {
+      displayName: process.env.ADMINONEUSER,
+      fullName: "Admin One",
+      email: process.env.ADMINONEEMAIL,
+      password: bcrypt.hashSync(
+        process.env.ADMINONEPASS,
+        bcrypt.genSaltSync(10),
+      ),
+      dateOfBirth: new Date(),
+      role: "admin",
+      verificationStatus: true,
+      token: "admintoken",
+    },
+  });
+  await prisma.user.upsert({
+    where: { userId: cuid() },
+    update: {},
+    create: {
+      displayName: process.env.ADMINTWOUSER,
+      fullName: "Admin Two",
+      email: process.env.ADMINTWOEMAIL,
+      password: bcrypt.hashSync(
+        process.env.ADMINTWOPASS,
+        bcrypt.genSaltSync(10),
+      ),
+      dateOfBirth: new Date(),
+      role: "admin",
+      verificationStatus: true,
+      token: "admintoken",
+    },
+  });
+  await prisma.user.upsert({
+    where: { userId: cuid() },
+    update: {},
+    create: {
+      displayName: process.env.ADMINTHREEUSER,
+      fullName: "Admin Three",
+      email: process.env.ADMINTHREEEMAIL,
+      password: bcrypt.hashSync(
+        process.env.ADMINTHREEPASS,
+        bcrypt.genSaltSync(10),
+      ),
+      dateOfBirth: new Date(),
+      role: "admin",
+      verificationStatus: true,
+      token: "admintoken",
+    },
+  });
+  await prisma.user.upsert({
+    where: { userId: cuid() },
+    update: {},
+    create: {
+      displayName: process.env.ADMINFOURUSER,
+      fullName: "Admin Four",
+      email: process.env.ADMINTHREEEMAIL,
+      password: bcrypt.hashSync(
+        process.env.ADMINFOURPASS,
+        bcrypt.genSaltSync(10),
+      ),
+      dateOfBirth: new Date(),
+      role: "admin",
+      verificationStatus: true,
+      token: "admintoken",
+    },
+  });
+  await prisma.user.upsert({
+    where: { userId: cuid() },
+    update: {},
+    create: {
+      displayName: process.env.ADMINFIVEUSER,
+      fullName: "Admin Five",
+      email: process.env.ADMINTHREEEMAIL,
+      password: bcrypt.hashSync(
+        process.env.ADMINFIVEPASS,
+        bcrypt.genSaltSync(10),
+      ),
+      dateOfBirth: new Date(),
+      role: "admin",
+      verificationStatus: true,
+      token: "admintoken",
     },
   });
 }
