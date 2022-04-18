@@ -146,7 +146,7 @@ model Quest {
   difficulty             QuestDifficulty          @default(EASY)
   visibility             QuestVisibility          @default(PRIVATE)
   category               QuestCategory            @default(SOCIAL)
-  wiki                   String                   @default("") @db.LongText
+  wiki                   String?                  @db.LongText
   mentorMessage          String?
   estimatedStartDate     DateTime                 @db.Date
   estimatedEndDate       DateTime                 @db.Date
