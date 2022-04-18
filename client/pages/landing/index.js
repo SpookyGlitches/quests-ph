@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Typography, Button, Box, Grid } from "@mui/material";
+import { getSession } from "next-auth/react";
 import LandingLayout from "../../components/Layouts/LandingLayout";
 
 export default function Index() {
@@ -55,4 +56,18 @@ export default function Index() {
       </Grid>
     </LandingLayout>
   );
+}
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  if (session) {
+    return {
+      redirect: {
+        destination: "/",
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 }

@@ -29,6 +29,7 @@ import Step2 from "../../../components/Registration/Step2";
 import Step3 from "../../../components/Registration/Step3";
 import { MentorRegistration } from "../../../validations/MentorRegistration";
 import SignUpDisclaimer from "../../../components/Registration/SignUpDisclaimer";
+import HaveAnAccount from "../../../components/Registration/HaveAnAccount";
 
 const steps = ["", "", ""];
 
@@ -192,6 +193,7 @@ const MentorRegistrationForm = () => {
           {activeStep === steps.length - 1 ? <SignUpDisclaimer /> : ""}
         </Stack>
       </Box>
+      <HaveAnAccount />
     </AuthLayout>
   );
 };

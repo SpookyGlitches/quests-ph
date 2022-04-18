@@ -51,9 +51,9 @@ export default async function approveReport(req, res) {
       subject: `User Report`,
       html: `<div>
       Greetings ${getUser.displayName}! We have recently received a report about your account. Here in Quests,
-      our users' welfare is one of the most important things we consider. After careful review of the report
+      our users' welfare is one of the most important things we consider here. After careful review of the report
       made against you, we have decided to temporarily ban your account for ${num} days. You will be unable to
-      access the Quests module within ${num} days. However, you will still be able to access the other modules.
+      access your account within ${num} days. However, you may log in after the said number of days.
 
       Thank you and have a great day!
 
