@@ -76,7 +76,7 @@ const OutgoingField = (item) => {
               marginTop: "-.25rem",
             }}
           >
-            {outgoingData.requestee.fullName}
+            {outgoingData.requestee.displayName}
           </Typography>
           <Typography
             variant="body2"
@@ -86,7 +86,7 @@ const OutgoingField = (item) => {
               marginTop: "-.4rem",
             }}
           >
-            {outgoingData.requestee.displayName}
+            {outgoingData.requestee.fullName}
           </Typography>
         </Box>
       </Box>
