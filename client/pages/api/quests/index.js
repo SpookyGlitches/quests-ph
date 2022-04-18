@@ -153,6 +153,7 @@ async function createQuest(req, res) {
         estimatedStartDate: startDate,
         estimatedEndDate: endDate,
         userId: user.userId,
+        wiki: '[{"type":"h1","children":[{"text":"Welcome"}]},{"type":"p","children":[{"text":"This is our Wiki where you can find tips, resources, and strategies to increase the success of us achieving our wishes. If you want to add something here, just send me a message in our chat!"}]},{"type":"p","children":[{"text":""}]}]',
         partyMembers: {
           create: {
             outcome,
