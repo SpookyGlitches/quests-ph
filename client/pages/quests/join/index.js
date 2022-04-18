@@ -54,7 +54,6 @@ Index.getLayout = function getLayout(page) {
 };
 
 export async function getServerSideProps(context) {
-  const { user } = await getSession(context);
   const { token } = context.query;
   if (!token) {
     return {
@@ -64,14 +63,16 @@ export async function getServerSideProps(context) {
       },
     };
   }
-  if (user.role === "mentor") {
-    return {
-      props: {
-        error: "This link is not available for mentors.",
-      },
-    };
-  }
+
   try {
+    const { user } = await getSession(context);
+    if (user.role === "mentor") {
+      return {
+        props: {
+          error: "This link is not available for mentors.",
+        },
+      };
+    }
     const verified = jwt.verify(
       token,
       process.env.INVITE_PARTY_MEMBER_SECRET_KEY,
