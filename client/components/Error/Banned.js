@@ -1,4 +1,5 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography, Button } from "@mui/material";
+import { signOut } from "next-auth/react";
 
 export default function Banned() {
   return (
@@ -19,6 +20,15 @@ export default function Banned() {
         <Typography variant="h5" sx={{ mt: "1rem" }}>
           You are unauthorized to view this page because you are banned.
         </Typography>
+        <Button
+          onClick={() =>
+            signOut({
+              callbackUrl: "/landing",
+            })
+          }
+        >
+          Sign Out
+        </Button>
       </Box>
     </Stack>
   );
