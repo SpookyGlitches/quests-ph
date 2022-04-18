@@ -6,6 +6,7 @@ import axios from "axios";
 import AppLayout from "../../components/Layouts/AppLayout";
 import AccessDenied from "../../components/Error/AccessDenied";
 import IncomingRequests from "../../components/Requests/Incoming";
+import ReapplyMentor from "../../components/Requests/ApplyAgain";
 
 function ListHolder({ items, requestName = "Mentor Requests" }) {
   return (
@@ -56,6 +57,7 @@ const Index = () => {
   if (session) {
     return (
       <AppLayout>
+        <ReapplyMentor userId={session.user.userId} />
         <ListHolder items={mentorrequests} />
       </AppLayout>
     );

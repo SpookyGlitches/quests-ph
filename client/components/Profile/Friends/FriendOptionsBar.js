@@ -273,7 +273,7 @@ export default function FriendsOptionsBar({
         <ErrorRoundedIcon sx={{ mr: 1 }} />
         Report
       </Button>
-      <Dialog open={openReport} onClose={handleCloseReport}>
+      <Dialog open={openReport} onClose={handleCloseReport} fullWidth>
         <DialogTitle>Report User</DialogTitle>
 
         <form onSubmit={handleSubmit(onSubmit)}>

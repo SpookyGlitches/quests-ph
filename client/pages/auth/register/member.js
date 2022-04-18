@@ -6,6 +6,8 @@ import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import Router from "next/router";
+import { getSession } from "next-auth/react";
+import axios from "axios";
 import AuthHeader from "../../../components/Auth/AuthHeader";
 import AuthLayout from "../../../components/Layouts/AuthLayout";
 import Step1 from "../../../components/Registration/Step1";
@@ -40,30 +42,31 @@ export default function Register() {
   const here = async (values) => {
     // eslint-disable-next-line
     try {
-      const res = await fetch("/api/auth/memberaccounts", {
+      await axios({
         method: "POST",
-        body: JSON.stringify(values),
-      });
-
-      if (res.status === 200) {
+        url: "/api/auth/memberaccounts",
+        data: {
+          values,
+        },
+      }).then(() => {
         Router.push({
           pathname: "/auth/verify-email/[emailAddress]",
           query: { emailAddress: values.email },
         });
-      } else if (res.status === 403) {
-        setMessage("Display Name is already in use.");
-        setShow(true);
-      } else if (res.status === 409) {
-        console.log("email");
-        setMessage("Email address is already in use.");
-        setShow(true);
-      } else if (res.status === 400) {
-        console.log("both");
-        setMessage("Display Name and Email Address are already in use.");
-        setShow(true);
-      }
+      });
     } catch (err) {
-      throw err;
+      if (err.response) {
+        if (err.response.status === 403) {
+          setMessage("Display Name is already in use.");
+          setShow(true);
+        } else if (err.response.status === 409) {
+          setMessage("Email address is already in use.");
+          setShow(true);
+        } else if (err.response.status === 400) {
+          setMessage("Display Name and Email Address are already in use.");
+          setShow(true);
+        }
+      }
     }
   };
 
@@ -163,4 +166,21 @@ export default function Register() {
       </Box>
     </AuthLayout>
   );
+}
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  if (session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: { session },
+  };
 }

@@ -17,6 +17,9 @@ import { Controller, useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import { useState } from "react";
+// eslint-disable-next-line
+import { useSession, getSession } from "next-auth/react";
+// eslint-disable-next-line
 import AppLayout from "../components/Layouts/AppLayout";
 import CreatePost from "../components/Quest/Post/CreatePost";
 import PostsList from "../components/Quest/Post/PostsList";
@@ -110,3 +113,18 @@ export default function Home() {
 Home.getLayout = function getLayout(page) {
   return <AppLayout>{page}</AppLayout>;
 };
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/landing",
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+}

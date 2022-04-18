@@ -9,7 +9,6 @@ export default NextAuth({
   cookie: {
     secure: process.env.NODE_ENV && process.env.NODE_ENV === "production",
   },
-  secret: "test",
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60,
@@ -27,8 +26,10 @@ export default NextAuth({
         const findUser = await prisma.user.findFirst({
           where: {
             email: credentials.email,
+            deletedAt: null,
           },
         });
+
         if (findUser) {
           const checkPass = await bcrypt.compare(
             credentials.password,
@@ -38,6 +39,7 @@ export default NextAuth({
             const user = await prisma.user.findFirst({
               where: {
                 email: credentials.email,
+                deletedAt: null,
               },
             });
             if (user) {
