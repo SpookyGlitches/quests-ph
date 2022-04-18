@@ -7,7 +7,7 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "cd .. && husky install client/.husky",
-    "vercel-build": "prisma generate && prisma migrate deploy && next build",
+    "vercel-build": "prisma generate && prisma migrate deploy && prisma db seed && next build",
     "pre-commit": "yarn eslint . --ext .js --ext .jsx --fix && yarn pretty-quick --staged"
   },
   "prisma":{
