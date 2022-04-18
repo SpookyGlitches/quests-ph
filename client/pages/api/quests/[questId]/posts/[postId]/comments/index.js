@@ -1,11 +1,14 @@
+import { getSession } from "next-auth/react";
 import prisma from "../../../../../../../lib/prisma";
 import withQuestProtect from "../../../../../../../middlewares/withQuestProtect";
+import maybeAwardUserForComment from "../../../../../../../helpers/badges/commentedOnPost";
 
 async function addComment(req, res) {
   try {
     const { content, partyMember } = req.body;
     const { postId } = req.query;
     const parsedPostId = Number(postId);
+    const { user } = await getSession({ req });
 
     const post = await prisma.post.findUnique({
       where: {
@@ -49,8 +52,20 @@ async function addComment(req, res) {
       transactions.push(awardPointsOperation);
     }
 
-    const [comment] = await prisma.$transaction(transactions);
+    const awardData = await maybeAwardUserForComment(user.userId);
+    if (awardData) {
+      const { insertUserBadgeData, insertNotificationData } = awardData;
+      const insertUserBadgeOperation = prisma.userBadge.create({
+        data: insertUserBadgeData,
+      });
+      const insertNotificationOperation = prisma.notification.create({
+        data: insertNotificationData,
+      });
+      transactions.push(insertUserBadgeOperation);
+      transactions.push(insertNotificationOperation);
+    }
 
+    const [comment] = await prisma.$transaction(transactions);
     return res.json(comment);
   } catch (err) {
     console.error(err);
@@ -75,6 +90,7 @@ async function getComments(req, res) {
         content: true,
         commentId: true,
         createdAt: true,
+        updatedAt: true,
         partyMemberId: true,
         partyMember: {
           select: {

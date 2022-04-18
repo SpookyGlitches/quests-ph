@@ -1,6 +1,7 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import Link from "next/link";
 import LandingLayout from "../../components/Layouts/LandingLayout";
 
 export default function PrivacyPolicy() {
@@ -28,7 +29,7 @@ export default function PrivacyPolicy() {
             textAlign: "left",
           }}
         >
-          Effective Date: December 10, 2021
+          Effective Date: April 18, 2022
         </Typography>
         <Typography
           variant="body1"
@@ -62,7 +63,7 @@ export default function PrivacyPolicy() {
           }}
         >
           If you have a disability, you may access this Privacy Policy in an
-          alternative format by contacting hello@quests.com.
+          alternative format by contacting questsappadm1@gmail.com.
         </Typography>
 
         <Typography
@@ -81,16 +82,51 @@ export default function PrivacyPolicy() {
             ml: 2,
           }}
         >
-          <li>Lorem Ipsum</li>
-          <li>Dolor sit Amet Consecteur</li>
-          <li>Sed do Eiusmod</li>
-          <li>Tempor Incidunt ut labore</li>
-          <li>Dolor in reprehenderit</li>
-          <li>Fugiat nulla pariatur</li>
-          <li>Officia desuunt mollit anim</li>
-          <li>Dolore eu fugiat Nulla</li>
+          <li>
+            <Link href="#first">
+              {/* eslint-disable-next-line */}
+              <a>Information That We Collect</a>
+            </Link>
+          </li>
+          <li>
+            <Link href="#second">
+              {/* eslint-disable-next-line */}
+              <a>How We Collect Your Information</a>
+            </Link>
+          </li>
+          <li>
+            <Link href="#third">
+              {/* eslint-disable-next-line */}
+              <a>From Who Do We Collect Information</a>
+            </Link>
+          </li>
+          <li>
+            <Link href="#fourth">
+              {/* eslint-disable-next-line */}
+              <a>How We Use Your Information</a>
+            </Link>
+          </li>
+          <li>
+            <Link href="#fifth">
+              {/* eslint-disable-next-line */}
+              <a>To Whom Do We Share Your Information</a>
+            </Link>
+          </li>
+          <li>
+            <Link href="#sixth">
+              {/* eslint-disable-next-line */}
+              <a>How We Protect Your Information</a>
+            </Link>
+          </li>
+          <li>
+            <Link href="#seventh">
+              {/* eslint-disable-next-line */}
+              <a>Rights and Access to Information</a>
+            </Link>
+          </li>
         </Box>
         <Typography
+          id="first"
           variant="h5"
           sx={{
             textAlign: "left",
@@ -98,7 +134,7 @@ export default function PrivacyPolicy() {
             mt: 10,
           }}
         >
-          Lorem Ipsum
+          Information That We Collect
         </Typography>
         <Typography
           variant="body1"
@@ -106,13 +142,33 @@ export default function PrivacyPolicy() {
             mt: 2,
           }}
         >
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Luctus
-          venenatis lectus magna fringilla urna porttitor rhoncus dolor. Massa
-          placerat duis ultricies lacus. Arcu dictum varius duis at consectetur
-          lorem donec.
+          Here in Quests, we collect the following information: <br />
+          <li>
+            Personal Information: Name (Required only for mentors), email
+            address, and date of birth.
+          </li>
+          <li>
+            Mentorship Experience (for mentor applicants): Details of related
+            mentorship experience and supporting documents such as your school
+            study load and related certificates if applicable.
+          </li>
+          <li>
+            Content you submit: Information regarding your Wishes, Obstacles,
+            Outcomes, and Plans when using the Quests application.
+          </li>
+          <li>
+            Actions you take: We collect information about the actions you do
+            within the application such as comments, reacts, posts, article
+            submissions, and user reports.
+          </li>
+          <li>
+            Other Information: You may opt to provide other information for a
+            particular situation such as contacting our administrators for
+            support.
+          </li>
         </Typography>
         <Typography
+          id="second"
           variant="h5"
           sx={{
             textAlign: "left",
@@ -120,7 +176,7 @@ export default function PrivacyPolicy() {
             mt: 5,
           }}
         >
-          Dolor sit Amet Consecteur
+          How We Collect Your Information
         </Typography>
         <Typography
           variant="body1"
@@ -128,12 +184,17 @@ export default function PrivacyPolicy() {
             mt: 2,
           }}
         >
-          Mauris a diam maecenas sed enim ut sem viverra. Id cursus metus
-          aliquam eleifend mi. Elementum tempus egestas sed sed risus pretium
-          quam. Orci ac auctor augue mauris augue neque gravida. Mollis nunc sed
-          id semper risus in.
+          <li>
+            Quests collects your information when you register through our
+            respective registration sites for mentor and member.
+          </li>
+          <li>
+            When you interact and use any of the functionalities in Quests.
+          </li>
+          <li>When you contact our administrators.</li>
         </Typography>
         <Typography
+          id="third"
           variant="h5"
           sx={{
             textAlign: "left",
@@ -141,7 +202,7 @@ export default function PrivacyPolicy() {
             mt: 5,
           }}
         >
-          Sed do Eiusmod
+          From Who Do We Collect Information
         </Typography>
         <Typography
           variant="body1"
@@ -149,13 +210,12 @@ export default function PrivacyPolicy() {
             mt: 2,
           }}
         >
-          Adipiscing at in tellus integer. Leo vel fringilla est ullamcorper.
-          Feugiat in fermentum posuere urna nec. Diam maecenas sed enim ut sem
-          viverra. Mauris augue neque gravida in fermentum et sollicitudin ac.
-          Mi eget mauris pharetra et. Sapien eget mi proin sed libero enim.
-          Lectus sit amet est placerat in egestas.
+          <li>Mentor Applicants</li>
+          <li>Verified Mentors</li>
+          <li>Current Members</li>
         </Typography>
         <Typography
+          id="fourth"
           variant="h5"
           sx={{
             textAlign: "left",
@@ -163,7 +223,7 @@ export default function PrivacyPolicy() {
             mt: 5,
           }}
         >
-          Tempor Incidunt ut labore
+          How We Use Your Information
         </Typography>
         <Typography
           variant="body1"
@@ -171,14 +231,23 @@ export default function PrivacyPolicy() {
             mt: 2,
           }}
         >
-          Justo laoreet sit amet cursus sit amet. Accumsan lacus vel facilisis
-          volutpat est velit egestas dui. Tellus at urna condimentum mattis
-          pellentesque id. Euismod elementum nisi quis eleifend quam adipiscing
-          vitae proin. Tortor vitae purus faucibus ornare suspendisse sed nisi
-          lacus sed. Urna molestie at elementum eu facilisis. Aliquet enim
-          tortor at auctor urna nunc id cursus metus.
+          Quests uses your information to be able to perform different
+          functionalities. Such functionalities include the mentorship system
+          under the WOOP (Wish, Outcome, Obstacle, Plan) Method. We use your
+          information only for the purpose for which it was collected and for
+          other purposes required by law with your consent. We use your
+          information to: <br />
+          <li>Provide, maintain, and improve our services;</li>
+          <li>Research and develop services;</li>
+          <li>
+            Protect the safety of Quests and its users which entails reporting
+            of users and enforcing respective penalties depending on the
+            severity of the offense.
+          </li>
+          <li>Provide customer support.</li>
         </Typography>
         <Typography
+          id="fifth"
           variant="h5"
           sx={{
             textAlign: "left",
@@ -186,7 +255,7 @@ export default function PrivacyPolicy() {
             mt: 5,
           }}
         >
-          Dolor in reprehenderit
+          To Whom Do We Share Your Information
         </Typography>
         <Typography
           variant="body1"
@@ -194,12 +263,19 @@ export default function PrivacyPolicy() {
             mt: 2,
           }}
         >
-          Eget aliquet nibh praesent tristique magna sit amet. Nisi lacus sed
-          viverra tellus in hac habitasse. Bibendum neque egestas congue quisque
-          egestas diam in arcu. Cras fermentum odio eu feugiat pretium nibh
-          ipsum consequat nisl.
+          Quests may disclose your information as we believe to be necessary or
+          appropriate: (a) under applicable law, including laws outside your
+          country of residence; (b) to comply with legal process; (c) to respond
+          to requests from public or government; (d) to enforce our terms and
+          conditions and lastly, in accordance to the Data Privacy Act of 2012.{" "}
+          <br />
+          We may disclose limited information to people such as: <br />
+          <li>Administrators</li>
+          Aforementioned constituents are also required to use information for
+          their primary purpose and keep such information confidential.
         </Typography>
         <Typography
+          id="sixth"
           variant="h5"
           sx={{
             textAlign: "left",
@@ -207,7 +283,7 @@ export default function PrivacyPolicy() {
             mt: 5,
           }}
         >
-          Fugiat nulla pariatur
+          How We Protect Your Information
         </Typography>
         <Typography
           variant="body1"
@@ -215,14 +291,20 @@ export default function PrivacyPolicy() {
             mt: 2,
           }}
         >
-          Justo laoreet sit amet cursus sit amet. Accumsan lacus vel facilisis
-          volutpat est velit egestas dui. Tellus at urna condimentum mattis
-          pellentesque id. Euismod elementum nisi quis eleifend quam adipiscing
-          vitae proin. Tortor vitae purus faucibus ornare suspendisse sed nisi
-          lacus sed. Urna molestie at elementum eu facilisis. Aliquet enim
-          tortor at auctor urna nunc id cursus metus.
+          Quests takes appropriate measures to maintain the safety of our
+          users&apos; information and to protect information from loss. <br />
+          <li>
+            We store the information we collect as long as it is necessary for
+            the purposes for which we collected it. Actions deemed proper are
+            taken into consideration when information must be destroyed or
+            disposed.
+          </li>
+          <li>
+            Information may be destroyed upon request or under applicable law.
+          </li>
         </Typography>
         <Typography
+          id="seventh"
           variant="h5"
           sx={{
             textAlign: "left",
@@ -230,7 +312,7 @@ export default function PrivacyPolicy() {
             mt: 5,
           }}
         >
-          Officia desuunt mollit anim
+          Rights and Access to Information
         </Typography>
         <Typography
           variant="body1"
@@ -238,48 +320,19 @@ export default function PrivacyPolicy() {
             mt: 2,
           }}
         >
-          Et egestas quis ipsum suspendisse ultrices gravida dictum fusce.
-          Mauris a diam maecenas sed enim ut sem viverra. Diam sollicitudin
-          tempor id eu nisl nunc mi ipsum. Faucibus turpis in eu mi bibendum.
-          Blandit turpis cursus in hac habitasse platea dictumst. Scelerisque
-          mauris pellentesque pulvinar pellentesque habitant morbi. Vitae congue
-          eu consequat ac felis donec et odio pellentesque.
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{
-            mt: 2,
-          }}
-        >
-          Consectetur libero id faucibus nisl tincidunt eget nullam non. Amet
-          facilisis magna etiam tempor orci. Orci sagittis eu volutpat odio
-          facilisis mauris. Risus quis varius quam quisque. Ornare lectus sit
-          amet est.
-        </Typography>
-        <Typography
-          variant="h5"
-          sx={{
-            textAlign: "left",
-
-            mt: 5,
-          }}
-        >
-          Dolore eu fugiat Nulla
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{
-            mt: 2,
-          }}
-        >
-          Tortor posuere ac ut consequat semper viverra nam libero justo.
-          Lacinia at quis risus sed vulputate odio ut enim blandit. Vel
-          fringilla est ullamcorper eget nulla facilisi etiam. Augue mauris
-          augue neque gravida in fermentum et sollicitudin. Egestas maecenas
-          pharetra convallis posuere. Sapien pellentesque habitant morbi
-          tristique senectus et netus et malesuada. Mattis ullamcorper velit sed
-          ullamcorper morbi tincidunt ornare massa eget. Sociis natoque
-          penatibus et magnis dis.
+          Quests sees the importance of the rights of our users with regards to
+          the information they have given us. With this being said, we also
+          honor the request of correction, update, or deletion if applicable.
+          <br />
+          Under the Data Privacy Act of 2012,
+          <li>
+            You may demand access to contents of your information that were
+            processed;
+          </li>
+          <li>Names and addresses of the recipients of your data;</li>
+          <li>Manner by which they were processed;</li>
+          <li>Date when your data was last accessed and modified;</li>
+          <li>Reasons for disclosure to recipients, if any.</li>
         </Typography>
       </Container>
     </LandingLayout>

@@ -1,14 +1,25 @@
 import { getSession } from "next-auth/react";
+import getMetaData from "metadata-scraper";
 import prisma from "../../../lib/prisma";
 
 async function submitArticles(req, res) {
   const { user } = await getSession({ req });
+
+  async function scrape(url) {
+    const data = await getMetaData(url);
+    return data;
+  }
+
   try {
+    const scrapedData = await scrape(req.query.link);
     const createArticles = await prisma.article.create({
       data: {
         userId: user.userId,
         category: req.query.category,
         link: req.query.link,
+        image: scrapedData.image,
+        title: scrapedData.title,
+        url: scrapedData.url,
       },
     });
     return res.status(200).send(createArticles);

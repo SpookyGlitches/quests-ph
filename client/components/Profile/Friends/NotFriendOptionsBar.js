@@ -6,7 +6,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import ErrorRoundedIcon from "@mui/icons-material/ErrorRounded";
-import CommentRoundedIcon from "@mui/icons-material/CommentRounded";
 import axios from "axios";
 import useSWR from "swr";
 import PersonAddAlt1RoundedIcon from "@mui/icons-material/PersonAddAlt1Rounded";
@@ -91,8 +90,8 @@ export default function MentorNotFriendOptionsBar({
               userId,
               values,
             },
-          }) // eslint-disable-next-line
-            .then((res) => {
+          })
+            .then(() => {
               enqueueSnackbar("You have reported this user!");
             })
             .catch((error) => {
@@ -119,12 +118,12 @@ export default function MentorNotFriendOptionsBar({
         if (response.data.length !== 1) {
           axios({
             method: "POST",
-            url: `/api/profile/${userId}/addfriend`,
+            url: `/api/profile/${userId}/addFriend`,
             data: {
               userId,
             },
-          }) // eslint-disable-next-line
-            .then((res) => {
+          })
+            .then(() => {
               enqueueSnackbar("You have successfully sent a friend request!");
             })
             .catch((error) => {
@@ -161,15 +160,18 @@ export default function MentorNotFriendOptionsBar({
           },
         })
         .then((response) => {
-          if (response.data.length !== 1) {
+          if (
+            response.data.avail.length === 0 &&
+            response.data.hasMentor.length === 0
+          ) {
             axios({
               method: "POST",
               url: `/api/profile/${userId}/mentorrequest`,
               data: {
                 questMentored,
               },
-            }) // eslint-disable-next-line
-              .then((res) => {
+            })
+              .then(() => {
                 enqueueSnackbar("You have sent a request!");
                 setQuestMentored("");
               })
@@ -177,11 +179,17 @@ export default function MentorNotFriendOptionsBar({
                 console.log(error);
               });
             setOpenRequest(false);
-          } else {
+          } else if (
+            response.data.avail.length === 1 &&
+            response.data.hasMentor.length === 0
+          ) {
             enqueueSnackbar(
               "This Quest is currently being requested to be mentored! Please choose another Quest!",
             );
-            setOpenRequest(true);
+          } else {
+            enqueueSnackbar(
+              "This Quest is already has a mentor! Please choose another Quest!",
+            );
           }
         });
     } else {
@@ -396,18 +404,6 @@ export default function MentorNotFriendOptionsBar({
         // eslint-disable-next-line
         <></>
       )}
-      <Button
-        variant="outlined"
-        style={{
-          backgroundColor: "#E8E8E8",
-          borderColor: "#E8E8E8",
-          color: "black",
-          float: "right",
-        }}
-      >
-        <CommentRoundedIcon sx={{ mr: 1 }} />
-        Chat
-      </Button>
     </Box>
   );
 }

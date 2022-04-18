@@ -1,10 +1,18 @@
-import { Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import useSWR, { useSWRConfig } from "swr";
 import { useSession } from "next-auth/react";
 import axios from "axios";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 import CommentItem from "./CommentItem";
 
-export default function CommmentsList({ questId, postId, setUpdating }) {
+export default function CommmentsList({
+  questId,
+  postId,
+  commentFormRef,
+  setUpdating,
+}) {
+  const router = useRouter();
   const { data: comments, mutate: mutateComments } = useSWR(
     questId && postId ? `/quests/${questId}/posts/${postId}/comments` : null,
   );
@@ -30,6 +38,8 @@ export default function CommmentsList({ questId, postId, setUpdating }) {
   };
 
   const editComment = (commentId, content) => {
+    commentFormRef.current.scrollIntoView();
+
     setUpdating({
       isUpdating: true,
       comment: {
@@ -38,6 +48,12 @@ export default function CommmentsList({ questId, postId, setUpdating }) {
       },
     });
   };
+
+  useEffect(() => {
+    if (router.query?.comment && comments && commentFormRef?.current) {
+      commentFormRef.current.scrollIntoView();
+    }
+  }, [router, commentFormRef, comments]);
 
   if (!comments || !userId) {
     return <div>Loading</div>;
@@ -57,6 +73,7 @@ export default function CommmentsList({ questId, postId, setUpdating }) {
           />
         );
       })}
+      <Box sx={{ display: "" }} ref={commentFormRef} />
     </Stack>
   );
 }

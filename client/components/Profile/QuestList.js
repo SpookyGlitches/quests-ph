@@ -24,7 +24,7 @@ export default function MyQuestChart() {
   const gatherData = (val) => {
     if (val === 0) {
       axios
-        .get(`/api/profile/friendquestslistactive`)
+        .get(`/api/profile/questslistactive`)
         .then((res) => {
           const questsFriend = res.data;
           questsFriend.forEach((item) => {
@@ -41,7 +41,7 @@ export default function MyQuestChart() {
         });
     } else {
       axios
-        .get(`/api/profile/friendquestslistinactive`)
+        .get(`/api/profile/questslistinactive`)
         .then((res) => {
           const questsFriend = res.data;
           questsFriend.forEach((item) => {

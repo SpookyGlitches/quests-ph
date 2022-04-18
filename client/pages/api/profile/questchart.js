@@ -14,6 +14,7 @@ export default async function GetMyQuestList(req, res) {
       const getQuests = await prisma.quest.findMany({
         where: {
           userId: user.userId,
+          deletedAt: null,
           NOT: {
             completedAt: null,
           },
@@ -43,6 +44,7 @@ export default async function GetMyQuestList(req, res) {
           const getFinalQuests = await prisma.quest.findMany({
             where: {
               questId: uniqueQuestsId[x],
+              deletedAt: null,
               NOT: {
                 completedAt: null,
               },

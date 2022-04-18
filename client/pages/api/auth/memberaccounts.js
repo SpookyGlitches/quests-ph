@@ -2,12 +2,13 @@ import nodemailer from "nodemailer";
 import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 import prisma from "../../../lib/prisma";
+import { awardEarlyUser, isUserEarly } from "../../../helpers/badges/earlyUser";
 // eslint-disable-next-line
 export default async function (req, res) {
   // eslint-disable-next-line
 
   if (req.method === "POST") {
-    const userInfo = JSON.parse(req.body);
+    const userInfo = req.body.values;
     const rawDate = userInfo.dateOfBirth;
     const dateObj = new Date(rawDate);
     const bdate = dateObj.toISOString();
@@ -44,14 +45,16 @@ export default async function (req, res) {
     <div>`,
     };
 
-    const checkEmail = await prisma.user.findUnique({
+    const checkEmail = await prisma.user.findFirst({
       where: {
         email: userDetails.email,
+        deletedAt: null,
       },
     });
-    const checkDisplayName = await prisma.user.findUnique({
+    const checkDisplayName = await prisma.user.findFirst({
       where: {
         displayName: userDetails.displayName,
+        deletedAt: null,
       },
     });
     if (checkDisplayName && checkEmail) {
@@ -61,11 +64,14 @@ export default async function (req, res) {
     } else if (checkEmail) {
       res.status(409).send({ message: "Email Exists" });
     } else if (!checkDisplayName && !checkEmail) {
-      await prisma.user.create({ data: userDetails });
-      transporter.sendMail(mailData, (err, info) => {
-        if (err) console.log(err);
-        else console.log(info);
+      const early = isUserEarly(new Date());
+      const awardOperations = early ? awardEarlyUser() : undefined;
+
+      // no need for pusher here
+      await prisma.user.create({
+        data: { ...userDetails, ...awardOperations },
       });
+      await transporter.sendMail(mailData);
       res.status(200).send({ message: "Success!" });
     }
 

@@ -1,14 +1,34 @@
-import { AppBar, Toolbar, IconButton, Typography, Menu } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Box,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
+import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import { useState } from "react";
+import { signOut } from "next-auth/react";
 
 const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const handleMobileMenuClose = () => {
+    setMobileMoreAnchorEl(null);
+  };
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+    handleMobileMenuClose();
+  };
+
+  const handleMobileMenuOpen = (event) => {
+    setMobileMoreAnchorEl(event.currentTarget);
   };
 
   const menuId = "primary-search-account-menu";
@@ -27,7 +47,46 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
       }}
       open={isMenuOpen}
       onClose={handleMenuClose}
-    />
+    >
+      <MenuItem
+        onClick={() =>
+          signOut({
+            callbackUrl: "/admin-auth/login",
+          })
+        }
+      >
+        Log Out
+      </MenuItem>
+    </Menu>
+  );
+
+  const mobileMenuId = "primary-search-account-menu-mobile";
+  const renderMobileMenu = (
+    <Menu
+      anchorEl={mobileMoreAnchorEl}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      id={mobileMenuId}
+      keepMounted
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      open={isMobileMenuOpen}
+      onClose={handleMobileMenuClose}
+    >
+      <MenuItem
+        onClick={() =>
+          signOut({
+            callbackUrl: "/admin-auth/login",
+          })
+        }
+      >
+        Log Out
+      </MenuItem>
+    </Menu>
   );
 
   return (
@@ -59,9 +118,34 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
           >
             Quests Admin
           </Typography>
+
+          <Box sx={{ flexGrow: 1 }} />
+          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+            <MenuItem
+              onClick={() =>
+                signOut({
+                  callbackUrl: "/admin-auth/login",
+                })
+              }
+            >
+              Log Out
+            </MenuItem>
+          </Box>
+          <Box sx={{ display: { xs: "flex", md: "none" } }}>
+            <IconButton
+              size="large"
+              aria-label="show more"
+              aria-controls={mobileMenuId}
+              aria-haspopup="true"
+              onClick={handleMobileMenuOpen}
+              color="inherit"
+            >
+              <MoreVertRoundedIcon />
+            </IconButton>
+          </Box>
         </Toolbar>
       </AppBar>
-
+      {renderMobileMenu}
       {renderMenu}
     </>
   );

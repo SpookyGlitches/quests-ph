@@ -1,82 +1,107 @@
 import { format } from "date-fns";
-import { Typography, Box, Button, Grid } from "@mui/material";
+import { Typography, Box, Paper, Button, Grid } from "@mui/material";
 import ScheduleRoundedIcon from "@mui/icons-material/ScheduleRounded";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
-import StyledPaper from "../Common/StyledPaper";
+import Category from "../Icons/Category";
+import getCategoryColor from "../../helpers/categoryColor";
 
-export default function QuestItem({ onJoinClick, quest, navigate }) {
+export default function QuestItem({ onJoinClick, quest, onClick }) {
   return (
-    <StyledPaper
+    <Paper
       sx={{
         width: "100%",
         height: "auto",
         overflow: "hidden",
         cursor: "pointer",
       }}
-      onClick={navigate}
+      onClick={onClick}
     >
-      <Grid container sx={{ minHeight: "6rem" }}>
-        <Grid item xs={12} md={2}>
+      <Grid container>
+        <Grid item xs={12} md={3} lg={2}>
           <Box
             sx={{
-              backgroundColor: "primary.main",
               height: "100%",
-              minHeight: "5rem",
-            }}
-          />
-        </Grid>
-        <Grid item xs={12} md={8}>
-          <Box
-            sx={{
-              paddingX: "1rem",
-              paddingY: "1.5em",
-              display: "flex",
+              backgroundColor: getCategoryColor(quest.category),
+              minHeight: 100,
               flexDirection: "column",
-              height: "100%",
+              display: "flex",
+              alignItems: "center",
               justifyContent: "center",
             }}
           >
-            <Typography variant="h6">{quest.wish}</Typography>
-            <Box
-              sx={{
-                display: "flex",
-                flexWrap: "wrap",
-                alignItems: "center",
-                gap: 1,
-              }}
-            >
-              <ScheduleRoundedIcon sx={{ fontSize: 16 }} />
-              <Typography variant="caption">
-                {format(new Date(quest.estimatedStartDate), "MMMM d")} -{" "}
-                {format(new Date(quest.estimatedEndDate), "MMMM d")}
-              </Typography>
-            </Box>
+            <Category
+              category={quest.category}
+              rootStyles={{ color: "white" }}
+            />
+            <Typography variant="caption" color="white">
+              {quest.category}
+            </Typography>
           </Box>
         </Grid>
-        {quest.canJoin && (
-          <Grid item xs={12} md={2}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: ["end", null, "center"],
-                width: "100%",
-                height: "100%",
-                padding: "0.5rem",
-                paddingBottom: "1rem,",
-              }}
-            >
-              <Button
-                size="small"
-                endIcon={<ArrowForwardIosRoundedIcon />}
-                onClick={onJoinClick}
+        <Grid item xs={12} md={9} lg={10}>
+          <Grid
+            container
+            sx={{
+              paddingY: 1,
+              height: "100%",
+              paddingX: 2,
+            }}
+            id="innerGrid"
+          >
+            <Grid item xs={12} md>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  height: "100%",
+                  justifyContent: "center",
+                }}
               >
-                Join
-              </Button>
-            </Box>
+                <Box sx={{ flexGrow: 1 }}>
+                  <Typography variant="h6">{quest.wish}</Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      alignItems: "center",
+                      gap: 1,
+                    }}
+                  >
+                    <ScheduleRoundedIcon sx={{ fontSize: 16 }} />
+                    <Typography variant="caption">
+                      {format(new Date(quest.estimatedStartDate), "MMMM d")} -{" "}
+                      {format(new Date(quest.estimatedEndDate), "MMMM d")}
+                    </Typography>
+                  </Box>
+                </Box>
+              </Box>
+            </Grid>
+            {quest.canJoin && (
+              <Grid item xs={12} md={2}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: {
+                      xs: "flex-end",
+                      md: "center",
+                    },
+                    height: "100%",
+                    alignItems: "center",
+                  }}
+                >
+                  <Button
+                    size="small"
+                    endIcon={<ArrowForwardIosRoundedIcon />}
+                    onClick={onJoinClick}
+                  >
+                    Join
+                  </Button>
+                </Box>
+              </Grid>
+            )}
           </Grid>
-        )}
+        </Grid>
       </Grid>
-    </StyledPaper>
+    </Paper>
   );
 }

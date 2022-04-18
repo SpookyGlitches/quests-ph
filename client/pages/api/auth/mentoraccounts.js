@@ -2,10 +2,11 @@ import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 import nodemailer from "nodemailer";
 import prisma from "../../../lib/prisma";
+import { awardEarlyUser, isUserEarly } from "../../../helpers/badges/earlyUser";
 // eslint-disable-next-line
 export default async function (req, res) {
   if (req.method === "POST") {
-    const userInfo = JSON.parse(req.body);
+    const userInfo = req.body.values;
     const rawDate = userInfo.dateOfBirth;
     const dateObj = new Date(rawDate);
     const bdate = dateObj.toISOString();
@@ -21,16 +22,9 @@ export default async function (req, res) {
       token: tok,
       experience: userInfo.experience,
       detailedExperience: userInfo.detailedExperience,
-      fileUpload: userInfo.fileUpload,
+      fileUpload: req.body.uploadedFiles,
+      fileKeys: req.body.keyArr,
     };
-    let fileLength;
-    if (userDetails.fileUpload === undefined) {
-      userDetails.fileUpload = 0;
-    } else {
-      fileLength = userDetails.fileUpload.length;
-    }
-
-    // eslint-disable-next-line
     const transporter = nodemailer.createTransport({
       port: process.env.MAIL_PORT,
       host: process.env.MAIL_HOST,
@@ -40,7 +34,6 @@ export default async function (req, res) {
       },
       secure: true,
     });
-    // eslint-disable-next-line
     const mailData = {
       from: process.env.SMTP_USER,
       to: userDetails.email,
@@ -49,18 +42,18 @@ export default async function (req, res) {
         This is an automated reply from Quests App University of San Carlos. Please do not reply.
         You are receiving this email because your email was just registered to an account on Quests.
         Verify your account through this <a href="${process.env.NEXTAUTH_URL}/verify/${userDetails.token}">link</a>.
-
-    <div>`,
+     <div>`,
     };
-
-    const checkEmail = await prisma.user.findUnique({
+    const checkEmail = await prisma.user.findFirst({
       where: {
         email: userDetails.email,
+        deletedAt: null,
       },
     });
-    const checkDisplayName = await prisma.user.findUnique({
+    const checkDisplayName = await prisma.user.findFirst({
       where: {
         displayName: userDetails.displayName,
+        deletedAt: null,
       },
     });
     if (checkDisplayName && checkEmail) {
@@ -70,7 +63,9 @@ export default async function (req, res) {
     } else if (checkEmail) {
       res.status(409).send({ message: "Email Exists" });
     } else if (!checkDisplayName && !checkEmail) {
-      // eslint-disable-next-line
+      const early = isUserEarly(new Date());
+      const awardOperations = early ? awardEarlyUser() : undefined;
+
       const userCreation = await prisma.user.create({
         data: {
           email: userDetails.email,
@@ -80,47 +75,37 @@ export default async function (req, res) {
           password: userDetails.password,
           role: userDetails.role,
           token: userDetails.token,
+          ...awardOperations,
         },
       });
-      if (userCreation) {
-        console.log("user created");
-        const findUser = await prisma.user.findFirst({
-          where: {
-            email: userDetails.email,
-          },
-        });
-        if (findUser) {
-          console.log("user found");
-          const mentorCreation = await prisma.mentorApplication.create({
-            data: {
-              mentorId: findUser.userId,
-              experience: userDetails.experience,
-              detailedExperience: userDetails.detailedExperience,
-            },
-          });
-          if (mentorCreation) {
-            console.log("mentor created");
-            if (userDetails.fileUpload !== 0) {
-              for (let i = 0; i < fileLength; i++) {
-                // eslint-disable-next-line
-                const fileCreation = await prisma.mentorFile.create({
-                  data: {
-                    mentorUploadId: findUser.userId,
-                    path: userDetails.fileUpload[i].path,
-                  },
-                });
-              }
-              transporter.sendMail(mailData, (err, info) => {
-                if (err) console.log(err);
-                else console.log(info);
-              });
-            }
-          }
-          res.status(200).send({ message: "Success!" });
-        }
-      }
-    }
+      // can assume user already exists here since it would throw an error if theyre not yet created at this point
+      const transactions = [];
 
-    await prisma.$disconnect();
+      const mentorCreation = prisma.mentorApplication.create({
+        data: {
+          mentorId: userCreation.userId,
+          experience: userDetails.experience,
+          detailedExperience: userDetails.detailedExperience,
+        },
+      });
+      transactions.push(mentorCreation);
+      const filesLength = userDetails.fileUpload?.length || 0;
+      for (let i = 0; i < filesLength; i++) {
+        transactions.push(
+          prisma.mentorFile.create({
+            data: {
+              mentorUploadId: userCreation.userId,
+              path: userDetails.fileUpload[i].path,
+              key: userDetails.fileKeys[i],
+            },
+          }),
+        );
+      }
+      // wow i can see my name haha
+
+      await prisma.$transaction(transactions);
+      await transporter.sendMail(mailData);
+      res.status(200).send({ message: "Success" });
+    }
   }
 }

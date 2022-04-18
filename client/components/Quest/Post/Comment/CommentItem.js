@@ -4,9 +4,10 @@ import {
   Typography,
   Stack,
   Divider,
+  Tooltip,
   IconButton,
 } from "@mui/material";
-import { formatRelative } from "date-fns";
+import { formatDistance, format } from "date-fns";
 import AddReactionRoundedIcon from "@mui/icons-material/AddReactionRounded";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
@@ -35,6 +36,9 @@ export default function CommentItem({
     setReactOptionsAnchor(event.currentTarget);
     setOpenReactOptions(!openReactOptions);
   };
+  const selected = comment.commentReacts.find(
+    (react) => react.partyMember.user.userId === userId,
+  );
 
   const addReact = async (type, commentId) => {
     await axios.post(
@@ -59,15 +63,7 @@ export default function CommentItem({
     );
   };
 
-  const getSelected = (commentReacts) => {
-    const currentReact = commentReacts.find(
-      (react) => react.partyMember?.user?.userId === userId,
-    );
-    return currentReact;
-  };
-
-  const handleReactClick = async (type, commentReacts, commentId) => {
-    const selected = getSelected(commentReacts);
+  const handleReactClick = async (type, commentId) => {
     try {
       if (!selected) await addReact(type, commentId);
       else if (selected.type === type)
@@ -109,9 +105,34 @@ export default function CommentItem({
               variant="subtitle2"
             >
               {comment.partyMember.user.displayName}
-              <Typography variant="caption" sx={{ color: "grey.700" }}>
-                {` ${formatRelative(new Date(comment.createdAt), new Date())}`}
-              </Typography>
+
+              <Tooltip
+                title={
+                  <div>
+                    <div>
+                      Created at{" "}
+                      {format(
+                        new Date(comment.createdAt),
+                        "MMMM d, yyyy HH:mm:ss",
+                      )}
+                    </div>
+                    <div>
+                      Updated at{" "}
+                      {format(
+                        new Date(comment.updatedAt),
+                        "MMMM d, yyyy HH:mm:ss",
+                      )}
+                    </div>
+                  </div>
+                }
+                describeChild
+              >
+                <Typography variant="caption" sx={{ color: "grey.700" }}>
+                  {` ${formatDistance(new Date(comment.createdAt), new Date(), {
+                    addSuffix: true,
+                  })}`}
+                </Typography>
+              </Tooltip>
             </Typography>
 
             <Box
@@ -175,10 +196,8 @@ export default function CommentItem({
         open={openReactOptions}
         anchor={reactOptionsAnchor}
         setOpen={setOpenReactOptions}
-        handleReactClick={(type) =>
-          handleReactClick(type, comment.commentReacts, comment.commentId)
-        }
-        getSelected={() => getSelected(comment.commentReacts)}
+        handleReactClick={(type) => handleReactClick(type, comment.commentId)}
+        selected={selected}
       />
     </>
   );

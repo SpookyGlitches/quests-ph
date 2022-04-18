@@ -44,7 +44,9 @@ export default function WoopModal({ handleOk, handleCancel, okText, details }) {
           <DialogContent>
             <Stack spacing={3}>
               <Box>
-                <Typography variant="h5">Wish</Typography>
+                <Typography variant="h6" sx={{ fontWeight: "medium" }}>
+                  Wish
+                </Typography>
                 <Typography variant="subtitle1">
                   {details?.statement?.wish}
                 </Typography>

@@ -51,7 +51,6 @@ const Sidebar = (props) => {
           "Articles",
           "Quests",
           "Reports",
-          "Logout",
         ].map((text) => (
           <Link
             href={`/admin/${text.replace(/ /g, "").toLowerCase()}`}

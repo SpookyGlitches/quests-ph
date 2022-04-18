@@ -6,12 +6,8 @@ import { useSWRConfig } from "swr";
 import { useEffect } from "react";
 import commentValidation from "../../../../validations/comment";
 
-export default function CommentInput({
-  questId,
-  postId,
-  updating,
-  setUpdating,
-}) {
+export default function CommentInput(props) {
+  const { questId, postId, updating, setUpdating } = props;
   const {
     handleSubmit,
     control,
@@ -19,7 +15,6 @@ export default function CommentInput({
     reset,
     setValue,
   } = useForm({
-    mode: "onSubmit",
     resolver: yupResolver(commentValidation),
     defaultValues: {
       content: "",

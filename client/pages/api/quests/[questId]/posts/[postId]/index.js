@@ -11,12 +11,13 @@ async function getPost(req, res) {
         title: true,
         postId: true,
         body: true,
+        updatedAt: true,
         partyMemberId: true,
         partyMember: {
           select: {
+            userId: true,
             user: {
               select: {
-                userId: true,
                 displayName: true,
               },
             },
@@ -29,6 +30,15 @@ async function getPost(req, res) {
           },
           select: {
             deletedAt: true,
+          },
+        },
+        postFiles: {
+          select: {
+            key: true,
+            postFileId: true,
+          },
+          where: {
+            deletedAt: null,
           },
         },
         postReacts: {
@@ -108,7 +118,6 @@ async function deletePost(req, res) {
     res.status(200).send();
   } catch (err) {
     console.log(err.message);
-    console.log("here");
     res.status(500).send();
   }
 }

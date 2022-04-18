@@ -5,7 +5,8 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 model Account {
@@ -36,9 +37,9 @@ model Session {
 
 model User {
   userId             String                   @id @default(cuid())
-  displayName        String                   @unique
+  displayName        String
   fullName           String?
-  email              String                   @unique
+  email              String
   password           String
   dateOfBirth        DateTime
   role               String
@@ -47,8 +48,9 @@ model User {
   createdAt          DateTime                 @default(now())
   updatedAt          DateTime?
   deletedAt          DateTime?
-  isActive           String                   @default("1") @db.Char(1)
+  isActive           String                   @default("0") @db.Char(1)
   token              String
+  isBanned           Boolean                  @default(false)
   mentorApplication  MentorApplication[]
   mentorFile         MentorFile[]
   accounts           Account[]
@@ -57,10 +59,10 @@ model User {
   questTask          QuestTask[]
   questTaskFinisher  QuestTaskFinisher[]
   message            Message[]
-  notification       Notification[]
+  notifications      Notification[]
+  userBadges         UserBadge[]
   conversationMember ConversationMember[]
   partyMembers       PartyMember[]
-  userBadge          UserBadge[]
   userReporter       UserReport[]             @relation("userReporter")
   userRecipient      UserReport[]             @relation("userRecipient")
   articles           Article[]
@@ -72,6 +74,8 @@ model User {
   requester          FriendRequest[]          @relation("requester")
   requestee          FriendRequest[]          @relation("requestee")
   forgotPassword     ForgotPassword[]
+
+  @@fulltext([displayName, fullName])
 }
 
 model ForgotPassword {
@@ -84,17 +88,19 @@ model ForgotPassword {
 }
 
 model MentorApplication {
-  mentorApplicationid Int    @id @default(autoincrement())
+  mentorApplicationid Int       @id @default(autoincrement())
   mentorId            String
   experience          String
   detailedExperience  String
-  user                User   @relation(fields: [mentorId], references: [userId])
+  deletedAt           DateTime?
+  user                User      @relation(fields: [mentorId], references: [userId])
 }
 
 model MentorFile {
   mentorFileId   Int       @id @default(autoincrement())
   mentorUploadId String
   path           String
+  key            String?
   createdAt      DateTime? @default(now())
   deletedAt      DateTime?
   user           User      @relation(fields: [mentorUploadId], references: [userId])
@@ -121,11 +127,16 @@ model Article {
   category   QuestCategory @default(SOCIAL)
   link       String
   status     ArticleStatus @default(DISAPPROVED)
+  title      String
+  image      String
+  url        String
   createdAt  DateTime      @default(now())
   updatedAt  DateTime?
   approvedAt DateTime?
   deletedAt  DateTime?
   user       User          @relation(fields: [userId], references: [userId])
+
+  @@fulltext([title])
 }
 
 model Quest {
@@ -135,7 +146,7 @@ model Quest {
   difficulty             QuestDifficulty          @default(EASY)
   visibility             QuestVisibility          @default(PRIVATE)
   category               QuestCategory            @default(SOCIAL)
-  wiki                   String                   @default("[{\"type\":\"h1\",\"children\":[{\"text\":\"Welcome\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"This is our Wiki where you can find tips, resources, and strategies to increase the success of us achieving our wishes. If you want to add here, just send me a message in our chat and I'll do it for you!\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"},{\"type\":\"a\",\"url\":\"https://www.youtube.com/watch?v=dQw4w9WgXcQ\",\"children\":[{\"text\":\"watch this awesome tip!\"}]},{\"text\":\"\"}]},{\"type\":\"p\",\"children\":[{\"text\":\" \"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"}]}]") @db.LongText
+  wiki                   String?                  @db.LongText
   mentorMessage          String?
   estimatedStartDate     DateTime                 @db.Date
   estimatedEndDate       DateTime                 @db.Date
@@ -150,6 +161,8 @@ model Quest {
   conversation           Conversation[]
   questPartyBan          QuestPartyBan[]
   questMentorshipRequest QuestMentorshipRequest[]
+
+  @@fulltext([wish])
 }
 
 model QuestTask {
@@ -187,7 +200,7 @@ model QuestMentorshipRequest {
   questId                  Int
   status                   MentorshipStatus @default(ACTIVE)
   createdAt                DateTime         @default(now())
-  updatedAt                DateTime?
+  updatedAt                DateTime         @updatedAt
   deletedAt                DateTime?
   partyLeader              User             @relation(name: "partyLeader", fields: [partyLeaderId], references: [userId])
   mentor                   User             @relation(name: "mentor", fields: [mentorId], references: [userId])
@@ -257,11 +270,13 @@ model Conversation {
 }
 
 model Notification {
-  notificationId Int       @id @default(autoincrement())
-  user           User      @relation(fields: [userId], references: [userId])
+  notificationId Int              @id @default(autoincrement())
+  user           User             @relation(fields: [userId], references: [userId])
   userId         String
   message        String
-  createdAt      DateTime  @default(now())
+  type           NotificationType
+  metadata       String?
+  createdAt      DateTime         @default(now())
   deletedAt      DateTime?
 }
 
@@ -284,7 +299,7 @@ model PartyMember {
   obstacle      String
   plan          String
   createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
   deletedAt     DateTime?
   pointsLog     PointsLog[]
   posts         Post[]
@@ -349,12 +364,14 @@ model Post {
   title         String
   body          String
   createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
   deletedAt     DateTime?
   postFiles     PostFile[]
   comments      Comment[]
   postReacts    PostReact[]
   partyMember   PartyMember @relation(fields: [partyMemberId], references: [partyMemberId])
+
+  @@fulltext([title, body])
 }
 
 model Comment {
@@ -363,7 +380,7 @@ model Comment {
   partyMemberId Int
   content       String
   createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
   deletedAt     DateTime?
   post          Post           @relation(fields: [postId], references: [postId])
   partyMember   PartyMember    @relation(fields: [partyMemberId], references: [partyMemberId])
@@ -406,7 +423,7 @@ enum ReactType {
 }
 
 // NEW END
- 
+
 model PostFile {
   postFileId Int       @id @default(autoincrement())
   postId     Int?
@@ -443,4 +460,8 @@ enum PointsLogAction {
   RECEIVED_POST_REACT
   RECEIVED_COMMENT_REACT
   RECEIVED_POST_COMMENT
+}
+
+enum NotificationType {
+  RECEIVED_BADGE
 }

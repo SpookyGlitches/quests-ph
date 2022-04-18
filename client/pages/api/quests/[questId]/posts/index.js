@@ -1,70 +1,37 @@
 import { getSession } from "next-auth/react";
 import postValidations from "../../../../../validations/post";
+import maybeAwardUserForPost from "../../../../../helpers/badges/createdPost";
 
 import prisma from "../../../../../lib/prisma";
 
 async function getPosts(req, res) {
+  const { questId, skip, take } = req.query;
+
+  const parsedTake = Number(take) || undefined;
+  const parsedSkip = parsedTake * Number(skip) || undefined;
+
   try {
     const posts = await prisma.post.findMany({
       orderBy: {
         createdAt: "desc",
       },
+      skip: parsedSkip,
+      take: parsedTake,
       where: {
         partyMember: {
-          questId: Number(req.query.questId),
-          deletedAt: null,
+          questId: Number(questId),
+          deletedAt: null, // means the partyMember is still active in the quest
           user: {
             deletedAt: null,
           },
         },
+        deletedAt: null,
       },
       select: {
-        createdAt: true,
-        title: true,
         postId: true,
-        body: true,
-        partyMemberId: true,
         partyMember: {
           select: {
-            user: {
-              select: {
-                userId: true,
-                displayName: true,
-              },
-            },
-            partyMemberId: true,
-          },
-        },
-        comments: {
-          where: {
-            deletedAt: null,
-          },
-          select: {
-            deletedAt: true,
-          },
-        },
-        postReacts: {
-          where: {
-            deletedAt: null,
-            partyMember: {
-              deletedAt: null,
-              user: {
-                deletedAt: null,
-              },
-            },
-          },
-          select: {
-            postReactId: true,
-            type: true,
-            partyMember: {
-              select: {
-                user: {
-                  select: {
-                    userId: true,
-                  },
-                },
-              },
-            },
+            questId: true,
           },
         },
       },
@@ -92,8 +59,9 @@ async function createPost(req, res) {
       },
       rejectOnNotFound: true,
     });
+    const transactions = [];
 
-    const post = await prisma.post.create({
+    const createPostOperation = prisma.post.create({
       data: {
         title,
         body,
@@ -103,6 +71,27 @@ async function createPost(req, res) {
         },
       },
     });
+    transactions.push(createPostOperation);
+
+    // award badge
+    const awardData = await maybeAwardUserForPost(user.userId);
+
+    if (awardData) {
+      const { insertUserBadgeData, insertNotificationData } = awardData;
+
+      const insertUserBadgeOperation = prisma.userBadge.create({
+        data: insertUserBadgeData,
+      });
+      const insertNotificationOperation = prisma.notification.create({
+        data: insertNotificationData,
+      });
+
+      transactions.push(insertUserBadgeOperation);
+      transactions.push(insertNotificationOperation);
+    }
+
+    const [post] = await prisma.$transaction(transactions);
+
     return res.status(200).json(post);
   } catch (err) {
     console.error(err);
