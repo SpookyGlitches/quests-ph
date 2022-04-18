@@ -23,6 +23,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
+  const [hasError, setHasError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
@@ -42,8 +43,10 @@ export default function Login() {
           setLoginError(
             "The email or password you entered isn't registered to an account.",
           );
+          setHasError(true);
         } else if (result.status === 403) {
           setLoginError("Please verify your account.");
+          setHasError(true);
         } else {
           setLoginError(result.error);
         }
@@ -66,7 +69,7 @@ export default function Login() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             sx={{ mb: 3 }}
-            error={loginError && loginError}
+            error={hasError}
           />
 
           <TextField
@@ -75,7 +78,8 @@ export default function Login() {
             label="Password"
             name="password"
             value={password}
-            error={loginError && loginError}
+            error={hasError}
+            helperText={hasError ? loginError : ""}
             onChange={(e) => setPassword(e.target.value)}
             type={showPassword ? "text" : "password"}
             autoComplete="current-password"
@@ -102,9 +106,7 @@ export default function Login() {
           >
             <Typography
               sx={{ fontSize: "12px", color: "red", align: "center", mb: 2 }}
-            >
-              {loginError}
-            </Typography>
+            />
           </Box>
           <Button variant="contained" type="submit" fullWidth>
             Sign In

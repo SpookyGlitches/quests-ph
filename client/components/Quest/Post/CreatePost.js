@@ -1,29 +1,23 @@
-import { Paper, Box, Avatar, Typography } from "@mui/material";
+import { Paper, Avatar, Typography } from "@mui/material";
 
-export default function CreatePost({ onCreatePostClick }) {
+export default function CreatePost({ onCreatePostClick, rootStyles }) {
   return (
     <Paper
       sx={{
-        backgroundColor: "background.paper",
-        borderRadius: 1,
         display: "flex",
         alignItems: "center",
-        paddingX: 3,
         paddingY: 2,
-        paddingLeft: 2,
-        marginBottom: 3,
-        gap: 2,
+        paddingX: 2,
+        gap: 1,
+        ...rootStyles,
       }}
     >
-      <Box sx={{}}>
-        <Avatar sx={{}}>X</Avatar>
-      </Box>
-      <Box
+      <Avatar>X</Avatar>
+      <Paper
         sx={{
           flexGrow: 1,
-          backgroundColor: "background.default",
+          marginLeft: 1,
           height: 50,
-          borderRadius: 1,
           paddingX: 1,
           display: "flex",
           cursor: "pointer",
@@ -31,10 +25,8 @@ export default function CreatePost({ onCreatePostClick }) {
         }}
         onClick={onCreatePostClick}
       >
-        <Typography variant="subtitle2" sx={{ color: "grey.700" }}>
-          Create a Post
-        </Typography>
-      </Box>
+        <Typography variant="body2">Create a new post</Typography>
+      </Paper>
     </Paper>
   );
 }

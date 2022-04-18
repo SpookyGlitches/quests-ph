@@ -11,6 +11,7 @@ async function getPost(req, res) {
         title: true,
         postId: true,
         body: true,
+        updatedAt: true,
         partyMemberId: true,
         partyMember: {
           select: {
@@ -117,7 +118,6 @@ async function deletePost(req, res) {
     res.status(200).send();
   } catch (err) {
     console.log(err.message);
-    console.log("here");
     res.status(500).send();
   }
 }

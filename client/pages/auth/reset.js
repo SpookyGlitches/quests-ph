@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Router from "next/router";
 import axios from "axios";
+import { getSession } from "next-auth/react";
 import AuthLayout from "../../components/Layouts/AuthLayout";
 import AuthHeader from "../../components/Auth/AuthHeader";
 import { resetUserPassword } from "../../validations/ResetPassword";
@@ -76,4 +77,21 @@ export default function ResetPassword() {
       <CreateAnAccount />
     </AuthLayout>
   );
+}
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  if (session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: { session },
+  };
 }

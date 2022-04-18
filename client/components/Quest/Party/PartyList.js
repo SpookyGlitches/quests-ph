@@ -9,20 +9,21 @@ import {
   TableHead,
   TableRow,
   Button,
+  Paper,
 } from "@mui/material";
 import axios from "axios";
 import { useRouter } from "next/router";
 import useSWR, { useSWRConfig } from "swr";
-import { useSession } from "next-auth/react";
 import PartyListItem from "./PartyListItem";
 
 export default function PartyList() {
   const router = useRouter();
   const { questId } = router.query;
-  const session = useSession();
-  const userId = session?.data?.user?.userId;
   const { data: partyMembers, mutate: mutatePartyMembers } = useSWR(
     questId ? `/quests/${questId}/partyMembers?includePoints=true` : null,
+  );
+  const { data: partyMember } = useSWR(
+    questId ? `/quests/${questId}/partyMembers/currentUser` : null,
   );
   const { data: quest } = useSWR(questId ? `/quests/${questId}` : null);
 
@@ -35,13 +36,13 @@ export default function PartyList() {
       );
       await navigator.clipboard.writeText(data);
       // eslint-disable-next-line no-alert
-      alert("Successfully copied on your clipboard.");
+      alert("Successfully copied the invite link on your clipboard.");
     } catch (err) {
       console.error(err);
     }
   };
 
-  if (!partyMembers || !quest) {
+  if (!partyMembers || !quest || !partyMember) {
     return <div>Loading</div>;
   }
 
@@ -76,8 +77,7 @@ export default function PartyList() {
 
   const leaveParty = async () => {
     try {
-      const member = partyMembers.find((item) => item.userId === userId);
-      await removePartyMember(member.partyMemberId);
+      await removePartyMember(partyMember.partyMemberId);
       mutate(`/quests/${questId}/partyMembers/currentUser`);
       router.push("/quests");
     } catch (err) {
@@ -85,86 +85,85 @@ export default function PartyList() {
     }
   };
 
-  const isPartyLeader = (userIdToCheck) => {
-    return quest.userId === userIdToCheck;
-  };
+  const isPartyLeader = partyMember.role === "PARTY_LEADER";
 
-  const renderMentor = () => {
-    const mentor = partyMembers.find((member) => member.role === "MENTOR");
-    if (!mentor) return null;
-    return (
-      <PartyListItem
-        item={mentor}
-        rank="_"
-        isPartyLeader={isPartyLeader}
-        removePartyMember={removePartyMember}
-        banPartyMember={banPartyMember}
-        userId={userId}
-      />
-    );
-  };
+  const mentees = [];
+  const mentors = [];
+
+  partyMembers.forEach((member, index) => {
+    if (member.user.role === "mentor") {
+      mentors.push(
+        <PartyListItem
+          item={member}
+          rank="_"
+          isPartyLeader={isPartyLeader}
+          key={member.partyMemberId}
+          removePartyMember={removePartyMember}
+          banPartyMember={banPartyMember}
+        />,
+      );
+    } else {
+      mentees.push(
+        <PartyListItem
+          item={member}
+          rank={index + 1}
+          isPartyLeader={isPartyLeader}
+          key={member.partyMemberId}
+          mentor
+          removePartyMember={removePartyMember}
+          banPartyMember={banPartyMember}
+        />,
+      );
+    }
+  });
 
   return (
-    <Box
-      sx={{
-        p: 1,
-        m: 3,
-      }}
-    >
-      <Typography variant="h4" sx={{ color: "primary.main", mb: 2 }}>
-        Party
-      </Typography>
-      <Stack spacing={3}>
-        <TableContainer sx={{}}>
+    <Paper sx={{ padding: 3 }}>
+      <Stack spacing={2}>
+        <Typography variant="h4" sx={{ color: "primary.main" }}>
+          Party
+        </Typography>
+        <TableContainer>
           <Table aria-label="simple table" size="small">
             <TableHead>
               <TableRow>
                 <TableCell>Rank</TableCell>
                 <TableCell>User</TableCell>
                 <TableCell align="center">Points</TableCell>
-                {isPartyLeader(userId) && (
-                  <TableCell align="center">Actions</TableCell>
-                )}
+                {isPartyLeader && <TableCell align="center">Actions</TableCell>}
               </TableRow>
             </TableHead>
 
             <TableBody>
-              {partyMembers
-                .filter((item) => item.role !== "MENTOR")
-                .map((item, index) => (
-                  <PartyListItem
-                    item={item}
-                    rank={index + 1}
-                    key={item.partyMemberId}
-                    isPartyLeader={isPartyLeader}
-                    removePartyMember={removePartyMember}
-                    banPartyMember={banPartyMember}
-                    userId={userId}
-                  />
-                ))}
-              {renderMentor()}
+              {mentees}
+              {mentors}
             </TableBody>
           </Table>
         </TableContainer>
 
-        <Box>
-          {!isPartyLeader(userId) && (
-            <Button variant="outlined" color="primary" onClick={leaveParty}>
-              Leave
-            </Button>
-          )}
-          {isPartyLeader(userId) && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+          }}
+        >
+          {isPartyLeader && (
             <Button
               variant="contained"
               color="primary"
-              style={{ float: "right", maxWidth: "80px", minWidth: "80px" }}
               onClick={generateInviteLink}
             >
               Invite
             </Button>
           )}
+          {!isPartyLeader && (
+            <Button variant="outlined" color="primary" onClick={leaveParty}>
+              Leave
+            </Button>
+          )}
         </Box>
       </Stack>
-    </Box>
+    </Paper>
   );
 }

@@ -1,8 +1,9 @@
-import { Box, Typography, Link as MuiLink } from "@mui/material";
+import { Box, Typography, Link as MuiLink, Paper } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import capitalizeFirstLetterOnly from "../../helpers/strings";
+import Category from "../Icons/Category";
 
 const muiLinkProps = {
   component: "button",
@@ -34,19 +35,16 @@ export default function QuestHeader() {
   }
 
   return (
-    <Box
+    <Paper
       sx={{
         display: "flex",
         backgroundColor: "background.paper",
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "column",
-        paddingTop: "2rem",
-        paddingBottom: "1rem",
-        paddingX: 2,
-        maxHeight: "20rem",
+        py: 3,
+        px: 1,
         gap: 2,
-        borderRadius: 2,
       }}
     >
       <Box
@@ -58,11 +56,21 @@ export default function QuestHeader() {
           flexDirection: "column",
         }}
       >
-        <Typography component="div" variant="body2">
-          {capitalizeFirstLetterOnly(quest.category)}
-        </Typography>
-        <Box sx={{ marginTop: "0.2rem" }}>
-          <Typography variant="h4" align="center" color="primary">
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "column",
+          }}
+        >
+          <Category category={quest.category} />
+          <Typography variant="body2" sx={{ fontWeight: "regular" }}>
+            {capitalizeFirstLetterOnly(quest.category)}
+          </Typography>
+        </Box>
+        <Box sx={{ marginTop: 1 }}>
+          <Typography variant="h5" align="center" color="primary">
             {quest.wish}
           </Typography>
         </Box>
@@ -90,6 +98,6 @@ export default function QuestHeader() {
           );
         })}
       </Box>
-    </Box>
+    </Paper>
   );
 }

@@ -2,124 +2,182 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import {
   Box,
+  Container,
   IconButton,
+  Stack,
   TextField,
-  ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
+import { useDebounce } from "use-debounce";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
-import { styled } from "@mui/material/styles";
 import AppLayout from "../../components/Layouts/AppLayout";
 import QuestsList from "../../components/Quest/QuestsList";
+import PostsList from "../../components/Quest/Post/PostsList";
+import Articles from "../../components/Articles/Articles";
+import UsersList from "../../components/Search/UsersList";
+import StyledToggleButton from "../../components/Common/StyledToggleButton";
+import QuestFilters from "../../components/Search/QuestFilters";
+import ArticleFilters from "../../components/Search/ArticleFilters";
 
-const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
-  "& .MuiToggleButtonGroup-grouped": {
-    border: 0,
-
-    "&:not(:first-of-type)": {
-      borderRadius: theme.shape.borderRadius,
-    },
-    "&:first-of-type": {
-      borderRadius: theme.shape.borderRadius,
-    },
-  },
-}));
-const StyledToggleButton = styled(ToggleButton)(({ theme }) => ({
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: "white",
-  fontWeight: "medium",
-  minWidth: 80,
-  "&.Mui-selected": {
-    fontWeight: "bold",
-    backgroundColor: theme.palette.background.paper,
-  },
-}));
+const questsFilterDefaultValues = {
+  category: ["HEALTH", "SOCIAL", "CAREER"],
+  status: ["ACTIVE", "COMPLETED"],
+};
+const articlesFilterDefaultValues = "HEALTH";
 
 export default function Search() {
   const router = useRouter();
-
-  const [selectedItem, setSelectedItem] = useState("quests");
+  const [text, setText] = useState("");
+  const [searchText] = useDebounce(text, 2000);
+  const [selectedItem, setSelectedItem] = useState("QUESTS");
+  const [filterParams, setFilterParams] = useState(questsFilterDefaultValues);
 
   useEffect(() => {
-    if (router.query.item) setSelectedItem(router.query.item);
+    if (router.query.selected) setSelectedItem(router.query.selected);
   }, [router]);
-
-  const handleItemClick = (event, newItem) => {
-    setSelectedItem(newItem);
-  };
 
   const renderResults = () => {
     switch (selectedItem) {
-      case "quests":
-        return <QuestsList hasJoined={false} />;
+      case "QUESTS":
+        return (
+          <QuestsList
+            url="/quests"
+            searchParams={{
+              take: 5,
+              search: searchText,
+              searching: true,
+              ...filterParams,
+            }}
+          />
+        );
+      case "POSTS":
+        return (
+          <PostsList
+            url="/home"
+            searchParams={{ take: 5, search: searchText }}
+          />
+        );
+      case "ARTICLES":
+        return <Articles category={filterParams} search={searchText} />;
+      case "MENTEES":
+        return (
+          <UsersList
+            url="/users"
+            searchParams={{ take: 5, search: searchText, role: "member" }}
+          />
+        );
+      case "MENTORS":
+        return (
+          <UsersList
+            url="/users"
+            searchParams={{ take: 5, search: searchText, role: "mentor" }}
+          />
+        );
       default:
-        return <div>😀</div>;
+        return null;
+    }
+  };
+
+  const resetDefaultValues = (newItem) => {
+    switch (newItem) {
+      case "ARTICLES":
+        setFilterParams(articlesFilterDefaultValues);
+        break;
+      case "QUESTS":
+        setFilterParams(questsFilterDefaultValues);
+        break;
+
+      default:
+        setFilterParams({});
+    }
+  };
+  const handleItemClick = (event, newItem) => {
+    event.preventDefault();
+    if (!newItem) return;
+    resetDefaultValues(newItem);
+    setSelectedItem(newItem);
+  };
+
+  const handleSearchChange = (event) => {
+    setText(event.target.value);
+  };
+
+  const renderFilters = () => {
+    switch (selectedItem) {
+      case "ARTICLES":
+        return (
+          <ArticleFilters
+            filterParams={filterParams}
+            setFilterParams={setFilterParams}
+          />
+        );
+      case "QUESTS":
+        return (
+          <QuestFilters
+            rootStyles={{ display: "flex", gap: 2, flexWrap: "wrap" }}
+            filterParams={filterParams}
+            setFilterParams={setFilterParams}
+          />
+        );
+      default:
+        return null;
     }
   };
 
   return (
-    <AppLayout>
-      <Box sx={{ marginY: "1rem", width: "100%" }}>
-        <Box
+    <Container maxWidth="md">
+      <Stack spacing={2}>
+        <TextField
+          label="Search"
+          variant="outlined"
+          size="small"
+          value={text}
+          onChange={handleSearchChange}
           sx={{
-            display: "flex",
             backgroundColor: "background.paper",
             borderRadius: 1,
           }}
-        >
-          <TextField
-            label="Search"
-            variant="outlined"
-            sx={{ flexGrow: 1, display: "flex" }}
-            InputProps={{
-              endAdornment: (
-                <IconButton>
-                  <SearchRoundedIcon />
-                </IconButton>
-              ),
-            }}
-          />
-        </Box>
-        <StyledToggleButtonGroup
-          color="primary"
+          InputProps={{
+            startAdornment: (
+              <IconButton size="small">
+                <SearchRoundedIcon />
+              </IconButton>
+            ),
+          }}
+        />
+        <ToggleButtonGroup
           value={selectedItem}
           onChange={handleItemClick}
+          fullWidth
           exclusive
-          sx={{ marginY: "1rem", gap: 2, flexWrap: "wrap" }}
+          color="primary"
+          sx={{
+            flexWrap: {
+              xs: "wrap",
+              sm: "nowrap",
+            },
+          }}
         >
-          {["Articles", "Quests", "Users", "Posts", "Mentors"].map((item) => (
+          {["Quests", "Posts", "Articles", "Mentees", "Mentors"].map((item) => (
             <StyledToggleButton
               key={item}
-              value={item.toLowerCase()}
+              value={item.toUpperCase()}
               size="small"
+              fullWidth
             >
               {item}
             </StyledToggleButton>
           ))}
-        </StyledToggleButtonGroup>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "1rem",
-          }}
-        >
-          <Box
-            sx={{
-              width: {
-                xs: "100%",
-                md: "90%",
-              },
-              flexDirection: "column",
-              alignItems: "center",
-              display: "flex",
-              gap: 2,
-            }}
-          >
-            {renderResults()}
-          </Box>
-        </Box>
-      </Box>
-    </AppLayout>
+        </ToggleButtonGroup>
+
+        {renderFilters()}
+
+        <Box sx={{ pt: 3 }}>{renderResults()}</Box>
+      </Stack>
+    </Container>
   );
 }
+
+Search.getLayout = function getLayout(page) {
+  return <AppLayout>{page}</AppLayout>;
+};

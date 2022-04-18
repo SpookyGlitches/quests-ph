@@ -25,7 +25,7 @@ async function editWiki(req, res) {
 }
 export default async function handler(req, res) {
   if (req.method === "PUT") {
-    await withQuestProtect(editWiki, req, res, ["PARTY_LEADER"]);
+    await withQuestProtect(editWiki, req, res, ["PARTY_LEADER", "MENTOR"]);
   } else {
     res.status(405).send();
   }

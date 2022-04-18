@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Box,
   Typography,
   Table,
   TableBody,
@@ -10,8 +9,10 @@ import {
   TableRow,
   CardHeader,
   Avatar,
+  Tooltip,
   Stack,
   IconButton,
+  Paper,
 } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
 import { useRouter } from "next/router";
@@ -26,10 +27,6 @@ export default function BanList() {
     questId ? `/quests/${questId}/partyBans` : null,
   );
 
-  if (!partyBans) {
-    return <div>Loading</div>;
-  }
-
   const revokeBan = async (partyBanId) => {
     try {
       await axios.delete(`/api/quests/${questId}/partyBans/${partyBanId}`);
@@ -42,61 +39,73 @@ export default function BanList() {
     }
   };
 
+  if (!partyBans) {
+    return <div>Loading</div>;
+  }
+
+  const partyBanItems = partyBans.map((partyBan) => (
+    <TableRow
+      key={partyBan.questPartyBanId}
+      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+    >
+      <TableCell component="th" scope="row" padding="none">
+        <CardHeader
+          avatar={
+            <Avatar
+              sx={{
+                bgcolor: deepOrange[500],
+              }}
+            />
+          }
+          title={partyBan.user.displayName}
+        />
+      </TableCell>
+      <TableCell align="right">
+        <Tooltip title="Revoke">
+          <IconButton onClick={() => revokeBan(partyBan.questPartyBanId)}>
+            <RemoveCircleOutlineRoundedIcon />
+          </IconButton>
+        </Tooltip>
+      </TableCell>
+    </TableRow>
+  ));
+
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <Box
-        sx={{
-          p: 1,
-          m: 3,
-        }}
-      >
-        <Typography
-          variant="h4"
-          sx={{ color: "primary.main", marginTop: "0em" }}
-        >
+    <Paper sx={{ padding: 3 }}>
+      <Stack spacing={2}>
+        <Typography variant="h4" sx={{ color: "primary.main" }}>
           Bans
         </Typography>
-        <Stack spacing={2}>
-          <TableContainer sx={{ mb: 0, mt: 0 }}>
-            <Table size="small" aria-label="ban table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>User</TableCell>
-                  <TableCell align="right">Actions</TableCell>
+        <TableContainer emp>
+          <Table size="small" aria-label="ban table">
+            <TableHead>
+              <TableRow>
+                <TableCell>User</TableCell>
+                <TableCell align="right">Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {partyBans.length <= 0 ? (
+                <TableRow
+                  sx={{
+                    "&:last-child td, &:last-child th": {
+                      border: 0,
+                    },
+                  }}
+                >
+                  <TableCell colSpan={2}>
+                    <Typography align="center" variant="body2">
+                      No results to show
+                    </Typography>
+                  </TableCell>
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {partyBans.map((partyBan) => (
-                  <TableRow
-                    key={partyBan.questPartyBanId}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row" padding="none">
-                      <CardHeader
-                        avatar={
-                          <Avatar
-                            sx={{
-                              bgcolor: deepOrange[500],
-                            }}
-                          />
-                        }
-                        title={partyBan.user.displayName}
-                      />
-                    </TableCell>
-                    <TableCell align="right">
-                      <IconButton
-                        onClick={() => revokeBan(partyBan.questPartyBanId)}
-                      >
-                        <RemoveCircleOutlineRoundedIcon />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Stack>
-      </Box>
-    </Box>
+              ) : (
+                partyBanItems
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Stack>
+    </Paper>
   );
 }

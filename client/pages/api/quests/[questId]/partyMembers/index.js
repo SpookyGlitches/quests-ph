@@ -30,6 +30,8 @@ async function fetchPartyMembers(req, res) {
             displayName: true,
             userId: true,
             image: true,
+            isActive: true,
+            role: true,
           },
         },
       },
