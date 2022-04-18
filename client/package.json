@@ -7,8 +7,11 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "cd .. && husky install client/.husky",
-    "pre-commit": "yarn eslint . --ext .js --ext .jsx --fix && yarn pretty-quick --staged",
-    "seed": "node prisma/seed.js"
+    "vercel-build": "prisma generate && prisma migrate deploy && next build",
+    "pre-commit": "yarn eslint . --ext .js --ext .jsx --fix && yarn pretty-quick --staged"
+  },
+  "prisma":{
+    "seed":"node prisma/seed.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.55.0",
