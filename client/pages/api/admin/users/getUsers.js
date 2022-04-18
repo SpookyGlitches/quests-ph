@@ -9,7 +9,11 @@ export default async function getAllUsers(req, res) {
     const users = await prisma.user.findMany({
       where: {
         deletedAt: null,
+        NOT: {
+          role: "admin",
+        },
       },
+
       select: {
         userId: true,
         displayName: true,

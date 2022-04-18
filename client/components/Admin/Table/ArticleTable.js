@@ -7,12 +7,6 @@ import { useRouter } from "next/router";
 export default function AdminDataGrid({ tableData, page, path }) {
   const router = useRouter();
 
-  // Users Mgmt
-
-  // Applications Mgmt
-
-  /* Articles Mgmt */
-  // Approve Article
   const handleApproveArticle = async (event, cellValues) => {
     try {
       const res = await axios.put(

@@ -3,7 +3,6 @@ require("dotenv").config();
 const bcrypt = require("bcryptjs");
 const cuid = require("cuid");
 
-const salt = bcrypt.genSaltSync(10);
 const prisma = new PrismaClient();
 // no need to use our own prisma lib thingy since this is outside
 // idk why i didnt use loop here :(
@@ -159,7 +158,10 @@ async function main() {
       displayName: process.env.ADMINONEUSER,
       fullName: "Admin One",
       email: process.env.ADMINONEEMAIL,
-      password: bcrypt.hashSync(process.env.ADMINONEPASS, salt),
+      password: bcrypt.hashSync(
+        process.env.ADMINONEPASS,
+        bcrypt.genSaltSync(10),
+      ),
       dateOfBirth: new Date(),
       role: "admin",
       verificationStatus: true,
@@ -173,7 +175,10 @@ async function main() {
       displayName: process.env.ADMINTWOUSER,
       fullName: "Admin Two",
       email: process.env.ADMINTWOEMAIL,
-      password: bcrypt.hashSync(process.env.ADMINTWOPASS, salt),
+      password: bcrypt.hashSync(
+        process.env.ADMINTWOPASS,
+        bcrypt.genSaltSync(10),
+      ),
       dateOfBirth: new Date(),
       role: "admin",
       verificationStatus: true,
@@ -187,7 +192,10 @@ async function main() {
       displayName: process.env.ADMINTHREEUSER,
       fullName: "Admin Three",
       email: process.env.ADMINTHREEEMAIL,
-      password: bcrypt.hashSync(process.env.ADMINTHREEPASS, salt),
+      password: bcrypt.hashSync(
+        process.env.ADMINTHREEPASS,
+        bcrypt.genSaltSync(10),
+      ),
       dateOfBirth: new Date(),
       role: "admin",
       verificationStatus: true,
@@ -201,7 +209,10 @@ async function main() {
       displayName: process.env.ADMINFOURUSER,
       fullName: "Admin Four",
       email: process.env.ADMINTHREEEMAIL,
-      password: bcrypt.hashSync(process.env.ADMINFOURPASS, salt),
+      password: bcrypt.hashSync(
+        process.env.ADMINFOURPASS,
+        bcrypt.genSaltSync(10),
+      ),
       dateOfBirth: new Date(),
       role: "admin",
       verificationStatus: true,
@@ -215,7 +226,10 @@ async function main() {
       displayName: process.env.ADMINFIVEUSER,
       fullName: "Admin Five",
       email: process.env.ADMINTHREEEMAIL,
-      password: bcrypt.hashSync(process.env.ADMINFIVEPASS, salt),
+      password: bcrypt.hashSync(
+        process.env.ADMINFIVEPASS,
+        bcrypt.genSaltSync(10),
+      ),
       dateOfBirth: new Date(),
       role: "admin",
       verificationStatus: true,
