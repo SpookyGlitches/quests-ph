@@ -6,6 +6,13 @@ import {
   Container,
   Typography,
   Avatar,
+  Paper,
+  TextField,
+  ToggleButtonGroup,
+  ToggleButton,
+  IconButton,
+  Grid,
+  ListItemButton,
   ListItemAvatar,
   ListItemText,
   Divider,
@@ -13,242 +20,167 @@ import {
   List,
 } from "@mui/material";
 
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import MarkEmailReadIcon from "@mui/icons-material/MarkEmailRead";
 import AppLayout from "../../components/Layouts/AppLayout";
+import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import useSWR, { mutate } from "swr";
+import axios from "axios";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 const index = () => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [unread, setRead] = useState(true);
+  const { data: session } = useSession();
+  const router = useRouter();
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [markallread, setMarkAllRead] = useState(true);
+  const [alignment, setAlignment] = React.useState("all");
 
-  const readHandler = () => {
-    setRead(false);
+  const handleChange = (event, newAlignment) => {
+    setAlignment(newAlignment);
   };
 
-  const markAllRead = () => {
-    setMarkAllRead(false);
+  const deleteNotification = async (id) => {
+    console.log(id);
+    try {
+      const res = await axios.delete("/api/notifications", {
+        notificationId: id,
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
+
+  const updateNotification_read_seen = async (id) => {
+    try {
+      const res = await axios.put(
+        `/api/notifications`,
+
+        { notificationId: id },
+      );
+      mutate("/notifications");
+      mutate("/notifications/notif_count");
+    } catch (error) {
+      console.log("failed");
+    }
+  };
+  const { data, error } = useSWR("/notifications", {
+    refreshInterval: 0,
+  });
+
+  // let finalData = { ...notif, ...person };
+
+  if (error) return <p>Error Fetching</p>;
+  if (!data) return <p>Loading...</p>;
+
+  console.log(data);
 
   return (
     <AppLayout>
+      <Paper sx={{ p: 3, display: "flex", gap: 5, flexDirection: "column" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+          }}
+        >
+          <Typography variant="h4" color="primary">
+            Notifications
+          </Typography>
+        </Box>
+      </Paper>
+
       <Box
         sx={{
-          width: "100%",
-          backgroundColor: "white",
-          padding: "1rem",
-          borderRadius: 1,
-          height: "100%",
-
-          borderColor: "grey.500",
+          marginTop: 2,
+          // border: 1,
+          // borderRadius: 2,
+          borderColor: "#D1D1D1",
         }}
       >
-        <Container sx={{ width: "60vw", marginLeft: 1 }}>
-          <Typography variant="h4" sx={{ cmarginLeft: 0, color: "#755cde" }}>
-            Notifications
-            <Tooltip title="Mark all as read" followCursor>
-              <Button
-                onClick={markAllRead}
-                display="flex"
-                directon="flex-start"
-                endIcon={<MarkEmailReadIcon style={{ fontSize: 30 }} />}
-              />
-            </Tooltip>
-          </Typography>
-
+        {data.map((notif) => (
           <List
+            key={notif.notificationId}
             sx={{
-              width: "60vw",
-              bgcolor: "background.paper",
-              overflow: "hidden",
+              "&.MuiList-root": {
+                padding: 0,
+                margin: 0,
+              },
+              width: "100%",
+              bgcolor: "primary",
+              marginBottom: 1,
+              marginLeft: 1,
             }}
           >
-            <ListItem button alignItems="flex-start">
-              <ListItemAvatar>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-              </ListItemAvatar>
+            <ListItemButton
+              onClick={() => updateNotification_read_seen(notif.notificationId)}
+              sx={{
+                "&.MuiListItemButton-root": {
+                  padding: 0,
+                  margin: 0,
+                },
+                bgcolor: "#ffffff",
+              }}
+            >
+              <Box
+                sx={{ marginRight: 2, position: "absolute", marginLeft: 0.5 }}
+              >
+                {notif.view_status === "SEEN" ? (
+                  <IconButton
+                    disableRipple
+                    sx={{ "&.MuiIconButton-root": { p: 0, m: 0 } }}
+                  >
+                    <CircleRoundedIcon
+                      sx={{ fontSize: "10px", color: "#755cde" }}
+                    />
+                  </IconButton>
+                ) : (
+                  []
+                )}
+              </Box>
+              <ListItem alignItems="flex-start">
+                <ListItemAvatar sx={{ marginRight: "5px" }}>
+                  <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                </ListItemAvatar>
+                <ListItemText
+                  sx={{ fontWeight: "bold" }}
+                  primary={notif.name}
+                  secondary={
+                    <React.Fragment>
+                      <Typography
+                        sx={{ display: "inline", marginTop: 1 }}
+                        component="span"
+                        variant="body2"
+                        color="text.primary"
+                      >
+                        {notif.message}
+                      </Typography>
+                      <Typography variant="body2">6d</Typography>
+                    </React.Fragment>
+                  }
+                />
 
-              <ListItemText
-                primary="Brunch this weekend?"
-                secondary={
-                  <>
-                    <Typography
-                      sx={{ display: "inline" }}
-                      component="span"
-                      variant="body2"
-                      color="text.primary"
-                    >
-                      15 hours ago
-                    </Typography>
-                    {" — I'll be in your neighborhood doing errands this…"}
-                  </>
-                }
-              />
-              {unread && markallread ? (
-                <Button onClick={readHandler}>
-                  <FiberManualRecordIcon style={{ fontSize: 15 }} />
-                </Button>
-              ) : (
-                []
-              )}
-            </ListItem>
-            <ListItem button alignItems="flex-start">
-              <ListItemAvatar>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-              </ListItemAvatar>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "flex-end",
+                    marginTop: 2,
+                  }}
+                >
+                  <IconButton
+                    sx={{ color: "#755cde" }}
+                    onClick={() => deleteNotification(notif.notificationId)}
+                  >
+                    <DeleteRoundedIcon fontSize="medium" />
+                  </IconButton>
+                </Box>
+              </ListItem>
+            </ListItemButton>
 
-              <ListItemText
-                primary="Brunch this weekend?"
-                secondary={
-                  <>
-                    <Typography
-                      sx={{ display: "inline" }}
-                      component="span"
-                      variant="body2"
-                      color="text.primary"
-                    >
-                      15 hours ago
-                    </Typography>
-                    {" — I'll be in your neighborhood doing errands this…"}
-                  </>
-                }
-              />
-              {unread && markallread ? (
-                <Button onClick={readHandler}>
-                  <FiberManualRecordIcon style={{ fontSize: 15 }} />
-                </Button>
-              ) : (
-                []
-              )}
-            </ListItem>
-            <Divider variant="inset" component="li" />
-            <ListItem button alignItems="flex-start">
-              <ListItemAvatar>
-                <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-              </ListItemAvatar>
-              <ListItemText
-                primary="Summer BBQ"
-                secondary={
-                  <>
-                    <Typography
-                      sx={{ display: "inline" }}
-                      component="span"
-                      variant="body2"
-                      color="text.primary"
-                    >
-                      3d
-                    </Typography>
-                    {" — Wish I could come, but I'm out of town this…"}
-                  </>
-                }
-              />
-            </ListItem>
-            <Divider variant="inset" component="li" />
-            <ListItem button alignItems="flex-start">
-              <ListItemAvatar>
-                <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-              </ListItemAvatar>
-              <ListItemText
-                primary="Summer BBQ"
-                secondary={
-                  <>
-                    <Typography
-                      sx={{ display: "inline" }}
-                      component="span"
-                      variant="body2"
-                      color="text.primary"
-                    >
-                      3d
-                    </Typography>
-                    {" — Wish I could come, but I'm out of town this…"}
-                  </>
-                }
-              />
-            </ListItem>
-            <Divider variant="inset" component="li" />
-            <ListItem button alignItems="flex-start">
-              <ListItemAvatar>
-                <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-              </ListItemAvatar>
-              <ListItemText
-                primary="Summer BBQ"
-                secondary={
-                  <>
-                    <Typography
-                      sx={{ display: "inline" }}
-                      component="span"
-                      variant="body2"
-                      color="text.primary"
-                    >
-                      3d
-                    </Typography>
-                    {" — Wish I could come, but I'm out of town this…"}
-                  </>
-                }
-              />
-            </ListItem>
-            <Divider variant="inset" component="li" />
-            <ListItem button alignItems="flex-start">
-              <ListItemAvatar>
-                <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-              </ListItemAvatar>
-              <ListItemText
-                primary="Summer BBQ"
-                secondary={
-                  <>
-                    <Typography
-                      sx={{ display: "inline" }}
-                      component="span"
-                      variant="body2"
-                      color="text.primary"
-                    >
-                      3d
-                    </Typography>
-                    {" — Wish I could come, but I'm out of town this…"}
-                  </>
-                }
-              />
-              {unread && markallread ? (
-                <Button onClick={readHandler}>
-                  <FiberManualRecordIcon style={{ fontSize: 15 }} />
-                </Button>
-              ) : (
-                []
-              )}
-            </ListItem>
-            <Divider variant="inset" component="li" />
-            <ListItem button alignItems="flex-start">
-              <ListItemAvatar>
-                <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-              </ListItemAvatar>
-              <ListItemText
-                primary="Summer BBQ"
-                secondary={
-                  <>
-                    <Typography
-                      sx={{ display: "inline" }}
-                      component="span"
-                      variant="body2"
-                      color="text.primary"
-                    >
-                      3d
-                    </Typography>
-                    {" — Wish I could come, but I'm out of town this…"}
-                  </>
-                }
-              />
-              {unread && markallread ? (
-                <Button onClick={readHandler}>
-                  <FiberManualRecordIcon style={{ fontSize: 15 }} />
-                </Button>
-              ) : (
-                []
-              )}
-            </ListItem>
+            <Divider />
           </List>
-        </Container>
+        ))}
       </Box>
     </AppLayout>
   );
