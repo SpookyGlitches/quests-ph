@@ -14,7 +14,7 @@ import Router from "next/router";
 import axios from "axios";
 import { getSession } from "next-auth/react";
 import { resetUserPassword } from "../../../validations/ResetPassword";
-import AuthHeader from "../../../components/Auth1/AuthHeader";
+import AuthHeader from "../../../components/Auth/AuthHeader";
 import AuthLayout from "../../../components/Layouts/AuthLayout";
 import prisma from "../../../lib/prisma";
 import FilledOut from "../../../components/Reset/FilledOut";

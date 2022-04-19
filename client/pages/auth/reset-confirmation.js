@@ -2,7 +2,7 @@ import { Stack, Box } from "@mui/material";
 import { useRouter } from "next/router";
 import { getSession } from "next-auth/react";
 import AuthLayout from "../../components/Layouts/AuthLayout";
-import AuthHeader from "../../components/Auth1/AuthHeader";
+import AuthHeader from "../../components/Auth/AuthHeader";
 import GoBackHome from "../../components/Reset/GoBack";
 
 export default function ResetPasswordConfirmation() {

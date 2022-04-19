@@ -18,7 +18,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
-import AuthHeader from "../../components/Auth1/AuthHeader";
+import AuthHeader from "../../components/Auth/AuthHeader";
 
 export default function AdminLogin() {
   const router = useRouter();

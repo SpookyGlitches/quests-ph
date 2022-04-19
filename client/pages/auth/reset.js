@@ -10,7 +10,7 @@ import Router from "next/router";
 import axios from "axios";
 import { getSession } from "next-auth/react";
 import AuthLayout from "../../components/Layouts/AuthLayout";
-import AuthHeader from "../../components/Auth1/AuthHeader";
+import AuthHeader from "../../components/Auth/AuthHeader";
 import { resetUserPassword } from "../../validations/ResetPassword";
 import CreateAnAccount from "../../components/Registration/CreateAnAccount";
 

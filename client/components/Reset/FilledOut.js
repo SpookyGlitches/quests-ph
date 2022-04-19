@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Typography, Link as MuiLink } from "@mui/material";
 import AuthLayout from "../Layouts/AuthLayout";
-import AuthHeader from "../Auth1/AuthHeader";
+import AuthHeader from "../Auth/AuthHeader";
 
 export default function Filled() {
   return (

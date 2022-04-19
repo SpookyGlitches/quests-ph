@@ -1,18 +1,5 @@
 import * as React from "react";
-import {
-  Box,
-  StepLabel,
-  Stack,
-  Stepper,
-  Button,
-  Step,
-  // eslint-disable-next-line
-  Snackbar,
-  // eslint-disable-next-line
-  IconButton,
-  // eslint-disable-next-line
-  CloseIcon,
-} from "@mui/material";
+import { Box, StepLabel, Stack, Stepper, Button, Step } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -22,7 +9,7 @@ import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import Router from "next/router";
 import axios from "axios";
 import { getSession } from "next-auth/react";
-import AuthHeader from "../../../components/Auth1/AuthHeader";
+import AuthHeader from "../../../components/Auth/AuthHeader";
 import AuthLayout from "../../../components/Layouts/AuthLayout";
 import Step1 from "../../../components/Registration/Step1";
 import Step2 from "../../../components/Registration/Step2";
