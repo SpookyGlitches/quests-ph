@@ -14,6 +14,7 @@ import {
   Grid,
   ListItemButton,
   ListItemAvatar,
+  Chip,
   ListItemText,
   Divider,
   ListItem,
@@ -24,6 +25,7 @@ import AppLayout from "../../components/Layouts/AppLayout";
 import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import useSWR, { mutate } from "swr";
+import { format, formatDistance } from "date-fns";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -62,6 +64,11 @@ const index = () => {
       console.log("failed");
     }
   };
+
+  const text = {
+    fontWeight: "bold",
+  };
+
   const { data, error } = useSWR("/notifications", {
     refreshInterval: 0,
   });
@@ -93,9 +100,9 @@ const index = () => {
       <Box
         sx={{
           marginTop: 2,
-          // border: 1,
-          // borderRadius: 2,
-          borderColor: "#D1D1D1",
+
+          borderRadius: 1,
+          border: "1px solid rgba(0, 0, 0, 0.12)",
         }}
       >
         {data.map((notif) => (
@@ -120,30 +127,25 @@ const index = () => {
                   margin: 0,
                 },
                 bgcolor: "#ffffff",
+                borderRadius: 1,
               }}
             >
               <Box
                 sx={{ marginRight: 2, position: "absolute", marginLeft: 0.5 }}
-              >
-                {notif.view_status === "SEEN" ? (
-                  <IconButton
-                    disableRipple
-                    sx={{ "&.MuiIconButton-root": { p: 0, m: 0 } }}
-                  >
-                    <CircleRoundedIcon
-                      sx={{ fontSize: "10px", color: "#755cde" }}
-                    />
-                  </IconButton>
-                ) : (
-                  []
-                )}
-              </Box>
+              ></Box>
               <ListItem alignItems="flex-start">
+                <Chip
+                  label={notif.type.split("_")[1]}
+                  color="primary"
+                  size="small"
+                  sx={{ marginTop: 2, fontWeight: "500" }}
+                />
                 <ListItemAvatar sx={{ marginRight: "5px" }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                  <Avatar alt="Remy Sharp" src={`/images/reward.png`} />
                 </ListItemAvatar>
+
                 <ListItemText
-                  sx={{ fontWeight: "bold" }}
+                  primaryTypographyProps={{ style: text }}
                   primary={notif.name}
                   secondary={
                     <React.Fragment>
@@ -155,7 +157,6 @@ const index = () => {
                       >
                         {notif.message}
                       </Typography>
-                      <Typography variant="body2">6d</Typography>
                     </React.Fragment>
                   }
                 />
@@ -163,17 +164,29 @@ const index = () => {
                 <Box
                   sx={{
                     display: "flex",
-                    flexDirection: "row",
+                    flexDirection: "column",
                     justifyContent: "flex-end",
-                    marginTop: 2,
                   }}
                 >
-                  <IconButton
-                    sx={{ color: "#755cde" }}
-                    onClick={() => deleteNotification(notif.notificationId)}
-                  >
-                    <DeleteRoundedIcon fontSize="medium" />
-                  </IconButton>
+                  <Typography variant="caption" sx={{ marginBottom: 1 }}>
+                    {formatDistance(new Date(notif.createdAt), new Date(), {
+                      addSuffix: true,
+                    })}
+                  </Typography>
+                  {notif.view_status === "SEEN" ? (
+                    <IconButton
+                      disableRipple
+                      sx={{
+                        "&.MuiIconButton-root": { p: 0, m: 0 },
+                      }}
+                    >
+                      <CircleRoundedIcon
+                        sx={{ fontSize: "10px", color: "#755cde" }}
+                      />
+                    </IconButton>
+                  ) : (
+                    []
+                  )}
                 </Box>
               </ListItem>
             </ListItemButton>

@@ -22,7 +22,8 @@ export default function CheckboxListSecondary() {
       sx={{
         backgroundColor: "background.paper",
         height: "100%",
-        borderRadius: 2,
+        borderRadius: 1,
+        border: "1px solid rgba(0, 0, 0, 0.12)",
       }}
     >
       {!data && <CircularProgress />}

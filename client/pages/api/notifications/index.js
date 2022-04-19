@@ -7,6 +7,7 @@ async function getNotificataion(req, res) {
   try {
     const notif = await prisma.notification.findMany({
       where: { userId: user.userId },
+      orderBy: { createdAt: "desc" },
     });
 
     const parse = notif.map((x) => JSON.parse(x.metadata));
@@ -30,7 +31,7 @@ async function getNotificataion(req, res) {
         const notification =
           await prisma.$queryRaw`select n.notificationId, n.userId, n.message, n.type, n.metadata, n.view_status,
           n.createdAt, b.badgeId, b.name, b.description, b.image FROM notification AS n
-          INNER JOIN badge AS b ON b.badgeId = ${badgeIds[x]} WHERE n.userId = ${user.userId}`;
+          INNER JOIN badge AS b ON b.badgeId = ${badgeIds[x]} WHERE n.userId = ${user.userId} ORDER BY n.createdAt DESC`;
 
         results.push(notification[x]);
       }
