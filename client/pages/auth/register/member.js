@@ -8,7 +8,7 @@ import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import Router from "next/router";
 import { getSession } from "next-auth/react";
 import axios from "axios";
-import AuthHeader from "../../../components/Auth/AuthHeader";
+import AuthHeader from "../../../components/Auth1/AuthHeader";
 import AuthLayout from "../../../components/Layouts/AuthLayout";
 import Step1 from "../../../components/Registration/Step1";
 import Step2 from "../../../components/Registration/Step2";

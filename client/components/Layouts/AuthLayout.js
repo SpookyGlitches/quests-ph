@@ -1,5 +1,5 @@
 import { Grid, Box } from "@mui/material";
-import AuthCarousel from "../Auth/AuthCarousel";
+import AuthCarousel from "../Auth1/AuthCarousel";
 
 const AuthLayout = ({ children }) => {
   return (

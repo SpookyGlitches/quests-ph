@@ -14,7 +14,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { signIn, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import AuthHeader from "../../components/Auth/AuthHeader";
+import AuthHeader from "../../components/Auth1/AuthHeader";
 import AuthLayout from "../../components/Layouts/AuthLayout";
 import CreateAnAccount from "../../components/Registration/CreateAnAccount";
 

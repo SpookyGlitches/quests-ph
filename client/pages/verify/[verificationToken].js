@@ -1,5 +1,5 @@
 import prisma from "../../lib/prisma";
-import AuthHeader from "../../components/Auth/AuthHeader";
+import AuthHeader from "../../components/Auth1/AuthHeader";
 import AuthLayout from "../../components/Layouts/AuthLayout";
 import GoBackHome from "../../components/Reset/GoBack";
 

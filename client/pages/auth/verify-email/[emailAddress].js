@@ -6,7 +6,7 @@ import { getSession } from "next-auth/react";
 import Alert from "@mui/material/Alert";
 import axios from "axios";
 import AuthLayout from "../../../components/Layouts/AuthLayout";
-import AuthHeader from "../../../components/Auth/AuthHeader";
+import AuthHeader from "../../../components/Auth1/AuthHeader";
 
 export default function VerifyEmail() {
   const [message, setMessage] = useState(null);
