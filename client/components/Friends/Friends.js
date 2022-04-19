@@ -16,7 +16,6 @@ const FriendsField = (item) => {
   const [open, setOpen] = useState(false);
   // eslint-disable-next-line
   const [friendData] = useState(item.item);
-
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -44,7 +43,7 @@ const FriendsField = (item) => {
       : friendData.userTwo;
   const handleProfileClick = async () => {
     axios
-      .get("/api/profile/friends/friendinfo", {
+      .get("/api/friends/friendinformation", {
         params: {
           displayName: userDisplayed.displayName,
         },
