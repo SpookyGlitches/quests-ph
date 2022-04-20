@@ -1,10 +1,12 @@
 import * as React from "react";
 import { useEffect } from "react";
 import useSWR from "swr";
+import axios from "axios";
 import FriendOptionsBar from "./FriendOptionsBar";
 import NotFriendOptionsBar from "./NotFriendOptionsBar";
 
 export default function Options({ userId, role }) {
+  const fetcher = (url) => axios.get(url).then((res) => res.data);
   const [friendInfo, setFriendInfo] = React.useState("");
   // eslint-disable-next-line
   const { data: friendInfos } = useSWR(
@@ -27,9 +29,27 @@ export default function Options({ userId, role }) {
   }, [friendInfos]);
 
   const { data: friendships } = useSWR(
-    userId ? `/profile/${userId}/friends` : null,
+    userId ? `/api/profile/${userId}/friends` : null,
+    fetcher,
   );
+  const { data: friendRequests } = useSWR(
+    userId ? `/api/profile/${userId}/checkrequest` : null,
+    fetcher,
+  );
+
   if (!friendships) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          overflow: "auto",
+        }}
+      />
+    );
+  }
+  if (!friendRequests) {
     return (
       <div
         style={{
@@ -48,9 +68,11 @@ export default function Options({ userId, role }) {
         userId={userId}
         friendInfo={friendInfo}
         role={role}
+        requests={friendRequests}
       />
     );
   }
+
   return (
     <FriendOptionsBar
       userId={userId}
