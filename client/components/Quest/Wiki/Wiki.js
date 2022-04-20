@@ -1,11 +1,13 @@
-import { Box, Button, Paper, Typography } from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
 import axios from "axios";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import useSWR from "swr";
+import { useContext, useEffect, useState } from "react";
+import { mutate } from "swr";
 import { Plate } from "@udecode/plate-core";
+import { LoadingButton } from "@mui/lab";
 import { plugins } from "../../../config/plate/plugins";
 import Toolbar from "./Toolbar";
+import { QuestContext } from "../../../context/QuestContext";
+import { PartyMemberContext } from "../../../context/PartyMemberContext";
 
 const initialValue = [
   {
@@ -15,42 +17,51 @@ const initialValue = [
 ];
 
 const Wiki = () => {
-  const { query } = useRouter();
-  const { questId } = query;
-
   const [plateValue, setPlateValue] = useState(initialValue);
   const [isEditing, setIsEditing] = useState(false);
-  const { data: quest, mutate: mutateQuest } = useSWR(
-    questId ? `/quests/${questId}` : null,
-  );
+  const [loading, setLoading] = useState(false);
 
-  const { data: partyMember } = useSWR(
-    questId ? `/quests/${questId}/partyMembers/currentUser` : null,
-  );
+  const partyMember = useContext(PartyMemberContext);
+  const quest = useContext(QuestContext);
+  const { questId, wiki, completedAt } = quest;
 
   useEffect(() => {
-    if (quest && quest.wiki) {
-      setPlateValue(JSON.parse(quest.wiki));
+    if (wiki) {
+      setPlateValue(JSON.parse(wiki));
     }
-  }, [quest]);
+  }, [wiki]);
 
   const onChangeDebug = (newPlateValue) => {
     setPlateValue(newPlateValue);
   };
+
+  const updateWiki = async () => {
+    try {
+      setLoading(true);
+      const stringifiedValue = JSON.stringify(plateValue);
+      await axios.put(`/api/quests/${quest.questId}/wiki`, {
+        wiki: stringifiedValue,
+      });
+
+      mutate(
+        `/quests/${questId}`,
+        (questData) => ({ ...questData, wiki: stringifiedValue }),
+        {
+          revalidate: false,
+        },
+      );
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+    }
+  };
   const toggleEditButton = async (event) => {
     event.preventDefault();
     if (isEditing) {
-      try {
-        const stringifiedValue = JSON.stringify(plateValue);
-        await axios.put(`/api/quests/${quest.questId}/wiki`, {
-          wiki: stringifiedValue,
-        });
-        mutateQuest((questData) => ({ ...questData, wiki: stringifiedValue }), {
-          revalidate: false,
-        });
-      } catch (err) {
-        console.error(err);
-      }
+      await updateWiki();
     }
     setIsEditing((prev) => !prev);
   };
@@ -58,7 +69,6 @@ const Wiki = () => {
   const editableProps = {
     placeholder: isEditing ? "Type something" : "",
     style: {
-      padding: "0.25rem 0.5rem",
       height: "100%",
       width: "100%",
     },
@@ -87,13 +97,18 @@ const Wiki = () => {
           justifyContent: "space-between",
         }}
       >
-        <Typography variant="h4" color="primary" sx={{}}>
+        <Typography variant="h5" color="primary" sx={{}}>
           Wiki
         </Typography>
         {partyMember.role !== "MENTEE" && (
-          <Button onClick={toggleEditButton} sx={{ height: "auto" }}>
+          <LoadingButton
+            disabled={Boolean(completedAt)}
+            onClick={toggleEditButton}
+            loading={loading}
+            loadingIndicator="Saving..."
+          >
             {isEditing ? "Save" : "Edit"}
-          </Button>
+          </LoadingButton>
         )}
       </Box>
 

@@ -13,7 +13,7 @@ function computeIfJoined(quests, role) {
   let canJoin = false;
   quests.forEach((item) => {
     joined = item.partyMembers.length !== 0;
-    canJoin = !joined && role !== "mentor";
+    canJoin = !item.completedAt && !joined && role !== "mentor";
     computed.push({
       ...item,
       joined,
@@ -102,6 +102,7 @@ async function getQuests(req, res) {
         estimatedStartDate: true,
         estimatedEndDate: true,
         questId: true,
+        completedAt: true,
         partyMembers: {
           select: {
             partyMemberId: true,

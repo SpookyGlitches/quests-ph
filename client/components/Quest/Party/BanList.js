@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Typography,
   Table,
@@ -15,18 +15,18 @@ import {
   Paper,
 } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
-import { useRouter } from "next/router";
 import useSWR from "swr";
 import RemoveCircleOutlineRoundedIcon from "@mui/icons-material/RemoveCircleOutlineRounded";
 import axios from "axios";
+import { QuestContext } from "../../../context/QuestContext";
 
 export default function BanList() {
-  const router = useRouter();
-  const { questId } = router.query;
+  const { questId, completedAt } = useContext(QuestContext);
   const { data: partyBans, mutate: mutatePartyBans } = useSWR(
     questId ? `/quests/${questId}/partyBans` : null,
   );
 
+  const completed = Boolean(completedAt);
   const revokeBan = async (partyBanId) => {
     try {
       await axios.delete(`/api/quests/${questId}/partyBans/${partyBanId}`);
@@ -62,7 +62,10 @@ export default function BanList() {
       </TableCell>
       <TableCell align="right">
         <Tooltip title="Revoke">
-          <IconButton onClick={() => revokeBan(partyBan.questPartyBanId)}>
+          <IconButton
+            onClick={() => revokeBan(partyBan.questPartyBanId)}
+            disabled={completed}
+          >
             <RemoveCircleOutlineRoundedIcon />
           </IconButton>
         </Tooltip>
@@ -73,7 +76,7 @@ export default function BanList() {
   return (
     <Paper sx={{ padding: 3 }}>
       <Stack spacing={2}>
-        <Typography variant="h4" sx={{ color: "primary.main" }}>
+        <Typography variant="h5" sx={{ color: "primary.main" }}>
           Bans
         </Typography>
         <TableContainer emp>

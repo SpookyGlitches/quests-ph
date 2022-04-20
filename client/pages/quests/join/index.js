@@ -77,14 +77,23 @@ export async function getServerSideProps(context) {
       token,
       process.env.INVITE_PARTY_MEMBER_SECRET_KEY,
     );
-    const existingMember = await prisma.partyMember.findFirst({
+
+    const quest = await prisma.quest.findUnique({
       where: {
-        userId: user.userId,
         questId: verified.questId,
       },
+      select: {
+        partyMembers: {
+          where: {
+            userId: user.userId,
+          },
+        },
+        completedAt: true,
+      },
+      rejectOnNotFound: true,
     });
 
-    if (existingMember) {
+    if (quest.partyMembers.length !== 0) {
       return {
         redirect: {
           permanent: true,
@@ -92,6 +101,11 @@ export async function getServerSideProps(context) {
         },
       };
     }
+
+    if (quest.completedAt) {
+      throw new Error();
+    }
+
     return {
       props: {
         token: verified,

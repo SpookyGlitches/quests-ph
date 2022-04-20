@@ -69,6 +69,7 @@ const Post = ({ postId, questId, children, onSpecificPost }) => {
             postReacts={postReacts}
             postId={postId}
             questId={questId}
+            disabled={Boolean(post.partyMember.quest.completedAt)}
           />
         </>
       )}

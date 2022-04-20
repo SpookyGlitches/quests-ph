@@ -3,8 +3,9 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import postValidations from "../../../validations/post";
+import { QuestContext } from "../../../context/QuestContext";
 
 export default function PostForm({
   post,
@@ -17,6 +18,7 @@ export default function PostForm({
   const session = useSession();
   const userId = session?.data?.user?.userId;
   const { questId } = router.query;
+  const { completedAt } = useContext(QuestContext);
 
   const {
     handleSubmit,
@@ -88,6 +90,7 @@ export default function PostForm({
                   label="Title"
                   onChange={onChange}
                   value={value}
+                  disabled={Boolean(completedAt)}
                   error={Boolean(errors.title)}
                   helperText={
                     errors.title
@@ -107,6 +110,7 @@ export default function PostForm({
                   multiline
                   minRows={3}
                   maxRows={8}
+                  disabled={Boolean(completedAt)}
                   onChange={onChange}
                   value={value}
                   error={Boolean(errors.body)}
@@ -128,7 +132,12 @@ export default function PostForm({
               }}
             >
               {isUpdating && <Button onClick={deletePost}>Delete</Button>}
-              <Button color="primary" variant="contained" type="submit">
+              <Button
+                color="primary"
+                variant="contained"
+                type="submit"
+                disabled={Boolean(completedAt)}
+              >
                 {isUpdating ? "Edit" : "Submit "} Post
               </Button>
             </Box>

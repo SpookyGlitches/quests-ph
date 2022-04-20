@@ -11,7 +11,7 @@ import DatePicker from "@mui/lab/DatePicker";
 import { Controller, useFormContext } from "react-hook-form";
 import { add } from "date-fns";
 
-export default function Step2({ wishItem }) {
+export default function Step2({ wishItem, disables }) {
   const {
     formState: { errors },
   } = useFormContext();
@@ -26,7 +26,11 @@ export default function Step2({ wishItem }) {
           <FormControl variant="filled" error={Boolean(errors.category)}>
             <InputLabel>Category</InputLabel>
 
-            <Select onChange={onChange} value={value}>
+            <Select
+              onChange={onChange}
+              value={value}
+              disabled={disables?.category}
+            >
               <MenuItem value="HEALTH">Health</MenuItem>
               <MenuItem value="CAREER">Career</MenuItem>
               <MenuItem value="SOCIAL">Social</MenuItem>
@@ -40,7 +44,11 @@ export default function Step2({ wishItem }) {
       <Controller
         name="difficulty"
         render={({ field: { onChange, value } }) => (
-          <FormControl variant="filled" error={Boolean(errors.difficulty)}>
+          <FormControl
+            variant="filled"
+            error={Boolean(errors.difficulty)}
+            disabled={disables?.difficulty}
+          >
             <InputLabel>Difficulty</InputLabel>
 
             <Select onChange={onChange} value={value}>
@@ -62,7 +70,11 @@ export default function Step2({ wishItem }) {
           <FormControl variant="filled" error={Boolean(errors.visibility)}>
             <InputLabel>Visibility</InputLabel>
 
-            <Select onChange={onChange} value={value}>
+            <Select
+              onChange={onChange}
+              value={value}
+              disabled={disables?.visibility}
+            >
               <MenuItem value="PUBLIC">Public</MenuItem>
               <MenuItem value="PRIVATE">Private</MenuItem>
             </Select>
@@ -87,6 +99,7 @@ export default function Step2({ wishItem }) {
                     disablePast
                     value={value}
                     onChange={onChange}
+                    disabled={disables?.startDate}
                     renderInput={(params) => (
                       <TextField
                         {...params}
@@ -114,6 +127,7 @@ export default function Step2({ wishItem }) {
                 >
                   <DatePicker
                     label="End date"
+                    disabled={disables?.endDate}
                     minDate={add(new Date(), { days: 1 })}
                     value={value}
                     disablePast

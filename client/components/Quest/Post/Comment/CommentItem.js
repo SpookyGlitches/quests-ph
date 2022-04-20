@@ -10,13 +10,15 @@ import {
 import { formatDistance, format } from "date-fns";
 import AddReactionRoundedIcon from "@mui/icons-material/AddReactionRounded";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useSWRConfig } from "swr";
 import axios from "axios";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import { useSnackbar } from "notistack";
 import ReactOptions from "../ReactOptions";
 import EmojiStack from "../EmojisStack";
+import { QuestContext } from "../../../../context/QuestContext";
 
 export default function CommentItem({
   comment,
@@ -27,9 +29,11 @@ export default function CommentItem({
 }) {
   const [reactOptionsAnchor, setReactOptionsAnchor] = useState(null);
   const [openReactOptions, setOpenReactOptions] = useState(false);
-
+  const { completedAt } = useContext(QuestContext);
   const session = useSession();
   const { mutate } = useSWRConfig();
+  const { enqueueSnackbar } = useSnackbar();
+
   const userId = session.data?.user?.userId;
 
   const toggleReactOptions = (event) => {
@@ -41,6 +45,16 @@ export default function CommentItem({
   );
 
   const addReact = async (type, commentId) => {
+    if (completedAt) {
+      enqueueSnackbar(
+        "You cannot react since the Quest is already completed.",
+        {
+          variant: "error",
+          preventDuplicate: true,
+        },
+      );
+      return;
+    }
     await axios.post(
       `/api/quests/${questId}/posts/${postId}/comments/${commentId}/reacts`,
       {
@@ -50,6 +64,16 @@ export default function CommentItem({
   };
 
   const updateReact = async (type, commentId, commentReactId) => {
+    if (completedAt) {
+      enqueueSnackbar(
+        "You cannot react since the Quest is already completed.",
+        {
+          variant: "error",
+          preventDuplicate: true,
+        },
+      );
+      return;
+    }
     await axios.put(
       `/api/quests/${questId}/posts/${postId}/comments/${commentId}/reacts/${commentReactId}`,
       {
@@ -157,7 +181,11 @@ export default function CommentItem({
                 direction="row"
                 sx={{ alignItems: "center", mt: 0.5 }}
               >
-                <IconButton size="small" onClick={toggleReactOptions}>
+                <IconButton
+                  size="small"
+                  onClick={toggleReactOptions}
+                  disabled={Boolean(completedAt) && !selected}
+                >
                   <AddReactionRoundedIcon fontSize="inherit" />
                 </IconButton>
               </Stack>
@@ -177,6 +205,7 @@ export default function CommentItem({
             >
               <IconButton
                 size="small"
+                disabled={Boolean(completedAt)}
                 onClick={() => editComment(comment.commentId, comment.content)}
               >
                 <EditRoundedIcon fontSize="inherit" />

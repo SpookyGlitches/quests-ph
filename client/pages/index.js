@@ -25,7 +25,7 @@ import CreatePost from "../components/Quest/Post/CreatePost";
 import PostsList from "../components/Quest/Post/PostsList";
 
 function CreatePostModal({ open, setOpen }) {
-  const { data: quests } = useSWR(open ? "/quests?" : null);
+  const { data: quests } = useSWR(open ? "/quests?status=ACTIVE" : null);
   const router = useRouter();
   const { control, handleSubmit } = useForm();
   const navigateToQuest = (values) => {
