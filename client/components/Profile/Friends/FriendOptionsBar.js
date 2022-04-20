@@ -10,7 +10,6 @@ import DialogTitle from "@mui/material/DialogTitle";
 import ErrorRoundedIcon from "@mui/icons-material/ErrorRounded";
 import CommentRoundedIcon from "@mui/icons-material/CommentRounded";
 import axios from "axios";
-import Router from "next/router";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Box,
@@ -24,7 +23,7 @@ import {
   FormHelperText,
   Typography,
 } from "@mui/material";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { useSnackbar } from "notistack";
 import { UserReport } from "../../../validations/userReport";
 
@@ -38,7 +37,7 @@ export default function FriendsOptionsBar({
   const [openReport, setOpenReport] = React.useState(false);
   const [openRequest, setOpenRequest] = React.useState(false);
   const [questMentored, setQuestMentored] = React.useState("");
-
+  const { mutate } = useSWRConfig();
   const { enqueueSnackbar } = useSnackbar();
 
   const currentValidationSchema = UserReport[0];
@@ -97,8 +96,8 @@ export default function FriendsOptionsBar({
               userId,
               values,
             },
-          }) // eslint-disable-next-line
-            .then((res) => {
+          })
+            .then(() => {
               enqueueSnackbar("You have reported this user!");
             })
             .catch((error) => {
@@ -128,7 +127,7 @@ export default function FriendsOptionsBar({
         friendshipId,
       },
     }).then(() => {
-      Router.reload();
+      mutate(`/api/profile/${userId}/friends`);
     });
   };
   const handleRequest = () => {
