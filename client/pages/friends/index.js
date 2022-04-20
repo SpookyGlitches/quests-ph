@@ -2,17 +2,52 @@ import CircularProgress from "@mui/material/CircularProgress";
 import useSWR from "swr";
 import { Box, Typography } from "@mui/material";
 import axios from "axios";
-import { useSession, getSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import AppLayout from "../../components/Layouts/AppLayout";
-import SearchBar from "../../components/Friends/Search";
-import FilterHolder from "../../components/Friends/FilterHolder";
 import Friends from "../../components/Friends/Friends";
 import Incoming from "../../components/Friends/Incoming";
 import Outgoing from "../../components/Friends/Outgoing";
 import AccessDenied from "../../components/Error/AccessDenied";
+import prisma from "../../lib/prisma";
 
-function ListHolder({ items, requestName }) {
-  const { data: session } = useSession();
+function ListHolder({ items, requestName, displayName }) {
+  if (items.length !== 0) {
+    return (
+      <Box
+        sx={{
+          backgroundColor: "background.paper",
+          padding: "1rem",
+          margin: "2rem",
+          display: "flex",
+          flexDirection: "column",
+          borderRadius: 2,
+        }}
+      >
+        <Typography color="primary" variant="h4">
+          {requestName}
+        </Typography>
+
+        {items.map((item) => {
+          switch (requestName) {
+            case "Incoming Requests":
+              return <Incoming key={item.friendRequestId} item={item} />;
+            case "Outgoing Requests":
+              return <Outgoing key={item.friendRequestId} item={item} />;
+            case "Friends":
+              return (
+                <Friends
+                  key={item.friendshipId}
+                  item={item}
+                  displayName={displayName}
+                />
+              );
+            default:
+              return <h4>Friends</h4>;
+          }
+        })}
+      </Box>
+    );
+  }
   return (
     <Box
       sx={{
@@ -27,34 +62,19 @@ function ListHolder({ items, requestName }) {
       <Typography color="primary" variant="h4">
         {requestName}
       </Typography>
-      {/* eslint-disable-next-line */}
-      {items.map((item) => {
-        switch (requestName) {
-          case "Incoming Requests":
-            return <Incoming key={item.friendRequestId} item={item} />;
-          case "Outgoing Requests":
-            return <Outgoing key={item.friendRequestId} item={item} />;
-          case "Friends":
-            return (
-              <Friends
-                key={item.friendshipId}
-                item={item}
-                displayName={session.user.displayName}
-              />
-            );
-          default:
-            return <h4>Friends</h4>;
-        }
-      })}
+      <Box sx={{ my: 3 }} align="center">
+        <Typography variant="h5" align="center">
+          No items found.
+        </Typography>
+      </Box>
     </Box>
   );
 }
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
-const Index = () => {
-  const { data: session } = useSession();
-  if (session) {
+const Index = ({ name }) => {
+  if (name != null) {
     // eslint-disable-next-line
     const { data: friends, error: one } = useSWR(
       "/api/friends/friends",
@@ -71,7 +91,6 @@ const Index = () => {
       fetcher,
     );
 
-    // Progress bar lng sa cause Im not sure how to handle this.
     if (!friends || one)
       return (
         <div
@@ -92,9 +111,7 @@ const Index = () => {
             justifyContent: "center",
             alignItems: "center",
           }}
-        >
-          <CircularProgress />
-        </div>
+        />
       );
     if (!outgoing || three)
       return (
@@ -104,18 +121,12 @@ const Index = () => {
             justifyContent: "center",
             alignItems: "center",
           }}
-        >
-          <CircularProgress />
-        </div>
+        />
       );
 
     return (
       <AppLayout>
         <div>
-          <SearchBar />
-
-          <FilterHolder />
-
           <ListHolder items={incoming} requestName="Incoming Requests" />
 
           <ListHolder items={outgoing} requestName="Outgoing Requests" />
@@ -123,20 +134,37 @@ const Index = () => {
           <ListHolder
             items={friends}
             requestName="Friends"
-            fullName={session.user.displayName}
+            displayName={name}
           />
         </div>
       </AppLayout>
     );
   }
+
   return <AccessDenied />;
 };
 export default Index;
 
 export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  let name;
+  if (session) {
+    const findUser = await prisma.user.findFirst({
+      where: {
+        userId: session.user.userId,
+        deletedAt: null,
+      },
+    });
+    name = findUser.displayName;
+    return {
+      props: {
+        name: JSON.parse(JSON.stringify(name)),
+      },
+    };
+  }
   return {
     props: {
-      session: await getSession(context),
+      name: null,
     },
   };
 }
