@@ -15,19 +15,19 @@ const AuthCarousel = () => {
       <img
         style={{ width: "auto", height: "auto" }}
         alt="Quests"
-        src="/auth/carousel1.png"
+        src="/auth/car1.png"
       />
 
       <img
         style={{ width: "auto", height: "auto" }}
         alt="Quests"
-        src="/auth/carousel2.png"
+        src="/auth/car3.png"
       />
 
       <img
         style={{ width: "auto", height: "auto" }}
         alt="Quests"
-        src="/auth/carousel3.png"
+        src="/auth/car2.png"
       />
     </Carousel>
   );
