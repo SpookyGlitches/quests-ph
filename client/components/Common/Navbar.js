@@ -20,7 +20,7 @@ import { styled, alpha } from "@mui/material/styles";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -149,10 +149,17 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
+<<<<<<< HEAD
+      <Link href="/notifications" passHref>
+        <MenuItem>
+          <IconButton size="large" aria-label="" color="inherit">
+            <Badge badgeContent={data || 0} color="error">
+=======
       <Link href={"/notifications"} passHref>
         <MenuItem>
           <IconButton size="large" aria-label="" color="inherit">
             <Badge badgeContent={data ? data : 0} color="error">
+>>>>>>> a0e9c3f9de2ebc3ae67450c749df60be924666e1
               <NotificationsRoundedIcon />
             </Badge>
           </IconButton>
@@ -224,7 +231,11 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
             <Link href="/notifications" passHref>
               <Tooltip title="Notifications" sx={{ p: 0.5 }}>
                 <IconButton size="large" aria-label="" color="inherit">
+<<<<<<< HEAD
+                  <Badge badgeContent={data || 0} color="error">
+=======
                   <Badge badgeContent={data ? data : 0} color="error">
+>>>>>>> a0e9c3f9de2ebc3ae67450c749df60be924666e1
                     <NotificationsRoundedIcon />
                   </Badge>
                 </IconButton>
