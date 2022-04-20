@@ -8,22 +8,13 @@ async function /* eslint-disable */ getNotificataion(req, res) {
     const notif = await prisma.notification.findMany({
       where: { userId: user.userId },
       orderBy: { createdAt: "desc" },
-    }); /* eslint-disable */
+    });
 
     const parse = notif.map((x) => JSON.parse(x.metadata));
 
     const badgeIds = parse.map((x) => x.badgeId);
 
     const results = [];
-
-    // for (let x = 0; x < notif.length; x++) {
-    //   const getBadgeInfo = await prisma.badge.findFirst({
-    //     where: {
-    //       badgeId: badgeIds[x],
-    //     },
-    //   });
-    //   results.push(getBadgeInfo);
-    // }
 
     if (badgeIds) {
       for (let x = 0; x < badgeIds.length; x++) {
