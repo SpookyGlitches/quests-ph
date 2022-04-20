@@ -3,17 +3,8 @@ import {
   Box,
   Typography,
   Avatar,
-<<<<<<< HEAD
   IconButton,
   Paper,
-=======
-  Paper,
-  TextField,
-  ToggleButtonGroup,
-  ToggleButton,
-  IconButton,
-  Grid,
->>>>>>> a0e9c3f9de2ebc3ae67450c749df60be924666e1
   ListItemButton,
   ListItemAvatar,
   Chip,
@@ -24,26 +15,13 @@ import {
   CircularProgress,
 } from "@mui/material";
 
-<<<<<<< HEAD
 import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
-
 import useSWR, { mutate } from "swr";
 import { formatDistance } from "date-fns";
 import axios from "axios";
-
-=======
->>>>>>> a0e9c3f9de2ebc3ae67450c749df60be924666e1
 import AppLayout from "../../components/Layouts/AppLayout";
-import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
-import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import useSWR, { mutate } from "swr";
-import { format, formatDistance } from "date-fns";
-import axios from "axios";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 
 const index = () => {
-<<<<<<< HEAD
   // const deleteNotification = async (id) => {
   //   console.log(id);
   //   try {
@@ -72,26 +50,6 @@ const index = () => {
 
   const text = {
     fontWeight: "bold",
-=======
-  const { data: session } = useSession();
-  const router = useRouter();
-
-  const [alignment, setAlignment] = React.useState("all");
-
-  const handleChange = (event, newAlignment) => {
-    setAlignment(newAlignment);
-  };
-
-  const deleteNotification = async (id) => {
-    console.log(id);
-    try {
-      const res = await axios.delete("/api/notifications", {
-        notificationId: id,
-      });
-    } catch (err) {
-      console.log(err);
-    }
->>>>>>> a0e9c3f9de2ebc3ae67450c749df60be924666e1
   };
   /* eslint-disable */
   const { data, error } = useSWR("/notifications", {
@@ -102,35 +60,6 @@ const index = () => {
 
   if (error) return <p>Error Fetching</p>;
   if (!data) return <CircularProgress />;
-  console.log(data);
-
-  const updateNotification_read_seen = async (id) => {
-    try {
-      const res = await axios.put(
-        `/api/notifications`,
-
-        { notificationId: id },
-      );
-      mutate("/notifications");
-      mutate("/notifications/notif_count");
-    } catch (error) {
-      console.log("failed");
-    }
-  };
-
-  const text = {
-    fontWeight: "bold",
-  };
-
-  const { data, error } = useSWR("/notifications", {
-    refreshInterval: 0,
-  });
-
-  // let finalData = { ...notif, ...person };
-
-  if (error) return <p>Error Fetching</p>;
-  if (!data) return <p>Loading...</p>;
-
   console.log(data);
 
   return (
@@ -173,11 +102,7 @@ const index = () => {
             }}
           >
             <ListItemButton
-<<<<<<< HEAD
               onClick={() => updateNotificationReadSeen(notif.notificationId)}
-=======
-              onClick={() => updateNotification_read_seen(notif.notificationId)}
->>>>>>> a0e9c3f9de2ebc3ae67450c749df60be924666e1
               sx={{
                 "&.MuiListItemButton-root": {
                   padding: 0,
@@ -189,11 +114,7 @@ const index = () => {
             >
               <Box
                 sx={{ marginRight: 2, position: "absolute", marginLeft: 0.5 }}
-<<<<<<< HEAD
               />
-=======
-              ></Box>
->>>>>>> a0e9c3f9de2ebc3ae67450c749df60be924666e1
               <ListItem alignItems="flex-start">
                 <Chip
                   label={notif.type.split("_")[1]}
@@ -202,7 +123,6 @@ const index = () => {
                   sx={{ marginTop: 2, fontWeight: "500" }}
                 />
                 <ListItemAvatar sx={{ marginRight: "5px" }}>
-<<<<<<< HEAD
                   <Avatar alt="Remy Sharp" src="/images/reward.png" />
                 </ListItemAvatar>
 
@@ -221,28 +141,6 @@ const index = () => {
                   }
                 />
 
-=======
-                  <Avatar alt="Remy Sharp" src={`/images/reward.png`} />
-                </ListItemAvatar>
-
-                <ListItemText
-                  primaryTypographyProps={{ style: text }}
-                  primary={notif.name}
-                  secondary={
-                    <React.Fragment>
-                      <Typography
-                        sx={{ display: "inline", marginTop: 1 }}
-                        component="span"
-                        variant="body2"
-                        color="text.primary"
-                      >
-                        {notif.message}
-                      </Typography>
-                    </React.Fragment>
-                  }
-                />
-
->>>>>>> a0e9c3f9de2ebc3ae67450c749df60be924666e1
                 <Box
                   sx={{
                     display: "flex",
