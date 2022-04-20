@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useForm, Controller } from "react-hook-form";
+import Router, { useRouter } from "next/router";
 import PersonRemoveAlt1RoundedIcon from "@mui/icons-material/PersonRemoveAlt1Rounded";
 import HelpCenterRounded from "@mui/icons-material/HelpCenterRounded";
 import Dialog from "@mui/material/Dialog";
@@ -10,7 +11,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import ErrorRoundedIcon from "@mui/icons-material/ErrorRounded";
 import CommentRoundedIcon from "@mui/icons-material/CommentRounded";
 import axios from "axios";
-import Router from "next/router";
+
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   Box,
@@ -34,11 +35,11 @@ export default function FriendsOptionsBar({
   friendInfo,
   role,
 }) {
+  const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [openReport, setOpenReport] = React.useState(false);
   const [openRequest, setOpenRequest] = React.useState(false);
   const [questMentored, setQuestMentored] = React.useState("");
-
   const { enqueueSnackbar } = useSnackbar();
 
   const currentValidationSchema = UserReport[0];
@@ -52,6 +53,16 @@ export default function FriendsOptionsBar({
   });
   const { control, handleSubmit, reset, formState } = methods;
   const { errors } = formState;
+
+  const handleChatButtonClick = async () => {
+    router.push(
+      {
+        pathname: `/chats`,
+        query: { userInfo: userId },
+      },
+      "/chats",
+    );
+  };
 
   const handleReport = () => {
     setOpenReport(true);
@@ -419,6 +430,7 @@ export default function FriendsOptionsBar({
           color: "black",
           float: "right",
         }}
+        onClick={handleChatButtonClick}
       >
         <CommentRoundedIcon sx={{ mr: 1 }} />
         Chat

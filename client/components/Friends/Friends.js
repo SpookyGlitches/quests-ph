@@ -53,13 +53,24 @@ const FriendsField = (item) => {
         router.push(`/profile/${res.data.userId}`); // profile page url here
       });
   };
+
+  const handleChatButtonClick = async () => {
+    router.push(
+      {
+        pathname: `/chats`,
+        query: { userInfo: userDisplayed.userId },
+      },
+      "/chats",
+    );
+  };
+
   const firstIcon = (
     <IconButton onClick={handleClickOpen}>
       <PersonRemoveRoundedIcon />
     </IconButton>
   );
   const secondIcon = (
-    <IconButton>
+    <IconButton onClick={handleChatButtonClick}>
       <ChatRoundedIcon />
     </IconButton>
   );

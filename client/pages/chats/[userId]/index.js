@@ -15,40 +15,27 @@ import {
 import { useState } from "react";
 import { useRouter } from "next/router";
 import useSWR from "swr";
-import InboxComponent from "../../components/Chat/InboxComponent";
-import AppLayout from "../../components/Layouts/AppLayout";
+import InboxComponent from "../../../components/Chat/InboxComponent";
+import AppLayout from "../../../components/Layouts/AppLayout";
 
 export default function ChatTalkLayout() {
   const router = useRouter();
+  if (router.query.userInfo.length !== 0) {
+    console.log("naa buang");
+  }
   const [selectedValue, setSelectedValue] = useState("");
 
   const { data, error } = useSWR("/chat/getFriendsForChat");
-
+  // eslint-disable-next-line
+  const { data: userToChatWith, error: userChatWithError } = useSWR(
+    `/auth/${router.query.userInfo}/getOtherUserCredentials`,
+  );
   const { data: userData, error: userError } = useSWR(
     `auth/getUserCredentials`,
   );
-
   if (error || userError) return <p>Failed to load</p>;
   if (!data || !userData) return <CircularProgress />;
-  /* 
-    So for now this is in a condition, 
-    I know not allowed pero it does the job for now :((
 
-    This will get from the Friends Page the userId of the friend
-    the logged in user wants to chat with. I run it only if 
-    router.query.userInfo has a value set, otherwise I leave it.
-   */
-  if (router.query.userInfo !== undefined) {
-    // eslint-disable-next-line
-    const { data: userToChatWith, error: userChatWithError } = useSWR(
-      `/auth/${router.query.userInfo}/getOtherUserCredentials`,
-    );
-    if (userChatWithError) return <p>Failed to load</p>;
-    if (!userToChatWith) return <CircularProgress />;
-    console.log("naa buang");
-  } else {
-    console.log("wa buang");
-  }
   let searchFriendBar;
   let inboxComponent;
   let img;
@@ -111,20 +98,8 @@ export default function ChatTalkLayout() {
         </Select>
       </Box>
     );
-    /*
-     This one just sets the value of whose chatbox to open when a dropdown value is selected.
-     Otherwise it is empty.
-     */
-    let otherUser = selectedValue;
-    /*
-      Which is why here, when we find that there is actually a value passed from friends into 
-      router.query.userInfo, cd
-    */
-    if (router.query.userInfo !== undefined && selectedValue.length === 0) {
-      // eslint-disable-next-line
-      otherUser = userToChatWith;
-    }
-
+    const otherUser = selectedValue;
+    console.log(selectedValue);
     const props = {
       otherUser,
       userData,

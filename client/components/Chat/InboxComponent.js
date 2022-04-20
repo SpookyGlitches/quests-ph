@@ -1,31 +1,38 @@
 import React, { useEffect } from "react";
-import { useSession, getSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import Talk from "talkjs";
 
-export default function InboxComponent({ otherUser }) {
+export default function InboxComponent(data) {
   const talkjsContainer = React.createRef();
-  const { data: sessionUser } = useSession();
+
   let other;
   useEffect(() => {
-    const currentUser = sessionUser;
+    // eslint-disable-next-line
+    const currentUser = data.userData;
     Talk.ready.then(() => {
       const me = new Talk.User({
-        id: currentUser.user.userId,
-        name: currentUser.user.displayName,
-        fullname: currentUser.user.fullName,
-        role: currentUser.user.role,
+        id: currentUser.userId,
+        name: currentUser.displayName,
+        fullname: currentUser.fullName,
+        role: currentUser.role,
       });
 
       const session = new Talk.Session({
         appId: "tvcbUw3n",
         me,
       });
-      if (otherUser.length !== 0) {
+      // eslint-disable-next-line
+      if (data.otherUser.length !== 0) {
+        // eslint-disable-next-line
         other = new Talk.User({
-          id: otherUser.userId,
-          name: otherUser.displayName,
-          fullname: otherUser.fullName,
-          role: otherUser.role,
+          // eslint-disable-next-line
+          id: data.otherUser.userId,
+          // eslint-disable-next-line
+          name: data.otherUser.displayName,
+          // eslint-disable-next-line
+          fullname: data.otherUser.fullName,
+          // eslint-disable-next-line
+          role: data.otherUser.role,
         });
 
         const conversation = session.getOrCreateConversation(
@@ -56,7 +63,8 @@ export default function InboxComponent({ otherUser }) {
         inbox.mount(talkjsContainer.current);
       }
     });
-  }, [otherUser]);
+    // eslint-disable-next-line
+  }, [data.otherUser]);
 
   return (
     <div
