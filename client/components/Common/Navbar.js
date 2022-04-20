@@ -8,16 +8,19 @@ import {
   MenuItem,
   InputBase,
   Badge,
+  Tooltip,
 } from "@mui/material";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import NotificationsRoundedIcon from "@mui/icons-material/NotificationsRounded";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import Link from "next/link";
 import { styled, alpha } from "@mui/material/styles";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
+import useSWR from "swr";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -92,6 +95,12 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
     setAnchorEl(event.currentTarget);
   };
 
+  const { data, error } = useSWR("/notifications/notif_count", {
+    refreshInterval: 0,
+  });
+
+  if (error) return <p>error</p>;
+
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -140,6 +149,17 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
+      <Link href="/notifications" passHref>
+        <MenuItem>
+          <IconButton size="large" aria-label="" color="inherit">
+            <Badge badgeContent={data || 0} color="error">
+              <NotificationsRoundedIcon />
+            </Badge>
+          </IconButton>
+
+          <p>Notifications</p>
+        </MenuItem>
+      </Link>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
@@ -201,11 +221,15 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <IconButton size="large" aria-label="" color="inherit">
-              <Badge badgeContent={17} color="error">
-                <NotificationsRoundedIcon />
-              </Badge>
-            </IconButton>
+            <Link href="/notifications" passHref>
+              <Tooltip title="Notifications" sx={{ p: 0.5 }}>
+                <IconButton size="large" aria-label="" color="inherit">
+                  <Badge badgeContent={data || 0} color="error">
+                    <NotificationsRoundedIcon />
+                  </Badge>
+                </IconButton>
+              </Tooltip>
+            </Link>
             <IconButton
               size="large"
               edge="end"

@@ -16,9 +16,10 @@ const index = () => {
         <Box
           sx={{
             backgroundColor: "background.paper",
-            borderRadius: 2,
+            borderRadius: 1,
             height: "auto",
             padding: "0.5rem",
+            border: "1px solid rgba(0, 0, 0, 0.12)",
           }}
         >
           <TaskLists />

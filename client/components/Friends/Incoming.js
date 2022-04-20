@@ -15,7 +15,7 @@ const IncomingField = (item) => {
 
   const handleProfileClick = () => {
     axios
-      .get("/api/profile/friends/friendinfo", {
+      .get("/api/friends/friendinformation", {
         params: {
           displayName: incomingData.requester.displayName,
         },
