@@ -6,6 +6,7 @@ import Todo from "../Quest/Tasks/ToDo";
 import EndQuest from "../Quest/EndQuest";
 import DateCard from "../Quest/Tasks/DateCard";
 import Suggestions from "../Common/Suggestions";
+import VideoCallRoom from "../Quest/VideoCallRoom";
 
 export default function QuestLayout({ children }) {
   const router = useRouter();
@@ -31,10 +32,11 @@ export default function QuestLayout({ children }) {
       </Grid>
       <Grid item xs={12} lg={4}>
         <Box sx={{}}>
-          <Stack spacing={4}>
+          <Stack spacing={3}>
             <DateCard />
             <Todo />
             <Suggestions />
+            {partyMember.role === "PARTY_LEADER" && <VideoCallRoom />}
             {partyMember.role === "PARTY_LEADER" && <EndQuest />}
           </Stack>
         </Box>
