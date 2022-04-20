@@ -2,15 +2,15 @@ import CircularProgress from "@mui/material/CircularProgress";
 import useSWR from "swr";
 import { Box, Typography } from "@mui/material";
 import axios from "axios";
-import { useSession, getSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import AppLayout from "../../components/Layouts/AppLayout";
 import Friends from "../../components/Friends/Friends";
 import Incoming from "../../components/Friends/Incoming";
 import Outgoing from "../../components/Friends/Outgoing";
 import AccessDenied from "../../components/Error/AccessDenied";
+import prisma from "../../lib/prisma";
 
-function ListHolder({ items, requestName }) {
-  const { data: session } = useSession();
+function ListHolder({ items, requestName, displayName }) {
   if (items.length !== 0) {
     return (
       <Box
@@ -38,7 +38,7 @@ function ListHolder({ items, requestName }) {
                 <Friends
                   key={item.friendshipId}
                   item={item}
-                  displayName={session.user.displayName}
+                  displayName={displayName}
                 />
               );
             default:
@@ -73,9 +73,8 @@ function ListHolder({ items, requestName }) {
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
-const Index = () => {
-  const { data: session } = useSession();
-  if (session) {
+const Index = ({ name }) => {
+  if (name != null) {
     // eslint-disable-next-line
     const { data: friends, error: one } = useSWR(
       "/api/friends/friends",
@@ -92,7 +91,6 @@ const Index = () => {
       fetcher,
     );
 
-    // Progress bar lng sa cause Im not sure how to handle this.
     if (!friends || one)
       return (
         <div
@@ -113,9 +111,7 @@ const Index = () => {
             justifyContent: "center",
             alignItems: "center",
           }}
-        >
-          <CircularProgress />
-        </div>
+        />
       );
     if (!outgoing || three)
       return (
@@ -125,9 +121,7 @@ const Index = () => {
             justifyContent: "center",
             alignItems: "center",
           }}
-        >
-          <CircularProgress />
-        </div>
+        />
       );
 
     return (
@@ -140,20 +134,37 @@ const Index = () => {
           <ListHolder
             items={friends}
             requestName="Friends"
-            fullName={session.user.displayName}
+            displayName={name}
           />
         </div>
       </AppLayout>
     );
   }
+
   return <AccessDenied />;
 };
 export default Index;
 
 export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  let name;
+  if (session) {
+    const findUser = await prisma.user.findFirst({
+      where: {
+        userId: session.user.userId,
+        deletedAt: null,
+      },
+    });
+    name = findUser.displayName;
+    return {
+      props: {
+        name: JSON.parse(JSON.stringify(name)),
+      },
+    };
+  }
   return {
     props: {
-      session: await getSession(context),
+      name: null,
     },
   };
 }

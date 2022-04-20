@@ -14,7 +14,7 @@ const OutgoingField = (item) => {
 
   const handleProfileClick = async () => {
     axios
-      .get("/api/profile/friends/friendinfo", {
+      .get("/api/friends/friendinformation", {
         params: {
           displayName: outgoingData.requestee.displayName,
         },
