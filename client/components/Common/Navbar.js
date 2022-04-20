@@ -20,11 +20,7 @@ import { styled, alpha } from "@mui/material/styles";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
-<<<<<<< HEAD
 import useSWR from "swr";
-=======
-import useSWR, { mutate } from "swr";
->>>>>>> a0e9c3f9de2ebc3ae67450c749df60be924666e1
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
