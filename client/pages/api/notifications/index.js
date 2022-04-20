@@ -1,7 +1,7 @@
 import { getSession } from "next-auth/react";
 import prisma from "../../../lib/prisma";
 
-async function /* eslint-disable */ getNotificataion(req, res) {
+async function getNotificataion(req, res) {
   const { user } = await getSession({ req });
 
   try {
