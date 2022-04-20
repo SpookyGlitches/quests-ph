@@ -16,19 +16,14 @@ import {
 } from "@mui/material";
 
 import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
-
 import useSWR, { mutate } from "swr";
 import { formatDistance } from "date-fns";
 import axios from "axios";
+<<<<<<< HEAD
 
+=======
+>>>>>>> b3531a07ba3c12ffdcdd1335342ce582439b609f
 import AppLayout from "../../components/Layouts/AppLayout";
-import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
-import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import useSWR, { mutate } from "swr";
-import { format, formatDistance } from "date-fns";
-import axios from "axios";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 
 const index = () => {
   // const deleteNotification = async (id) => {
@@ -69,35 +64,6 @@ const index = () => {
 
   if (error) return <p>Error Fetching</p>;
   if (!data) return <CircularProgress />;
-  console.log(data);
-
-  const updateNotification_read_seen = async (id) => {
-    try {
-      const res = await axios.put(
-        `/api/notifications`,
-
-        { notificationId: id },
-      );
-      mutate("/notifications");
-      mutate("/notifications/notif_count");
-    } catch (error) {
-      console.log("failed");
-    }
-  };
-
-  const text = {
-    fontWeight: "bold",
-  };
-
-  const { data, error } = useSWR("/notifications", {
-    refreshInterval: 0,
-  });
-
-  // let finalData = { ...notif, ...person };
-
-  if (error) return <p>Error Fetching</p>;
-  if (!data) return <p>Loading...</p>;
-
   console.log(data);
 
   return (
