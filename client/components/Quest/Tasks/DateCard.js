@@ -11,7 +11,8 @@ const DateCard = () => {
         paddingX: "1rem",
         paddingY: "1rem",
         backgroundColor: "background.paper",
-        borderRadius: 2,
+        borderRadius: 1,
+        border: "1px solid rgba(0, 0, 0, 0.12)",
       }}
     >
       <Typography sx={{ color: "#755cde", fontSize: 20, fontWeight: "bold" }}>

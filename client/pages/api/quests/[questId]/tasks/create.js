@@ -2,8 +2,9 @@ import { getSession } from "next-auth/react";
 import prisma from "../../../../../lib/prisma";
 
 export default async function createQuest(req, res) {
+  const { user } = await getSession({ req });
+
   try {
-    const { user } = await getSession({ req });
     const { title, description, points, dueDate } = req.body;
 
     const task = await prisma.questTask.create({
