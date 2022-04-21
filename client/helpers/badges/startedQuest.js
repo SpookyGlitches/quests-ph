@@ -1,4 +1,5 @@
 import prisma from "../../lib/prisma";
+
 const badges = {
   littleShot: {
     badgeId: 5,
