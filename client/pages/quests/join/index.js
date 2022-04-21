@@ -5,9 +5,8 @@ import axios from "axios";
 import { getSession } from "next-auth/react";
 import AppLayout from "../../../components/Layouts/AppLayout";
 import WoopModal from "../../../components/Quest/WoopModal";
-import { PrismaClient } from "@prisma/client";
-// import prisma from "../../../lib/prisma";
-const prisma = new PrismaClient();
+import prisma from "../../../lib/prisma";
+
 const Index = ({ error, token }) => {
   const router = useRouter();
 
