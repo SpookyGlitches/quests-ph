@@ -85,7 +85,8 @@ export async function getServerSideProps(context) {
       select: {
         partyMembers: {
           where: {
-            userId: user.userId,
+            // userId: user.userId,
+            deletedAt: null,
           },
         },
         completedAt: true,
@@ -93,17 +94,22 @@ export async function getServerSideProps(context) {
       rejectOnNotFound: true,
     });
 
-    if (quest.partyMembers.length !== 0) {
+    const reachedMaximum = quest.partyMembers.length >= 4;
+
+    if (quest.completedAt || reachedMaximum) {
+      throw new Error();
+    }
+
+    const joined = quest.partyMembers.some(
+      (member) => member.userId === user.userId,
+    );
+    if (joined) {
       return {
         redirect: {
           permanent: true,
           destination: `/quests/${verified.questId}`,
         },
       };
-    }
-
-    if (quest.completedAt) {
-      throw new Error();
     }
 
     return {

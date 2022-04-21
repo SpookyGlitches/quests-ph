@@ -156,7 +156,7 @@ export default function PartyList() {
             <Button
               variant="contained"
               color="primary"
-              disabled={Boolean(completedAt)}
+              disabled={Boolean(completedAt) || partyMembers.length < 4}
               onClick={generateInviteLink}
             >
               Invite

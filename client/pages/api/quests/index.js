@@ -6,14 +6,18 @@ import prisma from "../../../lib/prisma";
 import { step1Validations, step2Validations } from "../../../validations/quest";
 import maybeAwardUser from "../../../helpers/badges/startedQuest";
 
-function computeIfJoined(quests, role) {
+function computeIfJoined(quests, role, userId) {
   const computed = [];
 
   let joined = false;
   let canJoin = false;
   quests.forEach((item) => {
-    joined = item.partyMembers.length !== 0;
-    canJoin = !item.completedAt && !joined && role !== "mentor";
+    joined = item.partyMembers.some((member) => member.userId === userId);
+    canJoin =
+      !item.completedAt &&
+      !joined &&
+      role !== "mentor" &&
+      item.partyMembers.length < 4;
     computed.push({
       ...item,
       joined,
@@ -113,13 +117,12 @@ async function getQuests(req, res) {
             userId: true,
           },
           where: {
-            userId: user.userId,
             deletedAt: null,
           },
         },
       },
     });
-    const computed = computeIfJoined(quests, user.role);
+    const computed = computeIfJoined(quests, user.role, user.userId);
     return res.status(200).json(computed);
   } catch (error) {
     console.error(error);
