@@ -8,15 +8,8 @@ import WoopModal from "./WoopModal";
 import LoadMore from "../Common/LoadMore";
 
 function QuestPage(props) {
-  const {
-    url,
-    skip,
-    searchParams,
-    setHasMore,
-    toggleModal,
-    navigateToQuest,
-    setLoading,
-  } = props;
+  const { url, skip, searchParams, setHasMore, toggleModal, setLoading } =
+    props;
 
   const queryString = new URLSearchParams({ ...searchParams, skip }).toString();
   const { data: quests } = useSWR(url ? `${url}?${queryString}` : null);
@@ -35,7 +28,6 @@ function QuestPage(props) {
     return (
       <QuestItem
         key={quest.questId}
-        onClick={() => navigateToQuest(`/quests/${quest.questId}`)}
         onJoinClick={(event) => toggleModal(event, quest)}
         quest={quest}
       />
