@@ -15,7 +15,7 @@ const IncomingField = (item) => {
 
   const handleProfileClick = () => {
     axios
-      .get("/api/profile/friends/friendinfo", {
+      .get("/api/friends/friendinformation", {
         params: {
           displayName: incomingData.requester.displayName,
         },
@@ -100,7 +100,7 @@ const IncomingField = (item) => {
               marginTop: "-.25rem",
             }}
           >
-            {incomingData.requester.fullName}
+            {incomingData.requester.displayName}
           </Typography>
           <Typography
             variant="body2"
@@ -110,7 +110,7 @@ const IncomingField = (item) => {
               marginTop: "-.4rem",
             }}
           >
-            {incomingData.requester.displayName}
+            {incomingData.requester.fullName}
           </Typography>
         </Box>
       </Box>

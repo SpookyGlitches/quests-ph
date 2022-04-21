@@ -10,98 +10,37 @@ import {
   Grid,
   Avatar,
   ListItemAvatar,
+  CircularProgress,
 } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
-import InboxComponent from "../../components/Chat/InboxComponent";
-import AppLayout from "../../components/Layouts/AppLayout";
+import useSWR from "swr";
+import InboxComponent from "../../../components/Chat/InboxComponent";
+import AppLayout from "../../../components/Layouts/AppLayout";
 
 export default function ChatTalkLayout() {
   const router = useRouter();
-  const [friends, setFriends] = useState([]);
-  const [userCred, setUserCred] = useState([]);
-  const [userChat, setUserChat] = useState([]);
+  if (router.query.userInfo.length !== 0) {
+    console.log("naa buang");
+  }
   const [selectedValue, setSelectedValue] = useState("");
 
-  // const { data, error } = useSWR("/chat/getFriendsForChat");
-
-  // const { data: userData, error: userError } = useSWR(
-  //   `auth/getUserCredentials`,
-  // );
-
-  // if (error || userError) return <p>Failed to load</p>;
-  // if (!data || !userData) return <CircularProgress />;
-
-  const userData = async () => {
-    // eslint-disable-next-line
-    const res = await fetch("/api/auth/getUserCredentials", {
-      method: "GET",
-    }) // eslint-disable-next-line
-      .then((res) => res.json())
-      .then((data) => setUserCred(data));
-  };
-
-  useEffect(() => {
-    userData();
-  }, [userCred]);
-  /* 
-    So for now this is in a condition, 
-    I know not allowed pero it does the job for now :((
-
-    This will get from the Friends Page the userId of the friend
-    the logged in user wants to chat with. I run it only if 
-    router.query.userInfo has a value set, otherwise I leave it.
-   */
-  // if (router.query.userInfo !== undefined) {
-  //   // eslint-disable-next-line
-  //   const { data: userToChatWith, error: userChatWithError } = useSWR(
-  //     `/auth/${router.query.userInfo}/getOtherUserCredentials`,
-  //   );
-
-  //   if (userChatWithError) return <p>Failed to load</p>;
-  //   if (!userToChatWith) return <CircularProgress />;
-  //   console.log("naa buang");
-  // } else {
-  //   console.log("wa buang");
-  // }
-
-  const getFriendsForChat = async () => {
-    // eslint-disable-next-line
-    const res = await fetch("/api/chat/getFriendsForChat", {
-      method: "GET",
-    }) // eslint-disable-next-line
-      .then((res) => res.json())
-      .then((data) => setFriends(data));
-  };
-  useEffect(() => {
-    getFriendsForChat();
-  }, [friends]);
-
-  const userToChatWith = async () => {
-    // eslint-disable-next-line
-    const res = await fetch(
-      `/api/auth/${router.query.userInfo}/getOtherUserCredentials`,
-      {
-        method: "GET",
-      },
-    ) // eslint-disable-next-line
-      .then((res) => res.json())
-      .then((data) => setUserChat(data));
-  };
-
-  useEffect(() => {
-    if (router.query.userInfo !== undefined) {
-      userToChatWith();
-    } else {
-      console.log("wala");
-    }
-  }, []);
+  const { data, error } = useSWR("/chat/getFriendsForChat");
+  // eslint-disable-next-line
+  const { data: userToChatWith, error: userChatWithError } = useSWR(
+    `/auth/${router.query.userInfo}/getOtherUserCredentials`,
+  );
+  const { data: userData, error: userError } = useSWR(
+    `auth/getUserCredentials`,
+  );
+  if (error || userError) return <p>Failed to load</p>;
+  if (!data || !userData) return <CircularProgress />;
 
   let searchFriendBar;
   let inboxComponent;
   let img;
 
-  if (friends.length !== 0) {
+  if (data.length !== 0) {
     searchFriendBar = (
       <Box>
         <Select
@@ -114,7 +53,7 @@ export default function ChatTalkLayout() {
           }}
           onChange={(e) => setSelectedValue(e.target.value)}
         >
-          {friends.map((user) => (
+          {data.map((user) => (
             <MenuItem
               style={{
                 overflow: "hidden",
@@ -159,23 +98,11 @@ export default function ChatTalkLayout() {
         </Select>
       </Box>
     );
-    /*
-     This one just sets the value of whose chatbox to open when a dropdown value is selected.
-     Otherwise it is empty.
-     */
-    let otherUser = selectedValue;
-    /*
-      Which is why here, when we find that there is actually a value passed from friends into 
-      router.query.userInfo, cd
-    */
-    if (router.query.userInfo !== undefined && selectedValue.length === 0) {
-      // eslint-disable-next-line
-      otherUser = userChat;
-    }
-
+    const otherUser = selectedValue;
+    console.log(selectedValue);
     const props = {
       otherUser,
-      userCred,
+      userData,
     };
     inboxComponent = <InboxComponent {...props} />;
   } else {

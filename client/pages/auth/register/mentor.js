@@ -1,18 +1,5 @@
 import * as React from "react";
-import {
-  Box,
-  StepLabel,
-  Stack,
-  Stepper,
-  Button,
-  Step,
-  // eslint-disable-next-line
-  Snackbar,
-  // eslint-disable-next-line
-  IconButton,
-  // eslint-disable-next-line
-  CloseIcon,
-} from "@mui/material";
+import { Box, StepLabel, Stack, Stepper, Button, Step } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";

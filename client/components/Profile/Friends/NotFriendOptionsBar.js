@@ -7,7 +7,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import ErrorRoundedIcon from "@mui/icons-material/ErrorRounded";
 import axios from "axios";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import PersonAddAlt1RoundedIcon from "@mui/icons-material/PersonAddAlt1Rounded";
 import HelpCenterRounded from "@mui/icons-material/HelpCenterRounded";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -30,12 +30,13 @@ export default function MentorNotFriendOptionsBar({
   userId,
   friendInfo,
   role,
+  requests,
 }) {
   const [openReport, setOpenReport] = React.useState(false);
   const [openRequest, setOpenRequest] = React.useState(false);
   const [questMentored, setQuestMentored] = React.useState("");
-
   const { enqueueSnackbar } = useSnackbar();
+  const { mutate } = useSWRConfig();
   const currentValidationSchema = UserReport[0];
   const methods = useForm({
     resolver: yupResolver(currentValidationSchema),
@@ -47,6 +48,7 @@ export default function MentorNotFriendOptionsBar({
   });
   const { control, handleSubmit, reset, formState } = methods;
   const { errors } = formState;
+
   const handleReport = () => {
     setOpenReport(true);
   };
@@ -118,13 +120,14 @@ export default function MentorNotFriendOptionsBar({
         if (response.data.length !== 1) {
           axios({
             method: "POST",
-            url: `/api/profile/${userId}/addFriend`,
+            url: `/api/profile/${userId}/addafriend`,
             data: {
               userId,
             },
           })
             .then(() => {
               enqueueSnackbar("You have successfully sent a friend request!");
+              mutate(`/api/profile/${userId}/checkrequest`);
             })
             .catch((error) => {
               console.log(error);
@@ -250,7 +253,7 @@ export default function MentorNotFriendOptionsBar({
       >
         {" "}
         <PersonAddAlt1RoundedIcon sx={{ mr: 1 }} />
-        Add Friend
+        {requests.length !== 0 ? "Pending" : "Add Friend"}
       </Button>
       <Button
         variant="outlined"

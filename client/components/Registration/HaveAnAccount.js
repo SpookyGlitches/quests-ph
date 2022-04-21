@@ -8,8 +8,7 @@ export default function HaveAnAccount() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        mt: 2,
-        mb: -1,
+        mt: -1,
       }}
     >
       <Typography variant="string" align="center">

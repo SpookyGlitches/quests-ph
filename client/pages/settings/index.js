@@ -76,6 +76,7 @@ const Index = () => {
   const {
     control: controlPassword,
     handleSubmit: handleSubmitPassword,
+    reset,
     formState: { errors: errorsPassword },
   } = useForm({ resolver: yupResolver(ChangePasswordValidations) });
   const { mutate } = useSWRConfig();
@@ -131,6 +132,7 @@ const Index = () => {
             type: "success",
           });
         });
+      reset();
     } catch (err) {
       setNotify({
         isOpen: true,
