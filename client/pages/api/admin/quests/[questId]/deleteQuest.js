@@ -21,6 +21,48 @@ export default async function deleteQuests(req, res) {
             partyMemberId: Number(findPartyMembers[x].partyMemberId),
           },
           data: {
+            updatedAt: new Date(),
+            deletedAt: new Date(),
+          },
+        }),
+      );
+      transactions.push(
+        prisma.comment.updateMany({
+          where: {
+            partyMemberId: Number(findPartyMembers[x].partyMemberId),
+          },
+          data: {
+            deletedAt: new Date(),
+          },
+        }),
+      );
+      transactions.push(
+        prisma.commentReact.updateMany({
+          where: {
+            partyMemberId: Number(findPartyMembers[x].partyMemberId),
+          },
+          data: {
+            deletedAt: new Date(),
+          },
+        }),
+      );
+      transactions.push(
+        prisma.pointsLog.updateMany({
+          where: {
+            partyMemberId: Number(findPartyMembers[x].partyMemberId),
+          },
+          data: {
+            deletedAt: new Date(),
+          },
+        }),
+      );
+      transactions.push(
+        prisma.postReact.updateMany({
+          where: {
+            partyMemberId: Number(findPartyMembers[x].partyMemberId),
+          },
+          data: {
+            updatedAt: new Date(),
             deletedAt: new Date(),
           },
         }),
@@ -36,6 +78,7 @@ export default async function deleteQuests(req, res) {
       },
     });
     transactions.push(deleteParty);
+
     // Delete quests
     const deleteQuest = prisma.quest.update({
       where: {
@@ -46,8 +89,21 @@ export default async function deleteQuests(req, res) {
       },
     });
     transactions.push(deleteQuest);
+
     // Delete quest task
     const deleteQuestTask = prisma.questTask.updateMany({
+      where: {
+        questId: Number(req.query.questId),
+      },
+      data: {
+        updatedAt: new Date(),
+        deletedAt: new Date(),
+      },
+    });
+    transactions.push(deleteQuestTask);
+
+    // delete quest task finished
+    const deleteQuestTaskFinisher = prisma.questTaskFinisher.updateMany({
       where: {
         questId: Number(req.query.questId),
       },
@@ -55,7 +111,19 @@ export default async function deleteQuests(req, res) {
         deletedAt: new Date(),
       },
     });
-    transactions.push(deleteQuestTask);
+    transactions.push(deleteQuestTaskFinisher);
+
+    // delete quest pt bans
+    const deletequestPtBans = prisma.questPartyBan.updateMany({
+      where: {
+        questId: Number(req.query.questId),
+      },
+      data: {
+        updatedAt: new Date(),
+        deletedAt: new Date(),
+      },
+    });
+    transactions.push(deletequestPtBans);
     // Delete quest mentorship
     const deleteMentorReq = prisma.questMentorshipRequest.updateMany({
       where: {
