@@ -10,14 +10,11 @@ import {
   Grid,
   Avatar,
   ListItemAvatar,
-  CircularProgress,
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import useSWR from "swr";
 import InboxComponent from "../../components/Chat/InboxComponent";
 import AppLayout from "../../components/Layouts/AppLayout";
-import axios from "axios";
 
 export default function ChatTalkLayout() {
   const router = useRouter();
@@ -36,9 +33,10 @@ export default function ChatTalkLayout() {
   // if (!data || !userData) return <CircularProgress />;
 
   const userData = async () => {
+    // eslint-disable-next-line
     const res = await fetch("/api/auth/getUserCredentials", {
       method: "GET",
-    })
+    }) // eslint-disable-next-line
       .then((res) => res.json())
       .then((data) => setUserCred(data));
   };
@@ -68,9 +66,10 @@ export default function ChatTalkLayout() {
   // }
 
   const getFriendsForChat = async () => {
+    // eslint-disable-next-line
     const res = await fetch("/api/chat/getFriendsForChat", {
       method: "GET",
-    })
+    }) // eslint-disable-next-line
       .then((res) => res.json())
       .then((data) => setFriends(data));
   };
@@ -79,12 +78,13 @@ export default function ChatTalkLayout() {
   }, [friends]);
 
   const userToChatWith = async () => {
+    // eslint-disable-next-line
     const res = await fetch(
       `/api/auth/${router.query.userInfo}/getOtherUserCredentials`,
       {
         method: "GET",
       },
-    )
+    ) // eslint-disable-next-line
       .then((res) => res.json())
       .then((data) => setUserChat(data));
   };
