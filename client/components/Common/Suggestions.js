@@ -42,13 +42,13 @@ export default function Suggestions() {
     >
       <Stack spacing={1}>
         <Typography variant="h6" color="primary" sx={{}}>
-          Follow Suggestions
+          People You May Know
         </Typography>
         <Box sx={{ maxHeight: "10rem" }}>{/** no dat for now */}</Box>
       </Stack>
       {/* <Box sx={{ maxHeight: "10rem" }}>
-        <DateCard />
-      </Box> */}
+          <DateCard />
+        </Box> */}
     </Box>
   );
 }

@@ -5,9 +5,14 @@ import QuestHeader from "../Quest/QuestHeader";
 import Todo from "../Quest/Tasks/ToDo";
 import EndQuest from "../Quest/EndQuest";
 import DateCard from "../Quest/Tasks/DateCard";
+<<<<<<< HEAD
+
+import VideoCallRoom from "../Quest/VideoCallRoom";
+=======
 import Suggestions from "../Common/Suggestions";
 import { QuestContext } from "../../context/QuestContext";
 import { PartyMemberContext } from "../../context/PartyMemberContext";
+>>>>>>> 945ede3705f02cbe8af7d19079355b0aa339ec8c
 
 export default function QuestLayout({ children }) {
   const router = useRouter();
@@ -31,24 +36,20 @@ export default function QuestLayout({ children }) {
 
   return (
     <Grid container spacing={6}>
-      <QuestContext.Provider value={quest}>
-        <PartyMemberContext.Provider value={partyMember}>
-          <Grid item xs={12} lg={8}>
-            <QuestHeader />
-            <Box sx={{ marginTop: 4 }}>{children}</Box>
-          </Grid>
-          <Grid item xs={12} lg={4}>
-            <Box sx={{}}>
-              <Stack spacing={4}>
-                <DateCard />
-                <Todo />
-                <Suggestions />
-                {partyMember.role === "PARTY_LEADER" && <EndQuest />}
-              </Stack>
-            </Box>
-          </Grid>
-        </PartyMemberContext.Provider>
-      </QuestContext.Provider>
+      <Grid item xs={12} lg={8}>
+        <QuestHeader />
+        <Box sx={{ marginTop: 4 }}>{children}</Box>
+      </Grid>
+      <Grid item xs={12} lg={4}>
+        <Box sx={{}}>
+          <Stack spacing={3}>
+            <DateCard />
+            <Todo />
+            {partyMember.role === "PARTY_LEADER" && <VideoCallRoom />}
+            {partyMember.role === "PARTY_LEADER" && <EndQuest />}
+          </Stack>
+        </Box>
+      </Grid>
     </Grid>
   );
 }
