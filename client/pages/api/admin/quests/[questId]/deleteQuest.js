@@ -13,7 +13,39 @@ export default async function deleteQuests(req, res) {
       },
     });
 
+    const postIdArr = [];
+    const postIds = [];
+    for (let i = 0; i < findPartyMembers.length; i++) {
+      // eslint-disable-next-line
+      const getPostId = await prisma.post.findMany({
+        where: {
+          partyMemberId: findPartyMembers[i].partyMemberId,
+        },
+      });
+      postIdArr.push(getPostId);
+    }
+    postIdArr.forEach((item) => {
+      // eslint-disable-next-line
+      for (const key in item) {
+        postIds.push(item[key].postId);
+      }
+    });
+
+    // delete post files
     const transactions = [];
+    for (let i = 0; i < postIds.length; i++) {
+      transactions.push(
+        prisma.postfile.updateMany({
+          where: {
+            postId: postIds[i],
+          },
+          data: {
+            deletedAt: new Date(),
+          },
+        }),
+      );
+    }
+
     for (let x = 0; x < findPartyMembers.length; x++) {
       transactions.push(
         prisma.post.updateMany({
