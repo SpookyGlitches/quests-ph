@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { add } from "date-fns";
-import useSWR from "swr";
+import { useSWRConfig } from "swr";
 
 import {
   Box,
@@ -19,7 +19,7 @@ import {
   QuestVisibility,
   QuestCategory,
 } from "@prisma/client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import axios from "axios";
 import QuestLayout from "../../../../components/Layouts/QuestLayout";
@@ -30,8 +30,7 @@ import {
 } from "../../../../validations/quest";
 import WishInput from "../../../../components/Quest/Create/WishInput";
 import AppLayout from "../../../../components/Layouts/AppLayout";
-
-const wishItem = <WishInput />;
+import { QuestContext } from "../../../../context/QuestContext";
 
 const DialogItem = ({ handleOk, handleCancel, open, loading }) => {
   return (
@@ -44,7 +43,7 @@ const DialogItem = ({ handleOk, handleCancel, open, loading }) => {
       <DialogContent>
         <Typography variant="body1">
           Are you sure you want to delete this Quest? All associated data will
-          be lost
+          be lost.
         </Typography>
       </DialogContent>
       <DialogActions>
@@ -61,12 +60,22 @@ const DialogItem = ({ handleOk, handleCancel, open, loading }) => {
 
 export default function Edit() {
   const router = useRouter();
+
+  const quest = useContext(QuestContext);
   const {
-    query: { questId },
-  } = router;
-  const { data: quest, mutate: mutateQuest } = useSWR(
-    questId ? `/quests/${questId}` : null,
-  );
+    wish,
+    estimatedStartDate,
+    estimatedEndDate,
+    completedAt,
+    difficulty,
+    visibility,
+    category,
+    questId,
+  } = quest;
+  const completed = Boolean(completedAt);
+  const wishItem = <WishInput disabled={completed} />;
+
+  const { mutate: mutateQuest } = useSWRConfig();
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const methods = useForm({
@@ -86,19 +95,19 @@ export default function Edit() {
 
   useEffect(() => {
     if (!quest) return;
-    setValue("wish", quest.wish);
-    setValue("startDate", quest.estimatedStartDate);
-    setValue("endDate", quest.estimatedEndDate);
-    setValue("difficulty", quest.difficulty);
-    setValue("visibility", quest.visibility);
-    setValue("category", quest.category);
+    setValue("wish", wish);
+    setValue("startDate", estimatedStartDate);
+    setValue("endDate", estimatedEndDate);
+    setValue("difficulty", difficulty);
+    setValue("visibility", visibility);
+    setValue("category", category);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quest]);
 
   const submitForm = async (values) => {
     try {
-      await axios.put(`/api/quests/${quest.questId}`, values);
-      mutateQuest((questData) => ({
+      await axios.put(`/api/quests/${questId}`, values);
+      mutateQuest(`/quests/${questId}`, (questData) => ({
         ...questData,
         ...values,
       }));
@@ -114,7 +123,7 @@ export default function Edit() {
   const deleteQuest = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/quests/${quest.questId}`);
+      await axios.delete(`/api/quests/${questId}`);
       router.replace("/quests");
       setOpenDeleteModal(false);
     } catch (error) {
@@ -141,7 +150,17 @@ export default function Edit() {
               paddingX: {},
             }}
           >
-            <Step2 wishItem={wishItem} />
+            <Step2
+              wishItem={wishItem}
+              disables={{
+                visibility: true,
+                wish: completed,
+                category: completed,
+                difficulty: completed,
+                startDate: completed,
+                endDate: completed,
+              }}
+            />
           </Stack>
           <Box
             sx={{
@@ -153,7 +172,7 @@ export default function Edit() {
             <Button type="button" onClick={toggleDeleteModal}>
               Delete
             </Button>
-            <Button type="submit" variant="contained">
+            <Button type="submit" variant="contained" disabled={completed}>
               Edit
             </Button>
           </Box>

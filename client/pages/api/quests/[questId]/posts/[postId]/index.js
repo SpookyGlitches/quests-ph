@@ -21,6 +21,11 @@ async function getPost(req, res) {
                 displayName: true,
               },
             },
+            quest: {
+              select: {
+                completedAt: true,
+              },
+            },
             partyMemberId: true,
           },
         },

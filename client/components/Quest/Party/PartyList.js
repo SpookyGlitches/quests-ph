@@ -13,21 +13,25 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useRouter } from "next/router";
-import useSWR, { useSWRConfig } from "swr";
+import { useContext } from "react";
+import useSWR, { mutate } from "swr";
+import { PartyMemberContext } from "../../../context/PartyMemberContext";
+import { QuestContext } from "../../../context/QuestContext";
 import PartyListItem from "./PartyListItem";
 
 export default function PartyList() {
   const router = useRouter();
-  const { questId } = router.query;
+
+  const quest = useContext(QuestContext);
+  const partyMember = useContext(PartyMemberContext);
+  const isPartyLeader = partyMember.role === "PARTY_LEADER";
+
+  const { questId, completedAt } = quest;
+  const completed = Boolean(completedAt);
+
   const { data: partyMembers, mutate: mutatePartyMembers } = useSWR(
     questId ? `/quests/${questId}/partyMembers?includePoints=true` : null,
   );
-  const { data: partyMember } = useSWR(
-    questId ? `/quests/${questId}/partyMembers/currentUser` : null,
-  );
-  const { data: quest } = useSWR(questId ? `/quests/${questId}` : null);
-
-  const { mutate } = useSWRConfig();
 
   const generateInviteLink = async () => {
     try {
@@ -41,10 +45,6 @@ export default function PartyList() {
       console.error(err);
     }
   };
-
-  if (!partyMembers || !quest || !partyMember) {
-    return <div>Loading</div>;
-  }
 
   const removePartyMember = async (partyMemberId) => {
     try {
@@ -85,7 +85,9 @@ export default function PartyList() {
     }
   };
 
-  const isPartyLeader = partyMember.role === "PARTY_LEADER";
+  if (!partyMembers) {
+    return <div>Loading</div>;
+  }
 
   const mentees = [];
   const mentors = [];
@@ -100,6 +102,7 @@ export default function PartyList() {
           key={member.partyMemberId}
           removePartyMember={removePartyMember}
           banPartyMember={banPartyMember}
+          completed={completed}
         />,
       );
     } else {
@@ -112,6 +115,7 @@ export default function PartyList() {
           mentor
           removePartyMember={removePartyMember}
           banPartyMember={banPartyMember}
+          completed={completed}
         />,
       );
     }
@@ -120,7 +124,7 @@ export default function PartyList() {
   return (
     <Paper sx={{ padding: 3 }}>
       <Stack spacing={2}>
-        <Typography variant="h4" sx={{ color: "primary.main" }}>
+        <Typography variant="h5" sx={{ color: "primary.main" }}>
           Party
         </Typography>
         <TableContainer>
@@ -152,6 +156,11 @@ export default function PartyList() {
             <Button
               variant="contained"
               color="primary"
+              disabled={
+                Boolean(completedAt) ||
+                partyMembers.filter((member) => member.role !== "MENTOR")
+                  .length >= 4
+              }
               onClick={generateInviteLink}
             >
               Invite

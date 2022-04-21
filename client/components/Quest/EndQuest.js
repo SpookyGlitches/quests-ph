@@ -5,16 +5,19 @@ import {
   Button,
   Box,
   DialogContent,
+  Link as MuiLink,
   TextField,
+  Paper,
 } from "@mui/material";
-import { useRouter } from "next/router";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
-import { mutate } from "swr";
 import Image from "next/image";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, Controller } from "react-hook-form";
+import { useSWRConfig } from "swr";
+import Link from "next/link";
 import { completeQuestValidation } from "../../validations/quest";
+import { QuestContext } from "../../context/QuestContext";
 
 const DialogItem = ({ handleOk, handleCancel, open }) => {
   const {
@@ -97,13 +100,22 @@ const DialogItem = ({ handleOk, handleCancel, open }) => {
   );
 };
 
+function CustomLink({ label, link, childStyles }) {
+  return (
+    <Link href={link} passHref>
+      <MuiLink sx={{ ...childStyles }}>{label}</MuiLink>
+    </Link>
+  );
+}
+
 export default function EndQuest() {
   const [open, setOpen] = useState(false);
-  const router = useRouter();
-  const { questId } = router.query;
+  const { questId, completedAt } = useContext(QuestContext);
+  const { mutate } = useSWRConfig();
   const handleCancelClick = () => {
     setOpen(false);
   };
+
   const handleOk = async () => {
     try {
       await axios.put(`/api/quests/${questId}/complete`);
@@ -120,15 +132,56 @@ export default function EndQuest() {
   };
 
   return (
+    // eslint-disable-next-line react/jsx-no-useless-fragment
     <>
-      <Button variant="contained" color="primary" onClick={handleButtonClick}>
-        Complete Quest
-      </Button>
-      <DialogItem
-        open={open}
-        handleCancel={handleCancelClick}
-        handleOk={handleOk}
-      />
+      {!completedAt ? (
+        <>
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={Boolean(completedAt)}
+            onClick={handleButtonClick}
+          >
+            {completedAt ? "Quest Completed" : "Complete Quest"}
+          </Button>
+          <DialogItem
+            open={open}
+            handleCancel={handleCancelClick}
+            handleOk={handleOk}
+          />
+        </>
+      ) : (
+        <Paper
+          sx={{
+            position: "relative",
+            padding: 2,
+            display: "flex",
+            flexDirection: "column",
+            gap: 1,
+          }}
+        >
+          <Typography variant="h6" color="primary">
+            Completed!
+          </Typography>
+          <Image
+            src="/quests/completeQuest.svg"
+            alt="image of aliens holding balloons"
+            height={150}
+            width={300}
+          />
+          <Typography variant="body2" sx={{ mt: 2 }}>
+            Well done! This Quest has been completed. You can{" "}
+            <Typography color="primary" variant="inherit" component="span">
+              <CustomLink label="join" link="/search" />
+            </Typography>{" "}
+            a new one or{" "}
+            <Typography color="primary" variant="inherit" component="span">
+              <CustomLink label="start your own" link="/quests/create" />
+            </Typography>
+            .
+          </Typography>
+        </Paper>
+      )}
     </>
   );
 }

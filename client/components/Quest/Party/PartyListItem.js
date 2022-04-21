@@ -12,13 +12,16 @@ import PersonRemoveAlt1RoundedIcon from "@mui/icons-material/PersonRemoveAlt1Rou
 import { deepOrange } from "@mui/material/colors";
 import VerifiedUserRoundedIcon from "@mui/icons-material/VerifiedUserRounded";
 
-export default function PartyListItem({
-  item,
-  rank,
-  isPartyLeader,
-  removePartyMember,
-  banPartyMember,
-}) {
+export default function PartyListItem(props) {
+  const {
+    item,
+    rank,
+    isPartyLeader,
+    removePartyMember,
+    banPartyMember,
+    completed,
+  } = props;
+
   return (
     <TableRow
       key={item.partyMemberId}
@@ -51,7 +54,7 @@ export default function PartyListItem({
         <TableCell align="center">
           <Tooltip title="Remove">
             <IconButton
-              disabled={isPartyLeader}
+              disabled={item.role === "PARTY_LEADER" || completed}
               onClick={() => removePartyMember(item.partyMemberId)}
             >
               <PersonRemoveAlt1RoundedIcon />
@@ -59,7 +62,7 @@ export default function PartyListItem({
           </Tooltip>
           <Tooltip title="Ban">
             <IconButton
-              disabled={isPartyLeader}
+              disabled={item.role === "PARTY_LEADER" || completed}
               onClick={() => banPartyMember(item.user.userId)}
             >
               <BlockRoundedIcon />

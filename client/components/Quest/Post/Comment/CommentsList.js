@@ -67,6 +67,7 @@ export default function CommmentsList({
             comment={comment}
             key={comment.commentId}
             questId={questId}
+            disabled
             postId={postId}
             editComment={editComment}
             deleteComment={deleteComment}

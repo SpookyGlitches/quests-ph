@@ -6,14 +6,18 @@ import prisma from "../../../lib/prisma";
 import { step1Validations, step2Validations } from "../../../validations/quest";
 import maybeAwardUser from "../../../helpers/badges/startedQuest";
 
-function computeIfJoined(quests, role) {
+function computeIfJoined(quests, role, userId) {
   const computed = [];
 
   let joined = false;
   let canJoin = false;
   quests.forEach((item) => {
-    joined = item.partyMembers.length !== 0;
-    canJoin = !joined && role !== "mentor";
+    joined = item.partyMembers.some((member) => member.userId === userId);
+    canJoin =
+      !item.completedAt &&
+      !joined &&
+      role !== "mentor" &&
+      item.partyMembers.length < 4;
     computed.push({
       ...item,
       joined,
@@ -25,8 +29,8 @@ function computeIfJoined(quests, role) {
 
 async function getQuests(req, res) {
   const { user } = await getSession({ req });
-  const { searching, search, take, skip, category, status } = req.query;
-
+  const { searching, search, take, skip, category, status, startsAt } =
+    req.query;
   const parsedTake = Number(take) || undefined;
   const parsedSkip = parsedTake * Number(skip) || undefined;
 
@@ -93,6 +97,9 @@ async function getQuests(req, res) {
             ...filtered,
           },
         ],
+        estimatedStartDate: {
+          lte: startsAt ? new Date(startsAt) : undefined,
+        },
       },
       skip: parsedSkip,
       take: parsedTake,
@@ -102,19 +109,20 @@ async function getQuests(req, res) {
         estimatedStartDate: true,
         estimatedEndDate: true,
         questId: true,
+        completedAt: true,
+        difficulty: true,
         partyMembers: {
           select: {
             partyMemberId: true,
             userId: true,
           },
           where: {
-            userId: user.userId,
             deletedAt: null,
           },
         },
       },
     });
-    const computed = computeIfJoined(quests, user.role);
+    const computed = computeIfJoined(quests, user.role, user.userId);
     return res.status(200).json(computed);
   } catch (error) {
     console.error(error);

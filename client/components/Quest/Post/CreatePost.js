@@ -1,6 +1,16 @@
 import { Paper, Avatar, Typography } from "@mui/material";
 
-export default function CreatePost({ onCreatePostClick, rootStyles }) {
+export default function CreatePost({
+  onCreatePostClick,
+  rootStyles,
+  disabled,
+}) {
+  const createNewPost = (event) => {
+    if (disabled) {
+      return;
+    }
+    onCreatePostClick(event);
+  };
   return (
     <Paper
       sx={{
@@ -20,10 +30,11 @@ export default function CreatePost({ onCreatePostClick, rootStyles }) {
           height: 50,
           paddingX: 1,
           display: "flex",
-          cursor: "pointer",
+          cursor: !disabled && "pointer",
           alignItems: "center",
+          backgroundColor: disabled && "grey.200",
         }}
-        onClick={onCreatePostClick}
+        onClick={createNewPost}
       >
         <Typography variant="body2">Create a new post</Typography>
       </Paper>

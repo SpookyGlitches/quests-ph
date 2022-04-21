@@ -6,39 +6,49 @@ import Todo from "../Quest/Tasks/ToDo";
 import EndQuest from "../Quest/EndQuest";
 import DateCard from "../Quest/Tasks/DateCard";
 import Suggestions from "../Common/Suggestions";
+import { QuestContext } from "../../context/QuestContext";
+import { PartyMemberContext } from "../../context/PartyMemberContext";
 
 export default function QuestLayout({ children }) {
   const router = useRouter();
 
   const { questId } = router.query;
-  const { data: partyMember, error } = useSWR(
+
+  const { data: partyMember, error: partyMemberError } = useSWR(
     questId ? `/quests/${questId}/partyMembers/currentUser` : null,
   );
+  const { data: quest, error: questError } = useSWR(
+    questId ? `/quests/${questId}` : null,
+  );
 
-  if (error) {
+  if (partyMemberError || questError) {
     return <div>Something went wrong.</div>;
   }
 
-  if (!partyMember) {
+  if (!partyMember || !quest) {
     return <div>Loading...</div>;
   }
 
   return (
     <Grid container spacing={6}>
-      <Grid item xs={12} lg={8}>
-        <QuestHeader />
-        <Box sx={{ marginTop: 4 }}>{children}</Box>
-      </Grid>
-      <Grid item xs={12} lg={4}>
-        <Box sx={{}}>
-          <Stack spacing={4}>
-            <DateCard />
-            <Todo />
-            <Suggestions />
-            {partyMember.role === "PARTY_LEADER" && <EndQuest />}
-          </Stack>
-        </Box>
-      </Grid>
+      <QuestContext.Provider value={quest}>
+        <PartyMemberContext.Provider value={partyMember}>
+          <Grid item xs={12} lg={8}>
+            <QuestHeader />
+            <Box sx={{ marginTop: 4 }}>{children}</Box>
+          </Grid>
+          <Grid item xs={12} lg={4}>
+            <Box sx={{}}>
+              <Stack spacing={4}>
+                <DateCard />
+                <Todo />
+                <Suggestions />
+                {partyMember.role === "PARTY_LEADER" && <EndQuest />}
+              </Stack>
+            </Box>
+          </Grid>
+        </PartyMemberContext.Provider>
+      </QuestContext.Provider>
     </Grid>
   );
 }

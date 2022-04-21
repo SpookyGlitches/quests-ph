@@ -7,13 +7,14 @@ import {
   MenuItem,
   Paper,
 } from "@mui/material";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import axios from "axios";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useContext, useEffect, useState } from "react";
 import MemberStatement from "./MemberStatement";
 import WoopModal from "../WoopModal";
+import { QuestContext } from "../../../context/QuestContext";
+import { PartyMemberContext } from "../../../context/PartyMemberContext";
 
 const titleTypographyProps = {
   sx: {
@@ -23,18 +24,14 @@ const titleTypographyProps = {
 };
 
 export default function Statements() {
-  const { query } = useRouter();
-  const { questId } = query;
-
   const [anchorWoop, setAnchorWoop] = useState(null);
   const [openWoopPopper, setOpenWoopPopper] = useState(false);
 
-  const { data: quest } = useSWR(questId ? `/quests/${questId}` : null);
+  const { questId, wish, completedAt } = useContext(QuestContext);
+  const partyMember = useContext(PartyMemberContext);
+  const { mutate } = useSWRConfig();
   const { data: partyMembers, mutate: mutatePartyMembers } = useSWR(
     questId ? `/quests/${questId}/partyMembers?excludeMentor=true` : null,
-  );
-  const { data: partyMember, mutate: mutateStatement } = useSWR(
-    questId ? `/quests/${questId}/partyMembers/currentUser` : null,
   );
 
   const [woopModalDetails, setWoopModalDetails] = useState({
@@ -45,22 +42,22 @@ export default function Statements() {
       outcome: "",
       obstacle: "",
       plan: "",
-      wish: "",
+      wish,
     },
   });
 
   useEffect(() => {
-    if (!quest || !partyMember) return;
+    if (!partyMember) return;
     setWoopModalDetails((prev) => ({
       ...prev,
       statement: {
+        ...prev.statement,
         outcome: partyMember.outcome,
         obstacle: partyMember.obstacle,
         plan: partyMember.plan,
-        wish: quest.wish,
       },
     }));
-  }, [quest, partyMember]);
+  }, [partyMember]);
 
   const handleWoopPopperClick = (event) => {
     setAnchorWoop(event.currentTarget);
@@ -69,11 +66,10 @@ export default function Statements() {
 
   const updateUserStatement = async (values) => {
     const { data } = await axios.put(
-      `/api/quests/${quest.questId}/partyMembers/${partyMember.partyMemberId}`,
+      `/api/quests/${questId}/partyMembers/${partyMember.partyMemberId}`,
       values,
     );
-    mutateStatement(data);
-
+    mutate(`/quests/${questId}/partyMembers/currentUser`, data);
     mutatePartyMembers((questPartyMembers) => {
       const partyMemberIndex = questPartyMembers.findIndex((x) => {
         return x.partyMemberId === partyMember.partyMemberId;
@@ -113,7 +109,7 @@ export default function Statements() {
     setOpenWoopPopper(false);
   };
 
-  if (!quest || !partyMembers || !partyMember) {
+  if (!partyMembers) {
     return <div>Loading</div>;
   }
   const outcomes = [];
@@ -158,11 +154,14 @@ export default function Statements() {
             alignItems: "center",
           }}
         >
-          <Typography variant="h4" color="primary">
+          <Typography variant="h5" color="primary">
             Overview
           </Typography>
           {partyMember.role !== "MENTOR" && (
-            <IconButton onClick={handleWoopPopperClick}>
+            <IconButton
+              onClick={handleWoopPopperClick}
+              disabled={Boolean(completedAt)}
+            >
               <MoreHorizRoundedIcon />
             </IconButton>
           )}
@@ -171,7 +170,7 @@ export default function Statements() {
         <Stack spacing={3} sx={{ marginTop: 2 }}>
           <div>
             <Typography {...titleTypographyProps}>Wish</Typography>
-            <Typography variant="body1">{quest.wish}</Typography>
+            <Typography variant="body1">{wish}</Typography>
           </div>
           <div>
             <Typography {...titleTypographyProps}>Outcome</Typography>

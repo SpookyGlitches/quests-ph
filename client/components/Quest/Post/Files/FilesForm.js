@@ -7,11 +7,12 @@ import {
 } from "@mui/material";
 import useSWR from "swr";
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useRouter } from "next/router";
 import { v4 as uuidv4 } from "uuid";
 import FilePreviewList from "./FilePreviewList";
 import FileDropzone from "../../../Common/FileDropzone";
+import { QuestContext } from "../../../../context/QuestContext";
 
 function getFileExtension(filename) {
   const a = filename.split(".");
@@ -22,14 +23,15 @@ function getFileExtension(filename) {
 }
 
 export default function FilesForm({ uploadedFiles, setUploadedFiles }) {
-  const router = useRouter();
+  const { query } = useRouter();
 
   const [deleteAllChecked, setDeleteAllChecked] = useState(false);
   const [filesToDelete, setFilesToDelete] = useState([]);
   const [rejectedFiles, setRejectedFiles] = useState([]);
   const [loading, setLoading] = useState(false);
+  const { questId, completedAt } = useContext(QuestContext);
 
-  const { questId, postId } = router.query;
+  const { postId } = query;
 
   const { data: partyMember } = useSWR(
     questId ? `/quests/${questId}/partyMembers/currentUser` : null,
@@ -166,11 +168,12 @@ export default function FilesForm({ uploadedFiles, setUploadedFiles }) {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-      <FileDropzone
-        useDropzoneProps={dropzoneConfig}
-        dropzoneTitle="Drag and drop images here or click to add."
-      />
-
+      {!completedAt && (
+        <FileDropzone
+          useDropzoneProps={dropzoneConfig}
+          dropzoneTitle="Drag and drop images here or click to add."
+        />
+      )}
       {loading && <LinearProgress />}
 
       <FilePreviewList
