@@ -14,64 +14,61 @@ const badges = {
   },
 };
 
+function shouldAward(reacts, necessaryReacts) {
+  return reacts === necessaryReacts - 1;
+}
+
 export default async function maybeAwardUserForReact(userId) {
-  const [reactsCount, userBadges] = await prisma.$transaction([
-    prisma.postReact.count({
-      where: {
-        partyMember: {
-          userId,
+  const user = await prisma.user.findUnique({
+    where: {
+      userId,
+    },
+    select: {
+      userCurrency: {
+        select: {
+          postReacts: true,
         },
-        deletedAt: null,
       },
-    }),
-    prisma.userBadge.findMany({
-      where: {
-        badgeId: {
-          in: [9, 10],
-        },
-        userId,
-      },
-      select: {
-        badgeId: true,
-      },
-    }),
-  ]);
+    },
+    rejectOnNotFound: true,
+  });
 
-  if (
-    userBadges.length === 0 &&
-    reactsCount >= badges.expressive.necessaryReacts - 1
-  ) {
-    return {
-      insertUserBadgeData: {
-        userId,
-        badgeId: badges.expressive.badgeId,
+  const updateUserCurrency = {
+    where: {
+      userId,
+    },
+    data: {
+      postReacts: {
+        increment: 1,
       },
-      insertNotificationData: {
+    },
+  };
+
+  const badgesToCheck = [badges.expressive, badges.supportiveComrade];
+
+  let x = 0;
+  let insertUserBadgeData = null;
+  let insertNotificationData = null;
+  const {
+    userCurrency: { postReacts },
+  } = user;
+
+  while (x < badgesToCheck.length) {
+    const award = shouldAward(postReacts, badgesToCheck[x].necessaryReacts);
+    if (award) {
+      insertUserBadgeData = {
         userId,
-        message: badges.expressive.message,
+        badgeId: badgesToCheck[x].badgeId,
+      };
+      insertNotificationData = {
+        userId,
+        message: badgesToCheck[x].message,
         type: "RECEIVED_BADGE",
-        metadata: JSON.stringify({ badgeId: badges.expressive.badgeId }),
-      },
-    };
+        metadata: JSON.stringify({ badgeId: badgesToCheck[x].badgeId }),
+      };
+      break;
+    }
+    x++;
   }
-
-  if (
-    userBadges.length === 1 &&
-    reactsCount >= badges.supportiveComrade.necessaryReacts - 1
-  ) {
-    return {
-      insertUserBadgeData: {
-        userId,
-        badgeId: badges.supportiveComrade.badgeId,
-      },
-      insertNotificationData: {
-        userId,
-        message: badges.supportiveComrade.message,
-        type: "RECEIVED_BADGE",
-        metadata: JSON.stringify({ badgeId: badges.supportiveComrade.badgeId }),
-      },
-    };
-  }
-
-  return null;
+  return { updateUserCurrency, insertUserBadgeData, insertNotificationData };
 }

@@ -21,77 +21,61 @@ const badges = {
   },
 };
 
-function insertQueuePrisma(user, badge) {
-  const { badgeId, message, necessaryStartedQuests } = badge;
-
-  const meetsNecessaryStarted =
-    user.partyMembers.length >= necessaryStartedQuests - 1;
-  const doesntHaveTheBadge = !user.userBadges.find(
-    (userBadge) => userBadge.badgeId === badgeId,
-  );
-
-  if (meetsNecessaryStarted && doesntHaveTheBadge) {
-    return {
-      insertUserBadgeData: {
-        badgeId,
-        userId: user.userId,
-      },
-      insertNotificationData: {
-        message,
-        userId: user.userId,
-        type: "RECEIVED_BADGE",
-        metadata: JSON.stringify({ badgeId }),
-      },
-    };
-  }
-
-  return null;
+function shouldAward(startedPublicQuests, necessaryStartedQuests) {
+  return startedPublicQuests === necessaryStartedQuests - 1;
 }
 
-export default async function maybeAwardUser(userId) {
+export default async function maybeAwardUserForStartingQuest(userId) {
   const user = await prisma.user.findUnique({
     where: {
       userId,
     },
     select: {
-      userId: true,
-      userBadges: {
+      userCurrency: {
         select: {
-          userBadgeId: true,
-          badgeId: true,
-        },
-        where: {
-          badgeId: {
-            in: [5, 6, 7],
-          },
-        },
-      },
-      partyMembers: {
-        select: {
-          questId: true,
-        },
-        where: {
-          role: "PARTY_LEADER",
-          quest: {
-            visibility: "PUBLIC",
-            deletedAt: null,
-          },
-          deletedAt: null,
+          startedPublicQuests: true,
         },
       },
     },
     rejectOnNotFound: true,
   });
 
-  const legibleForLittleShot = insertQueuePrisma(user, badges.littleShot);
-  if (legibleForLittleShot) return legibleForLittleShot;
+  const {
+    userCurrency: { startedPublicQuests },
+  } = user;
 
-  const legibleForFineMover = insertQueuePrisma(user, badges.fineMover);
+  let insertUserBadgeData = null;
+  let insertNotificationData = null;
 
-  if (legibleForFineMover) return legibleForFineMover;
+  const updateUserCurrency = {
+    where: {
+      userId,
+    },
+    data: {
+      startedPublicQuests: {
+        increment: 1,
+      },
+    },
+  };
 
-  const legibleForInitiator = insertQueuePrisma(user, badges.initiator);
-  if (legibleForInitiator) return legibleForInitiator;
+  const badgesToCheck = [badges.littleShot, badges.fineMover, badges.initiator];
 
-  return null;
+  for (let x = 0; x < badgesToCheck.length; x++) {
+    const { badgeId, message, necessaryStartedQuests } = badgesToCheck[x];
+    const award = shouldAward(startedPublicQuests, necessaryStartedQuests);
+    if (award) {
+      insertUserBadgeData = {
+        userId,
+        badgeId,
+      };
+      insertNotificationData = {
+        userId,
+        message,
+        type: "RECEIVED_BADGE",
+        metadata: JSON.stringify({ badgeId }),
+      };
+      break;
+    }
+  }
+  return { updateUserCurrency, insertNotificationData, insertUserBadgeData };
 }

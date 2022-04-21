@@ -63,6 +63,7 @@ model User {
   userBadges         UserBadge[]
   conversationMember ConversationMember[]
   partyMembers       PartyMember[]
+  userCurrency       UserCurrency?
   userReporter       UserReport[]             @relation("userReporter")
   userRecipient      UserReport[]             @relation("userRecipient")
   articles           Article[]
@@ -467,6 +468,21 @@ enum NotificationType {
   RECEIVED_BADGE
 }
 
+model UserCurrency {
+  userCurrencyId        Int       @id @default(autoincrement())
+  userId                String
+  completedPublicQuests Int       @default(0)
+  startedPublicQuests   Int       @default(0)
+  posts                 Int       @default(0)
+  postReacts            Int       @default(0)
+  comments              Int       @default(0)
+  acceptedArticles      Int       @default(0)
+  user                  User      @relation(fields: [userId], references: [userId])
+  updatedAt             DateTime  @updatedAt
+  deletedAt             DateTime?
+
+  @@unique([userId])
+}
 
 enum NotificationStatus {
   SEEN

@@ -1,4 +1,5 @@
 import prisma from "../../../../../lib/prisma";
+import maybeAwardUserForArticle from "../../../../../helpers/badges/acceptedArticles";
 
 export default async function approveArticle(req, res) {
   if (req.method !== "PUT") {
@@ -6,6 +7,7 @@ export default async function approveArticle(req, res) {
   }
 
   try {
+    const transactions = [];
     const approvedArticle = await prisma.article.update({
       where: {
         articleId: Number(req.query.articleId),
@@ -16,6 +18,28 @@ export default async function approveArticle(req, res) {
         updatedAt: new Date(),
       },
     });
+
+    const { updateUserCurrency, insertUserBadgeData, insertNotificationData } =
+      await maybeAwardUserForArticle(approvedArticle.userId);
+
+    const updateUserCurrencyOperation = prisma.userCurrency.update({
+      where: updateUserCurrency.where,
+      data: updateUserCurrency.data,
+    });
+    transactions.push(updateUserCurrencyOperation);
+
+    if (insertUserBadgeData && insertNotificationData) {
+      const insertUserBadgeOperation = prisma.userBadge.create({
+        data: insertUserBadgeData,
+      });
+      const insertNotificationOperation = prisma.notification.create({
+        data: insertNotificationData,
+      });
+      transactions.push(insertUserBadgeOperation);
+      transactions.push(insertNotificationOperation);
+    }
+
+    await prisma.$transaction(transactions);
     return res.status(200).json(approvedArticle);
   } catch (error) {
     console.log(error);

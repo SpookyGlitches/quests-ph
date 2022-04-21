@@ -15,70 +15,60 @@ const badges = {
   },
 };
 
+function shouldAward(comments, necessaryComments) {
+  return comments === necessaryComments - 1;
+}
+
 export default async function maybeAwardUserForComment(userId) {
-  const [commentsCount, userBadges] = await prisma.$transaction([
-    prisma.comment.count({
-      where: {
-        partyMember: {
-          userId,
+  const user = await prisma.user.findUnique({
+    where: {
+      userId,
+    },
+    select: {
+      userCurrency: {
+        select: {
+          comments: true,
         },
-        post: {
-          partyMember: {
-            userId: {
-              not: userId,
-            },
-          },
-        },
-        deletedAt: null,
       },
-    }),
-    prisma.userBadge.findMany({
-      where: {
-        badgeId: {
-          in: [11, 12],
-        },
-        userId,
-      },
-      select: {
-        badgeId: true,
-      },
-    }),
-  ]);
+    },
+    rejectOnNotFound: true,
+  });
+  const {
+    userCurrency: { comments },
+  } = user;
 
-  if (
-    userBadges.length === 0 &&
-    commentsCount >= badges.insightful.necessaryComments - 1
-  ) {
-    return {
-      insertUserBadgeData: {
-        userId,
-        badgeId: badges.insightful.badgeId,
+  const badgesToCheck = [badges.insightful, badges.sage];
+  let insertUserBadgeData = null;
+  let insertNotificationData = null;
+
+  const updateUserCurrency = {
+    where: {
+      userId,
+    },
+    data: {
+      comments: {
+        increment: 1,
       },
-      insertNotificationData: {
+    },
+  };
+
+  for (let x = 0; x < badgesToCheck.length; x++) {
+    const { badgeId, message, necessaryComments } = badgesToCheck[x];
+    const award = shouldAward(comments, necessaryComments);
+    if (award) {
+      insertUserBadgeData = {
         userId,
-        message: badges.insightful.message,
+        badgeId,
+      };
+      insertNotificationData = {
+        userId,
+        message,
         type: "RECEIVED_BADGE",
-        metadata: JSON.stringify({ badgeId: badges.insightful.badgeId }),
-      },
-    };
+        metadata: JSON.stringify({ badgeId }),
+      };
+      break;
+    }
   }
 
-  if (
-    userBadges.length === 1 &&
-    commentsCount >= badges.sage.necessaryComments - 1
-  ) {
-    return {
-      insertUserBadgeData: {
-        userId,
-        badgeId: badges.sage.badgeId,
-      },
-      insertNotificationData: {
-        userId,
-        message: badges.sage.message,
-        type: "RECEIVED_BADGE",
-        metadata: JSON.stringify({ badgeId: badges.sage.badgeId }),
-      },
-    };
-  }
-  return null;
+  return { updateUserCurrency, insertUserBadgeData, insertNotificationData };
 }

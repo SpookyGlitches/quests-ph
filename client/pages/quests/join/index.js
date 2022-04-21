@@ -84,10 +84,12 @@ export async function getServerSideProps(context) {
       },
       select: {
         partyMembers: {
-          select: {
-            role: true,
-          },
           where: {
+            NOT: [
+              {
+                role: "MENTOR",
+              },
+            ],
             deletedAt: null,
           },
         },
