@@ -7,7 +7,7 @@ export default async function getAllApplications(req, res) {
 
   try {
     const applications =
-      await prisma.$queryRaw`SELECT mentorApplicationid, mentorId, fullName FROM user INNER JOIN MentorApplication ON MentorApplication.mentorId = User.userId WHERE isActive = 1`;
+      await prisma.$queryRaw`SELECT mentorApplicationid, mentorId, fullName FROM User INNER JOIN MentorApplication ON MentorApplication.mentorId = User.userId WHERE isActive = 1`;
     return res.status(200).json(applications);
   } catch (error) {
     console.log(error);

@@ -261,8 +261,8 @@ model Message {
 
 model Conversation {
   conversationId     Int                  @id @default(autoincrement())
-  quest              Quest                @relation(fields: [questId], references: [questId])
-  questId            Int
+  quest              Quest?               @relation(fields: [questId], references: [questId])
+  questId            Int?
   name               String
   createdAt          DateTime             @default(now())
   message            Message[]
@@ -466,6 +466,7 @@ enum PointsLogAction {
 enum NotificationType {
   RECEIVED_BADGE
 }
+
 
 enum NotificationStatus {
   SEEN
