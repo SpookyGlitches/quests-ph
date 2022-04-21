@@ -12,24 +12,40 @@ import {
   ListItemAvatar,
   CircularProgress,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import InboxComponent from "../../components/Chat/InboxComponent";
 import AppLayout from "../../components/Layouts/AppLayout";
+import axios from "axios";
 
 export default function ChatTalkLayout() {
   const router = useRouter();
+  const [friends, setFriends] = useState([]);
+  const [userCred, setUserCred] = useState([]);
+  const [userChat, setUserChat] = useState([]);
   const [selectedValue, setSelectedValue] = useState("");
 
-  const { data, error } = useSWR("/chat/getFriendsForChat");
+  // const { data, error } = useSWR("/chat/getFriendsForChat");
 
-  const { data: userData, error: userError } = useSWR(
-    `auth/getUserCredentials`,
-  );
+  // const { data: userData, error: userError } = useSWR(
+  //   `auth/getUserCredentials`,
+  // );
 
-  if (error || userError) return <p>Failed to load</p>;
-  if (!data || !userData) return <CircularProgress />;
+  // if (error || userError) return <p>Failed to load</p>;
+  // if (!data || !userData) return <CircularProgress />;
+
+  const userData = async () => {
+    const res = await fetch("/api/auth/getUserCredentials", {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((data) => setUserCred(data));
+  };
+
+  useEffect(() => {
+    userData();
+  }, [userCred]);
   /* 
     So for now this is in a condition, 
     I know not allowed pero it does the job for now :((
@@ -38,22 +54,54 @@ export default function ChatTalkLayout() {
     the logged in user wants to chat with. I run it only if 
     router.query.userInfo has a value set, otherwise I leave it.
    */
-  if (router.query.userInfo !== undefined) {
-    // eslint-disable-next-line
-    const { data: userToChatWith, error: userChatWithError } = useSWR(
-      `/auth/${router.query.userInfo}/getOtherUserCredentials`,
-    );
-    if (userChatWithError) return <p>Failed to load</p>;
-    if (!userToChatWith) return <CircularProgress />;
-    console.log("naa buang");
-  } else {
-    console.log("wa buang");
-  }
+  // if (router.query.userInfo !== undefined) {
+  //   // eslint-disable-next-line
+  //   const { data: userToChatWith, error: userChatWithError } = useSWR(
+  //     `/auth/${router.query.userInfo}/getOtherUserCredentials`,
+  //   );
+
+  //   if (userChatWithError) return <p>Failed to load</p>;
+  //   if (!userToChatWith) return <CircularProgress />;
+  //   console.log("naa buang");
+  // } else {
+  //   console.log("wa buang");
+  // }
+
+  const getFriendsForChat = async () => {
+    const res = await fetch("/api/chat/getFriendsForChat", {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((data) => setFriends(data));
+  };
+  useEffect(() => {
+    getFriendsForChat();
+  }, [friends]);
+
+  const userToChatWith = async () => {
+    const res = await fetch(
+      `/api/auth/${router.query.userInfo}/getOtherUserCredentials`,
+      {
+        method: "GET",
+      },
+    )
+      .then((res) => res.json())
+      .then((data) => setUserChat(data));
+  };
+
+  useEffect(() => {
+    if (router.query.userInfo !== undefined) {
+      userToChatWith();
+    } else {
+      console.log("wala");
+    }
+  }, []);
+
   let searchFriendBar;
   let inboxComponent;
   let img;
 
-  if (data.length !== 0) {
+  if (friends.length !== 0) {
     searchFriendBar = (
       <Box>
         <Select
@@ -66,7 +114,7 @@ export default function ChatTalkLayout() {
           }}
           onChange={(e) => setSelectedValue(e.target.value)}
         >
-          {data.map((user) => (
+          {friends.map((user) => (
             <MenuItem
               style={{
                 overflow: "hidden",
@@ -122,12 +170,12 @@ export default function ChatTalkLayout() {
     */
     if (router.query.userInfo !== undefined && selectedValue.length === 0) {
       // eslint-disable-next-line
-      otherUser = userToChatWith;
+      otherUser = userChat;
     }
 
     const props = {
       otherUser,
-      userData,
+      userCred,
     };
     inboxComponent = <InboxComponent {...props} />;
   } else {

@@ -8,7 +8,7 @@ export default function InboxComponent(data) {
   let other;
   useEffect(() => {
     // eslint-disable-next-line
-    const currentUser = data.userData;
+    const currentUser = data.userCred;
     Talk.ready.then(() => {
       const me = new Talk.User({
         id: currentUser.userId,
