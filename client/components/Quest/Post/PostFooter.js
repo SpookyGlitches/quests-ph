@@ -19,9 +19,7 @@ export default function PostFooter(props) {
           <EmojiStack spacing={-1} height={30} width={30} reacts={postReacts} />
         )}
       </Box>
-      <Typography variant="caption">
-        {commentsCount.length || 0} comments
-      </Typography>
+      <Typography variant="caption">{commentsCount || 0} comments</Typography>
     </Box>
   );
 }

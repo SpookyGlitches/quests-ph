@@ -5,31 +5,55 @@ const badges = {
     badgeId: 8,
     message:
       "You have received a badge for creating your first post. Congratulations!",
+    necessaryPosts: 1,
   },
 };
 
 export default async function maybeAwardUserForPost(userId) {
-  const { badgeId, message } = badges.publisher;
-  const postBadgeCount = await prisma.userBadge.count({
+  const user = await prisma.user.findUnique({
     where: {
       userId,
-      badgeId: 8,
     },
+    select: {
+      userCurrency: {
+        select: {
+          posts: true,
+        },
+      },
+    },
+    rejectOnNotFound: true,
   });
 
-  if (postBadgeCount === 0) {
-    return {
-      insertUserBadgeData: {
-        userId,
-        badgeId,
+  const updateUserCurrency = {
+    where: {
+      userId,
+    },
+    data: {
+      posts: {
+        increment: 1,
       },
-      insertNotificationData: {
-        userId,
-        message,
-        type: "RECEIVED_BADGE",
-        metadata: JSON.stringify({ badgeId }),
-      },
+    },
+  };
+
+  let insertUserBadgeData = null;
+  let insertNotificationData = null;
+  const {
+    userCurrency: { posts },
+  } = user;
+  const award = posts === badges.publisher.necessaryPosts - 1;
+  const { badgeId, message } = badges.publisher;
+  if (award) {
+    insertUserBadgeData = {
+      userId,
+      badgeId,
+    };
+    insertNotificationData = {
+      userId,
+      message,
+      type: "RECEIVED_BADGE",
+      metadata: JSON.stringify({ badgeId }),
     };
   }
-  return null;
+
+  return { updateUserCurrency, insertUserBadgeData, insertNotificationData };
 }

@@ -69,7 +69,20 @@ export default async function (req, res) {
 
       // no need for pusher here
       await prisma.user.create({
-        data: { ...userDetails, ...awardOperations },
+        data: {
+          ...userDetails,
+          ...awardOperations,
+          userCurrency: {
+            create: {
+              acceptedArticles: 0,
+              completedPublicQuests: 0,
+              startedPublicQuests: 0,
+              posts: 0,
+              postReacts: 0,
+              comments: 0,
+            },
+          },
+        },
       });
       await transporter.sendMail(mailData);
       res.status(200).send({ message: "Success!" });

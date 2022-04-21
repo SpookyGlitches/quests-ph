@@ -21,8 +21,12 @@ export default async function getAllFriends(req, res) {
         deletedAt: null,
       },
       include: {
-        userOne: { select: { displayName: true, fullName: true } },
-        userTwo: { select: { displayName: true, fullName: true } },
+        userOne: {
+          select: { userId: true, displayName: true, fullName: true },
+        },
+        userTwo: {
+          select: { userId: true, displayName: true, fullName: true },
+        },
       },
     });
     return res.status(200).json(friendsRequest);

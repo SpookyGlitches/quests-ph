@@ -9,7 +9,6 @@ import AppLayout from "../../../../components/Layouts/AppLayout";
 export default function PartyPage() {
   const { query } = useRouter();
   const { questId } = query;
-
   const { data: partyMember } = useSWR(
     questId ? `/quests/${questId}/partyMembers/currentUser` : null,
   );

@@ -1,7 +1,7 @@
 import { TextField } from "@mui/material";
 import { Controller, useFormContext } from "react-hook-form";
 
-export default function WishInput() {
+export default function WishInput({ disabled }) {
   const {
     formState: { errors },
   } = useFormContext();
@@ -11,6 +11,7 @@ export default function WishInput() {
       render={({ field: { onChange, value } }) => (
         <TextField
           fullWidth
+          disabled={disabled}
           label="Wish"
           onChange={onChange}
           value={value}

@@ -12,7 +12,7 @@ import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { format } from "date-fns";
 import { useRouter } from "next/router";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import StyledPaper from "../../Common/StyledPaper";
@@ -41,12 +41,15 @@ const TasksLists = () => {
     }
   };
 
-  const { data, error } = useSWR(`/quests/${router.query.questId}/tasks`);
+  const { data, error } = useSWR(
+    `/quests/${router.query.questId}/tasks`,
+    false,
+  );
+  // const latestData = [...data, { ...data, ...{ id: data.task.questTaskid } }];
+  mutate(`/quests/${router.query.questId}/tasks`);
 
   if (error) return <div>failed to load</div>;
   if (!data) return <CircularProgress />;
-
-  // const memberId = data.member.map((m) => m.partyMemberId);
 
   const memberId = data.member[0].partyMemberId;
 

@@ -74,11 +74,16 @@ async function createPost(req, res) {
     transactions.push(createPostOperation);
 
     // award badge
-    const awardData = await maybeAwardUserForPost(user.userId);
+    const { updateUserCurrency, insertNotificationData, insertUserBadgeData } =
+      await maybeAwardUserForPost(user.userId);
 
-    if (awardData) {
-      const { insertUserBadgeData, insertNotificationData } = awardData;
+    const updateUserCurrencyOperation = prisma.userCurrency.update({
+      where: updateUserCurrency.where,
+      data: updateUserCurrency.data,
+    });
+    transactions.push(updateUserCurrencyOperation);
 
+    if (insertNotificationData && insertUserBadgeData) {
       const insertUserBadgeOperation = prisma.userBadge.create({
         data: insertUserBadgeData,
       });

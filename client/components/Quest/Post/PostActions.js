@@ -6,13 +6,16 @@ import { useSWRConfig } from "swr";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useSnackbar } from "notistack";
 import ReactOptions from "./ReactOptions";
 
 export default function PostActions(props) {
-  const { postReacts, questId, postId } = props;
+  const { postReacts, questId, postId, disabled } = props;
   const router = useRouter();
   const session = useSession();
+  const { enqueueSnackbar } = useSnackbar();
   const { mutate } = useSWRConfig();
+
   const [reactOptionsAnchor, setReactOptionsAnchor] = useState(null);
   const [openReactOptions, setOpenReactOptions] = useState(false);
   const userId = session.data?.user?.userId;
@@ -22,6 +25,16 @@ export default function PostActions(props) {
   );
 
   const addReact = async (type) => {
+    if (disabled) {
+      enqueueSnackbar(
+        "You cannot react since the Quest is already completed.",
+        {
+          variant: "error",
+          preventDuplicate: true,
+        },
+      );
+      return;
+    }
     const { data } = await axios.post(
       `/api/quests/${questId}/posts/${postId}/reacts`,
       {
@@ -39,6 +52,16 @@ export default function PostActions(props) {
   };
 
   const updateReact = async (type, selectedReact) => {
+    if (disabled) {
+      enqueueSnackbar(
+        "You cannot react since the Quest is already completed.",
+        {
+          variant: "error",
+          preventDuplicate: true,
+        },
+      );
+      return;
+    }
     await axios.put(
       `/api/quests/${questId}/posts/${postId}/reacts/${selectedReact.postReactId}`,
       {
@@ -114,6 +137,7 @@ export default function PostActions(props) {
           startIcon={<AddReactionRoundedIcon />}
           onClick={onReactClick}
           size="medium"
+          disabled={disabled && !selected}
         >
           React
         </Button>
@@ -122,6 +146,7 @@ export default function PostActions(props) {
           variant="text"
           startIcon={<InsertCommentRoundedIcon />}
           size="medium"
+          disabled={disabled}
         >
           Comment
         </Button>

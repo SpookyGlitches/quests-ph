@@ -208,7 +208,7 @@ async function main() {
     create: {
       displayName: process.env.ADMINFOURUSER,
       fullName: "Admin Four",
-      email: process.env.ADMINTHREEEMAIL,
+      email: process.env.ADMINFOUREMAIL,
       password: bcrypt.hashSync(
         process.env.ADMINFOURPASS,
         bcrypt.genSaltSync(10),
@@ -225,7 +225,7 @@ async function main() {
     create: {
       displayName: process.env.ADMINFIVEUSER,
       fullName: "Admin Five",
-      email: process.env.ADMINTHREEEMAIL,
+      email: process.env.ADMINFIVEEMAIL,
       password: bcrypt.hashSync(
         process.env.ADMINFIVEPASS,
         bcrypt.genSaltSync(10),

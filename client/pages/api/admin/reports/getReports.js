@@ -24,7 +24,7 @@ export default async function getAllReports(req, res) {
     //   },
     // });
     const reports =
-      await prisma.$queryRaw`SELECT userReportId, reporter.fullName AS reporterFullName, recipient.fullName AS recipientFullName, recipient.email AS recipientEmail, reporter.email AS reporterEmail, reporterId, recipientId, category, description, status, userreport.createdAt FROM userreport INNER JOIN user reporter ON (reporter.userId = userreport.reporterId) INNER JOIN user recipient ON (recipient.userId = userreport.recipientId) WHERE status = "INACTIVE" AND userreport.deletedAt IS NULL AND banStart IS NULL AND banEnd IS NULL`;
+      await prisma.$queryRaw`SELECT userReportId, reporter.fullName AS reporterFullName, recipient.fullName AS recipientFullName, recipient.email AS recipientEmail, reporter.email AS reporterEmail, reporterId, recipientId, category, description, status, UserReport.createdAt FROM UserReport INNER JOIN User reporter ON (reporter.userId = UserReport.reporterId) INNER JOIN User recipient ON (recipient.userId = UserReport.recipientId) WHERE status = "INACTIVE" AND UserReport.deletedAt IS NULL AND banStart IS NULL AND banEnd IS NULL`;
     return res.status(200).json(reports);
   } catch (error) {
     console.log(error);

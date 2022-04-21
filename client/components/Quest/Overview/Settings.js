@@ -7,25 +7,25 @@ import {
   MenuItem,
   Paper,
 } from "@mui/material";
-import useSWR from "swr";
 
 import { format } from "date-fns";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import capitalizeFirstLetterOnly from "../../../helpers/strings";
+import { QuestContext } from "../../../context/QuestContext";
+import { PartyMemberContext } from "../../../context/PartyMemberContext";
 
 export default function Settings() {
   const router = useRouter();
-  const { questId } = router.query;
 
   const [anchorSettings, setAnchorSettings] = useState(null);
   const [openSettingsPopper, setOpenSettingsPopper] = useState(false);
 
-  const { data: quest } = useSWR(questId ? `/quests/${questId}` : null);
-  const { data: partyMember } = useSWR(
-    questId ? `/quests/${questId}/partyMembers/currentUser` : null,
-  );
+  const quest = useContext(QuestContext);
+  const partyMember = useContext(PartyMemberContext);
+
+  const { questId } = quest;
 
   const handleSettingsPopperClick = (event) => {
     setAnchorSettings(event.currentTarget);
@@ -39,10 +39,6 @@ export default function Settings() {
   const closePopper = () => {
     setOpenSettingsPopper(false);
   };
-
-  if (!quest || !partyMember) {
-    return <div>Loading</div>;
-  }
 
   return (
     <>
