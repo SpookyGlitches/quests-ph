@@ -25,8 +25,8 @@ function computeIfJoined(quests, role) {
 
 async function getQuests(req, res) {
   const { user } = await getSession({ req });
-  const { searching, search, take, skip, category, status } = req.query;
-
+  const { searching, search, take, skip, category, status, startsAt } =
+    req.query;
   const parsedTake = Number(take) || undefined;
   const parsedSkip = parsedTake * Number(skip) || undefined;
 
@@ -93,6 +93,9 @@ async function getQuests(req, res) {
             ...filtered,
           },
         ],
+        estimatedStartDate: {
+          lte: startsAt ? new Date(startsAt) : undefined,
+        },
       },
       skip: parsedSkip,
       take: parsedTake,
@@ -103,6 +106,7 @@ async function getQuests(req, res) {
         estimatedEndDate: true,
         questId: true,
         completedAt: true,
+        difficulty: true,
         partyMembers: {
           select: {
             partyMemberId: true,
