@@ -51,9 +51,8 @@ export default async function getUserCredential(req, res) {
           );
         }
      */
-
     const foundUsers =
-      await prisma.$queryRaw`SELECT userId, displayName, fullName, email, dateOfBirth, role, deletedAt FROM user WHERE userId IN (SELECT IF(userOneId!=${user.userId}, userOneId, userTwoId) AS friendId FROM friendship WHERE (userOneId = ${user.userId} OR userTwoId = ${user.userId}) AND (friendship.deletedAt IS NULL))`;
+      await prisma.$queryRaw`SELECT userId, displayName, fullName, email, dateOfBirth, role, deletedAt FROM User WHERE userId IN (SELECT IF(userOneId!=${user.userId}, userOneId, userTwoId) AS friendId FROM Friendship WHERE (userOneId = ${user.userId} OR userTwoId = ${user.userId}) AND (Friendship.deletedAt IS NULL))`;
 
     return res.status(200).json(foundUsers);
   } catch (error) {

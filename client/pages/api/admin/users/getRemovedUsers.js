@@ -24,7 +24,7 @@ export default async function getRemovedUsers(req, res) {
     //   },
     // });
     const users =
-      await prisma.$queryRaw`SELECT userId, displayName, fullName, email, role, SUBSTRING(deletedAt, 1, 10) AS deletedAt FROM user WHERE deletedAt IS NOT NULL`;
+      await prisma.$queryRaw`SELECT userId, displayName, fullName, email, role, SUBSTRING(deletedAt, 1, 10) AS deletedAt FROM User WHERE deletedAt IS NOT NULL`;
     return res.status(200).json(users);
   } catch (error) {
     console.log(error);
