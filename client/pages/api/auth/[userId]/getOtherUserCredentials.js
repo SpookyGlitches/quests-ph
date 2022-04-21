@@ -1,5 +1,4 @@
-import { getSession } from "next-auth/react";
-import prisma from "../../../lib/prisma";
+import prisma from "../../../../lib/prisma";
 
 export default async function getUserCredential(req, res) {
   if (req.method !== "GET") {
@@ -7,11 +6,9 @@ export default async function getUserCredential(req, res) {
   }
 
   try {
-    const { user } = await getSession({ req });
-
     const foundUser = await prisma.user.findUnique({
       where: {
-        userId: user.userId,
+        userId: req.query.userId,
       },
       select: {
         fullName: true,

@@ -1,5 +1,10 @@
-import { Avatar, Typography, Box, IconButton } from "@mui/material";
+import { Avatar, Typography, Box, IconButton, Button } from "@mui/material";
 import { useSWRConfig } from "swr";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 import PersonRemoveRoundedIcon from "@mui/icons-material/PersonRemoveRounded";
 import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
 import { useRouter } from "next/router";
@@ -8,8 +13,16 @@ import axios from "axios";
 
 const FriendsField = (item) => {
   const { mutate } = useSWRConfig();
+  const [open, setOpen] = useState(false);
   // eslint-disable-next-line
   const [friendData] = useState(item.item);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const handleDeleteFriend = async () => {
     await axios({
       method: "put",
@@ -30,7 +43,7 @@ const FriendsField = (item) => {
       : friendData.userTwo;
   const handleProfileClick = async () => {
     axios
-      .get("/api/profile/friends/friendinfo", {
+      .get("/api/friends/friendinformation", {
         params: {
           displayName: userDisplayed.displayName,
         },
@@ -39,13 +52,24 @@ const FriendsField = (item) => {
         router.push(`/profile/${res.data.userId}`); // profile page url here
       });
   };
+
+  const handleChatButtonClick = async () => {
+    router.push(
+      {
+        pathname: `/chats`,
+        query: { userInfo: userDisplayed.userId },
+      },
+      "/chats",
+    );
+  };
+
   const firstIcon = (
-    <IconButton onClick={handleDeleteFriend}>
+    <IconButton onClick={handleClickOpen}>
       <PersonRemoveRoundedIcon />
     </IconButton>
   );
   const secondIcon = (
-    <IconButton>
+    <IconButton onClick={handleChatButtonClick}>
       <ChatRoundedIcon />
     </IconButton>
   );
@@ -108,6 +132,23 @@ const FriendsField = (item) => {
         }}
       >
         {firstIcon}
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>Delete Friend</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-slide-description">
+              Are you sure you want to delete {userDisplayed.displayName} as a
+              friend?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={handleDeleteFriend}>Okay</Button>
+          </DialogActions>
+        </Dialog>
         {secondIcon}
       </Box>
     </Box>

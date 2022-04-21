@@ -34,9 +34,10 @@ export default function Suggestions() {
     <Box
       sx={{
         paddingX: "1rem",
-        paddingY: "1.5rem",
+        paddingY: "1rem",
         backgroundColor: "background.paper",
-        borderRadius: 2,
+        border: "1px solid rgba(0, 0, 0, 0.12)",
+        borderRadius: 1,
       }}
     >
       <Stack spacing={1}>
