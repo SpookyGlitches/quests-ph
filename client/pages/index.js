@@ -4,10 +4,12 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
+  Grid,
   Typography,
   Select,
   MenuItem,
   DialogContentText,
+  Stack,
   InputLabel,
   FormControl,
   DialogActions,
@@ -23,6 +25,7 @@ import { useSession, getSession } from "next-auth/react";
 import AppLayout from "../components/Layouts/AppLayout";
 import CreatePost from "../components/Quest/Post/CreatePost";
 import PostsList from "../components/Quest/Post/PostsList";
+import Suggestion from "../components/Common/Suggestions";
 
 function CreatePostModal({ open, setOpen }) {
   const { data: quests } = useSWR(open ? "/quests?" : null);
@@ -92,24 +95,25 @@ export default function Home() {
   const [open, setOpen] = useState(false);
 
   return (
-    <>
-      <Box
-        sx={{
-          width: {
-            xs: "100%",
-            lg: "80%",
-            xl: "70%",
-          },
-        }}
-      >
-        <CreatePost
-          onCreatePostClick={() => setOpen(true)}
-          rootStyles={{ marginBottom: 4 }}
-        />
-        <PostsList url="/home" searchParams={{ take: 5 }} />
-      </Box>
-      <CreatePostModal open={open} setOpen={setOpen} />
-    </>
+    <Grid container spacing={4}>
+      <Grid item xs={12} lg={8}>
+        <Box>
+          <CreatePost
+            onCreatePostClick={() => setOpen(true)}
+            rootStyles={{ marginBottom: 4 }}
+          />
+          <PostsList url="/home" searchParams={{ take: 5 }} />
+        </Box>
+        <CreatePostModal open={open} setOpen={setOpen} />
+      </Grid>
+      <Grid item xs={12} lg={4} sx={{}}>
+        <Box sx={{}}>
+          <Stack spacing={2}>
+            <Suggestion />
+          </Stack>
+        </Box>
+      </Grid>
+    </Grid>
   );
 }
 

@@ -5,7 +5,7 @@ import QuestHeader from "../Quest/QuestHeader";
 import Todo from "../Quest/Tasks/ToDo";
 import EndQuest from "../Quest/EndQuest";
 import DateCard from "../Quest/Tasks/DateCard";
-import Suggestions from "../Common/Suggestions";
+
 import VideoCallRoom from "../Quest/VideoCallRoom";
 
 export default function QuestLayout({ children }) {
@@ -35,7 +35,6 @@ export default function QuestLayout({ children }) {
           <Stack spacing={3}>
             <DateCard />
             <Todo />
-            <Suggestions />
             {partyMember.role === "PARTY_LEADER" && <VideoCallRoom />}
             {partyMember.role === "PARTY_LEADER" && <EndQuest />}
           </Stack>
