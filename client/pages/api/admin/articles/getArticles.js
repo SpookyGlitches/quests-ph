@@ -7,7 +7,7 @@ export default async function getAllArticles(req, res) {
 
   try {
     const articles =
-      await prisma.$queryRaw`SELECT articleId, fullName, category, link FROM user INNER JOIN article ON article.userId = user.userId WHERE approvedAt IS NULL AND article.updatedAt IS NULL`;
+      await prisma.$queryRaw`SELECT articleId, fullName, category, link FROM user INNER JOIN Article ON Article.userId = User.userId WHERE approvedAt IS NULL AND Article.updatedAt IS NULL`;
     return res.status(200).json(articles);
   } catch (error) {
     console.log(error);
