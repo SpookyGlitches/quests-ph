@@ -149,17 +149,10 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-<<<<<<< HEAD
       <Link href={"/notifications"} passHref>
         <MenuItem>
           <IconButton size="large" aria-label="" color="inherit">
             <Badge badgeContent={data ? data : 0} color="error">
-=======
-      <Link href="/notifications" passHref>
-        <MenuItem>
-          <IconButton size="large" aria-label="" color="inherit">
-            <Badge badgeContent={data || 0} color="error">
->>>>>>> b3531a07ba3c12ffdcdd1335342ce582439b609f
               <NotificationsRoundedIcon />
             </Badge>
           </IconButton>
@@ -231,11 +224,7 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
             <Link href="/notifications" passHref>
               <Tooltip title="Notifications" sx={{ p: 0.5 }}>
                 <IconButton size="large" aria-label="" color="inherit">
-<<<<<<< HEAD
                   <Badge badgeContent={data ? data : 0} color="error">
-=======
-                  <Badge badgeContent={data || 0} color="error">
->>>>>>> b3531a07ba3c12ffdcdd1335342ce582439b609f
                     <NotificationsRoundedIcon />
                   </Badge>
                 </IconButton>

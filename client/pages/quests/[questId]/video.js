@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Header from "@custom/shared/components/Header";
 import getDemoProps from "@custom/shared/lib/demoProps";
-import Call from "../../../components/Video/Call";
-import Home from "../../../components/Video/Home";
+import Call from "../components/Call";
+import Home from "../components/Home";
 
 export default function Index({ isConfigured = false }) {
   const [room, setRoom] = useState(null);

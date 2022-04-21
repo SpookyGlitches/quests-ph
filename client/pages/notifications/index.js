@@ -19,10 +19,6 @@ import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
 import useSWR, { mutate } from "swr";
 import { formatDistance } from "date-fns";
 import axios from "axios";
-<<<<<<< HEAD
-
-=======
->>>>>>> b3531a07ba3c12ffdcdd1335342ce582439b609f
 import AppLayout from "../../components/Layouts/AppLayout";
 
 const index = () => {
