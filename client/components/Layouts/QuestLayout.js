@@ -5,14 +5,8 @@ import QuestHeader from "../Quest/QuestHeader";
 import Todo from "../Quest/Tasks/ToDo";
 import EndQuest from "../Quest/EndQuest";
 import DateCard from "../Quest/Tasks/DateCard";
-<<<<<<< HEAD
 
 import VideoCallRoom from "../Quest/VideoCallRoom";
-=======
-import Suggestions from "../Common/Suggestions";
-import { QuestContext } from "../../context/QuestContext";
-import { PartyMemberContext } from "../../context/PartyMemberContext";
->>>>>>> 945ede3705f02cbe8af7d19079355b0aa339ec8c
 
 export default function QuestLayout({ children }) {
   const router = useRouter();
