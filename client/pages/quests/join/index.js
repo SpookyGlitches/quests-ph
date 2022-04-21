@@ -5,8 +5,9 @@ import axios from "axios";
 import { getSession } from "next-auth/react";
 import AppLayout from "../../../components/Layouts/AppLayout";
 import WoopModal from "../../../components/Quest/WoopModal";
-import prisma from "../../../lib/prisma";
-
+// import prisma from "../../../lib/prisma";
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 const Index = ({ error, token }) => {
   const router = useRouter();
 
@@ -84,8 +85,10 @@ export async function getServerSideProps(context) {
       },
       select: {
         partyMembers: {
+          select: {
+            role: true,
+          },
           where: {
-            // userId: user.userId,
             deletedAt: null,
           },
         },
