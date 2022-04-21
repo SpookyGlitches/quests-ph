@@ -52,9 +52,16 @@ async function addComment(req, res) {
       transactions.push(awardPointsOperation);
     }
 
-    const awardData = await maybeAwardUserForComment(user.userId);
-    if (awardData) {
-      const { insertUserBadgeData, insertNotificationData } = awardData;
+    const { updateUserCurrency, insertUserBadgeData, insertNotificationData } =
+      await maybeAwardUserForComment(user.userId);
+
+    const updateUserCurrencyOperation = prisma.userCurrency.update({
+      where: updateUserCurrency.where,
+      data: updateUserCurrency.data,
+    });
+    transactions.push(updateUserCurrencyOperation);
+
+    if (insertUserBadgeData && insertNotificationData) {
       const insertUserBadgeOperation = prisma.userBadge.create({
         data: insertUserBadgeData,
       });
