@@ -40,7 +40,6 @@ async function addReact(req, res) {
         postId: parsedPostId,
       },
     });
-    console.log(existingReact);
     if (existingReact) return res.status(400).send();
 
     const transactions = [];
@@ -56,7 +55,10 @@ async function addReact(req, res) {
     transactions.push(postReactOperation);
 
     // award award points brother
-    const post = await prisma.post.findUnique({
+    const {
+      partyMemberId: authorPartyMemberId,
+      partyMember: { role: authorRole },
+    } = await prisma.post.findUnique({
       where: {
         postId: parsedPostId,
       },
@@ -71,12 +73,12 @@ async function addReact(req, res) {
       rejectOnNotFound: true,
     });
 
-    if (post.partyMemberId !== partyMember.partyMemberId) {
-      if (post.partyMember.role !== "MENTOR") {
+    if (authorPartyMemberId !== partyMember.partyMemberId) {
+      if (authorRole !== "MENTOR") {
         // do not award when a post author reacts on their own post or if they are a mentor
         const awardPointsOperation = prisma.pointsLog.create({
           data: {
-            partyMemberId: post.partyMemberId,
+            partyMemberId: authorPartyMemberId,
             gainedPoints: 5,
             action: "RECEIVED_POST_REACT",
           },
@@ -86,10 +88,16 @@ async function addReact(req, res) {
     }
 
     // award badge
-    const awardData = await maybeAwardUserForReact(user.userId);
+    const { updateUserCurrency, insertUserBadgeData, insertNotificationData } =
+      await maybeAwardUserForReact(user.userId);
 
-    if (awardData) {
-      const { insertUserBadgeData, insertNotificationData } = awardData;
+    const updateUserCurrencyOperation = prisma.userCurrency.update({
+      where: updateUserCurrency.where,
+      data: updateUserCurrency.data,
+    });
+    transactions.push(updateUserCurrencyOperation);
+
+    if (insertNotificationData && insertUserBadgeData) {
       const insertUserBadgeOperation = prisma.userBadge.create({
         data: insertUserBadgeData,
       });
@@ -99,9 +107,9 @@ async function addReact(req, res) {
       transactions.push(insertUserBadgeOperation);
       transactions.push(insertNotificationOperation);
     }
+    // end of badge awards
 
     const [postReact] = await prisma.$transaction(transactions);
-    console.log(postReact);
     return res.json(postReact);
   } catch (err) {
     console.error(err);
