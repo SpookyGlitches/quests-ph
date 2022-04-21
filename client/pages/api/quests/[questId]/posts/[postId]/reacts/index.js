@@ -85,29 +85,31 @@ async function addReact(req, res) {
         });
         transactions.push(awardPointsOperation);
       }
-    }
 
-    // award badge
-    const { updateUserCurrency, insertUserBadgeData, insertNotificationData } =
-      await maybeAwardUserForReact(user.userId);
+      const {
+        updateUserCurrency,
+        insertUserBadgeData,
+        insertNotificationData,
+      } = await maybeAwardUserForReact(user.userId);
 
-    const updateUserCurrencyOperation = prisma.userCurrency.update({
-      where: updateUserCurrency.where,
-      data: updateUserCurrency.data,
-    });
-    transactions.push(updateUserCurrencyOperation);
-
-    if (insertNotificationData && insertUserBadgeData) {
-      const insertUserBadgeOperation = prisma.userBadge.create({
-        data: insertUserBadgeData,
+      const updateUserCurrencyOperation = prisma.userCurrency.update({
+        where: updateUserCurrency.where,
+        data: updateUserCurrency.data,
       });
-      const insertNotificationOperation = prisma.notification.create({
-        data: insertNotificationData,
-      });
-      transactions.push(insertUserBadgeOperation);
-      transactions.push(insertNotificationOperation);
+      transactions.push(updateUserCurrencyOperation);
+
+      if (insertNotificationData && insertUserBadgeData) {
+        const insertUserBadgeOperation = prisma.userBadge.create({
+          data: insertUserBadgeData,
+        });
+        const insertNotificationOperation = prisma.notification.create({
+          data: insertNotificationData,
+        });
+        transactions.push(insertUserBadgeOperation);
+        transactions.push(insertNotificationOperation);
+      }
+      // end of badge awards
     }
-    // end of badge awards
 
     const [postReact] = await prisma.$transaction(transactions);
     return res.json(postReact);

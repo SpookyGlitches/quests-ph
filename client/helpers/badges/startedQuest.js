@@ -77,6 +77,5 @@ export default async function maybeAwardUserForStartingQuest(userId) {
       break;
     }
   }
-
   return { updateUserCurrency, insertNotificationData, insertUserBadgeData };
 }

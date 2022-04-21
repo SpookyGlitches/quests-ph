@@ -1,6 +1,5 @@
-import { PrismaClient } from "@prisma/client";
-// import prisma from "../../lib/prisma";
-const prisma = new PrismaClient();
+import prisma from "../../lib/prisma";
+
 const badges = {
   expressive: {
     badgeId: 9,
