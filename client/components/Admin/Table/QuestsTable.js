@@ -16,9 +16,8 @@ export default function AdminDataGrid({ tableData, page, path }) {
   /* Quests Mgmt */
   const handleDeleteQuest = async (event, cellValues) => {
     try {
-      const res = await axios.put(
-        `/api/admin/quests/${cellValues.row.questId}/deleteQuest`,
-      );
+      const { questId } = cellValues.row;
+      const res = await axios.put(`/api/admin/quests/${questId}/deleteQuest`);
       router.reload();
       console.log(res);
     } catch (error) {
