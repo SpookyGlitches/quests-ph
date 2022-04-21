@@ -95,6 +95,7 @@ export default function EndQuest() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const [room, setRoom] = useState([]);
+  const [link, setLink] = useState("");
   const { questId } = router.query;
   const handleCancelClick = () => {
     setOpen(false);
@@ -130,21 +131,24 @@ export default function EndQuest() {
     handleOk();
   };
 
+  console.log(room.url);
   console.log(room);
+
   return (
     <>
-      {room.length < 0 ? (
-        <Link href={url} passHref>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={handleButtonClick}
-            startIcon={<VideoCameraFrontRoundedIcon />}
-          >
-            {"Room Link : "}
-            {url}
-          </Button>
-        </Link>
+      {room.length > 0 ? (
+        room.map((item) => {
+          <Link href={item.url} passHref>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleButtonClick}
+              startIcon={<VideoCameraFrontRoundedIcon />}
+            >
+              {item.url}
+            </Button>
+          </Link>;
+        })
       ) : (
         <Button
           variant="outlined"
@@ -152,9 +156,10 @@ export default function EndQuest() {
           onClick={handleButtonClick}
           startIcon={<VideoCameraFrontRoundedIcon />}
         >
-          New Video Chat Room
+          Start A Video Call
         </Button>
       )}
+
       <DialogItem
         open={open}
         handleCancel={handleCancelClick}
