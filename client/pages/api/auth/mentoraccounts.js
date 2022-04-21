@@ -76,6 +76,16 @@ export default async function (req, res) {
           role: userDetails.role,
           token: userDetails.token,
           ...awardOperations,
+          userCurrency: {
+            create: {
+              acceptedArticles: 0,
+              completedPublicQuests: 0,
+              startedPublicQuests: 0,
+              posts: 0,
+              postReacts: 0,
+              comments: 0,
+            },
+          },
         },
       });
       // can assume user already exists here since it would throw an error if theyre not yet created at this point

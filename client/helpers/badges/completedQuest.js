@@ -9,6 +9,7 @@ const badges = {
   },
   achiever: {
     badgeId: 3,
+
     necessaryCompletedQuests: 10,
     message:
       "You have received a badge for completing 10 public Quests. You're an achiever!",
@@ -32,138 +33,119 @@ const badges = {
   },
 };
 
-function insertDataForPrisma(
-  users,
-  badge,
-  insertUserBadgeData,
-  insertNotificationData,
-) {
-  const { badgeId, message, necessaryCompletedQuests } = badge;
-
-  users.forEach((user) => {
-    const meetsNecessaryCompleted =
-      user.partyMembers.length >= necessaryCompletedQuests - 1; //
-
-    const doesntHaveTheBadge = !user.userBadges.find(
-      (userBadge) => userBadge.badgeId === badgeId,
-    );
-
-    // get users who have this specific number of completed quests and if they dont have that badgeID
-    if (meetsNecessaryCompleted && doesntHaveTheBadge) {
-      insertUserBadgeData.push({
-        badgeId,
-        userId: user.userId,
-      });
-      insertNotificationData.push({
-        message,
-        userId: user.userId,
-        type: "RECEIVED_BADGE",
-        metadata: JSON.stringify({ badgeId }),
-      });
-    }
-  });
-}
-
-async function getPartyMembers(questId) {
-  const quest = await prisma.quest.findUnique({
+async function getPartyMembersInfo(questId) {
+  const partyMembers = await prisma.partyMember.findMany({
     where: {
       questId,
+      deletedAt: null,
     },
+    take: 5,
     select: {
-      partyMembers: {
-        where: {
-          user: {
-            deletedAt: null,
-          },
-          deletedAt: null,
-        },
+      userId: true,
+      role: true,
+      partyMemberId: true,
+      user: {
         select: {
-          partyMemberId: true,
-          role: true,
-          user: {
+          userCurrency: {
             select: {
-              userId: true,
+              completedPublicQuests: true,
             },
           },
         },
       },
     },
-    rejectOnNotFound: true,
   });
-
-  const partyMemberUserIds = quest.partyMembers.map(
-    (partyMember) => partyMember.user.userId,
-  );
-
-  const users = await prisma.user.findMany({
-    where: {
-      userId: {
-        in: partyMemberUserIds,
-      },
-    },
-    select: {
-      role: true,
-      userId: true,
-      userBadges: {
-        where: {
-          badgeId: {
-            in: [2, 3, 4, 13, 14],
-          },
-        },
-        select: {
-          userBadgeId: true,
-          badgeId: true,
-        },
-      },
-      partyMembers: {
-        where: {
-          quest: {
-            NOT: [{ completedAt: null }],
-            visibility: "PUBLIC",
-            deletedAt: null,
-          },
-          deletedAt: null,
-        },
-        select: {
-          questId: true,
-        },
-      },
-    },
-  });
-
-  return users;
+  return partyMembers;
 }
 
-function groupUsers(users) {
-  const mentors = [];
-  const mentees = [];
+function shouldAward(completedPublicQuests, necessaryCompletedQuests) {
+  return completedPublicQuests === necessaryCompletedQuests - 1;
+}
 
-  users.forEach((user) => {
-    if (user.role === "mentor") mentors.push(user);
-    else mentees.push(user);
+function insertDataForPrisma(
+  userId,
+  badgeId,
+  message,
+  insertUserBadgeData,
+  insertNotificationData,
+) {
+  insertUserBadgeData.push({
+    badgeId,
+    userId,
   });
+  insertNotificationData.push({
+    message,
+    userId,
+    type: "RECEIVED_BADGE",
+    metadata: JSON.stringify({ badgeId }),
+  });
+}
 
-  return { mentors, mentees };
+function updatePartyMembersCurrencies(partyMembersInfo) {
+  const mappedUserIds = partyMembersInfo.map(
+    (partyMember) => partyMember.userId,
+  );
+  const userCurrencyUpdate = {
+    where: {
+      userId: {
+        in: mappedUserIds,
+      },
+    },
+    data: {
+      completedPublicQuests: {
+        increment: 1,
+      },
+    },
+  };
+
+  return userCurrencyUpdate;
 }
 
 export default async function awardSomePartyMembersForCompletingQuest(questId) {
-  // questId should be Number
-  const users = await getPartyMembers(questId);
-  const { mentors, mentees } = groupUsers(users);
-  const { youngOne, achiever, manOfAction, paver, pathfinder } = badges;
+  const partyMembersInfo = await getPartyMembersInfo(questId);
 
   const userBadgeData = [];
   const notificationData = [];
 
-  // inefficient :)
-  // kay check siya for young one award and check again if legible for achiever
+  const updateUsersCurrencies = updatePartyMembersCurrencies(partyMembersInfo);
 
-  insertDataForPrisma(mentees, youngOne, userBadgeData, notificationData);
-  insertDataForPrisma(mentees, achiever, userBadgeData, notificationData);
-  insertDataForPrisma(mentees, manOfAction, userBadgeData, notificationData);
+  const { youngOne, achiever, manOfAction, paver, pathFinder } = badges;
+  const menteeBadges = [youngOne, achiever, manOfAction];
+  const mentorBadges = [paver, pathFinder];
 
-  insertDataForPrisma(mentors, paver, userBadgeData, notificationData);
-  insertDataForPrisma(mentors, pathfinder, userBadgeData, notificationData);
+  partyMembersInfo.forEach((partyMember) => {
+    const {
+      userId,
+      role,
+      user: { userCurrency },
+    } = partyMember;
+    let badgesForCheck = [];
 
-  return { userBadgeData, notificationData };
+    if (role === "MENTOR") {
+      badgesForCheck = mentorBadges;
+    } else {
+      badgesForCheck = menteeBadges;
+    }
+
+    let x = 0;
+    let awarded = false;
+    while (!awarded && x < badgesForCheck.length) {
+      const award = shouldAward(
+        userCurrency.completedPublicQuests,
+        badgesForCheck[x].necessaryCompletedQuests,
+      );
+      if (award) {
+        insertDataForPrisma(
+          userId,
+          badgesForCheck[x].badgeId,
+          badgesForCheck[x].message,
+          userBadgeData,
+          notificationData,
+        );
+      }
+      awarded = award;
+      x++;
+    }
+  });
+  return { userBadgeData, notificationData, updateUsersCurrencies };
 }
