@@ -4,7 +4,7 @@ import { PartyMemberRole } from "@prisma/client";
 import { getSession } from "next-auth/react";
 import prisma from "../../../lib/prisma";
 import { step1Validations, step2Validations } from "../../../validations/quest";
-import maybeAwardUser from "../../../helpers/badges/startedQuest";
+import maybeAwardUserForStartingQuest from "../../../helpers/badges/startedQuest";
 
 function computeIfJoined(quests, role, userId) {
   const computed = [];
@@ -137,21 +137,24 @@ async function getQuests(req, res) {
 }
 
 async function createQuest(req, res) {
+  const {
+    wish,
+    difficulty,
+    visibility,
+    category,
+    startDate,
+    endDate,
+    obstacle,
+    plan,
+    outcome,
+  } = req.body;
   try {
-    const {
-      wish,
-      difficulty,
-      visibility,
-      category,
-      startDate,
-      endDate,
-      obstacle,
-      plan,
-      outcome,
-    } = req.body;
     const { user } = await getSession({ req });
+
     await step1Validations.concat(step2Validations).validate({ ...req.body });
+
     const transactions = [];
+
     const insertQuestWithMemberOperation = prisma.quest.create({
       data: {
         wish,
@@ -173,15 +176,22 @@ async function createQuest(req, res) {
         },
       },
     });
-
     transactions.push(insertQuestWithMemberOperation);
 
     if (visibility === "PUBLIC") {
-      const awardData = await maybeAwardUser(user.userId);
+      const {
+        updateUserCurrency,
+        insertNotificationData,
+        insertUserBadgeData,
+      } = await maybeAwardUserForStartingQuest(user.userId);
 
-      if (awardData) {
-        console.log("User is awarded");
-        const { insertUserBadgeData, insertNotificationData } = awardData;
+      const updateUserCurrencyOperation = prisma.userCurrency.update({
+        where: updateUserCurrency.where,
+        data: updateUserCurrency.data,
+      });
+      transactions.push(updateUserCurrencyOperation);
+
+      if (insertNotificationData && insertUserBadgeData) {
         const insertUserBadgeOperation = prisma.userBadge.create({
           data: insertUserBadgeData,
         });
@@ -191,8 +201,6 @@ async function createQuest(req, res) {
         });
         transactions.push(insertUserBadgeOperation);
         transactions.push(insertNotificationOperation);
-      } else {
-        console.log("User is not awarded");
       }
     }
 
