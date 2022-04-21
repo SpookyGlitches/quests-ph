@@ -74,6 +74,10 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
   };
 
   const handleMenuClose = () => {
+    setAnchorEl(null);
+    handleMobileMenuClose();
+  };
+  const handleSettings = () => {
     router.push("/settings");
     setAnchorEl(null);
     handleMobileMenuClose();
@@ -119,7 +123,7 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleProfile}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleSettings}>My account</MenuItem>
       <MenuItem
         onClick={() =>
           signOut({

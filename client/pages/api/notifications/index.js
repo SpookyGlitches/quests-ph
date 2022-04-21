@@ -8,7 +8,7 @@ async function /* eslint-disable */ getNotificataion(req, res) {
     const notif = await prisma.notification.findMany({
       where: { userId: user.userId },
       orderBy: { createdAt: "desc" },
-    }); /* eslint-disable */
+    });
 
     const parse = notif.map((x) => JSON.parse(x.metadata));
 
@@ -16,22 +16,13 @@ async function /* eslint-disable */ getNotificataion(req, res) {
 
     const results = [];
 
-    // for (let x = 0; x < notif.length; x++) {
-    //   const getBadgeInfo = await prisma.badge.findFirst({
-    //     where: {
-    //       badgeId: badgeIds[x],
-    //     },
-    //   });
-    //   results.push(getBadgeInfo);
-    // }
-
     if (badgeIds) {
       for (let x = 0; x < badgeIds.length; x++) {
         const notification =
           /* eslint-disable */
           await prisma.$queryRaw`select n.notificationId, n.userId, n.message, n.type, n.metadata, n.view_status,
-          n.createdAt, b.badgeId, b.name, b.description, b.image FROM notification AS n
-          INNER JOIN badge AS b ON b.badgeId = ${badgeIds[x]} WHERE n.userId = ${user.userId} ORDER BY n.createdAt DESC`;
+          n.createdAt, b.badgeId, b.name, b.description, b.image FROM Notification AS n
+          INNER JOIN Badge AS b ON b.badgeId = ${badgeIds[x]} WHERE n.userId = ${user.userId} ORDER BY n.createdAt DESC`;
 
         results.push(notification[x]);
       }
@@ -44,7 +35,7 @@ async function /* eslint-disable */ getNotificataion(req, res) {
     return res.status(200).json(results);
   } catch (err) {
     console.log(err);
-    res.status(400).send();
+    return res.status(400).send();
   }
 }
 
@@ -66,7 +57,7 @@ async function updateSeenRead(req, res) {
   }
 }
 
-export default async function handler(req, res) {
+export default function handler(req, res) {
   switch (req.method) {
     case "GET":
       return getNotificataion(req, res);

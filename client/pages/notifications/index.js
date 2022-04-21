@@ -19,6 +19,7 @@ import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
 import useSWR, { mutate } from "swr";
 import { formatDistance } from "date-fns";
 import axios from "axios";
+import { getSession } from "next-auth/react";
 import AppLayout from "../../components/Layouts/AppLayout";
 
 const index = () => {
@@ -180,3 +181,11 @@ const index = () => {
 };
 
 export default index;
+
+export async function getServerSideProps(context) {
+  return {
+    props: {
+      session: await getSession(context),
+    },
+  };
+}
