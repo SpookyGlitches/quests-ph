@@ -24,7 +24,7 @@ export default function PostActions(props) {
     (react) => react.partyMember.userId === userId,
   );
 
-  const addReact = async (type) => {
+  const addReact = (type) => {
     if (disabled) {
       enqueueSnackbar(
         "You cannot react since the Quest is already completed.",
@@ -35,23 +35,22 @@ export default function PostActions(props) {
       );
       return;
     }
-    const { data } = await axios.post(
-      `/api/quests/${questId}/posts/${postId}/reacts`,
-      {
-        type,
-      },
-    );
-    mutate(
-      `/quests/${questId}/posts/${postId}/reacts`,
-
-      (reactsData) => {
+    mutate(`/quests/${questId}/posts/${postId}/reacts`, async (reactsData) => {
+      try {
+        const { data } = await axios.post(
+          `/api/quests/${questId}/posts/${postId}/reacts`,
+          {
+            type,
+          },
+        );
         return [...reactsData, { partyMember: { userId }, ...data }];
-      },
-      { revalidate: false },
-    );
+      } catch {
+        return reactsData;
+      }
+    });
   };
 
-  const updateReact = async (type, selectedReact) => {
+  const updateReact = (type, selectedReact) => {
     if (disabled) {
       enqueueSnackbar(
         "You cannot react since the Quest is already completed.",
@@ -62,51 +61,64 @@ export default function PostActions(props) {
       );
       return;
     }
-    await axios.put(
-      `/api/quests/${questId}/posts/${postId}/reacts/${selectedReact.postReactId}`,
-      {
-        type,
-      },
+
+    const newReacts = [...postReacts];
+    const selectedIndex = newReacts.findIndex(
+      (x) => x.postReactId === selectedReact.postReactId,
     );
+    newReacts[selectedIndex] = {
+      ...newReacts[selectedIndex],
+      type,
+    };
+
     mutate(
       `/quests/${questId}/posts/${postId}/reacts`,
-      (reactsData) => {
-        const newReactsData = [...reactsData];
-        const selectedIndex = reactsData.findIndex(
-          (x) => x.postReactId === selectedReact.postReactId,
-        );
-        newReactsData[selectedIndex] = {
-          ...newReactsData[selectedIndex],
-          type,
-        };
-        return newReactsData;
+      async () => {
+        try {
+          await axios.put(
+            `/api/quests/${questId}/posts/${postId}/reacts/${selectedReact.postReactId}`,
+            {
+              type,
+            },
+          );
+          return newReacts;
+        } catch {
+          return postReacts;
+        }
       },
-      { revalidate: false },
+      { optimisticData: newReacts },
     );
   };
 
-  const deleteReact = async (postReactId) => {
-    await axios.delete(
-      `/api/quests/${questId}/posts/${postId}/reacts/${postReactId}`,
+  const deleteReact = (postReactId) => {
+    const optimisticReacts = postReacts.filter(
+      (react) => react.postReactId !== selected.postReactId,
     );
     mutate(
       `/quests/${questId}/posts/${postId}/reacts`,
-      (reactsData) => {
-        return reactsData.filter(
-          (react) => react.postReactId !== selected.postReactId,
-        );
+      async () => {
+        try {
+          await axios.delete(
+            `/api/quests/${questId}/posts/${postId}/reacts/${postReactId}`,
+          );
+          return optimisticReacts;
+        } catch {
+          return postReactId;
+        }
       },
-      { revalidate: false },
+      { optimisticData: optimisticReacts },
     );
   };
 
   const handleReactClick = async (type) => {
     try {
-      if (!selected) await addReact(type);
-      else if (selected.type === type) await deleteReact(selected.postReactId);
-      else await updateReact(type, selected);
+      if (!selected) addReact(type);
+      else if (selected.type === type) deleteReact(selected.postReactId);
+      else updateReact(type, selected);
     } catch (error) {
       console.error(error);
+    } finally {
+      setOpenReactOptions(false);
     }
   };
 
