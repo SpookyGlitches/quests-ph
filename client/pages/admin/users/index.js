@@ -1,10 +1,10 @@
+import { getSession } from "next-auth/react";
 import { Box, Typography } from "@mui/material";
 import Link from "next/link";
 import * as React from "react";
 import useSWR from "swr";
 import BasicTable from "../../../components/Admin/Table/UsersTable";
 import AdminLayout from "../../../components/Layouts/AdminLayout";
-import { getSession } from "next-auth/react";
 
 export default function Index() {
   const { data: usersData, error } = useSWR(`/admin/users/getUsers`);
