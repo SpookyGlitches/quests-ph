@@ -35,7 +35,7 @@ export default async function deleteQuests(req, res) {
     const transactions = [];
     for (let i = 0; i < postIds.length; i++) {
       transactions.push(
-        prisma.postfile.updateMany({
+        prisma.postFile.updateMany({
           where: {
             postId: postIds[i],
           },

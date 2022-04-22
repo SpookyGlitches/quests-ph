@@ -34,7 +34,7 @@ export default async function deleteUsers(req, res) {
     const transactions = [];
     for (let i = 0; i < postIds.length; i++) {
       transactions.push(
-        prisma.postfile.updateMany({
+        prisma.postFile.updateMany({
           where: {
             postId: postIds[i],
           },
@@ -194,6 +194,8 @@ export default async function deleteUsers(req, res) {
         ],
       },
       data: {
+        status: "INACTIVE",
+        updatedAt: new Date(),
         deletedAt: new Date(),
       },
     });
@@ -232,7 +234,7 @@ export default async function deleteUsers(req, res) {
     transactions.push(deleteQuestPartyBan);
 
     // Delete user badges
-    const deleteUserBadge = await prisma.userBadge.updateMany({
+    const deleteUserBadge = prisma.userBadge.updateMany({
       where: {
         userId: req.query.userId,
       },
@@ -243,7 +245,7 @@ export default async function deleteUsers(req, res) {
     transactions.push(deleteUserBadge);
 
     // delete user
-    const deleteUser = await prisma.user.update({
+    const deleteUser = prisma.user.update({
       where: {
         userId: req.query.userId,
       },
