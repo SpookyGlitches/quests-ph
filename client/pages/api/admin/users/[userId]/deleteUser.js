@@ -99,7 +99,6 @@ export default async function deleteUsers(req, res) {
         }),
       );
     }
-
     // Delete articles
     const deleteArticles = prisma.article.updateMany({
       where: {
