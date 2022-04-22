@@ -11,7 +11,7 @@ function PostPage(props) {
 
   if (!posts) {
     setLoading(true);
-    return <div>Loading</div>;
+    return null;
   }
 
   if (posts.length < searchParams.take) {
