@@ -21,7 +21,7 @@ export default async function getAllQuests(req, res) {
     //   },
     // });
     const quests =
-      await prisma.$queryRaw`SELECT questId, User.fullName, wish, difficulty, visibility, category FROM User INNER JOIN Quest ON Quest.userId = User.userId WHERE Quest.completedAt IS NULL AND Quest.deletedAt IS NULL`;
+      await prisma.$queryRaw`SELECT questId, User.displayName, wish, difficulty, visibility, category FROM User INNER JOIN Quest ON Quest.userId = User.userId WHERE Quest.completedAt IS NULL AND Quest.deletedAt IS NULL`;
     return res.status(200).json(quests);
   } catch (error) {
     console.log(error);

@@ -40,7 +40,7 @@ export default function AdminDataGrid({ tableData, page, path }) {
           headerAlign: "center",
         },
         {
-          field: "fullName",
+          field: "displayName",
           headerName: "Party Leader",
           width: 160,
           headerAlign: "center",
@@ -110,7 +110,7 @@ export default function AdminDataGrid({ tableData, page, path }) {
           headerAlign: "center",
         },
         {
-          field: "fullName",
+          field: "displayName",
           headerName: "Party Leader",
           width: 160,
           headerAlign: "center",
