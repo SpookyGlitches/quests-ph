@@ -95,6 +95,7 @@ export default function ChatTalkLayout() {
     } else {
       console.log("wala");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   let searchFriendBar;
