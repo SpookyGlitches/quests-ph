@@ -108,8 +108,8 @@ export default function AdminDataGrid({ tableData, page, path }) {
           headerAlign: "center",
         },
         {
-          field: "fullName",
-          headerName: "Applicant Name",
+          field: "displayName",
+          headerName: "Applicant Display Name",
           width: 250,
           headerAlign: "center",
         },
@@ -185,8 +185,8 @@ export default function AdminDataGrid({ tableData, page, path }) {
           headerAlign: "center",
         },
         {
-          field: "fullName",
-          headerName: "Applicant Name",
+          field: "displayName",
+          headerName: "Applicant Display Name",
           width: 250,
           headerAlign: "center",
         },
