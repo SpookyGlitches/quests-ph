@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import { Stack } from "@mui/material";
+import { CircularProgress, Stack, Box } from "@mui/material";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { useState } from "react";
@@ -13,10 +13,20 @@ function QuestPage(props) {
 
   const queryString = new URLSearchParams({ ...searchParams, skip }).toString();
   const { data: quests } = useSWR(url ? `${url}?${queryString}` : null);
-
   if (!quests) {
     setLoading(true);
-    return <div>Loading</div>;
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: 100,
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
   }
 
   if (quests.length < searchParams.take) {
