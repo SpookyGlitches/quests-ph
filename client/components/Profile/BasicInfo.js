@@ -27,10 +27,6 @@ export default function BasicInfo({ userId }) {
     );
   }
 
-  // if (points) {
-  //   return JSON.stringify(points);
-  // }
-
   const letter = myInfo.displayName.charAt(0).toUpperCase();
   return (
     <Box
