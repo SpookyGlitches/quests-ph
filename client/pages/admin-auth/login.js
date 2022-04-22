@@ -1,3 +1,4 @@
+import { getSession, signIn } from "next-auth/react";
 import {
   Typography,
   TextField,
@@ -15,7 +16,6 @@ import {
 import { useState, useEffect } from "react";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import AuthHeader from "../../components/Auth/AuthHeader";
@@ -195,4 +195,29 @@ export default function AdminLogin() {
       </Stack>
     </Box>
   );
+}
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  if (session) {
+    if (session.user.role !== "admin") {
+      return {
+        redirect: {
+          destination: "/",
+          permanent: false,
+        },
+      };
+    }
+    return {
+      redirect: {
+        destination: "/admin",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: { session },
+  };
 }
