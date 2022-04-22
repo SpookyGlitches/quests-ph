@@ -131,6 +131,13 @@ export async function getServerSideProps(context) {
     };
   }
 
+  if (session.user.role === "admin") {
+    return {
+      redirect: {
+        destination: "/admin",
+      },
+    };
+  }
   return {
     props: {},
   };
