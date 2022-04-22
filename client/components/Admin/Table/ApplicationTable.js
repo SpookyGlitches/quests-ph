@@ -11,7 +11,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 const openFile = (key) => {
   const newWindow = window.open(
-    `${process.env.NEXT_PUBLIC_MENTORFILES_BASE_LINK}/${key}`,
+    `${process.env.NEXT_PUBLIC_MENTORFILES_BASE_LINK}${key}`,
     "_blank",
     "noopener,noreferrer",
   );
