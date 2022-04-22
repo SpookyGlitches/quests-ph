@@ -25,13 +25,30 @@ export default function CommentInput(props) {
   const updateComment = async (values) => {
     const commentId = updating.comment?.commentId;
     try {
+      mutate(
+        `/quests/${questId}/posts/${postId}/comments`,
+        (comments) => {
+          const commentToUpdate = comments.findIndex(
+            (comment) => comment.commentId === commentId,
+          );
+          if (commentToUpdate === -1) return comments;
+          const newComments = [...comments];
+
+          newComments[commentToUpdate] = {
+            ...newComments[commentToUpdate],
+            content: values.content,
+          };
+          return newComments;
+        },
+        { revalidate: false },
+      );
+      reset();
+      setUpdating({ isUpdating: false, comment: null });
       await axios.put(
         `/api/quests/${questId}/posts/${postId}/comments/${commentId}`,
         values,
       );
       mutate(`/quests/${questId}/posts/${postId}/comments`);
-      reset();
-      setUpdating({ isUpdating: false, comment: null });
     } catch (err) {
       console.error(err);
     }
@@ -72,7 +89,6 @@ export default function CommentInput(props) {
     setUpdating({ isUpdating: false, comment: null });
   };
 
-  // todo, ea: when user wants to edit, scroll to this input
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Controller

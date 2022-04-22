@@ -11,6 +11,10 @@ const withQuestProtect = async (handler, req, res, allowedRoles) => {
         userId: user.userId,
         deletedAt: null,
       },
+      select: {
+        partyMemberId: true,
+        role: true,
+      },
     });
 
     if (partyMember && allowedRoles.includes(partyMember.role)) {

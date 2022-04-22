@@ -61,6 +61,8 @@ export default function CommentItem({
         type,
       },
     );
+    mutate(`/quests/${questId}/posts/${postId}/comments`);
+    setOpenReactOptions(false);
   };
 
   const updateReact = async (type, commentId, commentReactId) => {
@@ -74,17 +76,67 @@ export default function CommentItem({
       );
       return;
     }
-    await axios.put(
-      `/api/quests/${questId}/posts/${postId}/comments/${commentId}/reacts/${commentReactId}`,
-      {
-        type,
-      },
-    );
+    try {
+      mutate(
+        `/quests/${questId}/posts/${postId}/comments`,
+        async (comments) => {
+          const commentToUpdate = comments.findIndex(
+            (commentItem) => commentItem.commentId === commentId,
+          );
+          if (commentToUpdate === -1) return comments;
+          const x = comments[commentToUpdate].commentReacts.findIndex(
+            (commentReact) => commentReact.commentReactId === commentReactId,
+          );
+
+          const copiedComments = [...comments];
+
+          copiedComments[commentToUpdate].commentReacts[x] = {
+            ...comments[commentToUpdate].commentReacts[x],
+            type,
+          };
+          return copiedComments;
+        },
+        { revalidate: false },
+      );
+      setOpenReactOptions(false);
+      await axios.put(
+        `/api/quests/${questId}/posts/${postId}/comments/${commentId}/reacts/${commentReactId}`,
+        {
+          type,
+        },
+      );
+    } catch (err) {
+      console.error(err);
+    }
   };
   const deleteReact = async (commentReactId, commentId) => {
-    await axios.delete(
-      `/api/quests/${questId}/posts/${postId}/comments/${commentId}/reacts/${commentReactId}`,
-    );
+    try {
+      mutate(
+        `/quests/${questId}/posts/${postId}/comments`,
+        async (comments) => {
+          const commentToUpdate = comments.findIndex(
+            (commentItem) => commentItem.commentId === commentId,
+          );
+          if (commentToUpdate === -1) return comments;
+          const newReacts = comments[commentToUpdate].commentReacts.filter(
+            (commentReact) => commentReact.commentReactId !== commentReactId,
+          );
+
+          const copiedComments = [...comments];
+
+          copiedComments[commentToUpdate].commentReacts = newReacts;
+          return copiedComments;
+        },
+        { revalidate: false },
+      );
+      setOpenReactOptions(false);
+
+      await axios.delete(
+        `/api/quests/${questId}/posts/${postId}/comments/${commentId}/reacts/${commentReactId}`,
+      );
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const handleReactClick = async (type, commentId) => {
@@ -93,8 +145,6 @@ export default function CommentItem({
       else if (selected.type === type)
         await deleteReact(selected.commentReactId, commentId);
       else await updateReact(type, commentId, selected.commentReactId);
-      // todo, ea: dont revalidate
-      mutate(`/quests/${questId}/posts/${postId}/comments`);
     } catch (error) {
       console.error(error);
     }
