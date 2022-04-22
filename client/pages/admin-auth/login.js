@@ -57,7 +57,7 @@ export default function AdminLogin() {
     signIn("credentials", {
       email,
       password,
-      callbackUrl: `/admin/`,
+      callbackUrl: `/admin`,
       redirect: false,
     }).then((result) => {
       if (result.error !== null) {
@@ -73,7 +73,7 @@ export default function AdminLogin() {
           setLoginError(result.error);
         }
       } else {
-        router.push(result.url);
+        router.push("/admin");
       }
     });
   };
