@@ -32,9 +32,12 @@ export default async function rejectApplication(req, res) {
       },
     });
     transactions.push(setDeletedAtFile);
-    const setDeletedAtApplication = prisma.mentorApplication.deleteMany({
+    const setDeletedAtApplication = prisma.mentorApplication.updateMany({
       where: {
         mentorId: req.query.mentorId,
+      },
+      data: {
+        deletedAt: new Date(),
       },
     });
     transactions.push(setDeletedAtApplication);

@@ -9,8 +9,9 @@ export default async function approveReport(req, res) {
   try {
     const obj = JSON.stringify(req.body.duration);
     const num = Number(obj.charAt(obj.length - 2));
+
     const transactions = [];
-    const getUser = await prisma.user.findFirst({
+    const getUser = await prisma.user.findUnique({
       where: {
         userId: req.body.recipient,
       },
@@ -23,6 +24,7 @@ export default async function approveReport(req, res) {
         isBanned: true,
       },
     });
+
     transactions.push(updateUser);
     const approvedReport = prisma.UserReport.update({
       where: {
@@ -50,19 +52,19 @@ export default async function approveReport(req, res) {
       to: getUser.email,
       subject: `User Report`,
       html: `<div>
-      Greetings ${getUser.displayName}! We have recently received a report about your account. Here in Quests,
-      our users' welfare is one of the most important things we consider here. After careful review of the report
-      made against you, we have decided to temporarily ban your account for ${num} days. You will be unable to
-      access your account within ${num} days. However, you may log in after the said number of days.
+          Greetings ${getUser.displayName}! We have recently received a report about your account. Here in Quests,
+          our users' welfare is one of the most important things we consider here. After careful review of the report
+          made against you, we have decided to temporarily ban your account for ${num} days. You will be unable to
+          access your account within ${num} days. However, you may log in after the said number of days.
 
-      Thank you and have a great day!
+          Thank you and have a great day!
 
-<div>`,
+    <div>`,
     };
 
     await prisma.$transaction(transactions);
     await transporter.sendMail(mailData);
-    return res.status(200).json(approvedReport);
+    return res.status(200).json();
   } catch (error) {
     console.log(error);
     return res.status(400).json({ message: "Something went wrong" });
