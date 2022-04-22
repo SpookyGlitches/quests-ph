@@ -23,15 +23,17 @@ export default function CommmentsList({
   const deleteComment = async (commentId) => {
     try {
       setUpdating({ isUpdating: false, comment: null });
-      await axios.delete(
-        `/api/quests/${questId}/posts/${postId}/comments/${commentId}`,
-      );
       const filtered = comments.filter(
         (comment) => comment.commentId !== commentId,
       );
+      mutateComments(filtered, { revalidate: false });
       // todo: dont revalidate
       mutate(`/quests/${questId}/posts/${postId}`);
-      mutateComments(filtered, { revalidate: false });
+      await axios.delete(
+        `/api/quests/${questId}/posts/${postId}/comments/${commentId}`,
+      );
+      mutateComments(filtered, { revalidate: true });
+      mutate(`/quests/${questId}/posts/${postId}`);
     } catch (err) {
       console.error(err);
     }
