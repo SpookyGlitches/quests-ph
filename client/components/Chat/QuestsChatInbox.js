@@ -37,6 +37,7 @@ export default function InboxComponent(data) {
       chatbox.select(conversation);
       chatbox.mount(talkjsContainer.current);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

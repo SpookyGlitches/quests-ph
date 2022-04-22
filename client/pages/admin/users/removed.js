@@ -1,3 +1,4 @@
+import { getSession } from "next-auth/react";
 import { Box, Typography } from "@mui/material";
 import Link from "next/link";
 import * as React from "react";
@@ -65,4 +66,28 @@ export default function Index() {
       </Box>
     </AdminLayout>
   );
+}
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/landing",
+      },
+    };
+  }
+  if (session) {
+    if (session.user.role !== "admin") {
+      return {
+        redirect: {
+          permanent: false,
+          destination: "/",
+        },
+      };
+    }
+  }
+  return {
+    props: {},
+  };
 }

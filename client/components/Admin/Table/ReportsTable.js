@@ -38,7 +38,7 @@ export default function AdminDataGrid({ tableData, page, path }) {
     setOpen(true);
     setRecipient(cellValues.row.recipientId);
     setReportId(cellValues.row.userReportId);
-    setDisplayName(cellValues.row.recipientFullName);
+    setDisplayName(cellValues.row.recipientDisplayName);
     setCategory(cellValues.row.category);
     setDescription(cellValues.row.description);
   };
@@ -109,13 +109,13 @@ export default function AdminDataGrid({ tableData, page, path }) {
           headerAlign: "center",
         },
         {
-          field: "recipientFullName",
+          field: "recipientDisplayName",
           headerName: "Reported User",
           width: 160,
           headerAlign: "center",
         },
         {
-          field: "reporterFullName",
+          field: "reporterDisplayName",
           headerName: "Reporter",
           width: 160,
           headerAlign: "center",
@@ -185,13 +185,13 @@ export default function AdminDataGrid({ tableData, page, path }) {
           headerAlign: "center",
         },
         {
-          field: "recipientFullName",
+          field: "recipientDisplayName",
           headerName: "Reported User",
           width: 160,
           headerAlign: "center",
         },
         {
-          field: "reporterFullName",
+          field: "reporterDisplayName",
           headerName: "Reporter",
           width: 160,
           headerAlign: "center",
@@ -273,13 +273,13 @@ export default function AdminDataGrid({ tableData, page, path }) {
           headerAlign: "center",
         },
         {
-          field: "recipientFullName",
+          field: "recipientDisplayName",
           headerName: "Reported User",
           width: 160,
           headerAlign: "center",
         },
         {
-          field: "reporterFullName",
+          field: "reporterDisplayName",
           headerName: "Reporter",
           width: 160,
           headerAlign: "center",

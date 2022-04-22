@@ -173,9 +173,17 @@ export default function Reset({ data }) {
 export async function getServerSideProps({ req, params }) {
   const session = await getSession({ req });
   if (session) {
+    if (session.user.role !== "admin") {
+      return {
+        redirect: {
+          destination: "/",
+          permanent: false,
+        },
+      };
+    }
     return {
       redirect: {
-        destination: "/",
+        destination: "/admin",
         permanent: false,
       },
     };
