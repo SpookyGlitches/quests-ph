@@ -6,6 +6,9 @@ export default function BasicInfo({ userId }) {
   const { data: myInfo } = useSWR(
     userId ? `/profile/${userId}/friendInfo` : null,
   );
+
+  const { data: points } = useSWR(userId ? `/profile/${userId}/points` : null);
+
   if (!myInfo) {
     return (
       <div
@@ -16,6 +19,10 @@ export default function BasicInfo({ userId }) {
         }}
       />
     );
+  }
+
+  if (points) {
+    return JSON.stringify(points);
   }
 
   const letter = myInfo.displayName.charAt(0).toUpperCase();
@@ -40,6 +47,10 @@ export default function BasicInfo({ userId }) {
       >
         {letter}
       </Avatar>
+      <Typography variant="body2" sx={{ fontWeight: "medium", mt: 1 }}>
+        Level 1
+      </Typography>
+
       <div
         style={{
           display: "flex",
