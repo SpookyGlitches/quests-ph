@@ -99,6 +99,17 @@ export default async function deleteUsers(req, res) {
         }),
       );
     }
+    // Delete usercurrency
+    const deleteUserCurrency = prisma.userCurrency.update({
+      where: {
+        userId: req.query.userId,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+    transactions.push(deleteUserCurrency);
+
     // Delete articles
     const deleteArticles = prisma.article.updateMany({
       where: {
