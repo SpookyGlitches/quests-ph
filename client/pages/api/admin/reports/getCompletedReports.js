@@ -28,7 +28,7 @@ export default async function getCompletedReports(req, res) {
     //   },
     // });
     const reports =
-      await prisma.$queryRaw`SELECT userReportId, reporter.fullName AS reporterFullName, recipient.fullName AS recipientFullName, recipient.email AS recipientEmail, reporter.email AS reporterEmail, reporterId, recipientId, category, description, status, UserReport.createdAt, SUBSTRING(banStart, 1, 10) AS banStart, SUBSTRING(banEnd, 1, 10) AS banEnd FROM UserReport INNER JOIN User reporter ON (reporter.userId = UserReport.reporterId) INNER JOIN User recipient ON (recipient.userId = UserReport.recipientId) WHERE UserReport.deletedAt IS NOT NULL AND banStart IS NOT NULL AND banEnd < NOW()`;
+      await prisma.$queryRaw`SELECT userReportId, reporter.displayName AS reporterDisplayName, recipient.displayName AS recipientDisplayName, recipient.email AS recipientEmail, reporter.email AS reporterEmail, reporterId, recipientId, category, description, status, UserReport.createdAt, SUBSTRING(banStart, 1, 10) AS banStart, SUBSTRING(banEnd, 1, 10) AS banEnd FROM UserReport INNER JOIN User reporter ON (reporter.userId = UserReport.reporterId) INNER JOIN User recipient ON (recipient.userId = UserReport.recipientId) WHERE UserReport.deletedAt IS NOT NULL AND banStart IS NOT NULL AND banEnd < NOW()`;
     return res.status(200).json(reports);
   } catch (error) {
     console.log(error);
