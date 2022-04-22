@@ -1,7 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import { getSession } from "next-auth/react";
+import prisma from "../../../../lib/prisma";
 
-const prisma = new PrismaClient();
 export default async function handler(req, res) {
   if (req.method !== "GET") {
     return res.status(403).send();
@@ -90,7 +89,6 @@ export default async function handler(req, res) {
     const commentsPoints = currency.comments * 10;
     const totalPoints =
       reactsPoints + articlesPoints + commentsPoints + publicQuestsPoints;
-    // const totalPoints = 50;
     const x = 10;
     const level = parseInt(totalPoints / x, 10);
     const nextLevel = level + 1;

@@ -1,13 +1,19 @@
-import { Box, Avatar, Typography } from "@mui/material";
+import { Box, Avatar, Typography, Tooltip } from "@mui/material";
 import VerifiedUserRoundedIcon from "@mui/icons-material/VerifiedUserRounded";
 import useSWR from "swr";
+import { useSession } from "next-auth/react";
 
 export default function BasicInfo({ userId }) {
   const { data: myInfo } = useSWR(
     userId ? `/profile/${userId}/friendInfo` : null,
   );
 
-  const { data: points } = useSWR(userId ? `/profile/${userId}/points` : null);
+  const session = useSession();
+  const mentor = session?.data?.user?.role === "mentor";
+
+  const { data: userExperience } = useSWR(
+    userId ? `/profile/${userId}/points` : null,
+  );
 
   if (!myInfo) {
     return (
@@ -21,9 +27,9 @@ export default function BasicInfo({ userId }) {
     );
   }
 
-  if (points) {
-    return JSON.stringify(points);
-  }
+  // if (points) {
+  //   return JSON.stringify(points);
+  // }
 
   const letter = myInfo.displayName.charAt(0).toUpperCase();
   return (
@@ -47,9 +53,29 @@ export default function BasicInfo({ userId }) {
       >
         {letter}
       </Avatar>
-      <Typography variant="body2" sx={{ fontWeight: "medium", mt: 1 }}>
-        Level 1
-      </Typography>
+      <Tooltip
+        describeChild
+        title={
+          <Box>
+            <Typography variant="body2" sx={{ fontWeight: "regular" }}>
+              Points: {userExperience?.totalPoints || 0}
+            </Typography>
+            {!mentor && (
+              <Typography variant="body2" sx={{ fontWeight: "regular" }}>
+                Tasks Points: {userExperience?.tasksPoints || 0}
+              </Typography>
+            )}
+            <Typography variant="caption" sx={{ fontWeight: "regular" }}>
+              {userExperience?.nextLevelLackingPoints || 10} points left to
+              reach Level {userExperience?.nextLevel || 1}
+            </Typography>
+          </Box>
+        }
+      >
+        <Typography variant="body2" sx={{ fontWeight: "medium", mt: 1 }}>
+          Level {userExperience?.level || 1}
+        </Typography>
+      </Tooltip>
 
       <div
         style={{
