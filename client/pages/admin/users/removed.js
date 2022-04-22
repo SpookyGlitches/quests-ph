@@ -4,6 +4,7 @@ import * as React from "react";
 import useSWR from "swr";
 import BasicTable from "../../../components/Admin/Table/UsersTable";
 import AdminLayout from "../../../components/Layouts/AdminLayout";
+import { getSession } from "next-auth/react";
 
 export default function Index() {
   const { data: usersData, error } = useSWR(`/admin/users/getRemovedUsers`);
@@ -65,4 +66,28 @@ export default function Index() {
       </Box>
     </AdminLayout>
   );
+}
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/landing",
+      },
+    };
+  }
+  if (session) {
+    if (session.user.role !== "admin") {
+      return {
+        redirect: {
+          permanent: false,
+          destination: "/",
+        },
+      };
+    }
+  }
+  return {
+    props: {},
+  };
 }
