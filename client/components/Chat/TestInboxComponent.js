@@ -2,9 +2,10 @@ import React, { useEffect } from "react";
 import { getSession } from "next-auth/react";
 import Talk from "talkjs";
 
-export default function InboxComponent(data) {
-  const talkjsContainer = React.createRef();
-  let other;
+export default function InboxComponent() {
+  const talkjsContainer = React.createRef();   
+  data = [{fullName: }, {}]
+
   useEffect(() => {
     // eslint-disable-next-line
     const currentUser = data.userCred;
@@ -23,6 +24,21 @@ export default function InboxComponent(data) {
       // eslint-disable-next-line
       if (data.otherUser.length !== 0) {
         // eslint-disable-next-line
+        const conversation = session.getOrCreateConversation(
+          Talk.oneOnOneId(me, other),
+        );
+        for (let i = 1; i <= 5; i++) {
+          window["other" + i] = new Talk.User({
+            // eslint-disable-next-line
+            id: data.otherUser[i].userId,
+            // eslint-disable-next-line
+            name: data.otherUser[i].displayName,
+            // eslint-disable-next-line
+            fullname: data.otherUser[i].fullName,
+            // eslint-disable-next-line
+            role: data.otherUser[i].role,
+          });
+        }
         other = new Talk.User({
           // eslint-disable-next-line
           id: data.otherUser.userId,
@@ -33,10 +49,6 @@ export default function InboxComponent(data) {
           // eslint-disable-next-line
           role: data.otherUser.role,
         });
-
-        const conversation = session.getOrCreateConversation(
-          Talk.oneOnOneId(me, other),
-        );
 
         conversation.setParticipant(me);
         conversation.setParticipant(other);

@@ -1,4 +1,10 @@
 import { getSession } from "next-auth/react";
+import * as React from "react";
+import { useTheme } from "@mui/material/styles";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import useSWR from "swr";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
 import Image from "next/image";
 import {
   Box,
@@ -6,8 +12,10 @@ import {
   Select,
   MenuItem,
   ListItemText,
+  TextField,
   Typography,
   Grid,
+  Autocomplete,
   Avatar,
   ListItemAvatar,
 } from "@mui/material";
@@ -16,12 +24,32 @@ import { useRouter } from "next/router";
 import InboxComponent from "../../components/Chat/InboxComponent";
 import AppLayout from "../../components/Layouts/AppLayout";
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+function getStyles(name, selectedValue, theme) {
+  return {
+    fontWeight:
+      selectedValue.indexOf(name) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
+
 export default function ChatTalkLayout() {
   const router = useRouter();
   const [friends, setFriends] = useState([]);
   const [userCred, setUserCred] = useState([]);
   const [userChat, setUserChat] = useState([]);
-  const [selectedValue, setSelectedValue] = useState("");
+  //   const [selectedValue, setSelectedValue] = useState("");
 
   // const { data, error } = useSWR("/chat/getFriendsForChat");
 
@@ -77,6 +105,15 @@ export default function ChatTalkLayout() {
     getFriendsForChat();
   }, []);
 
+  let friendsList = [];
+  friendsList = friends.map((friend) => {
+    return {
+      fullName: friend.fullName,
+      userId: friend.userId,
+      role: friend.role,
+    };
+  });
+
   const userToChatWith = async () => {
     // eslint-disable-next-line
     const res = await fetch(
@@ -98,85 +135,30 @@ export default function ChatTalkLayout() {
   let searchFriendBar;
   let inboxComponent;
   let img;
-
+  console.log(friendsList);
   if (friends.length !== 0) {
     searchFriendBar = (
-      <Box>
-        <Select
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            mx: 15,
-            my: 5,
-          }}
-          defaultValue=""
-          onChange={(e) => setSelectedValue(e.target.value)}
-        >
-          {friends.map((user) => (
-            <MenuItem
-              style={{
-                overflow: "hidden",
-                overflowY: "scroll",
-              }}
-              key={user.userId}
-              value={user}
-            >
-              <ListItem key={user.userId} alignItems="flex-start">
-                <ListItemAvatar>
-                  <Avatar alt="No">
-                    {user.fullName.charAt(0)}
-                    {user.fullName.split(" ")[1].charAt(0)}
-                  </Avatar>
-                </ListItemAvatar>
-
-                <ListItemText
-                  primary={
-                    <Grid
-                      sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        p: 1,
-                        m: 1,
-                      }}
-                    >
-                      <Typography
-                        sx={{
-                          fontSize: "15px",
-                          marginRight: 1,
-                          fontWeight: "bold",
-                        }}
-                      >
-                        {user.fullName}
-                      </Typography>
-                    </Grid>
-                  }
-                />
-              </ListItem>
-            </MenuItem>
-          ))}
-        </Select>
-      </Box>
+      <Autocomplete
+        multiple
+        id="tags-outlined"
+        options={friendsList}
+        getOptionLabel={(option) => option.fullName}
+        isOptionEqualToValue={(option, value) =>
+          option.fullName === value.fullName
+        }
+        defaultValue={[friendsList[0]]}
+        filterSelectedOptions
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Chat Friends"
+            placeholder="Choose friends to chat with now"
+          />
+        )}
+      />
     );
-    /*
-     This one just sets the value of whose chatbox to open when a dropdown value is selected.
-     Otherwise it is empty.
-     */
-    let otherUser = selectedValue;
-    /*
-      Which is why here, when we find that there is actually a value passed from friends into 
-      router.query.userInfo, cd
-    */
-    if (router.query.userInfo !== undefined && selectedValue.length === 0) {
-      // eslint-disable-next-line
-      otherUser = userChat;
-    }
 
-    const props = {
-      otherUser,
-      userCred,
-    };
-    inboxComponent = <InboxComponent {...props} />;
+    // inboxComponent = <InboxComponent {...props} />;
   } else {
     searchFriendBar = (
       <Typography variant="h5" sx={{ mt: 3, color: "#000000" }} align="center">
@@ -198,7 +180,7 @@ export default function ChatTalkLayout() {
     <AppLayout>
       <Box sx={{ mb: 5 }} align="center">
         <Typography sx={{ marginTop: 1 }} variant="h3" align="center">
-          Chats Page
+          Chats Testing Page
         </Typography>
         {searchFriendBar}
       </Box>

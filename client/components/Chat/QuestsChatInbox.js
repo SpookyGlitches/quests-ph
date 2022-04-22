@@ -5,7 +5,7 @@ import Talk from "talkjs";
 export default function InboxComponent(data) {
   const talkjsContainer = React.createRef();
   // const { data: sessionUser } = useSession();
-
+  console.log(data);
   useEffect(() => {
     // eslint-disable-next-line
     const currentUser = data.userData;
@@ -25,9 +25,9 @@ export default function InboxComponent(data) {
 
       const conversation = session.getOrCreateConversation(
         // eslint-disable-next-line
-        `${data.questName} Chatroom`,
+        `${data.questId}QuestChat`,
       );
-
+      console.log(conversation);
       conversation.setParticipant(me);
       conversation.setAttributes({
         // eslint-disable-next-line
@@ -37,7 +37,6 @@ export default function InboxComponent(data) {
       chatbox.select(conversation);
       chatbox.mount(talkjsContainer.current);
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
