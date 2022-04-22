@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Typography,
@@ -7,14 +7,19 @@ import {
   Paper,
   ListItemButton,
   ListItemAvatar,
+  Button,
   Chip,
   ListItemText,
   Divider,
   ListItem,
   List,
   CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
-
 import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
 import useSWR, { mutate } from "swr";
 import { formatDistance } from "date-fns";
@@ -22,7 +27,37 @@ import axios from "axios";
 import { getSession } from "next-auth/react";
 import AppLayout from "../../components/Layouts/AppLayout";
 
-const index = () => {
+function BadgeModal(props) {
+  const {
+    badgeModalState: { open, notificationMessage },
+    setOpen,
+  } = props;
+  return (
+    <Dialog fullWidth maxWidth="sm" open={open}>
+      <DialogTitle>Hooray!</DialogTitle>
+      <DialogContent>
+        <DialogContentText>{notificationMessage}</DialogContentText>
+        <Box sx={{ display: "flex", justifyContent: "center" }} />
+      </DialogContent>
+      <DialogActions>
+        <Button variant="text" onClick={setOpen}>
+          Close
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
+export default function Index() {
+  const [badgeModalState, setBadgeModalState] = useState({
+    open: false,
+    notificationMessage: "",
+    badgeDetails: {
+      name: "",
+      description: "",
+      image: "",
+    },
+  });
   // const deleteNotification = async (id) => {
   //   console.log(id);
   //   try {
@@ -34,14 +69,21 @@ const index = () => {
   //   }
   // };
 
-  const updateNotificationReadSeen = async (id) => {
+  const updateNotificationReadSeen = async (notif) => {
     try {
+      if (notif.type === "RECEIVED_BADGE") {
+        setBadgeModalState({
+          open: true,
+          notificationMessage: notif.message,
+          badgeDetails: {
+            image: notif.image,
+            description: notif.description,
+            name: notif.name,
+          },
+        });
+      }
       /* eslint-disable */
-      const res = await axios.put(
-        `/api/notifications`,
-
-        { notificationId: id },
-      );
+      const res = await axios.put(`/api/notifications`, { notificationId: id });
       mutate("/notifications");
       mutate("/notifications/notif_count");
     } catch (error) {
@@ -103,7 +145,7 @@ const index = () => {
             }}
           >
             <ListItemButton
-              onClick={() => updateNotificationReadSeen(notif.notificationId)}
+              onClick={() => updateNotificationReadSeen(notif)}
               sx={{
                 "&.MuiListItemButton-root": {
                   padding: 0,
@@ -176,11 +218,13 @@ const index = () => {
           </List>
         ))}
       </Box>
+      <BadgeModal
+        badgeModalState={badgeModalState}
+        setOpen={() => setBadgeModalState((prev) => ({ ...prev, open: false }))}
+      />
     </AppLayout>
   );
-};
-
-export default index;
+}
 
 export async function getServerSideProps(context) {
   return {
