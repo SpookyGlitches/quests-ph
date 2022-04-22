@@ -1,77 +1,107 @@
 import prisma from "../../../../../lib/prisma";
 
-export default async function deleteQuest(req, res) {
+export default async function deleteQuests(req, res) {
   if (req.method !== "PUT") {
     return res.status(404).json({ message: "Method not allowed " });
   }
 
   try {
-    // Will fix this later since messy pa ang pag implement.
+    // find pt members
+    const findPartyMembers = await prisma.partyMember.findMany({
+      where: {
+        questId: Number(req.query.questId),
+      },
+    });
 
-    // // Delete party member
-    // const deleteParty = await prisma.partyMember.update({
-    //   where: {
-    //     userId: String(req.query.userId),
-    //   },
-    //   data: {
-    //     deletedAt: new Date(),
-    //   },
-    // });
-    // // Delete posts
-    // const deletePost = await prisma.post.update({
-    //   where: {
-    //     userId: String(req.query.userId),
-    //   },
-    //   data: {
-    //     deletedAt: new Date(),
-    //   },
-    // });
-    // // Delete post file
-    // const deletePostFile = await prisma.postFile.update({
-    //   where: {
-    //     userId: String(req.query.userId),
-    //   },
-    //   data: {
-    //     deletedAt: new Date(),
-    //   },
-    // });
-    // // Delete quests
-    // const deleteQuest = await prisma.quest.update({
-    //   where: {
-    //     userId: String(req.query.userId),
-    //   },
-    //   data: {
-    //     deletedAt: new Date(),
-    //   },
-    // });
-    // // Delete quest mentorship
-    // const deleteMentorReq = await prisma.questMentorshipRequest.update({
-    //   where: {
-    //     OR: [
-    //       {
-    //         partyLeaderId: String(req.query.userId),
-    //       },
-    //       {
-    //         mentorId: String(req.query.userId),
-    //       },
-    //     ],
-    //   },
-    //   data: {
-    //     deletedAt: new Date(),
-    //   },
-    // });
-    // // Delete quest task
-    // const deleteQuestTask = await prisma.questTask.update({
-    //   where: {
-    //     userId: String(req.query.userId),
-    //   },
-    //   data: {
-    //     deletedAt: new Date(),
-    //   },
-    // });
+    const postIdArr = [];
+    const postIds = [];
+    for (let i = 0; i < findPartyMembers.length; i++) {
+      // eslint-disable-next-line
+      const getPostId = await prisma.post.findMany({
+        where: {
+          partyMemberId: findPartyMembers[i].partyMemberId,
+        },
+      });
+      postIdArr.push(getPostId);
+    }
+    postIdArr.forEach((item) => {
+      // eslint-disable-next-line
+      for (const key in item) {
+        postIds.push(item[key].postId);
+      }
+    });
 
-    // For now I just set isActive to 0 and deletedAt to the current date.
-    const deletedQuest = await prisma.quest.update({
+    // delete post files
+    const transactions = [];
+    for (let i = 0; i < postIds.length; i++) {
+      transactions.push(
+        prisma.postFile.updateMany({
+          where: {
+            postId: postIds[i],
+          },
+          data: {
+            deletedAt: new Date(),
+          },
+        }),
+      );
+    }
+
+    for (let x = 0; x < findPartyMembers.length; x++) {
+      transactions.push(
+        prisma.post.updateMany({
+          where: {
+            partyMemberId: Number(findPartyMembers[x].partyMemberId),
+          },
+          data: {
+            updatedAt: new Date(),
+            deletedAt: new Date(),
+          },
+        }),
+      );
+      transactions.push(
+        prisma.comment.updateMany({
+          where: {
+            partyMemberId: Number(findPartyMembers[x].partyMemberId),
+          },
+          data: {
+            deletedAt: new Date(),
+          },
+        }),
+      );
+      transactions.push(
+        prisma.commentReact.updateMany({
+          where: {
+            partyMemberId: Number(findPartyMembers[x].partyMemberId),
+          },
+          data: {
+            deletedAt: new Date(),
+          },
+        }),
+      );
+      transactions.push(
+        prisma.pointsLog.updateMany({
+          where: {
+            partyMemberId: Number(findPartyMembers[x].partyMemberId),
+          },
+          data: {
+            deletedAt: new Date(),
+          },
+        }),
+      );
+      transactions.push(
+        prisma.postReact.updateMany({
+          where: {
+            partyMemberId: Number(findPartyMembers[x].partyMemberId),
+          },
+          data: {
+            updatedAt: new Date(),
+            deletedAt: new Date(),
+          },
+        }),
+      );
+    }
+    // Delete party member
+    const deleteParty = prisma.partyMember.updateMany({
       where: {
         questId: Number(req.query.questId),
       },
@@ -79,31 +109,70 @@ export default async function deleteQuest(req, res) {
         deletedAt: new Date(),
       },
     });
-    return res.status(200).json(deletedQuest);
+    transactions.push(deleteParty);
+
+    // Delete quests
+    const deleteQuest = prisma.quest.update({
+      where: {
+        questId: Number(req.query.questId),
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+    transactions.push(deleteQuest);
+
+    // Delete quest task
+    const deleteQuestTask = prisma.questTask.updateMany({
+      where: {
+        questId: Number(req.query.questId),
+      },
+      data: {
+        updatedAt: new Date(),
+        deletedAt: new Date(),
+      },
+    });
+    transactions.push(deleteQuestTask);
+
+    // delete quest task finished
+    const deleteQuestTaskFinisher = prisma.questTaskFinisher.updateMany({
+      where: {
+        questId: Number(req.query.questId),
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+    transactions.push(deleteQuestTaskFinisher);
+
+    // delete quest pt bans
+    const deletequestPtBans = prisma.questPartyBan.updateMany({
+      where: {
+        questId: Number(req.query.questId),
+      },
+      data: {
+        updatedAt: new Date(),
+        deletedAt: new Date(),
+      },
+    });
+    transactions.push(deletequestPtBans);
+    // Delete quest mentorship
+    const deleteMentorReq = prisma.questMentorshipRequest.updateMany({
+      where: {
+        questId: Number(req.query.questId),
+      },
+      data: {
+        status: "INACTIVE",
+        updatedAt: new Date(),
+        deletedAt: new Date(),
+      },
+    });
+    transactions.push(deleteMentorReq);
+
+    await prisma.$transaction(transactions);
+    return res.status(200).json();
   } catch (error) {
     console.log(error);
     return res.status(400).json({ message: "Something went wrong" });
   }
 }
-
-// const nodemailer = require("nodemailer");
-// const transporter = nodemailer.createTransport({
-//   port: 465,
-//   host: "smtp.gmail.com",
-//   auth: {
-//     user: process.env.SMTP_USER,
-//     pass: process.env.SMTP_PASSWORD,
-//   },
-//   secure: true,
-// });
-// const mailData = {
-//   from: process.env.SMTP_USER,
-//   to: userDetails.email,
-//   subject: `Verification`,
-//   html: `<div>
-//     This is an automated reply from Quests App University of San Carlos. Please do not reply.
-//     You are receiving this email because your email was just registered to an account on Quests.
-//     Verify your account through this link. http://localhost:8080/verify/${userDetails.token}
-
-// <div>`,
-// };
