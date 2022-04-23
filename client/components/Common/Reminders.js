@@ -8,16 +8,12 @@ import {
   ListItem,
   Select,
   Divider,
-  Skeleton,
   ListItemText,
-  Checkbox,
   Stack,
-  FormGroup,
-  FormControlLabel,
-  IconButton,
   CircularProgress,
 } from "@mui/material";
 
+import { getSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import useSWR from "swr";
 
@@ -25,11 +21,9 @@ import { formatRelative, subDays } from "date-fns";
 import Link from "next/link";
 
 export default function Reminders() {
-  const data = 0;
   const [selectedValue, setSelectedValue] = useState("");
-  const [tasks, setTasks] = useState([]);
 
-  const { data: quests, error } = useSWR("/quests?status=ACTIVE");
+  const { data: quests } = useSWR("/quests?status=ACTIVE");
 
   useEffect(() => {
     if (quests) {
@@ -72,10 +66,12 @@ export default function Reminders() {
             <InputLabel id="demo-simple-select-label">Quest</InputLabel>
 
             <Select
+              key={selectedValue}
               value={selectedValue}
               onChange={(e) => setSelectedValue(e.target.value)}
             >
               {quests.map((quest) => (
+                /* eslint-disable */
                 <MenuItem value={quest.questId}>{quest.wish}</MenuItem>
               ))}
             </Select>
@@ -111,19 +107,19 @@ export default function Reminders() {
                   primary={task.title}
                   secondary={
                     <Typography
-                        sx={{ display: "inline" }}
-                        component="span"
-                        variant="body2"
-                        color="text.primary"
-                      >
-                        {task.points}
-                        {" points"}
-                        {" | "}
-                        {formatRelative(
-                          subDays(new Date(task.dueAt), 3),
-                          new Date(),
-                        )}
-                      </Typography>
+                      sx={{ display: "inline" }}
+                      component="span"
+                      variant="body2"
+                      color="text.primary"
+                    >
+                      {task.points}
+                      {" points"}
+                      {" | "}
+                      {formatRelative(
+                        subDays(new Date(task.dueAt), 3),
+                        new Date(),
+                      )}
+                    </Typography>
                   }
                 />
               </ListItem>
