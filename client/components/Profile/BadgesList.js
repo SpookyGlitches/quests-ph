@@ -21,7 +21,7 @@ export default function BadgesList({ userId }) {
     open: false,
     notificationMessage: "",
     badgeDetails: {
-      name: "",
+      title: "",
       description: "",
       image: "",
     },
@@ -45,7 +45,7 @@ export default function BadgesList({ userId }) {
       badgeDetails: {
         image: badge.image,
         description: badge.description,
-        name: badge.name,
+        title: `Gained ${badge.name} badge`,
       },
     });
   };

@@ -17,7 +17,7 @@ export default function BadgeModal(props) {
   return (
     <Dialog fullWidth maxWidth="xs" open={open}>
       <DialogTitle color="primary" align="center">
-        Gained {badgeDetails.name} Badge
+        {badgeDetails.title}
       </DialogTitle>
       <DialogContent>
         <Box

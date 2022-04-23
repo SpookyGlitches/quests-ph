@@ -27,7 +27,7 @@ export default function Index() {
     open: false,
     notificationMessage: "",
     badgeDetails: {
-      name: "",
+      title: "",
       description: "",
       image: "",
     },
@@ -52,7 +52,7 @@ export default function Index() {
           badgeDetails: {
             image: notif.image,
             description: notif.description,
-            name: notif.name,
+            title: `Gained ${notif.name} badge`,
           },
         });
       }
