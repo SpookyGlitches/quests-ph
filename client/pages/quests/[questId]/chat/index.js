@@ -16,6 +16,7 @@ export default function QuestsChatPage({ questId }) {
 
   const props = {
     questName: data.wish,
+    questId: data.questId,
     userData,
   };
   const inboxComponent = <QuestsChatInbox {...props} />;

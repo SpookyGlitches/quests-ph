@@ -1,3 +1,4 @@
+import axios from "axios";
 import prisma from "../../../../../lib/prisma";
 
 export default async function deleteQuests(req, res) {
@@ -170,6 +171,15 @@ export default async function deleteQuests(req, res) {
     transactions.push(deleteMentorReq);
 
     await prisma.$transaction(transactions);
+    await axios.delete(
+      `https://api.talkjs.com/v1/tvcbUw3n/conversations/${req.query.questId}QuestChat/`,
+      {
+        headers: {
+          Authorization: `Bearer sk_test_NPBhbi9sSMV8aA6DnWhSkmKzxQpivO6p`,
+          "Content-Type": "application/json",
+        },
+      },
+    );
     return res.status(200).json();
   } catch (error) {
     console.log(error);
