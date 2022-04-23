@@ -3,6 +3,7 @@ import { Stack } from "@mui/material";
 import useSWR from "swr";
 import Post from "./Post";
 import LoadMore from "../../Common/LoadMore";
+import CustomCircularProgress from "../../Common/CustomSpinner";
 
 function PostPage(props) {
   const { url, skip, setHasMore, setLoading, searchParams } = props;
@@ -11,7 +12,7 @@ function PostPage(props) {
 
   if (!posts) {
     setLoading(true);
-    return <div>Loading</div>;
+    return <CustomCircularProgress />;
   }
 
   if (posts.length < searchParams.take) {

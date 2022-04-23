@@ -15,6 +15,7 @@ import MemberStatement from "./MemberStatement";
 import WoopModal from "../WoopModal";
 import { QuestContext } from "../../../context/QuestContext";
 import { PartyMemberContext } from "../../../context/PartyMemberContext";
+import CustomCircularProgress from "../../Common/CustomSpinner";
 
 const titleTypographyProps = {
   sx: {
@@ -110,7 +111,7 @@ export default function Statements() {
   };
 
   if (!partyMembers) {
-    return <div>Loading</div>;
+    return <CustomCircularProgress rootStyles={{ minHeight: 100 }} />;
   }
   const outcomes = [];
   const obstacles = [];

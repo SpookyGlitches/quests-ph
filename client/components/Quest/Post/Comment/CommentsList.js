@@ -1,4 +1,4 @@
-import { Box, Stack } from "@mui/material";
+import { Box, CircularProgress, Stack } from "@mui/material";
 import useSWR, { useSWRConfig } from "swr";
 import { useSession } from "next-auth/react";
 import axios from "axios";
@@ -58,7 +58,18 @@ export default function CommmentsList({
   }, [router, commentFormRef, comments]);
 
   if (!comments || !userId) {
-    return <div>Loading</div>;
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: 100,
+        }}
+      >
+        <CircularProgress color="primary" />
+      </Box>
+    );
   }
 
   return (
