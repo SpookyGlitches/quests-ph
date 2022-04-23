@@ -6,7 +6,7 @@ import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import ConnectWithoutContactRoundedIcon from "@mui/icons-material/ConnectWithoutContactRounded";
-
+import MilitaryTechRoundedIcon from "@mui/icons-material/MilitaryTechRounded";
 import {
   List,
   ListItem,
@@ -39,6 +39,10 @@ const memberlinks = [
     label: "Chats",
     path: "/chats",
   },
+  {
+    label: "Badges",
+    path: "/badges",
+  },
 ];
 
 const mentorLinks = [
@@ -66,6 +70,10 @@ const mentorLinks = [
     label: "Chats",
     path: "/chats",
   },
+  {
+    label: "Badges",
+    path: "/badges",
+  },
 ];
 const Sidebar = (props) => {
   const { window, drawerWidth, handleDrawerToggle, mobileOpen, userRole } =
@@ -87,6 +95,8 @@ const Sidebar = (props) => {
         return <ChatRoundedIcon />;
       case "Profile":
         return <AccountCircleRoundedIcon />;
+      case "Badges":
+        return <MilitaryTechRoundedIcon />;
       default:
     }
   };

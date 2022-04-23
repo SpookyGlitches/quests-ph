@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Typography,
@@ -14,15 +14,24 @@ import {
   List,
   CircularProgress,
 } from "@mui/material";
-
 import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
 import useSWR, { mutate } from "swr";
 import { formatDistance } from "date-fns";
 import axios from "axios";
 import { getSession } from "next-auth/react";
 import AppLayout from "../../components/Layouts/AppLayout";
+import BadgeModal from "../../components/Common/BadgeModal";
 
-const index = () => {
+export default function Index() {
+  const [badgeModalState, setBadgeModalState] = useState({
+    open: false,
+    notificationMessage: "",
+    badgeDetails: {
+      title: "",
+      description: "",
+      image: "",
+    },
+  });
   // const deleteNotification = async (id) => {
   //   console.log(id);
   //   try {
@@ -34,14 +43,21 @@ const index = () => {
   //   }
   // };
 
-  const updateNotificationReadSeen = async (id) => {
+  const updateNotificationReadSeen = async (notif) => {
     try {
+      if (notif.type === "RECEIVED_BADGE") {
+        setBadgeModalState({
+          open: true,
+          notificationMessage: notif.message,
+          badgeDetails: {
+            image: notif.image,
+            description: notif.description,
+            title: `Gained ${notif.name} badge`,
+          },
+        });
+      }
       /* eslint-disable */
-      const res = await axios.put(
-        `/api/notifications`,
-
-        { notificationId: id },
-      );
+      const res = await axios.put(`/api/notifications`, { notificationId: id });
       mutate("/notifications");
       mutate("/notifications/notif_count");
     } catch (error) {
@@ -103,7 +119,7 @@ const index = () => {
             }}
           >
             <ListItemButton
-              onClick={() => updateNotificationReadSeen(notif.notificationId)}
+              onClick={() => updateNotificationReadSeen(notif)}
               sx={{
                 "&.MuiListItemButton-root": {
                   padding: 0,
@@ -176,11 +192,14 @@ const index = () => {
           </List>
         ))}
       </Box>
+
+      <BadgeModal
+        badgeModalState={badgeModalState}
+        setOpen={() => setBadgeModalState((prev) => ({ ...prev, open: false }))}
+      />
     </AppLayout>
   );
-};
-
-export default index;
+}
 
 export async function getServerSideProps(context) {
   return {
