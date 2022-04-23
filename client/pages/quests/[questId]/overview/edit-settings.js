@@ -31,6 +31,7 @@ import {
 import WishInput from "../../../../components/Quest/Create/WishInput";
 import AppLayout from "../../../../components/Layouts/AppLayout";
 import { QuestContext } from "../../../../context/QuestContext";
+import CustomCircularProgress from "../../../../components/Common/CustomSpinner";
 
 const DialogItem = ({ handleOk, handleCancel, open, loading }) => {
   return (
@@ -134,7 +135,7 @@ export default function Edit() {
   };
 
   if (!quest) {
-    return <div>Loading here</div>;
+    return <CustomCircularProgress />;
   }
 
   return (

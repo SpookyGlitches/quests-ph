@@ -10,9 +10,8 @@ export default function AdminDataGrid({ tableData, page, path }) {
 
   const handleDeleteUser = async (event, cellValues) => {
     try {
-      const res = await axios.put(
-        `/api/admin/users/${cellValues.row.userId}/deleteUser`,
-      );
+      const { userId } = cellValues.row;
+      const res = await axios.put(`/api/admin/users/${userId}/deleteUser`);
       router.reload();
       console.log(res);
     } catch (error) {

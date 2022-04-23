@@ -40,9 +40,17 @@ export async function getServerSideProps(context) {
   const session = await getSession(context);
 
   if (session) {
+    if (session.user.role !== "admin") {
+      return {
+        redirect: {
+          destination: "/",
+          permanent: false,
+        },
+      };
+    }
     return {
       redirect: {
-        destination: "/",
+        destination: "/admin",
         permanent: false,
       },
     };

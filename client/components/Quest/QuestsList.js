@@ -6,6 +6,7 @@ import { useState } from "react";
 import QuestItem from "./QuestItem";
 import WoopModal from "./WoopModal";
 import LoadMore from "../Common/LoadMore";
+import CustomCircularProgress from "../Common/CustomSpinner";
 
 function QuestPage(props) {
   const { url, skip, searchParams, setHasMore, toggleModal, setLoading } =
@@ -13,10 +14,9 @@ function QuestPage(props) {
 
   const queryString = new URLSearchParams({ ...searchParams, skip }).toString();
   const { data: quests } = useSWR(url ? `${url}?${queryString}` : null);
-
   if (!quests) {
     setLoading(true);
-    return <div>Loading</div>;
+    return <CustomCircularProgress sx={{ minHeight: 100 }} />;
   }
 
   if (quests.length < searchParams.take) {

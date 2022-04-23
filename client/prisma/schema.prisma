@@ -192,6 +192,7 @@ model QuestTaskFinisher {
   questTaskid         Int
   gainedPoints        Int
   createdAt           DateTime  @default(now())
+  deletedAt           DateTime?
 }
 
 model QuestMentorshipRequest {
@@ -201,7 +202,7 @@ model QuestMentorshipRequest {
   questId                  Int
   status                   MentorshipStatus @default(ACTIVE)
   createdAt                DateTime         @default(now())
-  updatedAt                DateTime         @updatedAt
+  updatedAt                DateTime?         
   deletedAt                DateTime?
   partyLeader              User             @relation(name: "partyLeader", fields: [partyLeaderId], references: [userId])
   mentor                   User             @relation(name: "mentor", fields: [mentorId], references: [userId])
@@ -225,6 +226,7 @@ model PointsLog {
   gainedPoints  Int // 1 -> when someone receives a comment react, 5 -> when someone receives a post react, 10 -> when someone receives a comment, x -> when completing a task
   action        PointsLogAction
   createdAt     DateTime        @default(now())
+  deletedAt     DateTime?
   partyMember   PartyMember     @relation(fields: [partyMemberId], references: [partyMemberId])
 }
 

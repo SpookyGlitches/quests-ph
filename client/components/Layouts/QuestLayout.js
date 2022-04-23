@@ -8,6 +8,8 @@ import DateCard from "../Quest/Tasks/DateCard";
 import { QuestContext } from "../../context/QuestContext";
 import { PartyMemberContext } from "../../context/PartyMemberContext";
 import VideoCallRoom from "../Quest/VideoCallRoom";
+import NotFound from "../Common/NotFound";
+import CustomCircularProgress from "../Common/CustomSpinner";
 
 export default function QuestLayout({ children }) {
   const router = useRouter();
@@ -22,11 +24,15 @@ export default function QuestLayout({ children }) {
   );
 
   if (partyMemberError || questError) {
-    return <div>Something went wrong.</div>;
+    return (
+      <Box sx={{ height: "100%", width: "100%" }}>
+        <NotFound />;
+      </Box>
+    );
   }
 
   if (!partyMember || !quest) {
-    return <div>Loading...</div>;
+    return <CustomCircularProgress rootStyles={{ minHeight: "50vh" }} />;
   }
 
   return (

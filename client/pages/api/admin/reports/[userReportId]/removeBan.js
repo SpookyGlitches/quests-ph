@@ -7,7 +7,7 @@ export default async function approveReport(req, res) {
   }
 
   try {
-    const getUser = await prisma.user.findFirst({
+    const getUser = await prisma.user.findUnique({
       where: {
         userId: req.body.userId,
       },
