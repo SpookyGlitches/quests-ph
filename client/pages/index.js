@@ -25,7 +25,7 @@ import { useSession, getSession } from "next-auth/react";
 import AppLayout from "../components/Layouts/AppLayout";
 import CreatePost from "../components/Quest/Post/CreatePost";
 import PostsList from "../components/Quest/Post/PostsList";
-import Suggestion from "../components/Common/Suggestions";
+import Reminders from "../components/Common/Reminders";
 
 function CreatePostModal({ open, setOpen }) {
   const { data: quests } = useSWR(open ? "/quests?status=ACTIVE" : null);
@@ -90,6 +90,14 @@ function CreatePostModal({ open, setOpen }) {
     </Dialog>
   );
 }
+function Copyright() {
+  const year = new Date().getFullYear();
+  return (
+    <Typography align="center" sx={{ fontWeight: "medium", fontSize: "13px" }}>
+      {`Copyright © Quests ${year}`}
+    </Typography>
+  );
+}
 
 export default function Home() {
   const [open, setOpen] = useState(false);
@@ -109,7 +117,7 @@ export default function Home() {
       <Grid item xs={12} lg={4} sx={{}}>
         <Box sx={{}}>
           <Stack spacing={2}>
-            <Suggestion />
+            <Reminders />
           </Stack>
         </Box>
       </Grid>
