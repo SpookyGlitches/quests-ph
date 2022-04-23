@@ -33,7 +33,7 @@ export default function BadgeModal(props) {
           <Image
             src={`/badges/${badgeDetails.image}`}
             height={150}
-            alt={`badge image of ${badgeDetails.name}`}
+            alt="badge image"
             width={150}
           />
         </Box>
