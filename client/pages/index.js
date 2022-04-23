@@ -90,14 +90,14 @@ function CreatePostModal({ open, setOpen }) {
     </Dialog>
   );
 }
-function Copyright() {
-  const year = new Date().getFullYear();
-  return (
-    <Typography align="center" sx={{ fontWeight: "medium", fontSize: "13px" }}>
-      {`Copyright © Quests ${year}`}
-    </Typography>
-  );
-}
+// function Copyright() {
+//   const year = new Date().getFullYear();
+//   return (
+//     <Typography align="center" sx={{ fontWeight: "medium", fontSize: "13px" }}>
+//       {`Copyright © Quests ${year}`}
+//     </Typography>
+//   );
+// }
 
 export default function Home() {
   const [open, setOpen] = useState(false);
