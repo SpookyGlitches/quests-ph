@@ -17,7 +17,6 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
   DialogActions,
 } from "@mui/material";
 import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
@@ -25,22 +24,47 @@ import useSWR, { mutate } from "swr";
 import { formatDistance } from "date-fns";
 import axios from "axios";
 import { getSession } from "next-auth/react";
+import Image from "next/image";
 import AppLayout from "../../components/Layouts/AppLayout";
 
 function BadgeModal(props) {
   const {
-    badgeModalState: { open, notificationMessage },
+    badgeModalState: { open, notificationMessage, badgeDetails },
     setOpen,
   } = props;
   return (
-    <Dialog fullWidth maxWidth="sm" open={open}>
-      <DialogTitle>Hooray!</DialogTitle>
+    <Dialog fullWidth maxWidth="xs" open={open}>
+      <DialogTitle color="primary" align="center">
+        Gained {badgeDetails.name} Badge
+      </DialogTitle>
       <DialogContent>
-        <DialogContentText>{notificationMessage}</DialogContentText>
-        <Box sx={{ display: "flex", justifyContent: "center" }} />
+        <Box
+          sx={{
+            position: "relative",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            mt: 2,
+            gap: 5,
+          }}
+        >
+          <Image
+            src={`/badges/${badgeDetails.image}`}
+            height={150}
+            alt={`badge image of ${badgeDetails.name}`}
+            width={150}
+          />
+        </Box>
+        <Typography
+          align="center"
+          variant="body2"
+          sx={{ fontWeight: "medium", mt: 5 }}
+        >
+          {notificationMessage}
+        </Typography>
       </DialogContent>
-      <DialogActions>
-        <Button variant="text" onClick={setOpen}>
+      <DialogActions sx={{ m: 0 }}>
+        <Button variant="text" onClick={setOpen} fullWidth>
           Close
         </Button>
       </DialogActions>
