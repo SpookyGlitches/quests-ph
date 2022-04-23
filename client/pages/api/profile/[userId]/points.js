@@ -1,4 +1,3 @@
-import { getSession } from "next-auth/react";
 import prisma from "../../../../lib/prisma";
 
 export default async function handler(req, res) {
@@ -6,19 +5,26 @@ export default async function handler(req, res) {
     return res.status(403).send();
   }
 
+  const { userId } = req.query;
   try {
-    const { user } = await getSession({ req });
     const userCurrency = prisma.userCurrency.findUnique({
       where: {
-        userId: user.userId,
+        userId,
+      },
+      include: {
+        user: {
+          select: {
+            role: true,
+          },
+        },
       },
     });
-    const mentor = user.role === "mentor";
+    const mentor = userCurrency.user.role === "mentor";
 
     const userPoints = prisma.pointsLog.findMany({
       where: {
         partyMember: {
-          userId: user.userId,
+          userId,
           deletedAt: null,
         },
       },
@@ -26,7 +32,7 @@ export default async function handler(req, res) {
 
     const userPublicQuests = prisma.partyMember.findMany({
       where: {
-        userId: user.userId,
+        userId,
         quest: {
           NOT: [
             {
