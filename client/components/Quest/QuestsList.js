@@ -1,11 +1,12 @@
 import useSWR from "swr";
-import { CircularProgress, Stack, Box } from "@mui/material";
+import { Stack } from "@mui/material";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { useState } from "react";
 import QuestItem from "./QuestItem";
 import WoopModal from "./WoopModal";
 import LoadMore from "../Common/LoadMore";
+import CustomCircularProgress from "../Common/CustomSpinner";
 
 function QuestPage(props) {
   const { url, skip, searchParams, setHasMore, toggleModal, setLoading } =
@@ -15,18 +16,7 @@ function QuestPage(props) {
   const { data: quests } = useSWR(url ? `${url}?${queryString}` : null);
   if (!quests) {
     setLoading(true);
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          minHeight: 100,
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
+    return <CustomCircularProgress sx={{ minHeight: 100 }} />;
   }
 
   if (quests.length < searchParams.take) {

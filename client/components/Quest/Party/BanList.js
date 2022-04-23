@@ -19,6 +19,7 @@ import useSWR from "swr";
 import RemoveCircleOutlineRoundedIcon from "@mui/icons-material/RemoveCircleOutlineRounded";
 import axios from "axios";
 import { QuestContext } from "../../../context/QuestContext";
+import CustomCircularProgress from "../../Common/CustomSpinner";
 
 export default function BanList() {
   const { questId, completedAt } = useContext(QuestContext);
@@ -40,7 +41,7 @@ export default function BanList() {
   };
 
   if (!partyBans) {
-    return <div>Loading</div>;
+    return <CustomCircularProgress rootStyles={{ minHeight: 100 }} />;
   }
 
   const partyBanItems = partyBans.map((partyBan) => (
