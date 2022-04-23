@@ -27,7 +27,6 @@ export default function QuestFilters(props) {
     const newVal = { startsAt: newStartsAt };
     if (filterParams.status.includes("COMPLETED")) {
       newVal.status = ["ACTIVE"];
-      setFilterParams();
     }
     if (!newStartsAt) {
       newVal.startsAt = "";
