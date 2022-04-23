@@ -17,6 +17,7 @@ import { useContext } from "react";
 import useSWR, { mutate } from "swr";
 import { PartyMemberContext } from "../../../context/PartyMemberContext";
 import { QuestContext } from "../../../context/QuestContext";
+import CustomCircularProgress from "../../Common/CustomSpinner";
 import PartyListItem from "./PartyListItem";
 
 export default function PartyList() {
@@ -86,7 +87,7 @@ export default function PartyList() {
   };
 
   if (!partyMembers) {
-    return <div>Loading</div>;
+    return <CustomCircularProgress rootStyles={{ minHeight: 100 }} />;
   }
 
   const mentees = [];

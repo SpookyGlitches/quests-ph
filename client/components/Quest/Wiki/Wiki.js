@@ -53,9 +53,7 @@ const Wiki = () => {
     } catch (err) {
       console.error(err);
     } finally {
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
+      setLoading(false);
     }
   };
   const toggleEditButton = async (event) => {

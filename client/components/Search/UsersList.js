@@ -3,6 +3,7 @@ import { Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import LoadMore from "../Common/LoadMore";
 import User from "./User";
+import CustomCircularProgress from "../Common/CustomSpinner";
 
 function UserPage({ url, setHasMore, searchParams, setLoading, skip }) {
   const queryString = new URLSearchParams({ ...searchParams, skip }).toString();
@@ -10,7 +11,7 @@ function UserPage({ url, setHasMore, searchParams, setLoading, skip }) {
 
   if (!users) {
     setLoading(true);
-    return <div>Loading</div>;
+    return <CustomCircularProgress rootStyles={{ minHeight: 100 }} />;
   }
 
   if (users.length < searchParams.take) {
