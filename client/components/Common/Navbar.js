@@ -206,7 +206,7 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
             component="div"
             sx={{ display: { xs: "none", md: "block" } }}
           >
-            MUI
+            Quests
           </Typography>
           <Search onClick={navigateToSearchPage}>
             <SearchIconWrapper>
