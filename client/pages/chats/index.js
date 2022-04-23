@@ -44,26 +44,6 @@ export default function ChatTalkLayout() {
   useEffect(() => {
     userData();
   }, [userCred]);
-  /* 
-    So for now this is in a condition, 
-    I know not allowed pero it does the job for now :((
-
-    This will get from the Friends Page the userId of the friend
-    the logged in user wants to chat with. I run it only if 
-    router.query.userInfo has a value set, otherwise I leave it.
-   */
-  // if (router.query.userInfo !== undefined) {
-  //   // eslint-disable-next-line
-  //   const { data: userToChatWith, error: userChatWithError } = useSWR(
-  //     `/auth/${router.query.userInfo}/getOtherUserCredentials`,
-  //   );
-
-  //   if (userChatWithError) return <p>Failed to load</p>;
-  //   if (!userToChatWith) return <CircularProgress />;
-  //   console.log("naa buang");
-  // } else {
-  //   console.log("wa buang");
-  // }
 
   const getFriendsForChat = async () => {
     // eslint-disable-next-line
@@ -197,9 +177,6 @@ export default function ChatTalkLayout() {
   return (
     <AppLayout>
       <Box sx={{ mb: 5 }} align="center">
-        <Typography sx={{ marginTop: 1 }} variant="h3" align="center">
-          Chats Page
-        </Typography>
         {searchFriendBar}
       </Box>
       {inboxComponent}

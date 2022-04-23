@@ -27,7 +27,7 @@ export default function InboxComponent(data) {
         // eslint-disable-next-line
         `${data.questId}QuestChat`,
       );
-      console.log(conversation);
+
       conversation.setParticipant(me);
       conversation.setAttributes({
         // eslint-disable-next-line
