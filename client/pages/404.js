@@ -1,5 +1,5 @@
-import { Stack, Typography, Link as MuiLink } from "@mui/material";
-import Link from "next/link";
+import { Stack } from "@mui/material";
+import NotFound from "../components/Common/NotFound";
 
 export default function Custom404() {
   return (
@@ -10,26 +10,11 @@ export default function Custom404() {
       borderRadius="1rem"
       sx={{
         background: "background.default",
-        margin: "5rem",
-        padding: "5rem",
+        height: "100vh",
+        width: "100vw",
       }}
     >
-      <Typography variant="h1" sx={{}}>
-        404
-      </Typography>
-      <Typography variant="h6" sx={{ mt: "1rem" }}>
-        This page could not be found
-      </Typography>
-
-      <Typography sx={{ mt: "1rem" }}>
-        <Link href="/" passHref>
-          <MuiLink
-            sx={{ color: "#755cde", fontSize: "1rem", fontWeight: "medium" }}
-          >
-            Go Back Home
-          </MuiLink>
-        </Link>
-      </Typography>
+      <NotFound />
     </Stack>
   );
 }

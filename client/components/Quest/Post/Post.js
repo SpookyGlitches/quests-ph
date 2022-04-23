@@ -1,4 +1,4 @@
-import { Paper, Divider } from "@mui/material";
+import { Paper, Divider, Skeleton } from "@mui/material";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import { useSession } from "next-auth/react";
@@ -23,10 +23,6 @@ const Post = ({ postId, questId, children, onSpecificPost }) => {
     if (!onSpecificPost) router.push(`/quests/${questId}/posts/${postId}`);
   };
 
-  if (!post) {
-    return <div>Loading</div>;
-  }
-
   return (
     <Paper
       sx={{
@@ -37,25 +33,32 @@ const Post = ({ postId, questId, children, onSpecificPost }) => {
         gap: 1,
       }}
     >
-      <PostHeader
-        createdAt={post.createdAt}
-        isAuthor={isAuthor}
-        displayName={post.partyMember.user.displayName}
-        image={post.partyMember.user.image}
-        postId={postId}
-        questId={questId}
-        updatedAt={post.updatedAt}
-      />
+      {post ? (
+        <PostHeader
+          createdAt={post.createdAt}
+          isAuthor={isAuthor}
+          displayName={post.partyMember.user.displayName}
+          image={post.partyMember.user.image}
+          postId={postId}
+          questId={questId}
+          updatedAt={post.updatedAt}
+        />
+      ) : (
+        <Skeleton sx={{ minHeight: 50 }} />
+      )}
+      {post ? (
+        <PostBody
+          title={post.title}
+          body={post.body}
+          postFiles={post.postFiles}
+          onClick={navigateToPost}
+          onSpecificPost={onSpecificPost}
+        />
+      ) : (
+        <Skeleton sx={{ minHeight: 100 }} />
+      )}
 
-      <PostBody
-        title={post.title}
-        body={post.body}
-        postFiles={post.postFiles}
-        onClick={navigateToPost}
-        onSpecificPost={onSpecificPost}
-      />
-
-      {postReacts && (
+      {postReacts && post ? (
         <>
           <PostFooter
             postReacts={postReacts}
@@ -72,6 +75,8 @@ const Post = ({ postId, questId, children, onSpecificPost }) => {
             disabled={Boolean(post.partyMember.quest.completedAt)}
           />
         </>
+      ) : (
+        <Skeleton sx={{ minHeight: 40 }} />
       )}
 
       {/* Comments Section */}
