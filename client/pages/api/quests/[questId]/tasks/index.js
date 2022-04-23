@@ -8,9 +8,10 @@ async function getAllTasks(req, res) {
     const { user } = await getSession({ req });
 
     const [memberId, returnAllTask] = await prisma.$transaction([
-      prisma.$queryRaw`SELECT partyMemberId FROM PartyMember WHERE userId = ${user.userId};`,
+      prisma.$queryRaw`SELECT partyMemberId FROM PartyMember WHERE userId = ${user.userId} AND questId = ${req.query.questId};`,
 
       prisma.questTask.findMany({
+        take: 3,
         where: {
           questTaskFinisher: {
             none: {
@@ -20,6 +21,7 @@ async function getAllTasks(req, res) {
           deletedAt: null,
           questId: Number(req.query.questId),
         },
+        orderBy: { createdAt: "desc" },
       }),
     ]);
 
