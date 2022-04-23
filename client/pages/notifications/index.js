@@ -7,70 +7,20 @@ import {
   Paper,
   ListItemButton,
   ListItemAvatar,
-  Button,
   Chip,
   ListItemText,
   Divider,
   ListItem,
   List,
   CircularProgress,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
 } from "@mui/material";
 import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
 import useSWR, { mutate } from "swr";
 import { formatDistance } from "date-fns";
 import axios from "axios";
 import { getSession } from "next-auth/react";
-import Image from "next/image";
 import AppLayout from "../../components/Layouts/AppLayout";
-
-function BadgeModal(props) {
-  const {
-    badgeModalState: { open, notificationMessage, badgeDetails },
-    setOpen,
-  } = props;
-  return (
-    <Dialog fullWidth maxWidth="xs" open={open}>
-      <DialogTitle color="primary" align="center">
-        Gained {badgeDetails.name} Badge
-      </DialogTitle>
-      <DialogContent>
-        <Box
-          sx={{
-            position: "relative",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            mt: 2,
-            gap: 5,
-          }}
-        >
-          <Image
-            src={`/badges/${badgeDetails.image}`}
-            height={150}
-            alt={`badge image of ${badgeDetails.name}`}
-            width={150}
-          />
-        </Box>
-        <Typography
-          align="center"
-          variant="body2"
-          sx={{ fontWeight: "medium", mt: 5 }}
-        >
-          {notificationMessage}
-        </Typography>
-      </DialogContent>
-      <DialogActions sx={{ m: 0 }}>
-        <Button variant="text" onClick={setOpen} fullWidth>
-          Close
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-}
+import BadgeModal from "../../components/Common/BadgeModal";
 
 export default function Index() {
   const [badgeModalState, setBadgeModalState] = useState({
@@ -242,6 +192,7 @@ export default function Index() {
           </List>
         ))}
       </Box>
+
       <BadgeModal
         badgeModalState={badgeModalState}
         setOpen={() => setBadgeModalState((prev) => ({ ...prev, open: false }))}
