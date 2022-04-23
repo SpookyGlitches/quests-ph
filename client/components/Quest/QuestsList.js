@@ -2,7 +2,7 @@ import useSWR from "swr";
 import { Stack } from "@mui/material";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import QuestItem from "./QuestItem";
 import WoopModal from "./WoopModal";
 import LoadMore from "../Common/LoadMore";
@@ -21,7 +21,10 @@ function QuestPage(props) {
 
   if (quests.length < searchParams.take) {
     setHasMore(false);
+  } else {
+    setHasMore(true);
   }
+
   setLoading(false);
 
   return quests.map((quest) => {
@@ -38,8 +41,8 @@ function QuestPage(props) {
 export default function QuestsList({ url, searchParams }) {
   const router = useRouter();
   const [count, setCount] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [loading, setLoading] = useState(true);
+  const [hasMore, setHasMore] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [modalDetails, setModalDetails] = useState({
     loading: false,
     title: "Join Quest",
@@ -88,6 +91,12 @@ export default function QuestsList({ url, searchParams }) {
   const loadMore = () => {
     setCount((prev) => prev + 1);
   };
+
+  useEffect(() => {
+    setCount(1);
+    setHasMore(false);
+    setLoading(false);
+  }, [searchParams, url]);
 
   return (
     <>
