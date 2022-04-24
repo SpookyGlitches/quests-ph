@@ -18,6 +18,7 @@ import UsersList from "../../components/Search/UsersList";
 import StyledToggleButton from "../../components/Common/StyledToggleButton";
 import QuestFilters from "../../components/Search/QuestFilters";
 import ArticleFilters from "../../components/Search/ArticleFilters";
+import DocumentTitle from "../../components/Common/DocumentTitle";
 
 const questsFilterDefaultValues = {
   category: ["HEALTH", "SOCIAL", "CAREER"],
@@ -124,8 +125,14 @@ export default function Search() {
     }
   };
 
+  const capitalize = (s) => {
+    if (typeof s !== "string") return "";
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  };
+
   return (
     <Container maxWidth="md">
+      <DocumentTitle title={capitalize(router.pathname.split("/")[1])} />
       <Stack spacing={2}>
         <TextField
           label="Search"

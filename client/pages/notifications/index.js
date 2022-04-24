@@ -20,8 +20,10 @@ import axios from "axios";
 import { getSession } from "next-auth/react";
 import AppLayout from "../../components/Layouts/AppLayout";
 import BadgeModal from "../../components/Common/BadgeModal";
-
+import DocumentTitle from "../../components/Common/DocumentTitle";
+import { useRouter } from "next/router";
 export default function Index() {
+  const router = useRouter();
   const [badgeModalState, setBadgeModalState] = useState({
     open: false,
     notificationMessage: "",
@@ -68,8 +70,14 @@ export default function Index() {
   if (!data) return <CircularProgress />;
   console.log(data);
 
+  const capitalize = (s) => {
+    if (typeof s !== "string") return "";
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  };
+
   return (
     <AppLayout>
+      <DocumentTitle title={capitalize(router.pathname.split("/")[1])} />
       <Paper sx={{ p: 3, display: "flex", gap: 5, flexDirection: "column" }}>
         <Box
           sx={{

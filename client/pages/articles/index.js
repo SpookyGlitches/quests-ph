@@ -5,8 +5,11 @@ import AppLayout from "../../components/Layouts/AppLayout";
 import Articles from "../../components/Articles/Articles";
 import SubmitArticles from "../../components/Articles/SubmitArticles";
 import AccessDenied from "../../components/Error/AccessDenied";
+import DocumentTitle from "../../components/Common/DocumentTitle";
+import { useRouter } from "next/router";
 
 export default function Search() {
+  const router = useRouter();
   const { data: session } = useSession();
   const [category, setCategory] = React.useState("Health");
 
@@ -29,9 +32,16 @@ export default function Search() {
         return <Articles category="HEALTH" />;
     }
   };
+
+  const capitalize = (s) => {
+    if (typeof s !== "string") return "";
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  };
+
   if (session) {
     return (
       <AppLayout>
+        <DocumentTitle title={capitalize(router.pathname.split("/")[1])} />
         <Box sx={{ marginY: "1rem", width: "100%" }}>
           <Box
             style={{

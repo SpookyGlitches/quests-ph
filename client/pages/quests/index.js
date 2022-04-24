@@ -14,8 +14,11 @@ import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import QuestFilters from "../../components/Search/QuestFilters";
 import AppLayout from "../../components/Layouts/AppLayout";
 import QuestsList from "../../components/Quest/QuestsList";
+import DocumentTitle from "../../components/Common/DocumentTitle";
+import { useRouter } from "next/router";
 
 export default function Index() {
+  const router = useRouter();
   const [text, setText] = useState("");
   const [searchText] = useDebounce(text, 2000);
 
@@ -28,8 +31,14 @@ export default function Index() {
     setText(event.target.value);
   };
 
+  const capitalize = (s) => {
+    if (typeof s !== "string") return "";
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  };
+
   return (
     <Paper sx={{ p: 3, display: "flex", gap: 5, flexDirection: "column" }}>
+      <DocumentTitle title={capitalize(router.pathname.split("/")[1])} />
       <Box
         sx={{
           display: "flex",
