@@ -11,10 +11,11 @@ import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import { useDebounce } from "use-debounce";
 import { useState } from "react";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import { useSession } from "next-auth/react";
 import QuestFilters from "../../components/Search/QuestFilters";
 import AppLayout from "../../components/Layouts/AppLayout";
 import QuestsList from "../../components/Quest/QuestsList";
-import { useSession } from "next-auth/react";
+
 export default function Index() {
   const [text, setText] = useState("");
   const [searchText] = useDebounce(text, 2000);
