@@ -63,7 +63,6 @@ export default function AdminDataGrid({ tableData, page, path }) {
 
   // eslint-disable-next-line
   const handleClickApproved = async (event, cellValues) => {
-    console.log(cellValues.row.mentorId);
     try {
       await axios({
         method: "get",
