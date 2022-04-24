@@ -27,7 +27,6 @@ export default function AdminDataGrid({ tableData, page, path }) {
   };
 
   const handleDeleteUser = async () => {
-    console.log(openedUser);
     try {
       const { userId } = openedUser.row;
       const res = await axios.put(`/api/admin/users/${userId}/deleteUser`);
@@ -178,7 +177,7 @@ export default function AdminDataGrid({ tableData, page, path }) {
         onClose={handleClose}
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>Delete Friend</DialogTitle>
+        <DialogTitle>Delete User</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
             Are you sure you want to delete this user? This action is
