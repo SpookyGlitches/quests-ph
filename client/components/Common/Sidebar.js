@@ -118,7 +118,7 @@ const Sidebar = (props) => {
             ))
           : memberlinks.map(({ path, label }) => (
               <Link href={path} passHref key={label}>
-                <ListItem button key={label} component="a">
+                <ListItem button active={true} key={label} component="a">
                   <ListItemIcon>{renderIcon(label)}</ListItemIcon>
                   <ListItemText primary={label} />
                 </ListItem>

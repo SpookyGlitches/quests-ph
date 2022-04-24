@@ -7,7 +7,6 @@ import {
   Paper,
   ListItemButton,
   ListItemAvatar,
-  Chip,
   ListItemText,
   Divider,
   ListItem,
@@ -32,16 +31,6 @@ export default function Index() {
       image: "",
     },
   });
-  // const deleteNotification = async (id) => {
-  //   console.log(id);
-  //   try {
-  //     const res = await axios.delete("/api/notifications", {
-  //       notificationId: id,
-  //     });
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
 
   const updateNotificationReadSeen = async (notif) => {
     try {
@@ -133,14 +122,8 @@ export default function Index() {
                 sx={{ marginRight: 2, position: "absolute", marginLeft: 0.5 }}
               />
               <ListItem alignItems="flex-start">
-                <Chip
-                  label={notif.type.split("_")[1]}
-                  color="primary"
-                  size="small"
-                  sx={{ marginTop: 2, fontWeight: "500" }}
-                />
                 <ListItemAvatar sx={{ marginRight: "5px" }}>
-                  <Avatar alt="Remy Sharp" src="/images/reward.png" />
+                  <Avatar alt="Remy Sharp" src={`/badges/${notif.image}`} />
                 </ListItemAvatar>
 
                 <ListItemText

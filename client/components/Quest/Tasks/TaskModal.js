@@ -4,6 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 import { mutate } from "swr";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
+import { useSnackbar } from "notistack";
 import TaskDetails from "./TaskDetails";
 
 export default function FinishTask({
@@ -13,6 +14,7 @@ export default function FinishTask({
   questTaskid,
   memberId,
 }) {
+  const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const { questId } = router.query;
@@ -20,11 +22,18 @@ export default function FinishTask({
   const handleOk = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`/api/quests/${questId}/tasks`, {
-        points,
-        questTaskid,
-        memberId,
-      });
+      await axios
+        .post(`/api/quests/${questId}/tasks`, {
+          points,
+          questTaskid,
+          memberId,
+        })
+        .then((response) => {
+          enqueueSnackbar(
+            `You earned ${response.data.pointsLog.gainedPoints} points for finishing a task`,
+          );
+        });
+
       setOpen(false);
       mutate(`/quests/${questId}/tasks`);
     } catch (err) {

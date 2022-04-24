@@ -1,9 +1,11 @@
 import { Button } from "@mui/material";
 import { useState } from "react";
+import { useSnackbar } from "notistack";
 
 import VideoCameraFrontRoundedIcon from "@mui/icons-material/VideoCameraFrontRounded";
 
 export default function EndQuest() {
+  const { enqueueSnackbar } = useSnackbar();
   const [room, setRoom] = useState([]);
 
   const handleOk = async () => {
@@ -31,7 +33,10 @@ export default function EndQuest() {
           },
         )
           .then((res) => res.json())
-          .then((data) => setRoom(data.url));
+          .then((data) => {
+            enqueueSnackbar("Succesfully created video meeting room");
+            setRoom(data.url);
+          });
     } catch (err) {
       console.error(err);
     }
