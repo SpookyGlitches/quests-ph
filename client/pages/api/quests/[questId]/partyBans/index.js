@@ -1,4 +1,3 @@
-import axios from "axios";
 import prisma from "../../../../../lib/prisma";
 import withQuestProtect from "../../../../../middlewares/withQuestProtect";
 
@@ -12,7 +11,6 @@ async function getQuestPartyBans(req, res) {
       include: {
         user: {
           select: {
-            userId: true,
             displayName: true,
             image: true,
           },
@@ -114,15 +112,7 @@ async function banPartyMember(req, res) {
       removeMemberOperation,
       banMemberOperation,
     ]);
-    await axios.delete(
-      `https://api.talkjs.com/v1/tvcbUw3n/conversations/${parsedQuestId}QuestChat/participants/${partyMemberData.userId}`,
-      {
-        headers: {
-          Authorization: `Bearer sk_test_NPBhbi9sSMV8aA6DnWhSkmKzxQpivO6p`,
-          "Content-Type": "application/json",
-        },
-      },
-    );
+
     return res.status(200).send();
   } catch (error) {
     console.log(error);

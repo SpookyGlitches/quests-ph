@@ -1,5 +1,4 @@
 import { PrismaClientValidationError } from "@prisma/client/runtime";
-import axios from "axios";
 import awardSomePartyMembersForCompletingQuest from "../../../../helpers/badges/completedQuest";
 import prisma from "../../../../lib/prisma";
 
@@ -43,15 +42,7 @@ async function completeQuest(req, res) {
     }
 
     await prisma.$transaction(transactions);
-    await axios.delete(
-      `https://api.talkjs.com/v1/tvcbUw3n/conversations/${questId}QuestChat/`,
-      {
-        headers: {
-          Authorization: `Bearer sk_test_NPBhbi9sSMV8aA6DnWhSkmKzxQpivO6p`,
-          "Content-Type": "application/json",
-        },
-      },
-    );
+
     res.status(200).send(transactions);
   } catch (err) {
     console.log(err);
