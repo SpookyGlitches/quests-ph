@@ -30,7 +30,7 @@ export default function FinishTask({
         })
         .then((response) => {
           enqueueSnackbar(
-            `You earned ${response.data.pointsLog.gainedPoints} points for finishing a task`,
+            `You earn ${response.data.pointsLog.gainedPoints} points for finishing a task`,
           );
         });
 
