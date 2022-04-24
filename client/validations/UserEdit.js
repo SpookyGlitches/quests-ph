@@ -7,12 +7,13 @@ const requiredMsg = "This field is required";
 export const EditMemberValidations = object({
   fullName: string().required(requiredMsg),
   displayName: string()
+    .min(6, "Display Name must be at least 6 characters")
+    .max(20)
     .matches(
       /^[a-zA-Z0-9]+$/,
       "Your display name should not contain spaces or special characters",
     )
-    .min(6, "Display Name must be at least 6 characters")
-    .max(20)
+
     .required(requiredMsg),
 
   dateOfBirth: string()
