@@ -58,15 +58,16 @@ export default async function rejectApplication(req, res) {
       html: `<div>
       Greetings, ${getUser.displayName}!
         This is an automated reply from Quests App University of San Carlos. Please do not reply.
-        Thank you for your application as a mentor of Quests. However, after carefully reviewing your application, 
+        Thank you for your application as a mentor of Quests. However, after carefully reviewing your application,
         we have decided to pursue other applicants whom we feel more closely meet our needs at this time. <br/>
-        You can, however, apply again if you wish to. You may submit your reapplication in the <b>Requests</b> 
-        tab of your account. Thank you and have a great day!
+        You can, however, apply again if you wish to. You may submit your reapplication in the <b>Requests</b>
+        tab of your account. Thank you and have a great day! <br/>
+        <b>Additional Remarks:</b> ${req.body.values}
     <div>`,
     };
     await prisma.$transaction(transactions);
     await transporter.sendMail(mailData);
-    return res.status(200).json(rejectedUser);
+    return res.status(200).json();
   } catch (error) {
     console.log(error);
     return res.status(400).json({ message: "Something went wrong" });

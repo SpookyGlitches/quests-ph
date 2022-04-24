@@ -1,6 +1,6 @@
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Button, Typography } from "@mui/material";
+import { Button, Typography, TextField, FormControl } from "@mui/material";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Dialog from "@mui/material/Dialog";
@@ -8,6 +8,9 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { SubmitArticle } from "../../../validations/SubmitArticle";
 
 const openFile = (key) => {
   const newWindow = window.open(
@@ -34,11 +37,50 @@ const ListItem = ({ array }) => {
 
 export default function AdminDataGrid({ tableData, page, path }) {
   const [open, setOpen] = React.useState(false);
+  const [openRejection, setOpenRejection] = React.useState(false);
+  const [cellVals, setCellVals] = React.useState("");
   const router = useRouter();
   const [fileArr, setFileArr] = React.useState([]);
   const [expArr, setExpArr] = React.useState([]);
+  const currentValidationSchema = SubmitArticle[1];
+  const methods = useForm({
+    resolver: yupResolver(currentValidationSchema),
+    mode: "onChange",
+    defaultValues: {
+      rejectionReason: "",
+    },
+  });
+  const { control, handleSubmit, reset, formState } = methods;
+  const { errors } = formState;
   const handleClose = () => {
     setOpen(false);
+  };
+  // Reject Application
+  // eslint-disable-next-line
+  const handleRejectApplication = async (event, cellValues) => {
+    setOpenRejection(true);
+    setCellVals(cellValues.row.mentorId);
+  };
+  const onSubmitReject = async (values) => {
+    try {
+      await axios
+        .put(`/api/admin/applications/${cellVals}/rejectApplication`, {
+          values: values.rejectionReason,
+        })
+        .then(() => {
+          setOpenRejection(false);
+          router.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+    reset();
+  };
+  const handleCloseRejection = () => {
+    setOpenRejection(false);
   };
 
   // eslint-disable-next-line
@@ -93,26 +135,6 @@ export default function AdminDataGrid({ tableData, page, path }) {
       console.log(error);
     }
   };
-
-  // Reject Application
-  const handleRejectApplication = async (event, cellValues) => {
-    try {
-      const res = await axios.put(
-        `/api/admin/applications/${cellValues.row.mentorId}/rejectApplication`,
-      );
-      router.reload();
-      // Probs gonna add something like sending an email then requiring them to send again.
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-    }
-    console.log("updated");
-  };
-  // Articles Mgmt
-
-  // Quests Mgmt
-
-  // Reports Mgmt
 
   let columns;
   let dataGrid;
@@ -282,6 +304,74 @@ export default function AdminDataGrid({ tableData, page, path }) {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Dialog open={openRejection} onClose={handleCloseRejection}>
+        <DialogTitle>
+          <Typography variant="h4" style={{ color: "#755cde" }}>
+            Reject Application
+          </Typography>
+        </DialogTitle>
+        <form onSubmit={handleSubmit(onSubmitReject)}>
+          <DialogContent sx={{ mt: -1 }}>
+            <DialogContentText>
+              <Typography>
+                Input your reason for rejection here. You may put NA if
+                applicable.
+              </Typography>
+            </DialogContentText>
+
+            <FormControl fullWidth sx={{ mt: 3 }}>
+              <Controller
+                control={control}
+                name="rejectionReason"
+                render={({ field: { onChange, value } }) => (
+                  <TextField
+                    fullWidth
+                    id="filled-basic"
+                    label="Reason"
+                    multiline
+                    rows={2}
+                    onChange={onChange}
+                    value={value}
+                    sx={{ mt: 2 }}
+                    error={
+                      errors.rejectionReason && errors.rejectionReason.message
+                    }
+                    helperText={
+                      errors.rejectionReason
+                        ? errors.rejectionReason.message
+                        : ""
+                    }
+                  />
+                )}
+              />
+            </FormControl>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={handleCloseRejection}
+              variant="outlined"
+              color="primary"
+              style={{
+                backgroundColor: "#B0B0B0",
+                borderColor: "#E8E8E8",
+                color: "white",
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{ m: 1 }}
+              type="submit"
+            >
+              Submit
+            </Button>
+          </DialogActions>
+        </form>
+      </Dialog>
+
       {dataGrid}
     </div>
   );
