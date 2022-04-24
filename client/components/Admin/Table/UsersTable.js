@@ -1,6 +1,13 @@
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Button } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from "@mui/material";
 import axios from "axios";
 import { useRouter } from "next/router";
 
@@ -8,9 +15,21 @@ export default function AdminDataGrid({ tableData, page, path }) {
   const router = useRouter();
   /* Users Mgmt */
 
-  const handleDeleteUser = async (event, cellValues) => {
+  const [open, setOpen] = React.useState(false);
+  const [openedUser, setOpenedUser] = React.useState();
+  const handleClickOpen = (event, cellValues) => {
+    setOpen(true);
+    setOpenedUser(cellValues);
+  };
+  const handleClose = () => {
+    setOpen(false);
+    setOpenedUser();
+  };
+
+  const handleDeleteUser = async () => {
+    console.log(openedUser);
     try {
-      const { userId } = cellValues.row;
+      const { userId } = openedUser.row;
       const res = await axios.put(`/api/admin/users/${userId}/deleteUser`);
       router.reload();
       console.log(res);
@@ -72,7 +91,7 @@ export default function AdminDataGrid({ tableData, page, path }) {
                 variant="contained"
                 color="primary"
                 onClick={(event) => {
-                  handleDeleteUser(event, cellValues);
+                  handleClickOpen(event, cellValues);
                 }}
               >
                 Delete
@@ -154,6 +173,24 @@ export default function AdminDataGrid({ tableData, page, path }) {
       }}
     >
       {dataGrid}
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>Delete Friend</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            Are you sure you want to delete this user? This action is
+            irreversible.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleDeleteUser}>Okay</Button>
+        </DialogActions>
+      </Dialog>
+      ;
     </div>
   );
 }
