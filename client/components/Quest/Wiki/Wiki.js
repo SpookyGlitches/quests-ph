@@ -1,7 +1,7 @@
 import { Box, Paper, Typography } from "@mui/material";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { mutate } from "swr";
+import { useSWRConfig } from "swr";
 import { Plate } from "@udecode/plate-core";
 import { LoadingButton } from "@mui/lab";
 import { plugins } from "../../../config/plate/plugins";
@@ -20,6 +20,8 @@ const Wiki = () => {
   const [plateValue, setPlateValue] = useState(initialValue);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const { mutate } = useSWRConfig();
 
   const partyMember = useContext(PartyMemberContext);
   const quest = useContext(QuestContext);
