@@ -26,6 +26,7 @@ const withQuestProtect = async (handler, req, res, allowedRoles) => {
     }
     return res.status(404).send();
   } catch (error) {
+    console.log(error);
     return res.status(500).send();
   }
 };
