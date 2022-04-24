@@ -4,12 +4,12 @@ import { Box, Grid, Stack } from "@mui/material";
 import QuestHeader from "../Quest/QuestHeader";
 import Todo from "../Quest/Tasks/ToDo";
 import EndQuest from "../Quest/EndQuest";
-import DateCard from "../Quest/Tasks/DateCard";
 import { QuestContext } from "../../context/QuestContext";
 import { PartyMemberContext } from "../../context/PartyMemberContext";
 import VideoCallRoom from "../Quest/VideoCallRoom";
 import NotFound from "../Common/NotFound";
 import CustomCircularProgress from "../Common/CustomSpinner";
+import MentorMessage from "../Quest/MentorMessage";
 
 export default function QuestLayout({ children }) {
   const router = useRouter();
@@ -46,10 +46,10 @@ export default function QuestLayout({ children }) {
           <Grid item xs={12} lg={4}>
             <Box sx={{}}>
               <Stack spacing={3}>
-                <DateCard />
                 <Todo />
                 {partyMember.role === "PARTY_LEADER" && <VideoCallRoom />}
                 {partyMember.role === "PARTY_LEADER" && <EndQuest />}
+                <MentorMessage />
               </Stack>
             </Box>
           </Grid>
