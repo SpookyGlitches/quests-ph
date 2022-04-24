@@ -14,7 +14,7 @@ import {
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useContext } from "react";
-import useSWR, { mutate } from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { PartyMemberContext } from "../../../context/PartyMemberContext";
 import { QuestContext } from "../../../context/QuestContext";
 import CustomCircularProgress from "../../Common/CustomSpinner";
@@ -25,6 +25,8 @@ export default function PartyList() {
 
   const quest = useContext(QuestContext);
   const partyMember = useContext(PartyMemberContext);
+  const { mutate } = useSWRConfig();
+
   const isPartyLeader = partyMember.role === "PARTY_LEADER";
 
   const { questId, completedAt } = quest;
