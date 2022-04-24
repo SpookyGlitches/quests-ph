@@ -100,7 +100,8 @@ export default function PartyList() {
   const mentees = [];
   const mentors = [];
 
-  partyMembers.forEach((member, index) => {
+  let x = 0;
+  partyMembers.forEach((member) => {
     if (member.user.role === "mentor") {
       mentors.push(
         <PartyListItem
@@ -117,7 +118,7 @@ export default function PartyList() {
       mentees.push(
         <PartyListItem
           item={member}
-          rank={index + 1}
+          rank={x + 1}
           isPartyLeader={isPartyLeader}
           key={member.partyMemberId}
           mentor
@@ -126,6 +127,7 @@ export default function PartyList() {
           completed={completed}
         />,
       );
+      x++;
     }
   });
 
