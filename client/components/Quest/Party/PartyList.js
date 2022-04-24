@@ -49,13 +49,14 @@ export default function PartyList() {
 
   const removePartyMember = async (partyMemberId) => {
     try {
-      await axios.delete(
-        `/api/quests/${questId}/partyMembers/${partyMemberId}`,
-      );
       const filtered = partyMembers.filter(
         (item) => item.partyMemberId !== partyMemberId,
       );
-      mutatePartyMembers(filtered);
+      mutatePartyMembers(filtered, { revalidate: false });
+      await axios.delete(
+        `/api/quests/${questId}/partyMembers/${partyMemberId}`,
+      );
+      mutatePartyMembers(filtered, { revalidate: true });
     } catch (error) {
       console.error(error);
     }
@@ -63,14 +64,15 @@ export default function PartyList() {
 
   const banPartyMember = async (toBanUserId) => {
     try {
-      await axios.post(`/api/quests/${questId}/partyBans`, {
-        userId: toBanUserId,
-      });
       const filteredMembers = partyMembers.filter(
         (item) => item.userId !== toBanUserId,
       );
-      mutatePartyMembers(filteredMembers);
+      mutatePartyMembers(filteredMembers, { revalidate: false });
+      await axios.post(`/api/quests/${questId}/partyBans`, {
+        userId: toBanUserId,
+      });
       mutate(`/quests/${questId}/partyBans`);
+      mutatePartyMembers(filteredMembers, { revalidate: true });
     } catch (error) {
       console.error(error);
     }
