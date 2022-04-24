@@ -43,7 +43,7 @@ export default function ChatTalkLayout() {
 
   useEffect(() => {
     userData();
-  }, [userCred]);
+  }, []);
 
   const getFriendsForChat = async () => {
     // eslint-disable-next-line
