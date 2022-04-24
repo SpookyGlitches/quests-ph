@@ -375,8 +375,8 @@ const Index = () => {
                           fullWidth
                           sx={{ mt: 2 }}
                           helperText={
-                            errorsPassword.dateOfBirth && (
-                              <p>{errorsPassword.dateOfBirth.message}</p>
+                            errors.dateOfBirth && (
+                              <p>{errors.dateOfBirth.message}</p>
                             )
                           }
                           id="dateOfBirth"
