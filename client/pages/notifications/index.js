@@ -46,7 +46,9 @@ export default function Index() {
         });
       }
       /* eslint-disable */
-      const res = await axios.put(`/api/notifications`, { notificationId: id });
+      const res = await axios.put(`/api/notifications`, {
+        notificationId: notif.notificationId,
+      });
       mutate("/notifications");
       mutate("/notifications/notif_count");
     } catch (error) {
@@ -66,7 +68,6 @@ export default function Index() {
 
   if (error) return <p>Error Fetching</p>;
   if (!data) return <CircularProgress />;
-  console.log(data);
 
   return (
     <AppLayout>
