@@ -16,7 +16,10 @@ function UserPage({ url, setHasMore, searchParams, setLoading, skip }) {
 
   if (users.length < searchParams.take) {
     setHasMore(false);
+  } else {
+    setHasMore(true);
   }
+
   setLoading(false);
 
   return users.map((user) => {
@@ -26,8 +29,8 @@ function UserPage({ url, setHasMore, searchParams, setLoading, skip }) {
 
 export default function UsersList({ url, searchParams }) {
   const [count, setCount] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [loading, setLoading] = useState(true);
+  const [hasMore, setHasMore] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const userPages = [];
   for (let i = 0; i < count; i++) {
@@ -48,7 +51,7 @@ export default function UsersList({ url, searchParams }) {
   };
 
   useEffect(() => {
-    setHasMore(true);
+    setHasMore(false);
     setCount(1);
   }, [searchParams]);
 

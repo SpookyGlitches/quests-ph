@@ -44,26 +44,6 @@ export default function ChatTalkLayout() {
   useEffect(() => {
     userData();
   }, [userCred]);
-  /* 
-    So for now this is in a condition, 
-    I know not allowed pero it does the job for now :((
-
-    This will get from the Friends Page the userId of the friend
-    the logged in user wants to chat with. I run it only if 
-    router.query.userInfo has a value set, otherwise I leave it.
-   */
-  // if (router.query.userInfo !== undefined) {
-  //   // eslint-disable-next-line
-  //   const { data: userToChatWith, error: userChatWithError } = useSWR(
-  //     `/auth/${router.query.userInfo}/getOtherUserCredentials`,
-  //   );
-
-  //   if (userChatWithError) return <p>Failed to load</p>;
-  //   if (!userToChatWith) return <CircularProgress />;
-  //   console.log("naa buang");
-  // } else {
-  //   console.log("wa buang");
-  // }
 
   const getFriendsForChat = async () => {
     // eslint-disable-next-line
@@ -75,7 +55,7 @@ export default function ChatTalkLayout() {
   };
   useEffect(() => {
     getFriendsForChat();
-  }, [friends]);
+  }, []);
 
   const userToChatWith = async () => {
     // eslint-disable-next-line
@@ -92,10 +72,7 @@ export default function ChatTalkLayout() {
   useEffect(() => {
     if (router.query.userInfo !== undefined) {
       userToChatWith();
-    } else {
-      console.log("wala");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   let searchFriendBar;
@@ -113,6 +90,7 @@ export default function ChatTalkLayout() {
             mx: 15,
             my: 5,
           }}
+          defaultValue=""
           onChange={(e) => setSelectedValue(e.target.value)}
         >
           {friends.map((user) => (
@@ -182,7 +160,7 @@ export default function ChatTalkLayout() {
   } else {
     searchFriendBar = (
       <Typography variant="h5" sx={{ mt: 3, color: "#000000" }} align="center">
-        Oops! Looks like you gotta add friends first. :(
+        Oops. You gotta add friends or join a quest first. :(
       </Typography>
     );
     img = (
@@ -199,9 +177,6 @@ export default function ChatTalkLayout() {
   return (
     <AppLayout>
       <Box sx={{ mb: 5 }} align="center">
-        <Typography sx={{ marginTop: 1 }} variant="h3" align="center">
-          Chats Page
-        </Typography>
         {searchFriendBar}
       </Box>
       {inboxComponent}

@@ -4,7 +4,6 @@ import Talk from "talkjs";
 
 export default function InboxComponent(data) {
   const talkjsContainer = React.createRef();
-
   let other;
   useEffect(() => {
     // eslint-disable-next-line
