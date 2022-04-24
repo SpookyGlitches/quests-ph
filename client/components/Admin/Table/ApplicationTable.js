@@ -61,7 +61,27 @@ export default function AdminDataGrid({ tableData, page, path }) {
     }
   };
 
-  /* Applications Mgmt */
+  // eslint-disable-next-line
+  const handleClickApproved = async (event, cellValues) => {
+    console.log(cellValues.row.mentorId);
+    try {
+      await axios({
+        method: "get",
+        url: `/api/admin/applications/${cellValues.row.mentorId}/getApprovedFiles`,
+      })
+        .then((res) => {
+          setExpArr(res.data.experience);
+          setFileArr(res.data.files);
+          setOpen(true);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // Approve Application
   const handleApproveApplication = async (event, cellValues) => {
     try {
@@ -191,6 +211,13 @@ export default function AdminDataGrid({ tableData, page, path }) {
           headerAlign: "center",
         },
         {
+          field: "fullName",
+          headerName: "Applicant Full Name",
+          width: 250,
+          headerAlign: "center",
+        },
+
+        {
           field: "Document",
           headerAlign: "center",
           width: 250,
@@ -201,29 +228,10 @@ export default function AdminDataGrid({ tableData, page, path }) {
                 color="primary"
                 style={{ margin: "0 auto", display: "flex" }}
                 onClick={(event) => {
-                  handleClick(event, cellValues);
+                  handleClickApproved(event, cellValues);
                 }}
               >
                 View
-              </Button>
-            );
-          },
-        },
-        {
-          field: "Action",
-          headerAlign: "center",
-          width: 150,
-          renderCell: (cellValues) => {
-            return (
-              <Button
-                fullWidth
-                variant="contained"
-                color="error"
-                onClick={(event) => {
-                  handleRejectApplication(event, cellValues);
-                }}
-              >
-                Reject
               </Button>
             );
           },
