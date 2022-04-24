@@ -65,7 +65,11 @@ export default function FriendsOptionsBar({
   };
 
   const handleReport = () => {
-    setOpenReport(true);
+    if (friendInfo.isBanned !== true) {
+      setOpenReport(true);
+    } else {
+      enqueueSnackbar("This user is currently banned.");
+    }
   };
 
   const handleCloseReport = () => {
