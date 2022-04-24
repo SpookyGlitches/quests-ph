@@ -104,10 +104,7 @@ export default function ChatTalkLayout() {
             >
               <ListItem key={user.userId} alignItems="flex-start">
                 <ListItemAvatar>
-                  <Avatar alt="No">
-                    {user.fullName.charAt(0)}
-                    {user.fullName.split(" ")[1].charAt(0)}
-                  </Avatar>
+                  <Avatar alt="No">{user.displayName.charAt(0)}</Avatar>
                 </ListItemAvatar>
 
                 <ListItemText
@@ -127,7 +124,7 @@ export default function ChatTalkLayout() {
                           fontWeight: "bold",
                         }}
                       >
-                        {user.fullName}
+                        {user.displayName}
                       </Typography>
                     </Grid>
                   }
