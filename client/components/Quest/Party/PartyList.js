@@ -48,33 +48,36 @@ export default function PartyList() {
   };
 
   const removePartyMember = async (partyMemberId) => {
+    const filtered = partyMembers.filter(
+      (item) => item.partyMemberId !== partyMemberId,
+    );
+    mutatePartyMembers(filtered, { revalidate: false });
     try {
-      const filtered = partyMembers.filter(
-        (item) => item.partyMemberId !== partyMemberId,
-      );
-      mutatePartyMembers(filtered, { revalidate: false });
       await axios.delete(
         `/api/quests/${questId}/partyMembers/${partyMemberId}`,
       );
-      mutatePartyMembers(filtered, { revalidate: true });
     } catch (error) {
       console.error(error);
+    } finally {
+      mutatePartyMembers(filtered, { revalidate: true });
     }
   };
 
   const banPartyMember = async (toBanUserId) => {
+    const filteredMembers = partyMembers.filter(
+      (item) => item.userId !== toBanUserId,
+    );
+    mutatePartyMembers(filteredMembers, { revalidate: false });
+
     try {
-      const filteredMembers = partyMembers.filter(
-        (item) => item.userId !== toBanUserId,
-      );
-      mutatePartyMembers(filteredMembers, { revalidate: false });
       await axios.post(`/api/quests/${questId}/partyBans`, {
         userId: toBanUserId,
       });
-      mutate(`/quests/${questId}/partyBans`);
-      mutatePartyMembers(filteredMembers, { revalidate: true });
     } catch (error) {
       console.error(error);
+    } finally {
+      mutate(`/quests/${questId}/partyBans`);
+      mutatePartyMembers(filteredMembers, { revalidate: true });
     }
   };
 
