@@ -1,11 +1,28 @@
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Button } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from "@mui/material";
 import axios from "axios";
 import { useRouter } from "next/router";
 
 export default function AdminDataGrid({ tableData, page, path }) {
   const router = useRouter();
+  const [open, setOpen] = React.useState(false);
+  const [openedQuest, setOpenedQuest] = React.useState();
+  const handleClickOpen = (event, cellValues) => {
+    setOpen(true);
+    setOpenedQuest(cellValues);
+  };
+  const handleClose = () => {
+    setOpen(false);
+    setOpenedQuest();
+  };
 
   // Users Mgmt
 
@@ -14,9 +31,9 @@ export default function AdminDataGrid({ tableData, page, path }) {
   // Articles Mgmt
 
   /* Quests Mgmt */
-  const handleDeleteQuest = async (event, cellValues) => {
+  const handleDeleteQuest = async () => {
     try {
-      const { questId } = cellValues.row;
+      const { questId } = openedQuest.row;
       const res = await axios.put(`/api/admin/quests/${questId}/deleteQuest`);
       router.reload();
       console.log(res);
@@ -81,7 +98,7 @@ export default function AdminDataGrid({ tableData, page, path }) {
                 color="error"
                 style={{ margin: "0 auto", display: "flex" }}
                 onClick={(event) => {
-                  handleDeleteQuest(event, cellValues);
+                  handleClickOpen(event, cellValues);
                 }}
               >
                 Delete
@@ -168,6 +185,23 @@ export default function AdminDataGrid({ tableData, page, path }) {
       }}
     >
       {dataGrid}
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>Delete Quest</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            Are you sure you want to delete this quest? This action is
+            irreversible.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleDeleteQuest}>Okay</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
