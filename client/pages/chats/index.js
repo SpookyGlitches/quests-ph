@@ -160,7 +160,7 @@ export default function ChatTalkLayout() {
   } else {
     searchFriendBar = (
       <Typography variant="h5" sx={{ mt: 3, color: "#000000" }} align="center">
-        Oops. You gotta add friends first. :(
+        Oops. You gotta add friends to chat with first. :(
       </Typography>
     );
     img = (
