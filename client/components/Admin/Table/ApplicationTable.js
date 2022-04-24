@@ -203,19 +203,19 @@ export default function AdminDataGrid({ tableData, page, path }) {
           width: 250,
           headerAlign: "center",
         },
-        {
-          field: "displayName",
-          headerName: "Applicant Display Name",
-          width: 250,
-          headerAlign: "center",
-        },
+
         {
           field: "fullName",
           headerName: "Applicant Full Name",
           width: 250,
           headerAlign: "center",
         },
-
+        {
+          field: "email",
+          headerName: "Email",
+          width: 250,
+          headerAlign: "center",
+        },
         {
           field: "Document",
           headerAlign: "center",
