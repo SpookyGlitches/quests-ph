@@ -168,8 +168,8 @@ export default function MentorNotFriendOptionsBar({
         })
         .then((response) => {
           if (
-            response.data.avail.length === 0 &&
-            response.data.hasMentor.length === 0
+            response.data.avail === null &&
+            response.data.hasMentor === null
           ) {
             axios({
               method: "POST",
@@ -187,16 +187,21 @@ export default function MentorNotFriendOptionsBar({
               });
             setOpenRequest(false);
           } else if (
-            response.data.avail.length === 1 &&
-            response.data.hasMentor.length === 0
+            response.data.avail !== null &&
+            response.data.hasMentor === null
           ) {
             enqueueSnackbar(
               "This Quest is currently being requested to be mentored! Please choose another Quest!",
             );
-          } else {
+            setQuestMentored("");
+          } else if (
+            response.data.avail === null &&
+            response.data.hasMentor !== null
+          ) {
             enqueueSnackbar(
               "This Quest already has a mentor! Please choose another Quest!",
             );
+            setQuestMentored("");
           }
         });
     } else {
