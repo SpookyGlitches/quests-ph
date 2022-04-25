@@ -4,13 +4,13 @@ const requiredMsg = "This field is required";
 
 const titleValidation = object({
   title: string()
-    .max(32, "Maximum length of 32 characters")
+    .max(100, "Maximum length of 100 characters")
     .required(requiredMsg),
 });
 
 const bodyValidation = object({
   body: string()
-    .max(128, "Maximum length of 128 characters")
+    .max(200, "Maximum length of 200 characters")
     .required(requiredMsg),
 });
 

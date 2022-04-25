@@ -10,6 +10,7 @@ import VideoCallRoom from "../Quest/VideoCallRoom";
 import NotFound from "../Common/NotFound";
 import CustomCircularProgress from "../Common/CustomSpinner";
 import DocumentTitle from "../Common/DocumentTitle";
+import MentorMessage from "../Quest/MentorMessage";
 
 export default function QuestLayout({ children }) {
   const router = useRouter();
@@ -41,6 +42,17 @@ export default function QuestLayout({ children }) {
     if (typeof s !== "string") return "";
     return s.charAt(0).toUpperCase() + s.slice(1);
   };
+  const renderEndQuest = () => {
+    if (quest.completedAt) {
+      return <EndQuest />;
+    }
+
+    if (partyMember.role === "PARTY_LEADER") {
+      return <EndQuest />;
+    }
+
+    return null;
+  };
 
   return (
     <Grid container spacing={6}>
@@ -56,7 +68,8 @@ export default function QuestLayout({ children }) {
               <Stack spacing={3}>
                 <Todo />
                 {partyMember.role === "PARTY_LEADER" && <VideoCallRoom />}
-                {partyMember.role === "PARTY_LEADER" && <EndQuest />}
+                {renderEndQuest()}
+                <MentorMessage />
               </Stack>
             </Box>
           </Grid>

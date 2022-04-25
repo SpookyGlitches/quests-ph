@@ -32,7 +32,7 @@ export default function Index() {
     },
   });
 
-  const updateNotificationReadSeen = async (notif, nid) => {
+  const updateNotificationReadSeen = async (notif) => {
     try {
       if (notif.type === "RECEIVED_BADGE") {
         setBadgeModalState({
@@ -47,7 +47,7 @@ export default function Index() {
       }
       /* eslint-disable */
       const res = await axios.put(`/api/notifications`, {
-        notificationId: nid,
+        notificationId: notif.notificationId,
       });
       mutate("/notifications");
       mutate("/notifications/notif_count");
@@ -67,7 +67,7 @@ export default function Index() {
   // let finalData = { ...notif, ...person };
 
   if (!data) return <CustomCircularProgress />;
-  console.log(data);
+
   return (
     <AppLayout>
       <Paper sx={{ p: 3, display: "flex", gap: 5, flexDirection: "column" }}>

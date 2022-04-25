@@ -12,6 +12,7 @@ import { useDebounce } from "use-debounce";
 import { useState } from "react";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 import QuestFilters from "../../components/Search/QuestFilters";
 import AppLayout from "../../components/Layouts/AppLayout";
 import QuestsList from "../../components/Quest/QuestsList";
@@ -26,6 +27,8 @@ export default function Index() {
     category: ["HEALTH", "SOCIAL", "CAREER"],
     status: ["ACTIVE", "COMPLETED"],
   }));
+  const session = useSession();
+  const role = session.data?.user?.role;
 
   const handleSearchChange = (event) => {
     setText(event.target.value);
@@ -50,11 +53,13 @@ export default function Index() {
         <Typography variant="h4" color="primary">
           Quests
         </Typography>
-        <Link href="/quests/create" passHref>
-          <Button variant="contained" startIcon={<AddRoundedIcon />}>
-            New Quest
-          </Button>
-        </Link>
+        {role !== "mentor" && (
+          <Link href="/quests/create" passHref>
+            <Button variant="contained" startIcon={<AddRoundedIcon />}>
+              New Quest
+            </Button>
+          </Link>
+        )}
       </Box>
       <Box sx={{}}>
         <TextField

@@ -7,7 +7,7 @@ import { useForm, Controller } from "react-hook-form";
 import useSWR, { useSWRConfig } from "swr";
 import { yupResolver } from "@hookform/resolvers/yup";
 import moment from "moment";
-import { getSession } from "next-auth/react";
+import { useSession, getSession } from "next-auth/react";
 import DatePicker from "@mui/lab/DatePicker";
 import axios from "axios";
 import {
@@ -27,6 +27,7 @@ import NoDataPage from "../noData";
 import Notification from "../../components/Common/Notification";
 import { ChangePasswordValidations } from "../../validations/ChangePassword";
 import { EditMemberValidations } from "../../validations/UserEdit";
+import { EditMentorValidations } from "../../validations/UserMentorEdit";
 import DataFieldHolder from "../../components/Settings/DataFieldHolder";
 import AppLayout from "../../components/Layouts/AppLayout";
 
@@ -66,11 +67,18 @@ const Index = () => {
     type: "",
   });
 
+  const session = useSession();
+  const mentor = session?.data?.user?.role === "mentor";
+
+  const objectValidation = mentor
+    ? EditMentorValidations
+    : EditMemberValidations;
+
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(EditMemberValidations) });
+  } = useForm({ resolver: yupResolver(objectValidation) });
 
   const {
     control: controlPassword,
@@ -372,6 +380,7 @@ const Index = () => {
                         <TextField
                           fullWidth
                           sx={{ mt: 2 }}
+                          variant="outlined"
                           helperText={
                             errors.dateOfBirth && (
                               <p>{errors.dateOfBirth.message}</p>

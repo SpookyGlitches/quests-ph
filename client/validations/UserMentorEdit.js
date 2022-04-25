@@ -4,7 +4,8 @@ import moment from "moment";
 const requiredMsg = "This field is required";
 
 // eslint-disable-next-line import/prefer-default-export
-export const EditMemberValidations = object({
+export const EditMentorValidations = object({
+  fullName: string().required(requiredMsg),
   displayName: string()
     .min(6, "Display Name must be at least 6 characters")
     .max(20)

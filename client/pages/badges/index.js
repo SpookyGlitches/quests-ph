@@ -4,7 +4,6 @@ import { useState } from "react";
 import prisma from "../../lib/prisma";
 import BadgeModal from "../../components/Common/BadgeModal";
 import AppLayout from "../../components/Layouts/AppLayout";
-import DocumentTitle from "../../components/Common/DocumentTitle";
 
 export default function BadgesPage({ badges }) {
   const [badgeModalState, setBadgeModalState] = useState({

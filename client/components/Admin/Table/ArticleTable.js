@@ -1,11 +1,28 @@
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Button } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Stack,
+  Typography,
+} from "@mui/material";
 import axios from "axios";
 import { useRouter } from "next/router";
 
 export default function AdminDataGrid({ tableData, page, path }) {
+  const [open, setOpen] = React.useState(false);
+  const [rowLink, setRowLink] = React.useState();
   const router = useRouter();
+
+  const handleClick = (event, cellValues) => {
+    setRowLink(cellValues.row.link);
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleApproveArticle = async (event, cellValues) => {
     try {
@@ -77,10 +94,23 @@ export default function AdminDataGrid({ tableData, page, path }) {
           headerAlign: "center",
         },
         {
-          field: "link",
-          headerName: "Link",
-          width: 150,
+          field: "View Link",
           headerAlign: "center",
+          width: 160,
+          renderCell: (cellValues) => {
+            return (
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ margin: "0 auto", display: "flex" }}
+                onClick={(event) => {
+                  handleClick(event, cellValues);
+                }}
+              >
+                View
+              </Button>
+            );
+          },
         },
         {
           field: "Action",
@@ -147,10 +177,23 @@ export default function AdminDataGrid({ tableData, page, path }) {
           headerAlign: "center",
         },
         {
-          field: "link",
-          headerName: "Link",
-          width: 150,
+          field: "View Link",
           headerAlign: "center",
+          width: 160,
+          renderCell: (cellValues) => {
+            return (
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ margin: "0 auto", display: "flex" }}
+                onClick={(event) => {
+                  handleClick(event, cellValues);
+                }}
+              >
+                View
+              </Button>
+            );
+          },
         },
         {
           field: "Action",
@@ -193,6 +236,14 @@ export default function AdminDataGrid({ tableData, page, path }) {
         }}
       >
         {dataGrid}
+        <Dialog open={open} onClose={handleClose} fullWidth>
+          <DialogTitle>Article Link: </DialogTitle>
+          <Stack spacing={1.5} sx={{ mt: "-1.5em" }}>
+            <DialogContent>
+              <Typography>{rowLink}</Typography>
+            </DialogContent>
+          </Stack>
+        </Dialog>
       </div>
     );
   }

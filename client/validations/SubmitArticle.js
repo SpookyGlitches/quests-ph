@@ -9,5 +9,8 @@ export const submitArticles = object({
   category: mixed().oneOf(["HEALTH", "SOCIAL", "CAREER"]).required(requiredMsg),
   link: string().matches(URL, "Please enter a valid URL").required(requiredMsg),
 });
+export const submitReason = object({
+  rejectionReason: string().required(requiredMsg).max(50),
+});
 
-export const SubmitArticle = [submitArticles];
+export const SubmitArticle = [submitArticles, submitReason];

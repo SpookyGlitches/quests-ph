@@ -109,9 +109,9 @@ export default async function awardSomePartyMembersForCompletingQuest(questId) {
 
   const updateUsersCurrencies = updatePartyMembersCurrencies(partyMembersInfo);
 
-  const { youngOne, achiever, manOfAction, paver, pathFinder } = badges;
+  const { youngOne, achiever, manOfAction, paver, pathfinder } = badges;
   const menteeBadges = [youngOne, achiever, manOfAction];
-  const mentorBadges = [paver, pathFinder];
+  const mentorBadges = [paver, pathfinder];
 
   partyMembersInfo.forEach((partyMember) => {
     const {
@@ -147,5 +147,6 @@ export default async function awardSomePartyMembersForCompletingQuest(questId) {
       x++;
     }
   });
+
   return { userBadgeData, notificationData, updateUsersCurrencies };
 }

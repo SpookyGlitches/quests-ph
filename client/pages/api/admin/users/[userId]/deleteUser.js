@@ -211,6 +211,17 @@ export default async function deleteUsers(req, res) {
     });
     transactions.push(deleteMentorReq);
 
+    // Delete mentorship application
+    const deleteMentorApplication = prisma.questMentorshipRequest.updateMany({
+      where: {
+        mentorId: req.query.userId,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+    transactions.push(deleteMentorApplication);
+
     // Delete quest task
     const deleteQuestTask = prisma.questTask.updateMany({
       where: {
