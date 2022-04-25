@@ -19,7 +19,6 @@ import axios from "axios";
 import { getSession } from "next-auth/react";
 import AppLayout from "../../components/Layouts/AppLayout";
 import BadgeModal from "../../components/Common/BadgeModal";
-import CustomCircularProgress from "../../components/Common/CustomSpinner";
 
 export default function Index() {
   const [badgeModalState, setBadgeModalState] = useState({
