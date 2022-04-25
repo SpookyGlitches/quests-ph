@@ -5,7 +5,7 @@ const requiredMsg = "This field is required";
 const commentValidation = object({
   content: string()
     .trim()
-    .max(128, "Maximum length of 128 characters")
+    .max(200, "Maximum length of 200 characters")
     .required(requiredMsg),
 });
 
