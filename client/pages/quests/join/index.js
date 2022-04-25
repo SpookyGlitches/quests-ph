@@ -93,6 +93,12 @@ export async function getServerSideProps(context) {
             deletedAt: null,
           },
         },
+        questPartyBan: {
+          where: {
+            userId: user.userId,
+            deletedAt: null,
+          },
+        },
         completedAt: true,
       },
       rejectOnNotFound: true,
@@ -101,6 +107,10 @@ export async function getServerSideProps(context) {
     const reachedMaximum = quest.partyMembers.length >= 4;
 
     if (quest.completedAt || reachedMaximum) {
+      throw new Error();
+    }
+
+    if (quest.questPartyBan.length !== 0) {
       throw new Error();
     }
 
