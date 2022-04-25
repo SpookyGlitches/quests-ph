@@ -21,8 +21,6 @@ export default function FriendsProfile() {
 
   if (!pName) return <>No Name</>;
 
-  console.log(pName);
-
   if (session) {
     return (
       <AppLayout>
