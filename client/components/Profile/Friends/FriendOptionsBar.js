@@ -58,7 +58,7 @@ export default function FriendsOptionsBar({
     router.push(
       {
         pathname: `/chats`,
-        query: { userInfo: userId },
+        query: { userInfo: friendInfo.userId },
       },
       "/chats",
     );
@@ -194,7 +194,7 @@ export default function FriendsOptionsBar({
             );
           } else {
             enqueueSnackbar(
-              "This Quest is already has a mentor! Please choose another Quest!",
+              "This Quest already has a mentor! Please choose another Quest!",
             );
           }
         });

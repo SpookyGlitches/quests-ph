@@ -25,16 +25,18 @@ async function checkAvailQuest(req, res) {
         deletedAt: null,
       },
     });
-    // check if request already has a mentor who accepted the quest
-    const checkHasMentor = await prisma.questMentorshipRequest.findMany({
+
+    const checkHasMentor = await prisma.partyMember.findFirst({
       where: {
+        role: "MENTOR",
         questId: Number(req.query.questMentored),
-        status: "ACTIVE",
-        NOT: {
-          updatedAt: null,
-        },
+        deletedAt: null,
+      },
+      select: {
+        partyMemberId: true,
       },
     });
+
     return res
       .status(200)
       .send({ avail: checkAvail, hasMentor: checkHasMentor });

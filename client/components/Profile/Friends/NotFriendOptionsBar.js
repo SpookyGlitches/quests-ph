@@ -195,7 +195,7 @@ export default function MentorNotFriendOptionsBar({
             );
           } else {
             enqueueSnackbar(
-              "This Quest is already has a mentor! Please choose another Quest!",
+              "This Quest already has a mentor! Please choose another Quest!",
             );
           }
         });
