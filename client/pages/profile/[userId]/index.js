@@ -19,14 +19,10 @@ export default function FriendsProfile() {
 
   const { data: pName } = useSWR(`/profile/${userId}`);
 
-  if (!pName) return <>No Name</>;
-
-  console.log(pName);
-
   if (session) {
     return (
       <AppLayout>
-        <DocumentTitle title={`${pName.displayName}`} />
+        <DocumentTitle title={`${pName?.displayName || " "}`} />
         <Box
           sx={{
             display: "flex",

@@ -66,8 +66,6 @@ export default function Index() {
 
   // let finalData = { ...notif, ...person };
 
-  if (!data) return <CustomCircularProgress />;
-
   return (
     <AppLayout>
       <Paper sx={{ p: 3, display: "flex", gap: 5, flexDirection: "column" }}>
@@ -93,7 +91,7 @@ export default function Index() {
           border: "1px solid rgba(0, 0, 0, 0.12)",
         }}
       >
-        {data.map((notif) => (
+        {data?.map((notif) => (
           <List
             key={notif.notificationId}
             sx={{
