@@ -58,7 +58,7 @@ export default function FriendsOptionsBar({
     router.push(
       {
         pathname: `/chats`,
-        query: { userInfo: userId },
+        query: { userInfo: friendInfo.userId },
       },
       "/chats",
     );
