@@ -35,6 +35,18 @@ export default function QuestLayout({ children }) {
     return <CustomCircularProgress rootStyles={{ minHeight: "50vh" }} />;
   }
 
+  const renderEndQuest = () => {
+    if (quest.completedAt) {
+      return <EndQuest />;
+    }
+
+    if (partyMember.role === "PARTY_LEADER") {
+      return <EndQuest />;
+    }
+
+    return null;
+  };
+
   return (
     <Grid container spacing={6}>
       <QuestContext.Provider value={quest}>
@@ -48,7 +60,7 @@ export default function QuestLayout({ children }) {
               <Stack spacing={3}>
                 <Todo />
                 {partyMember.role === "PARTY_LEADER" && <VideoCallRoom />}
-                {partyMember.role === "PARTY_LEADER" && <EndQuest />}
+                {renderEndQuest()}
                 <MentorMessage />
               </Stack>
             </Box>
