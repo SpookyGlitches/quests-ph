@@ -81,6 +81,7 @@ const FriendsField = (item) => {
         flexDirection: "row",
         marginTop: "1.5rem",
         marginLeft: "0.5rem",
+        cursor: "pointer",
       }}
     >
       <Box

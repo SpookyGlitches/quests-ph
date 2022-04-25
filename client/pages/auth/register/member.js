@@ -15,6 +15,7 @@ import Step2 from "../../../components/Registration/Step2";
 import { registerUserValidation } from "../../../validations/UserRegistration";
 import SignUpDisclaimer from "../../../components/Registration/SignUpDisclaimer";
 import HaveAnAccount from "../../../components/Registration/HaveAnAccount";
+import DocumentTitle from "../../../components/Common/DocumentTitle";
 
 const steps = ["", ""];
 export default function Register() {
@@ -88,6 +89,7 @@ export default function Register() {
 
   return (
     <AuthLayout>
+      <DocumentTitle title="Quests" />
       <AuthHeader subtitle="Create an account" />
       {!show ? (
         ""

@@ -118,7 +118,8 @@ export default function BadgesList({ userId }) {
         paddingX: "1rem",
         paddingY: "1.5rem",
         width: "100%",
-        borderRadius: 2,
+        borderRadius: 1,
+        border: "1px solid rgba(0, 0, 0, 0.12)",
       }}
     >
       <Typography sx={{ marginBottom: "1rem" }} align="center" variant="h6">

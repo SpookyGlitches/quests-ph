@@ -37,7 +37,8 @@ export default function BasicInfo({ userId }) {
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "column",
-        borderRadius: 2,
+        borderRadius: 1,
+        border: "1px solid rgba(0, 0, 0, 0.12)",
       }}
     >
       <Avatar

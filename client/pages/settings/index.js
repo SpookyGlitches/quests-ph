@@ -25,7 +25,6 @@ import {
 } from "@mui/material";
 import NoDataPage from "../noData";
 import Notification from "../../components/Common/Notification";
-
 import { ChangePasswordValidations } from "../../validations/ChangePassword";
 import { EditMemberValidations } from "../../validations/UserEdit";
 import { EditMentorValidations } from "../../validations/UserMentorEdit";
@@ -149,7 +148,6 @@ const Index = () => {
       });
     }
   };
-
   return (
     <AppLayout>
       <Box

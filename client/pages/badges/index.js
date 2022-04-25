@@ -26,6 +26,7 @@ export default function BadgesPage({ badges }) {
       },
     });
   };
+
   return (
     <Paper sx={{ p: 3 }}>
       <Typography color="primary" variant="h4">

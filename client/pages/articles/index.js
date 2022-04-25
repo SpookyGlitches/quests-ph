@@ -29,6 +29,7 @@ export default function Search() {
         return <Articles category="HEALTH" />;
     }
   };
+
   if (session) {
     return (
       <AppLayout>

@@ -9,12 +9,15 @@ import { PartyMemberContext } from "../../context/PartyMemberContext";
 import VideoCallRoom from "../Quest/VideoCallRoom";
 import NotFound from "../Common/NotFound";
 import CustomCircularProgress from "../Common/CustomSpinner";
+import DocumentTitle from "../Common/DocumentTitle";
 import MentorMessage from "../Quest/MentorMessage";
 
 export default function QuestLayout({ children }) {
   const router = useRouter();
 
   const { questId } = router.query;
+
+  const { data: questsName } = useSWR(`/quests/${router.query.questId}`);
 
   const { data: partyMember, error: partyMemberError } = useSWR(
     questId ? `/quests/${questId}/partyMembers/currentUser` : null,
@@ -35,6 +38,10 @@ export default function QuestLayout({ children }) {
     return <CustomCircularProgress rootStyles={{ minHeight: "50vh" }} />;
   }
 
+  const capitalize = (s) => {
+    if (typeof s !== "string") return "";
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  };
   const renderEndQuest = () => {
     if (quest.completedAt) {
       return <EndQuest />;
@@ -49,6 +56,7 @@ export default function QuestLayout({ children }) {
 
   return (
     <Grid container spacing={6}>
+      <DocumentTitle title={capitalize(`${questsName.wish}`)} />
       <QuestContext.Provider value={quest}>
         <PartyMemberContext.Provider value={partyMember}>
           <Grid item xs={12} lg={8}>

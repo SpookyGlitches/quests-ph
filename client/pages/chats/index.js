@@ -15,6 +15,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import InboxComponent from "../../components/Chat/InboxComponent";
 import AppLayout from "../../components/Layouts/AppLayout";
+import DocumentTitle from "../../components/Common/DocumentTitle";
 
 export default function ChatTalkLayout() {
   const router = useRouter();
@@ -171,8 +172,14 @@ export default function ChatTalkLayout() {
     );
   }
 
+  const capitalize = (s) => {
+    if (typeof s !== "string") return "";
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  };
+
   return (
     <AppLayout>
+      <DocumentTitle title={capitalize(router.pathname.split("/")[1])} />
       <Box sx={{ mb: 5 }} align="center">
         {searchFriendBar}
       </Box>

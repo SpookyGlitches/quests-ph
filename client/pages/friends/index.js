@@ -1,4 +1,5 @@
 import CircularProgress from "@mui/material/CircularProgress";
+import { useRouter } from "next/router";
 import useSWR from "swr";
 import { Box, Typography } from "@mui/material";
 import axios from "axios";
@@ -9,6 +10,7 @@ import Incoming from "../../components/Friends/Incoming";
 import Outgoing from "../../components/Friends/Outgoing";
 import AccessDenied from "../../components/Error/AccessDenied";
 import prisma from "../../lib/prisma";
+import DocumentTitle from "../../components/Common/DocumentTitle";
 
 function ListHolder({ items, requestName, displayName }) {
   if (items.length !== 0) {
@@ -20,7 +22,8 @@ function ListHolder({ items, requestName, displayName }) {
           margin: "2rem",
           display: "flex",
           flexDirection: "column",
-          borderRadius: 2,
+          borderRadius: 1,
+          border: "1px solid rgba(0, 0, 0, 0.12)",
         }}
       >
         <Typography color="primary" variant="h4">
@@ -56,7 +59,8 @@ function ListHolder({ items, requestName, displayName }) {
         margin: "2rem",
         display: "flex",
         flexDirection: "column",
-        borderRadius: 2,
+        borderRadius: 1,
+        border: "1px solid rgba(0, 0, 0, 0.12)",
       }}
     >
       <Typography color="primary" variant="h4">
@@ -74,6 +78,7 @@ function ListHolder({ items, requestName, displayName }) {
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
 const Index = ({ name }) => {
+  const router = useRouter();
   if (name != null) {
     // eslint-disable-next-line
     const { data: friends, error: one } = useSWR(
@@ -124,9 +129,15 @@ const Index = ({ name }) => {
         />
       );
 
+    const capitalize = (s) => {
+      if (typeof s !== "string") return "";
+      return s.charAt(0).toUpperCase() + s.slice(1);
+    };
+
     return (
       <AppLayout>
-        <div>
+        <DocumentTitle title={capitalize(router.pathname.split("/")[1])} />
+        <Box>
           <ListHolder items={incoming} requestName="Incoming Requests" />
 
           <ListHolder items={outgoing} requestName="Outgoing Requests" />
@@ -136,7 +147,7 @@ const Index = ({ name }) => {
             requestName="Friends"
             displayName={name}
           />
-        </div>
+        </Box>
       </AppLayout>
     );
   }

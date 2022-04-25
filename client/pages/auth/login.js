@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import AuthHeader from "../../components/Auth/AuthHeader";
 import AuthLayout from "../../components/Layouts/AuthLayout";
 import CreateAnAccount from "../../components/Registration/CreateAnAccount";
+import DocumentTitle from "../../components/Common/DocumentTitle";
 
 export default function Login() {
   const router = useRouter();
@@ -58,8 +59,8 @@ export default function Login() {
 
   return (
     <AuthLayout>
+      <DocumentTitle title="Login or Sign-Up" />
       <AuthHeader subtitle="Sign in to your account" />
-
       <Stack direction="column" spacing={2}>
         <form onSubmit={handleLogin}>
           <TextField

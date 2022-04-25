@@ -17,6 +17,7 @@ import Step3 from "../../../components/Registration/Step3";
 import { MentorRegistration } from "../../../validations/MentorRegistration";
 import SignUpDisclaimer from "../../../components/Registration/SignUpDisclaimer";
 import HaveAnAccount from "../../../components/Registration/HaveAnAccount";
+import DocumentTitle from "../../../components/Common/DocumentTitle";
 
 const steps = ["", "", ""];
 
@@ -95,6 +96,7 @@ const MentorRegistrationForm = () => {
 
   return (
     <AuthLayout>
+      <DocumentTitle title="Quests" />
       <AuthHeader subtitle="Create an account" />
       {!show ? (
         ""

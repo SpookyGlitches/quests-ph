@@ -26,6 +26,7 @@ import AppLayout from "../components/Layouts/AppLayout";
 import CreatePost from "../components/Quest/Post/CreatePost";
 import PostsList from "../components/Quest/Post/PostsList";
 import Reminders from "../components/Common/Reminders";
+import DocumentTitle from "../components/Common/DocumentTitle";
 
 function CreatePostModal({ open, setOpen }) {
   const { data: quests } = useSWR(open ? "/quests?status=ACTIVE" : null);
@@ -98,12 +99,12 @@ function CreatePostModal({ open, setOpen }) {
 //     </Typography>
 //   );
 // }
-
 export default function Home() {
   const [open, setOpen] = useState(false);
 
   return (
     <Grid container spacing={4}>
+      <DocumentTitle title="Home" />
       <Grid item xs={12} lg={8}>
         <Box>
           <CreatePost

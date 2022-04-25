@@ -11,7 +11,6 @@ import {
   Divider,
   ListItem,
   List,
-  CircularProgress,
 } from "@mui/material";
 import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
 import useSWR, { mutate } from "swr";
@@ -20,6 +19,7 @@ import axios from "axios";
 import { getSession } from "next-auth/react";
 import AppLayout from "../../components/Layouts/AppLayout";
 import BadgeModal from "../../components/Common/BadgeModal";
+import CustomCircularProgress from "../../components/Common/CustomSpinner";
 
 export default function Index() {
   const [badgeModalState, setBadgeModalState] = useState({
@@ -66,8 +66,7 @@ export default function Index() {
 
   // let finalData = { ...notif, ...person };
 
-  if (error) return <p>Error Fetching</p>;
-  if (!data) return <CircularProgress />;
+  if (!data) return <CustomCircularProgress />;
 
   return (
     <AppLayout>
@@ -109,7 +108,9 @@ export default function Index() {
             }}
           >
             <ListItemButton
-              onClick={() => updateNotificationReadSeen(notif)}
+              onClick={() =>
+                updateNotificationReadSeen(notif, notif.notificationId)
+              }
               sx={{
                 "&.MuiListItemButton-root": {
                   padding: 0,
