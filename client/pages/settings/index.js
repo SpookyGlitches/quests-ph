@@ -25,16 +25,12 @@ import {
 } from "@mui/material";
 import NoDataPage from "../noData";
 import Notification from "../../components/Common/Notification";
-import { useRouter } from "next/router";
-import DocumentTitle from "../../components/Common/DocumentTitle";
-
 import { ChangePasswordValidations } from "../../validations/ChangePassword";
 import { EditMemberValidations } from "../../validations/UserEdit";
 import DataFieldHolder from "../../components/Settings/DataFieldHolder";
 import AppLayout from "../../components/Layouts/AppLayout";
 
 const Index = () => {
-  const router = useRouter();
   const [openProfileForm, setopenProfileForm] = React.useState(false);
   const [openResetPasswordForm, setopenResetPasswordForm] =
     React.useState(false);
@@ -144,14 +140,8 @@ const Index = () => {
       });
     }
   };
-  const capitalize = (s) => {
-    if (typeof s !== "string") return "";
-    return s.charAt(0).toUpperCase() + s.slice(1);
-  };
-
   return (
     <AppLayout>
-      <DocumentTitle title={capitalize(router.pathname.split("/")[1])} />
       <Box
         sx={{
           backgroundColor: "background.paper",

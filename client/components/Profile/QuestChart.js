@@ -61,7 +61,8 @@ export default function QuestChart() {
     <Box
       sx={{
         backgroundColor: "background.paper",
-        borderRadius: 2,
+        borderRadius: 1,
+        border: "1px solid rgba(0, 0, 0, 0.12)",
         padding: "1rem",
       }}
     >

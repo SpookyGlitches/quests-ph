@@ -4,17 +4,19 @@ import { Box, Grid, Stack } from "@mui/material";
 import QuestHeader from "../Quest/QuestHeader";
 import Todo from "../Quest/Tasks/ToDo";
 import EndQuest from "../Quest/EndQuest";
-import DateCard from "../Quest/Tasks/DateCard";
 import { QuestContext } from "../../context/QuestContext";
 import { PartyMemberContext } from "../../context/PartyMemberContext";
 import VideoCallRoom from "../Quest/VideoCallRoom";
 import NotFound from "../Common/NotFound";
 import CustomCircularProgress from "../Common/CustomSpinner";
+import DocumentTitle from "../Common/DocumentTitle";
 
 export default function QuestLayout({ children }) {
   const router = useRouter();
 
   const { questId } = router.query;
+
+  const { data: questsName } = useSWR(`/quests/${router.query.questId}`);
 
   const { data: partyMember, error: partyMemberError } = useSWR(
     questId ? `/quests/${questId}/partyMembers/currentUser` : null,
@@ -35,8 +37,14 @@ export default function QuestLayout({ children }) {
     return <CustomCircularProgress rootStyles={{ minHeight: "50vh" }} />;
   }
 
+  const capitalize = (s) => {
+    if (typeof s !== "string") return "";
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  };
+
   return (
     <Grid container spacing={6}>
+      <DocumentTitle title={capitalize(`${questsName.wish}`)} />
       <QuestContext.Provider value={quest}>
         <PartyMemberContext.Provider value={partyMember}>
           <Grid item xs={12} lg={8}>
@@ -46,7 +54,6 @@ export default function QuestLayout({ children }) {
           <Grid item xs={12} lg={4}>
             <Box sx={{}}>
               <Stack spacing={3}>
-                <DateCard />
                 <Todo />
                 {partyMember.role === "PARTY_LEADER" && <VideoCallRoom />}
                 {partyMember.role === "PARTY_LEADER" && <EndQuest />}

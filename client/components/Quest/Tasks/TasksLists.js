@@ -1,11 +1,4 @@
-import {
-  Box,
-  Typography,
-  IconButton,
-  CircularProgress,
-  Grid,
-  Button,
-} from "@mui/material";
+import { Box, Typography, IconButton, Grid, Button } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
@@ -18,6 +11,7 @@ import { useSession } from "next-auth/react";
 import StyledPaper from "../../Common/StyledPaper";
 import TaskModal from "./TaskModal";
 import TaskDone from "../../../public/images/tasks-all-done.svg";
+import CustomCircularProgress from "../../Common/CustomSpinner";
 
 const TasksLists = () => {
   const router = useRouter();
@@ -41,15 +35,11 @@ const TasksLists = () => {
     }
   };
 
-  const { data, error } = useSWR(
-    `/quests/${router.query.questId}/tasks`,
-    false,
-  );
+  const { data } = useSWR(`/quests/${router.query.questId}/tasks`, false);
   // const latestData = [...data, { ...data, ...{ id: data.task.questTaskid } }];
   mutate(`/quests/${router.query.questId}/tasks`);
 
-  if (error) return <div>failed to load</div>;
-  if (!data) return <CircularProgress />;
+  if (!data) return <CustomCircularProgress />;
 
   const memberId = data.member[0].partyMemberId;
 
@@ -115,6 +105,7 @@ const TasksLists = () => {
                           backgroundColor: "primary.main",
                           height: "100%",
                           minHeight: "2rem",
+                          cursor: "pointer",
                         }}
                       />
                     </Link>

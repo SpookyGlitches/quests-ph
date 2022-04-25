@@ -12,10 +12,12 @@ import DatePicker from "@mui/lab/DatePicker";
 import TitleRoundedIcon from "@mui/icons-material/TitleRounded";
 import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import SportsScoreRoundedIcon from "@mui/icons-material/SportsScoreRounded";
+import { useSnackbar } from "notistack";
 
 import { createTaskSchema } from "../../../validations/TasksCreate";
 
 const TaskForm = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
 
   const {
@@ -28,7 +30,11 @@ const TaskForm = () => {
     const { questId } = router.query;
 
     try {
-      const res = await axios.post(`/api/quests/${questId}/tasks/create`, data);
+      const res = await axios
+        .post(`/api/quests/${questId}/tasks/create`, data)
+        .then(() => {
+          enqueueSnackbar(`Succesfully created a task`);
+        });
 
       console.log(res.data);
     } catch (error) {

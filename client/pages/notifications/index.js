@@ -11,7 +11,6 @@ import {
   Divider,
   ListItem,
   List,
-  CircularProgress,
 } from "@mui/material";
 import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
 import useSWR, { mutate } from "swr";
@@ -20,10 +19,9 @@ import axios from "axios";
 import { getSession } from "next-auth/react";
 import AppLayout from "../../components/Layouts/AppLayout";
 import BadgeModal from "../../components/Common/BadgeModal";
-import DocumentTitle from "../../components/Common/DocumentTitle";
-import { useRouter } from "next/router";
+import CustomCircularProgress from "../../components/Common/CustomSpinner";
+
 export default function Index() {
-  const router = useRouter();
   const [badgeModalState, setBadgeModalState] = useState({
     open: false,
     notificationMessage: "",
@@ -34,7 +32,7 @@ export default function Index() {
     },
   });
 
-  const updateNotificationReadSeen = async (notif) => {
+  const updateNotificationReadSeen = async (notif, nid) => {
     try {
       if (notif.type === "RECEIVED_BADGE") {
         setBadgeModalState({
@@ -48,7 +46,9 @@ export default function Index() {
         });
       }
       /* eslint-disable */
-      const res = await axios.put(`/api/notifications`, { notificationId: id });
+      const res = await axios.put(`/api/notifications`, {
+        notificationId: nid,
+      });
       mutate("/notifications");
       mutate("/notifications/notif_count");
     } catch (error) {
@@ -66,18 +66,10 @@ export default function Index() {
 
   // let finalData = { ...notif, ...person };
 
-  if (error) return <p>Error Fetching</p>;
-  if (!data) return <CircularProgress />;
+  if (!data) return <CustomCircularProgress />;
   console.log(data);
-
-  const capitalize = (s) => {
-    if (typeof s !== "string") return "";
-    return s.charAt(0).toUpperCase() + s.slice(1);
-  };
-
   return (
     <AppLayout>
-      <DocumentTitle title={capitalize(router.pathname.split("/")[1])} />
       <Paper sx={{ p: 3, display: "flex", gap: 5, flexDirection: "column" }}>
         <Box
           sx={{
@@ -116,7 +108,9 @@ export default function Index() {
             }}
           >
             <ListItemButton
-              onClick={() => updateNotificationReadSeen(notif)}
+              onClick={() =>
+                updateNotificationReadSeen(notif, notif.notificationId)
+              }
               sx={{
                 "&.MuiListItemButton-root": {
                   padding: 0,

@@ -69,7 +69,8 @@ const UpdateTask = () => {
           alignItems: "center",
           justifyContent: "center",
           backgroundColor: "background.paper",
-          borderRadius: 2,
+          borderRadius: 1,
+          border: "1px solid rgba(0, 0, 0, 0.12)",
         }}
       >
         <Box

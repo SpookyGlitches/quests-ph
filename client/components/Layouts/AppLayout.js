@@ -2,15 +2,23 @@ import { useState } from "react";
 import { CssBaseline, Box, Toolbar, Container } from "@mui/material";
 import { useSession } from "next-auth/react";
 import useSWR from "swr";
+import { useRouter } from "next/router";
 import Navbar from "../Common/Navbar";
 import Sidebar from "../Common/Sidebar";
 import Banned from "../Error/Banned";
+import DocumentTitle from "../Common/DocumentTitle";
 
 const drawerWidth = 240;
 
 const AppLayout = ({ children }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { data: session } = useSession();
+  const router = useRouter();
+
+  const capitalize = (s) => {
+    if (typeof s !== "string") return "";
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  };
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -28,6 +36,7 @@ const AppLayout = ({ children }) => {
   if (myInfo.isBanned === false) {
     return (
       <Box sx={{ display: "flex" }}>
+        <DocumentTitle title={capitalize(router.pathname.split("/")[1])} />
         <CssBaseline />
         <Navbar
           drawerWidth={drawerWidth}

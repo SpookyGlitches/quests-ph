@@ -11,11 +11,11 @@ import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import { useDebounce } from "use-debounce";
 import { useState } from "react";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import { useRouter } from "next/router";
 import QuestFilters from "../../components/Search/QuestFilters";
 import AppLayout from "../../components/Layouts/AppLayout";
 import QuestsList from "../../components/Quest/QuestsList";
 import DocumentTitle from "../../components/Common/DocumentTitle";
-import { useRouter } from "next/router";
 
 export default function Index() {
   const router = useRouter();

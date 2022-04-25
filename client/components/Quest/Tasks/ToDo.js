@@ -26,9 +26,17 @@ export default function CheckboxListSecondary() {
         border: "1px solid rgba(0, 0, 0, 0.12)",
       }}
     >
-      <Typography variant="h6" color="primary" sx={{ m: 1, p: 1 }}>
-        To Do
-      </Typography>
+      <Box
+        sx={{
+          bgcolor: "#755CDE",
+          borderRadius: 0.3,
+          marginBottom: 2,
+        }}
+      >
+        <Typography variant="h6" color="white" sx={{ p: 2 }}>
+          To Do Lists
+        </Typography>
+      </Box>
       {data.tasks.length !== 0 ? (
         data.tasks.map((task) => (
           <List

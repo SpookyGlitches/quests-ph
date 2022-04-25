@@ -22,7 +22,8 @@ function ListHolder({ items, requestName, displayName }) {
           margin: "2rem",
           display: "flex",
           flexDirection: "column",
-          borderRadius: 2,
+          borderRadius: 1,
+          border: "1px solid rgba(0, 0, 0, 0.12)",
         }}
       >
         <Typography color="primary" variant="h4">
@@ -58,7 +59,8 @@ function ListHolder({ items, requestName, displayName }) {
         margin: "2rem",
         display: "flex",
         flexDirection: "column",
-        borderRadius: 2,
+        borderRadius: 1,
+        border: "1px solid rgba(0, 0, 0, 0.12)",
       }}
     >
       <Typography color="primary" variant="h4">
@@ -135,7 +137,7 @@ const Index = ({ name }) => {
     return (
       <AppLayout>
         <DocumentTitle title={capitalize(router.pathname.split("/")[1])} />
-        <div>
+        <Box>
           <ListHolder items={incoming} requestName="Incoming Requests" />
 
           <ListHolder items={outgoing} requestName="Outgoing Requests" />
@@ -145,7 +147,7 @@ const Index = ({ name }) => {
             requestName="Friends"
             displayName={name}
           />
-        </div>
+        </Box>
       </AppLayout>
     );
   }

@@ -5,10 +5,8 @@ import prisma from "../../lib/prisma";
 import BadgeModal from "../../components/Common/BadgeModal";
 import AppLayout from "../../components/Layouts/AppLayout";
 import DocumentTitle from "../../components/Common/DocumentTitle";
-import { useRouter } from "next/router";
 
 export default function BadgesPage({ badges }) {
-  const router = useRouter();
   const [badgeModalState, setBadgeModalState] = useState({
     open: false,
     notificationMessage: "",
@@ -29,14 +27,9 @@ export default function BadgesPage({ badges }) {
       },
     });
   };
-  const capitalize = (s) => {
-    if (typeof s !== "string") return "";
-    return s.charAt(0).toUpperCase() + s.slice(1);
-  };
 
   return (
     <Paper sx={{ p: 3 }}>
-      <DocumentTitle title={capitalize(router.pathname.split("/")[1])} />
       <Typography color="primary" variant="h4">
         Obtainable Badges
       </Typography>

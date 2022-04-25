@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
 import { useSession, getSession } from "next-auth/react";
+import useSWR from "swr";
 import AppLayout from "../../../components/Layouts/AppLayout";
 import FriendBadgesList from "../../../components/Profile/Friends/FriendsBadgesList";
 import FriendsBasicInfo from "../../../components/Profile/Friends/FriendsBasicInfo";
@@ -9,15 +10,23 @@ import OptionsBar from "../../../components/Profile/Friends/OptionsBar";
 import FriendsQuestList from "../../../components/Profile/Friends/FriendsQuestsList";
 import AccessDenied from "../../../components/Error/AccessDenied";
 import prisma from "../../../lib/prisma";
+import DocumentTitle from "../../../components/Common/DocumentTitle";
 
 export default function FriendsProfile() {
   const router = useRouter();
   const { data: session } = useSession();
   const { userId } = router.query;
 
+  const { data: pName } = useSWR(`/profile/${userId}`);
+
+  if (!pName) return <>No Name</>;
+
+  console.log(pName);
+
   if (session) {
     return (
       <AppLayout>
+        <DocumentTitle title={`${pName.displayName}`} />
         <Box
           sx={{
             display: "flex",

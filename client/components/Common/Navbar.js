@@ -99,11 +99,9 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const { data, error } = useSWR("/notifications/notif_count", {
+  const { data } = useSWR("/notifications/notif_count", {
     refreshInterval: 0,
   });
-
-  if (error) return <p>error</p>;
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (
