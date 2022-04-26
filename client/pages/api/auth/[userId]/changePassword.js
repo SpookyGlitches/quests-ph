@@ -15,7 +15,6 @@ export default async function changePassword(req, res) {
     const foundUser = await prisma.user.findUnique({
       where: {
         userId: userDetails.userId,
-        deletedAt: null,
       },
       select: {
         fullName: true,
@@ -24,7 +23,7 @@ export default async function changePassword(req, res) {
 
     if (foundUser) {
       const success = await prisma.user.update({
-        where: { userId: userDetails.userId, deletedAt: null },
+        where: { userId: userDetails.userId },
         data: { password: submittedPassword },
       });
 
