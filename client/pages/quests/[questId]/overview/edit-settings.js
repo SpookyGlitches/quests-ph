@@ -32,6 +32,7 @@ import WishInput from "../../../../components/Quest/Create/WishInput";
 import AppLayout from "../../../../components/Layouts/AppLayout";
 import { QuestContext } from "../../../../context/QuestContext";
 import CustomCircularProgress from "../../../../components/Common/CustomSpinner";
+import { useSnackbar } from "notistack";
 
 const DialogItem = ({ handleOk, handleCancel, open, loading }) => {
   return (
@@ -75,6 +76,7 @@ export default function Edit() {
   } = quest;
   const completed = Boolean(completedAt);
   const wishItem = <WishInput disabled={completed} />;
+  const { enqueueSnackbar } = useSnackbar();
 
   const { mutate: mutateQuest } = useSWRConfig();
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -107,11 +109,9 @@ export default function Edit() {
 
   const submitForm = async (values) => {
     try {
+      mutateQuest({ ...quest, ...values });
+      enqueueSnackbar("Updated successfully.");
       await axios.put(`/api/quests/${questId}`, values);
-      mutateQuest(`/quests/${questId}`, (questData) => ({
-        ...questData,
-        ...values,
-      }));
     } catch (err) {
       console.error(err);
     }
@@ -137,6 +137,7 @@ export default function Edit() {
   if (!quest) {
     return <CustomCircularProgress />;
   }
+  console.log(questId);
 
   return (
     <Paper sx={{ padding: 3 }}>
