@@ -1,3 +1,4 @@
+import axios from "axios";
 import prisma from "../../../../../lib/prisma";
 import withQuestProtect from "../../../../../middlewares/withQuestProtect";
 
@@ -29,6 +30,8 @@ async function removePartyMember(req, res) {
       },
       rejectOnNotFound: true,
       select: {
+        questId: true,
+        userId: true,
         partyMemberId: true,
         posts: {
           select: {
@@ -42,6 +45,41 @@ async function removePartyMember(req, res) {
         },
       },
     });
+
+    // Removes the user from the group chat
+    const talkJsRes = await axios.get(
+      `https://api.talkjs.com/v1/tvcbUw3n/users/${partyMemberData.userId}/conversations`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer sk_test_NPBhbi9sSMV8aA6DnWhSkmKzxQpivO6p",
+        },
+      },
+    );
+
+    /* Flag variable to tell us if we found the convo in the list of the user's
+      list of convos and stop the loop */
+    let flag = 0;
+    for (let i = 0; i < talkJsRes.data.data.length && flag === 0; i++) {
+      if (talkJsRes.data.data[i].id === `${partyMemberData.questId}QuestChat`) {
+        flag = 1;
+      }
+    }
+
+    /* If the flag is up, meaning the user is part of the quest's chat, he is removed
+    from participating. */
+    if (flag === 1) {
+      await axios.delete(
+        `https://api.talkjs.com/v1/tvcbUw3n/conversations/${partyMemberData.questId}QuestChat/participants/${partyMemberData.userId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer sk_test_NPBhbi9sSMV8aA6DnWhSkmKzxQpivO6p",
+          },
+        },
+      );
+    }
+
     const postIds = [];
     const postFileIds = [];
 
