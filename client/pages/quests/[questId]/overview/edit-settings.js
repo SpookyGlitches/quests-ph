@@ -137,7 +137,6 @@ export default function Edit() {
   if (!quest) {
     return <CustomCircularProgress />;
   }
-  console.log(questId);
 
   return (
     <Paper sx={{ padding: 3 }}>
