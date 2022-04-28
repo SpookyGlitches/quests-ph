@@ -77,7 +77,7 @@ function ListHolder({ items, requestName, displayName }) {
 
 const fetcher = (url) => axios.get(url).then((res) => res.data);
 
-const Index = ({ name }) => {
+export default function Index({ name }) {
   const router = useRouter();
   if (name != null) {
     // eslint-disable-next-line
@@ -135,7 +135,7 @@ const Index = ({ name }) => {
     };
 
     return (
-      <AppLayout>
+      <>
         <DocumentTitle title={capitalize(router.pathname.split("/")[1])} />
         <Box>
           <ListHolder items={incoming} requestName="Incoming Requests" />
@@ -148,13 +148,16 @@ const Index = ({ name }) => {
             displayName={name}
           />
         </Box>
-      </AppLayout>
+      </>
     );
   }
 
   return <AccessDenied />;
+}
+
+Index.getLayout = function getLayout(page) {
+  return <AppLayout>{page}</AppLayout>;
 };
-export default Index;
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
