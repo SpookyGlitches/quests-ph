@@ -1,8 +1,9 @@
-import { Box, Avatar, Typography, Tooltip } from "@mui/material";
+import { Box, Typography, Tooltip } from "@mui/material";
 import { useSession } from "next-auth/react";
 
 import useSWR from "swr";
 import VerifiedUserRoundedIcon from "@mui/icons-material/VerifiedUserRounded";
+import CustomAvatar from "../../Common/CustomAvatar";
 
 export default function FriendsBasicInfo({ userId }) {
   const { data: friendInfos } = useSWR(
@@ -26,7 +27,6 @@ export default function FriendsBasicInfo({ userId }) {
     );
   }
 
-  const letter = friendInfos.displayName.charAt(0).toUpperCase();
   return (
     <Box
       sx={{
@@ -39,15 +39,16 @@ export default function FriendsBasicInfo({ userId }) {
         borderRadius: 2,
       }}
     >
-      <Avatar
-        sx={{
+      <CustomAvatar
+        displayName={friendInfos.displayName}
+        image={friendInfos.image}
+        rootStyles={{
           backgroundColor: "primary.main",
           height: "6rem",
           width: "6rem",
         }}
-      >
-        {letter}
-      </Avatar>
+      />
+
       <Tooltip
         describeChild
         title={

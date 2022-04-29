@@ -8,18 +8,17 @@ import {
   TableHead,
   TableRow,
   CardHeader,
-  Avatar,
   Tooltip,
   Stack,
   IconButton,
   Paper,
 } from "@mui/material";
-import { deepOrange } from "@mui/material/colors";
 import useSWR from "swr";
 import RemoveCircleOutlineRoundedIcon from "@mui/icons-material/RemoveCircleOutlineRounded";
 import axios from "axios";
 import { QuestContext } from "../../../context/QuestContext";
 import CustomCircularProgress from "../../Common/CustomSpinner";
+import CustomAvatar from "../../Common/CustomAvatar";
 
 export default function BanList() {
   const { questId, completedAt } = useContext(QuestContext);
@@ -52,10 +51,9 @@ export default function BanList() {
       <TableCell component="th" scope="row" padding="none">
         <CardHeader
           avatar={
-            <Avatar
-              sx={{
-                bgcolor: deepOrange[500],
-              }}
+            <CustomAvatar
+              displayName={partyBan.user.displayName}
+              image={partyBan.user.image}
             />
           }
           title={partyBan.user.displayName}

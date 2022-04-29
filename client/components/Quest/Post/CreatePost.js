@@ -1,10 +1,17 @@
-import { Paper, Avatar, Typography } from "@mui/material";
+import { Paper, Typography } from "@mui/material";
+import { useSession } from "next-auth/react";
+import useSWR from "swr";
+import CustomAvatar from "../../Common/CustomAvatar";
 
-export default function CreatePost({
-  onCreatePostClick,
-  rootStyles,
-  disabled,
-}) {
+export default function CreatePost(props) {
+  const { onCreatePostClick, rootStyles, disabled } = props;
+  const session = useSession();
+  const userId = session?.data?.user?.userId;
+
+  const { data: myInfo } = useSWR(
+    userId ? `/profile/${userId}/friendInfo` : null,
+  );
+
   const createNewPost = (event) => {
     if (disabled) {
       return;
@@ -22,7 +29,10 @@ export default function CreatePost({
         ...rootStyles,
       }}
     >
-      <Avatar>X</Avatar>
+      <CustomAvatar
+        displayName={myInfo?.displayName || "QU"}
+        image={myInfo?.image}
+      />
       <Paper
         sx={{
           flexGrow: 1,

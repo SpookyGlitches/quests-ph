@@ -1,6 +1,5 @@
 import {
   Box,
-  Avatar,
   Typography,
   IconButton,
   Menu,
@@ -11,6 +10,7 @@ import { format, formatDistance } from "date-fns";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import CustomAvatar from "../../Common/CustomAvatar";
 
 export default function PostHeader(props) {
   const {
@@ -44,9 +44,7 @@ export default function PostHeader(props) {
   return (
     <>
       <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-        <Avatar sx={{ backgroundColor: "pink" }}>
-          {image || displayName.charAt(0)}
-        </Avatar>
+        <CustomAvatar displayName={displayName} image={image} />
         <Box sx={{ flexGrow: 1, alignItems: "flex-start" }}>
           <Typography variant="body2" sx={{ m: 0, p: 0 }} fontWeight="medium">
             {displayName}
