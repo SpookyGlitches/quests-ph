@@ -2,15 +2,14 @@ import {
   TableRow,
   TableCell,
   IconButton,
-  Avatar,
   Tooltip,
   Typography,
   Box,
 } from "@mui/material";
 import BlockRoundedIcon from "@mui/icons-material/BlockRounded";
 import PersonRemoveAlt1RoundedIcon from "@mui/icons-material/PersonRemoveAlt1Rounded";
-import { deepOrange } from "@mui/material/colors";
 import VerifiedUserRoundedIcon from "@mui/icons-material/VerifiedUserRounded";
+import CustomAvatar from "../../Common/CustomAvatar";
 
 export default function PartyListItem(props) {
   const {
@@ -34,13 +33,10 @@ export default function PartyListItem(props) {
       <TableCell>{rank} </TableCell>
       <TableCell align="center">
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <Avatar
-            sx={{
-              bgcolor: deepOrange[500],
-            }}
-          >
-            {item.user.displayName[0]}
-          </Avatar>
+          <CustomAvatar
+            displayName={item.user.displayName}
+            image={item.user.image}
+          />
           <Typography variant="body2">{item.user.displayName}</Typography>
           {item.user.role === "mentor" && item.user.isActive === "1" && (
             <VerifiedUserRoundedIcon color="primary" sx={{ fontSize: 20 }} />

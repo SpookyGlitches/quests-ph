@@ -1,12 +1,21 @@
-import { Box, Avatar, Typography, Tooltip } from "@mui/material";
+import { Box, Typography, Tooltip, IconButton } from "@mui/material";
 import VerifiedUserRoundedIcon from "@mui/icons-material/VerifiedUserRounded";
 import useSWR from "swr";
 import { useSession } from "next-auth/react";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import { useState } from "react";
+import CustomAvatar from "../Common/CustomAvatar";
+import ImageProfileUpload from "./ImageProfileUpload";
 
 export default function BasicInfo({ userId }) {
   const { data: myInfo } = useSWR(
     userId ? `/profile/${userId}/friendInfo` : null,
   );
+  const [open, setOpen] = useState(false);
+
+  const openImageUploadModal = () => {
+    setOpen(true);
+  };
 
   const session = useSession();
   const mentor = session?.data?.user?.role === "mentor";
@@ -27,7 +36,6 @@ export default function BasicInfo({ userId }) {
     );
   }
 
-  const letter = myInfo.displayName.charAt(0).toUpperCase();
   return (
     <Box
       sx={{
@@ -41,15 +49,37 @@ export default function BasicInfo({ userId }) {
         border: "1px solid rgba(0, 0, 0, 0.12)",
       }}
     >
-      <Avatar
+      <Box
         sx={{
-          backgroundColor: "primary.main",
-          height: "6rem",
-          width: "6rem",
+          position: "relative",
         }}
       >
-        {letter}
-      </Avatar>
+        <CustomAvatar
+          displayName={myInfo.displayName}
+          image={myInfo.image}
+          rootStyles={{
+            height: "6rem",
+            width: "6rem",
+          }}
+        />
+        <IconButton
+          sx={{
+            position: "absolute",
+            right: 0,
+            zIndex: 200,
+            bottom: 0,
+            backgroundColor: "grey.200",
+            "&:hover": {
+              backgroundColor: "grey.100",
+            },
+          }}
+          onClick={openImageUploadModal}
+          size="small"
+        >
+          <EditRoundedIcon sx={{ fontSize: "inherit" }} />
+        </IconButton>
+      </Box>
+
       <Tooltip
         describeChild
         title={
@@ -94,7 +124,12 @@ export default function BasicInfo({ userId }) {
           <VerifiedUserRoundedIcon color="primary" sx={{ ml: 1 }} />
         ) : null}
       </div>
-
+      <ImageProfileUpload
+        open={open}
+        setOpen={setOpen}
+        image={myInfo.image}
+        displayName={myInfo.displayName}
+      />
       <Typography variant="body2">{myInfo.fullName}</Typography>
     </Box>
   );

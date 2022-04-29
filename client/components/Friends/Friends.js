@@ -1,4 +1,4 @@
-import { Avatar, Typography, Box, IconButton, Button } from "@mui/material";
+import { Typography, Box, IconButton, Button } from "@mui/material";
 import { useSWRConfig } from "swr";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -10,6 +10,7 @@ import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import axios from "axios";
+import CustomAvatar from "../Common/CustomAvatar";
 
 const FriendsField = (item) => {
   const { mutate } = useSWRConfig();
@@ -92,10 +93,9 @@ const FriendsField = (item) => {
         }}
         onClick={handleProfileClick}
       >
-        <Avatar
-          sx={{
-            backgroundColor: "primary.main",
-          }}
+        <CustomAvatar
+          displayName={userDisplayed.displayName}
+          image={userDisplayed.image}
         />
         <Box
           sx={{ display: "flex", flexDirection: "column", marginLeft: "1rem" }}

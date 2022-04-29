@@ -22,10 +22,20 @@ export default async function getAllFriends(req, res) {
       },
       include: {
         userOne: {
-          select: { userId: true, displayName: true, fullName: true },
+          select: {
+            userId: true,
+            displayName: true,
+            fullName: true,
+            image: true,
+          },
         },
         userTwo: {
-          select: { userId: true, displayName: true, fullName: true },
+          select: {
+            userId: true,
+            displayName: true,
+            fullName: true,
+            image: true,
+          },
         },
       },
     });

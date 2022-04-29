@@ -1,6 +1,5 @@
 import {
   Box,
-  Avatar,
   Typography,
   Stack,
   Divider,
@@ -19,6 +18,7 @@ import { useSnackbar } from "notistack";
 import ReactOptions from "../ReactOptions";
 import EmojiStack from "../EmojisStack";
 import { QuestContext } from "../../../../context/QuestContext";
+import CustomAvatar from "../../../Common/CustomAvatar";
 
 export default function CommentItem({
   comment,
@@ -163,9 +163,11 @@ export default function CommentItem({
         }}
         key={comment.commentId}
       >
-        <Avatar sx={{ width: 32, height: 32 }}>
-          {comment.partyMember.user.image}
-        </Avatar>
+        <CustomAvatar
+          image={comment.partyMember.user.image}
+          rootStyles={{ width: 32, height: 32 }}
+          displayName={comment.partyMember.user.displayName}
+        />
         <Box
           sx={{
             display: "flex",
