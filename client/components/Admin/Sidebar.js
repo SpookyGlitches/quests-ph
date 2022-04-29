@@ -1,48 +1,15 @@
-import Link from "next/link";
-import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
-import InsertDriveFileRoundedIcon from "@mui/icons-material/InsertDriveFileRounded";
-import KeyboardTabRoundedIcon from "@mui/icons-material/KeyboardTabRounded";
-import MapRoundedIcon from "@mui/icons-material/MapRounded";
-import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
-import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
-import {
-  List,
-  ListItem,
-  Divider,
-  Drawer,
-  Box,
-  ListItemIcon,
-  ListItemText,
-  Toolbar,
-} from "@mui/material";
+import { List, Divider, Drawer, Box, Toolbar } from "@mui/material";
+import { useRouter } from "next/router";
+import SidebarLinkMenu from "../Common/SidebarLinkMenu";
 
 const Sidebar = (props) => {
   const { window, drawerWidth, handleDrawerToggle, mobileOpen } = props;
-
-  // eslint-disable-next-line consistent-return
-  const renderIcon = (text) => {
-    switch (text) {
-      case "Users":
-        return <PersonRoundedIcon />;
-      case "Applications":
-        return <InsertDriveFileRoundedIcon />;
-      case "Articles":
-        return <AssignmentRoundedIcon />;
-      case "Quests":
-        return <MapRoundedIcon />;
-      case "Reports":
-        return <WarningRoundedIcon />;
-      case "Logout":
-        return <KeyboardTabRoundedIcon />;
-      default:
-    }
-  };
+  const router = useRouter();
 
   const drawer = (
     <div>
       <Toolbar />
       <Divider />
-      {/* something app logo/profile should be here */}
       <List>
         {[
           // Mapping of different admin placeholders
@@ -51,18 +18,17 @@ const Sidebar = (props) => {
           "Articles",
           "Quests",
           "Reports",
-        ].map((text) => (
-          <Link
-            href={`/admin/${text.replace(/ /g, "").toLowerCase()}`}
-            passHref
-            key={text}
-          >
-            <ListItem button key={text} component="a">
-              <ListItemIcon>{renderIcon(text)}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          </Link>
-        ))}
+        ].map((text) => {
+          const href = `/admin/${text.replace(/ /g, "").toLowerCase()}`;
+          return (
+            <SidebarLinkMenu
+              path={href}
+              key={text}
+              routerPathName={router.pathname}
+              label={text}
+            />
+          );
+        })}
       </List>
     </div>
   );
