@@ -15,7 +15,9 @@ export default async function getAllOutgoing(req, res) {
         deletedAt: null,
       },
       include: {
-        requestee: { select: { displayName: true, fullName: true } },
+        requestee: {
+          select: { displayName: true, fullName: true, image: true },
+        },
       },
     });
     return res.status(200).json(outgoingRequest);
