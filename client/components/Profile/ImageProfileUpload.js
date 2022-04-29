@@ -12,7 +12,7 @@ import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useSWRConfig } from "swr";
-
+import { useSnackbar } from "notistack";
 import { useState } from "react";
 import FileDropzone from "../Common/FileDropzone";
 import CustomAvatar from "../Common/CustomAvatar";
@@ -27,7 +27,7 @@ function getFileExtension(filename) {
 
 export default function ImageProfileUpload(props) {
   const { image, open, setOpen, displayName } = props;
-
+  const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
   const session = useSession();
   const { mutate } = useSWRConfig();
@@ -60,7 +60,9 @@ export default function ImageProfileUpload(props) {
       });
 
       mutate(`/profile/${userId}/friendInfo`);
+      enqueueSnackbar("Successfully updated.");
     } catch (err) {
+      enqueueSnackbar("Something went wrong. Please try again.");
       console.error(err);
     } finally {
       setLoading(false);
@@ -74,10 +76,15 @@ export default function ImageProfileUpload(props) {
     onDropAccepted: uploadImage,
   };
   const removeImage = async () => {
-    await axios.put(`/api/users/${userId}/updateImage`, {
-      image: null,
-    });
-    mutate(`/profile/${userId}/friendInfo`);
+    try {
+      await axios.put(`/api/users/${userId}/updateImage`, {
+        image: null,
+      });
+      enqueueSnackbar("Successfully updated.");
+      mutate(`/profile/${userId}/friendInfo`);
+    } catch (err) {
+      enqueueSnackbar("Something went wrong. Please try again.");
+    }
   };
 
   const closeModal = () => {
