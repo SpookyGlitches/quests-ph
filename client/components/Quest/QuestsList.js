@@ -13,19 +13,25 @@ function QuestPage(props) {
     props;
 
   const queryString = new URLSearchParams({ ...searchParams, skip }).toString();
-  const { data: quests } = useSWR(url ? `${url}?${queryString}` : null);
+  const { data: quests, isValidating } = useSWR(
+    url ? `${url}?${queryString}` : null,
+  );
+
+  useEffect(() => {
+    setLoading(isValidating);
+
+    if (!quests) {
+      return;
+    }
+
+    const hasMore = quests.length >= searchParams.take;
+    setHasMore(hasMore);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [quests, isValidating]);
+
   if (!quests) {
-    setLoading(true);
     return <CustomCircularProgress sx={{ minHeight: 100 }} />;
   }
-
-  if (quests.length < searchParams.take) {
-    setHasMore(false);
-  } else {
-    setHasMore(true);
-  }
-
-  setLoading(false);
 
   return quests.map((quest) => {
     return (

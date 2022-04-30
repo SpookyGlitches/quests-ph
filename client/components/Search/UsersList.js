@@ -7,20 +7,25 @@ import CustomCircularProgress from "../Common/CustomSpinner";
 
 function UserPage({ url, setHasMore, searchParams, setLoading, skip }) {
   const queryString = new URLSearchParams({ ...searchParams, skip }).toString();
-  const { data: users } = useSWR(url ? `${url}?${queryString}` : null);
+  const { data: users, isValidating } = useSWR(
+    url ? `${url}?${queryString}` : null,
+  );
+
+  useEffect(() => {
+    setLoading(isValidating);
+
+    if (!users) {
+      return;
+    }
+
+    const hasMore = users.length >= searchParams.take;
+    setHasMore(hasMore);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [users, isValidating]);
 
   if (!users) {
-    setLoading(true);
     return <CustomCircularProgress rootStyles={{ minHeight: 100 }} />;
   }
-
-  if (users.length < searchParams.take) {
-    setHasMore(false);
-  } else {
-    setHasMore(true);
-  }
-
-  setLoading(false);
 
   return users.map((user) => {
     return <User user={user} key={user.userId} />;
@@ -53,7 +58,7 @@ export default function UsersList({ url, searchParams }) {
   useEffect(() => {
     setHasMore(false);
     setCount(1);
-  }, [searchParams]);
+  }, [searchParams, url]);
 
   return (
     <>
