@@ -12,12 +12,14 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitArticle } from "../../../validations/SubmitArticle";
 
-const openFile = (key) => {
-  const newWindow = window.open(
-    `${process.env.NEXT_PUBLIC_MENTORFILES_BASE_LINK}${key}`,
-    "_blank",
-    "noopener,noreferrer",
-  );
+const openFile = async (key) => {
+  const beforeDot = key.substr(0, key.indexOf("."));
+  const afterDot = key.substr(key.indexOf(".") + 1);
+  const signedURL = `/api/auth/getPresignedUrl?type=${encodeURIComponent(
+    afterDot,
+  )}&key=${beforeDot}`;
+  const { data: awsURL } = await axios.get(signedURL);
+  const newWindow = window.open(`${awsURL}`, "_blank", "noopener,noreferrer");
   if (newWindow) newWindow.opener = null;
 };
 
