@@ -19,7 +19,6 @@ const openFile = async (key) => {
     afterDot,
   )}&key=${beforeDot}`;
   const { data: awsURL } = await axios.get(signedURL);
-  console.log(awsURL);
   const newWindow = window.open(`${awsURL}`, "_blank", "noopener,noreferrer");
   if (newWindow) newWindow.opener = null;
 };
