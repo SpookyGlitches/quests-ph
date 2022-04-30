@@ -44,7 +44,7 @@ const TasksLists = () => {
   // const latestData = [...data, { ...data, ...{ id: data.task.questTaskid } }];
   mutate(`/quests/${router.query.questId}/tasks`);
 
-  if (!data && !count & !doneCount) return <CustomCircularProgress />;
+  if (!data && !count && !doneCount) return <CustomCircularProgress />;
 
   const memberId = data?.member[0].partyMemberId;
 

@@ -10,7 +10,7 @@ export default async function (req, res) {
         requesteeId: req.body.userId,
       },
     });
-
+    /* eslint-disable */
     const insertFriendReq = await prisma.notification.create({
       data: {
         userId: req.body.userId,

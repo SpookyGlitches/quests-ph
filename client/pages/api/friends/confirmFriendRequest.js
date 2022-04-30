@@ -27,23 +27,24 @@ export default async function confirmFriendRequests(req, res) {
       //   },
       // });
 
-      const [newFriendship, insertNotifData] = await prisma.$transaction([
-        prisma.friendship.create({
-          data: {
-            userOneId: req.body.requesterId,
-            userTwoId: req.body.requesteeId,
-            createdAt: new Date(),
-          },
-        }),
-        prisma.notification.create({
-          data: {
-            userId: req.body.requesterId,
-            type: "ACCEPT_FRIEND_REQUEST",
-            message: "accepted your friend request.",
-            metadata: JSON.stringify({ userId: user.userId }),
-          },
-        }),
-      ]);
+      const [newFriendship, /* eslint-disable */ insertNotifData] =
+        await prisma.$transaction([
+          prisma.friendship.create({
+            data: {
+              userOneId: req.body.requesterId,
+              userTwoId: req.body.requesteeId,
+              createdAt: new Date(),
+            },
+          }),
+          prisma.notification.create({
+            data: {
+              userId: req.body.requesterId,
+              type: "ACCEPT_FRIEND_REQUEST",
+              message: "accepted your friend request.",
+              metadata: JSON.stringify({ userId: user.userId }),
+            },
+          }),
+        ]);
       returnValue = newFriendship;
       console.log(returnValue);
     } else {

@@ -1,6 +1,5 @@
 import { getSession } from "next-auth/react";
 import { PrismaClient } from "@prisma/client";
-import { parse } from "date-fns";
 
 export default async function checkFriendReqs(req, res) {
   const prisma = new PrismaClient();
@@ -25,6 +24,7 @@ export default async function checkFriendReqs(req, res) {
     if (parseIDs) {
       // console.log(parseIDs.length);
       for (let x = 0; x < parseIDs.length; x++) {
+        /* eslint-disable */
         const checkFriendship = await prisma.friendship.findFirst({
           where: {
             OR: [
@@ -59,6 +59,7 @@ export default async function checkFriendReqs(req, res) {
     const returnUser = [];
 
     for (let x = 0; x < userNotFriend.length; x++) {
+      /* eslint-disable */
       const returnAllUser = await prisma.user.findFirst({
         take: 2,
         where: {

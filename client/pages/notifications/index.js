@@ -1,26 +1,9 @@
-import React, { useState } from "react";
-import {
-  Box,
-  Typography,
-  Avatar,
-  IconButton,
-  Paper,
-  ListItemButton,
-  ListItemAvatar,
-  ListItemText,
-  Divider,
-  Skeleton,
-  ListItem,
-  List,
-  CircularProgress,
-} from "@mui/material";
-import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
+import React from "react";
+import { Box, Typography, Paper, List } from "@mui/material";
 import useSWR, { mutate } from "swr";
-import { formatDistance } from "date-fns";
 import axios from "axios";
 import { getSession } from "next-auth/react";
 import AppLayout from "../../components/Layouts/AppLayout";
-import BadgeModal from "../../components/Common/BadgeModal";
 import ReceivedBadge from "../../components/Notification/ReceivedBadge";
 import FriendRequest from "../../components/Notification/FriendRequest";
 import AcceptFriendRequest from "../../components/Notification/AcceptFriendRequest";
@@ -30,6 +13,7 @@ import ApprovedArticle from "../../components/Notification/ApprovedArticle";
 export default function Index() {
   const updateNotificationReadSeen = async (notifid) => {
     try {
+      /* eslint-disable */
       const res = await axios.put(`/api/notifications`, {
         notificationId: notifid,
       });
@@ -41,6 +25,7 @@ export default function Index() {
   };
   const deleteNotification = async (notifid) => {
     try {
+      /* eslint-disable */
       const res = await axios.put(`/api/notifications/deleteNotif`, {
         notificationId: notifid,
       });
@@ -51,9 +36,6 @@ export default function Index() {
     }
   };
 
-  const text = {
-    fontWeight: "bold",
-  };
   /* eslint-disable */
   const { data, error } = useSWR("/notifications");
 

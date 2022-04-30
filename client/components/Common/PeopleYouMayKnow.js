@@ -2,27 +2,17 @@ import { useState } from "react";
 import {
   Box,
   Typography,
-  InputLabel,
-  MenuItem,
-  FormControl,
   List,
   ListItem,
   Avatar,
   Button,
   ListItemAvatar,
-  Select,
-  Divider,
   ListItemButton,
   ListItemText,
-  Checkbox,
-  Stack,
-  FormGroup,
-  FormControlLabel,
-  IconButton,
-  CircularProgress,
 } from "@mui/material";
 import axios from "axios";
 import { useSnackbar } from "notistack";
+import { getSession } from "next-auth/react";
 import useSWR, { mutate } from "swr";
 import Link from "next/link";
 
@@ -30,7 +20,6 @@ export default function Reminders() {
   const { enqueueSnackbar } = useSnackbar();
   const [flag, setFlag] = useState(false);
   const { data: suggestions } = useSWR("/profile/suggestions");
-  const [status, setStatus] = useState("Add Friend");
 
   const handleAdd = (userId) => {
     axios({
@@ -92,19 +81,7 @@ export default function Reminders() {
         People You May Know
       </Typography>
       {suggestions?.map((item) => (
-        <List
-          key={item.userId}
-          //   sx={{
-          //     "&.MuiList-root": {
-          //       padding: 0,
-          //       margin: 0,
-          //     },
-          //   }}
-          //   sx={{
-          //     width: "100%",
-          //     maxWidth: 360,
-          //   }}
-        >
+        <List key={item.userId}>
           <ListItem
             button
             secondaryAction={

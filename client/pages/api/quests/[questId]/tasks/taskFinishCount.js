@@ -11,12 +11,12 @@ export default async function getTaskCount(req, res) {
 
   const { user } = await getSession({ req });
 
-  const done_count = await prisma.questTaskFinisher.count({
+  const doneCount = await prisma.questTaskFinisher.count({
     where: {
       questId: Number(req.query.questId),
       userId: user.userId,
     },
   });
 
-  return res.status(200).send(done_count);
+  return res.status(200).send(doneCount);
 }

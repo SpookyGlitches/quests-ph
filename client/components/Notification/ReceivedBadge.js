@@ -5,15 +5,11 @@ import {
   Typography,
   Avatar,
   IconButton,
-  Paper,
   ListItemButton,
   ListItemAvatar,
   ListItemText,
   Divider,
-  Skeleton,
   ListItem,
-  List,
-  CircularProgress,
 } from "@mui/material";
 import { formatDistance } from "date-fns";
 import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
@@ -23,6 +19,7 @@ const ReceivedBadge = ({
   metadata,
   onClick,
   message,
+  /* eslint-disable */
   view_status,
   createdAt,
 }) => {

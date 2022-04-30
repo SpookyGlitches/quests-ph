@@ -1,4 +1,3 @@
-import { getSession } from "next-auth/react";
 import prisma from "../../../../../lib/prisma";
 
 export default async function articleHandler(req, res) {

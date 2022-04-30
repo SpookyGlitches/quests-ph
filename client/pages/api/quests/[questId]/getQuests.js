@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { getSession } from "next-auth/react";
 
 export default async function getSpecificQuestHandler(req, res) {
   const prisma = new PrismaClient();
@@ -7,8 +6,6 @@ export default async function getSpecificQuestHandler(req, res) {
     return res.status(400).send();
   }
   try {
-    const { user } = await getSession({ req });
-
     const quest = await prisma.quest.findUnique({
       where: {
         questId: Number(req.query.questId),

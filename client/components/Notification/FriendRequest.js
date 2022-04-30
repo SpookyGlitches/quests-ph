@@ -30,6 +30,7 @@ const FriendRequest = ({
   message,
   onRemove,
   createdAt,
+  /* eslint-disable */
   view_status,
 }) => {
   const [anchorWoop, setAnchorWoop] = useState(null);
@@ -89,11 +90,6 @@ const FriendRequest = ({
   };
 
   const closeWoopPopper = () => {
-    setOpenWoopPopper(false);
-  };
-
-  const handleRemove = () => {
-    onRemove;
     setOpenWoopPopper(false);
   };
 

@@ -24,6 +24,7 @@ const UserBan = ({
   message,
   createdAt,
   onRemove,
+  /* eslint-disable */
   view_status,
 }) => {
   const [anchorWoop, setAnchorWoop] = useState(null);
@@ -48,12 +49,8 @@ const UserBan = ({
     setOpenWoopPopper(false);
   };
 
-  const handleRemove = () => {
-    onRemove;
-    setOpenWoopPopper(false);
-  };
-
   return (
+    /* eslint-disable */
     <>
       <ListItemButton
         sx={{

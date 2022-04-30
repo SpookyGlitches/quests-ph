@@ -1,20 +1,16 @@
-import { getSession } from "next-auth/react";
-import prisma from "../../../lib/prisma";
+import prisma from "../../../../lib/prisma";
 
-export default async function articleHandler(req, res) {
+export default async function getAllArticles(req, res) {
   if (req.method !== "GET") {
-    return res.status(401).send();
+    return res.status(404).json({ message: "Method not allowed " });
   }
-  try {
-    const articleInfo = await prisma.article.findUnique({
-      where: {
-        articleId: req.query.articleId,
-      },
-    });
 
-    return res.status(200).json(articleInfo);
-  } catch (e) {
-    console.log(e);
-    return res.status(400).send({ message: "something went wrong" });
+  try {
+    const articles =
+      await prisma.$queryRaw`SELECT articleId, displayName, category, link FROM User INNER JOIN Article ON Article.userId = User.userId WHERE approvedAt IS NULL AND Article.updatedAt IS NULL AND Article.deletedAt IS NULL`;
+    return res.status(200).json(articles);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ message: "Something went wrong" });
   }
 }

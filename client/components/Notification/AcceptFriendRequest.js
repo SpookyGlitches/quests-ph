@@ -6,18 +6,13 @@ import {
   Avatar,
   Badge,
   IconButton,
-  Paper,
   ListItemButton,
   Menu,
   MenuItem,
   ListItemAvatar,
   ListItemText,
   Divider,
-  Skeleton,
   ListItem,
-  List,
-  CircularProgress,
-  Button,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { formatDistance } from "date-fns";
@@ -32,6 +27,7 @@ const FriendRequest = ({
   onRemove,
   message,
   createdAt,
+  /* eslint-disable */
   view_status,
 }) => {
   const [anchorWoop, setAnchorWoop] = useState(null);
@@ -59,11 +55,8 @@ const FriendRequest = ({
     setOpenWoopPopper(false);
   };
 
-  const handleRemove = () => {
-    onRemove;
-    setOpenWoopPopper(false);
-  };
   return (
+    /* eslint-disable */
     <>
       <ListItemButton
         sx={{
@@ -103,7 +96,7 @@ const FriendRequest = ({
                 variant="body2"
                 color="text.primary"
               >
-                {userInfo.fullName} accepted your friend request
+                {userInfo.fullName} {message}
               </Typography>
             }
             secondary={<></>}
@@ -141,7 +134,6 @@ const FriendRequest = ({
               ) : (
                 []
               )}
-
               <IconButton
                 onClick={handleWoopPopperClick}
                 sx={{

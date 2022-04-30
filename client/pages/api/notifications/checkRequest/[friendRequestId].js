@@ -1,5 +1,4 @@
-import { getSession } from "next-auth/react";
-import { Prisma, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 // eslint-disable-next-line
 export default async function (req, res) {
   const prisma = new PrismaClient();
