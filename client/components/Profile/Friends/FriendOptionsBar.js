@@ -58,7 +58,7 @@ export default function FriendsOptionsBar({
     router.push(
       {
         pathname: `/chats`,
-        query: { userInfo: userId },
+        query: { userInfo: friendInfo.userId },
       },
       "/chats",
     );
@@ -167,8 +167,8 @@ export default function FriendsOptionsBar({
         })
         .then((response) => {
           if (
-            response.data.avail.length === 0 &&
-            response.data.hasMentor.length === 0
+            response.data.avail === null &&
+            response.data.hasMentor === null
           ) {
             axios({
               method: "POST",
@@ -186,16 +186,21 @@ export default function FriendsOptionsBar({
               });
             setOpenRequest(false);
           } else if (
-            response.data.avail.length === 1 &&
-            response.data.hasMentor.length === 0
+            response.data.avail !== null &&
+            response.data.hasMentor === null
           ) {
             enqueueSnackbar(
               "This Quest is currently being requested to be mentored! Please choose another Quest!",
             );
-          } else {
+            setQuestMentored("");
+          } else if (
+            response.data.avail === null &&
+            response.data.hasMentor !== null
+          ) {
             enqueueSnackbar(
-              "This Quest is already has a mentor! Please choose another Quest!",
+              "This Quest already has a mentor! Please choose another Quest!",
             );
+            setQuestMentored("");
           }
         });
     } else {

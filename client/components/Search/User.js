@@ -1,6 +1,7 @@
-import { Paper, Avatar, Box, Typography, IconButton } from "@mui/material";
+import { Paper, Box, Typography, IconButton } from "@mui/material";
 import NavigateNextRoundedIcon from "@mui/icons-material/NavigateNextRounded";
 import { useRouter } from "next/router";
+import CustomAvatar from "../Common/CustomAvatar";
 
 export default function User({ user }) {
   const router = useRouter();
@@ -19,7 +20,7 @@ export default function User({ user }) {
       }}
       onClick={navigateToProfile}
     >
-      <Avatar sx={{ backgroundColor: "primary.main" }} />
+      <CustomAvatar displayName={user.displayName} image={user.image} />
       <Box sx={{ flexGrow: 1 }}>
         <Typography variant="body2" sx={{ fontWeight: "medium" }}>
           {user.displayName}

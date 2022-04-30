@@ -22,6 +22,7 @@ import {
 import { useEffect, useState, useContext } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import axios from "axios";
+import { useSnackbar } from "notistack";
 import QuestLayout from "../../../../components/Layouts/QuestLayout";
 import Step2 from "../../../../components/Quest/Create/Step2";
 import {
@@ -75,6 +76,7 @@ export default function Edit() {
   } = quest;
   const completed = Boolean(completedAt);
   const wishItem = <WishInput disabled={completed} />;
+  const { enqueueSnackbar } = useSnackbar();
 
   const { mutate: mutateQuest } = useSWRConfig();
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -107,11 +109,9 @@ export default function Edit() {
 
   const submitForm = async (values) => {
     try {
+      mutateQuest({ ...quest, ...values });
+      enqueueSnackbar("Updated successfully.");
       await axios.put(`/api/quests/${questId}`, values);
-      mutateQuest(`/quests/${questId}`, (questData) => ({
-        ...questData,
-        ...values,
-      }));
     } catch (err) {
       console.error(err);
     }

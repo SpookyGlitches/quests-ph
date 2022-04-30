@@ -1,10 +1,11 @@
-import { Avatar, Typography, Box, IconButton } from "@mui/material";
+import { Typography, Box, IconButton } from "@mui/material";
 import { useSWRConfig } from "swr";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import GroupAddRoundedIcon from "@mui/icons-material/GroupAddRounded";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import axios from "axios";
+import CustomAvatar from "../Common/CustomAvatar";
 
 const IncomingField = (item) => {
   const { mutate } = useSWRConfig();
@@ -84,10 +85,9 @@ const IncomingField = (item) => {
         }}
         onClick={handleProfileClick}
       >
-        <Avatar
-          sx={{
-            backgroundColor: "primary.main",
-          }}
+        <CustomAvatar
+          displayName={incomingData.requester.displayName}
+          image={incomingData.requester.image}
         />
         <Box
           sx={{ display: "flex", flexDirection: "column", marginLeft: "1rem" }}

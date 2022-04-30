@@ -1,22 +1,6 @@
-import Link from "next/link";
-import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
-import MapRoundedIcon from "@mui/icons-material/MapRounded";
-import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";
-import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
-import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
-import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
-import ConnectWithoutContactRoundedIcon from "@mui/icons-material/ConnectWithoutContactRounded";
-import MilitaryTechRoundedIcon from "@mui/icons-material/MilitaryTechRounded";
-import {
-  List,
-  ListItem,
-  Divider,
-  Drawer,
-  Box,
-  ListItemIcon,
-  ListItemText,
-  Toolbar,
-} from "@mui/material";
+import { List, Divider, Drawer, Box, Toolbar } from "@mui/material";
+import { useRouter } from "next/router";
+import SidebarLinkMenu from "./SidebarLinkMenu";
 
 const memberlinks = [
   {
@@ -75,31 +59,12 @@ const mentorLinks = [
     path: "/badges",
   },
 ];
+
 const Sidebar = (props) => {
+  const router = useRouter();
+
   const { window, drawerWidth, handleDrawerToggle, mobileOpen, userRole } =
     props;
-  // eslint-disable-next-line consistent-return
-  const renderIcon = (text) => {
-    switch (text) {
-      case "Home":
-        return <HomeRoundedIcon />;
-      case "Quests":
-        return <MapRoundedIcon />;
-      case "Requests":
-        return <ConnectWithoutContactRoundedIcon />;
-      case "Articles":
-        return <ArticleRoundedIcon />;
-      case "Friends":
-        return <PeopleRoundedIcon />;
-      case "Chats":
-        return <ChatRoundedIcon />;
-      case "Profile":
-        return <AccountCircleRoundedIcon />;
-      case "Badges":
-        return <MilitaryTechRoundedIcon />;
-      default:
-    }
-  };
 
   const drawer = (
     <div>
@@ -109,20 +74,20 @@ const Sidebar = (props) => {
       <List>
         {userRole === "mentor"
           ? mentorLinks.map(({ path, label }) => (
-              <Link href={path} passHref key={label}>
-                <ListItem button key={label} component="a">
-                  <ListItemIcon>{renderIcon(label)}</ListItemIcon>
-                  <ListItemText primary={label} />
-                </ListItem>
-              </Link>
+              <SidebarLinkMenu
+                path={path}
+                label={label}
+                key={label}
+                routerPathName={router.pathname}
+              />
             ))
           : memberlinks.map(({ path, label }) => (
-              <Link href={path} passHref key={label}>
-                <ListItem button key={label} component="a">
-                  <ListItemIcon>{renderIcon(label)}</ListItemIcon>
-                  <ListItemText primary={label} />
-                </ListItem>
-              </Link>
+              <SidebarLinkMenu
+                path={path}
+                label={label}
+                key={label}
+                routerPathName={router.pathname}
+              />
             ))}
       </List>
     </div>

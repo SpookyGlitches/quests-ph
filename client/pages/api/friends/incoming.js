@@ -15,7 +15,9 @@ export default async function getAllIncoming(req, res) {
         deletedAt: null,
       },
       include: {
-        requester: { select: { displayName: true, fullName: true } },
+        requester: {
+          select: { displayName: true, fullName: true, image: true },
+        },
       },
     });
     return res.status(200).json(incomingRequest);

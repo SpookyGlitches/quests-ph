@@ -19,6 +19,7 @@ async function getPost(req, res) {
             user: {
               select: {
                 displayName: true,
+                image: true,
               },
             },
             quest: {

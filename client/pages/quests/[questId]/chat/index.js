@@ -1,6 +1,6 @@
 import { getSession } from "next-auth/react";
-import { CircularProgress } from "@mui/material";
 import useSWR from "swr";
+import CustomCircularProgress from "../../../../components/Common/CustomSpinner";
 import QuestsChatInbox from "../../../../components/Chat/QuestsChatInbox";
 import QuestsLayout from "../../../../components/Layouts/QuestLayout";
 import AppLayout from "../../../../components/Layouts/AppLayout";
@@ -12,7 +12,7 @@ export default function QuestsChatPage({ questId }) {
     `/auth/getUserCredentials`,
   );
   if (error || userError) return <p>Failed to load</p>;
-  if (!data || !userData) return <CircularProgress />;
+  if (!data || !userData) return <CustomCircularProgress />;
 
   const props = {
     questName: data.wish,
@@ -21,12 +21,16 @@ export default function QuestsChatPage({ questId }) {
   };
   const inboxComponent = <QuestsChatInbox {...props} />;
 
+  return inboxComponent;
+}
+
+QuestsChatPage.getLayout = function getLayout(page) {
   return (
     <AppLayout>
-      <QuestsLayout>{inboxComponent}</QuestsLayout>
+      <QuestsLayout>{page}</QuestsLayout>
     </AppLayout>
   );
-}
+};
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
