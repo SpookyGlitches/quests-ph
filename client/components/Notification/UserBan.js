@@ -67,7 +67,7 @@ const UserBan = ({
         <Box sx={{ marginRight: 2, position: "absolute", marginLeft: 0.5 }} />
         <ListItem alignItems="flex-start">
           <ListItemAvatar sx={{ marginRight: "5px" }}>
-            <Avatar alt="Remy Sharp" />
+            <Avatar alt="Remy Sharp" src="/friends/ban.svg" />
           </ListItemAvatar>
 
           <ListItemText

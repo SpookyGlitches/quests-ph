@@ -4,6 +4,7 @@ import {
   Box,
   Typography,
   Avatar,
+  Badge,
   IconButton,
   Menu,
   MenuItem,
@@ -14,12 +15,14 @@ import {
   ListItem,
   Button,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { formatDistance } from "date-fns";
 import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import Link from "next/link";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import CustomAvatar from "../Common/CustomAvatar";
 
 const FriendRequest = ({
   metadata,
@@ -73,6 +76,11 @@ const FriendRequest = ({
   const text = {
     fontWeight: "bold",
   };
+  const SmallAvatar = styled(Avatar)(({ theme }) => ({
+    width: 22,
+    height: 22,
+    border: `2px solid ${theme.palette.background.paper}`,
+  }));
 
   const handleWoopPopperClick = (event) => {
     event.preventDefault();
@@ -117,18 +125,14 @@ const FriendRequest = ({
           </Button>
         </>
       );
-    } if (
+    }
+    if (
       checkFriendReq[0].status === "COMPLETED" &&
       checkFriendReq[0].completedAt !== null
     ) {
-      return (
-        <Typography variant="caption">Request Accepted</Typography>
-      );
-    } 
-      return (
-        <Typography variant="caption">Request Decline</Typography>
-      );
-    
+      return <Typography variant="caption">Request Accepted</Typography>;
+    }
+    return <Typography variant="caption">Request Decline</Typography>;
   };
 
   return (
@@ -153,7 +157,18 @@ const FriendRequest = ({
         <ListItem alignItems="flex-start">
           <Link href={`/profile/${checkFriendReq[0].requesterId}`} passHref>
             <ListItemAvatar sx={{ marginRight: "5px", cursor: "pointer" }}>
-              <Avatar alt="Remy Sharp" />
+              <Badge
+                overlap="circular"
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                badgeContent={
+                  <SmallAvatar alt="Travis Howard" src="/friends/addf.svg" />
+                }
+              >
+                <CustomAvatar
+                  displayName={checkFriendReq[0].displayName}
+                  image={checkFriendReq[0].image}
+                />
+              </Badge>
             </ListItemAvatar>
           </Link>
 

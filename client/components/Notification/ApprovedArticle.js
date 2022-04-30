@@ -74,7 +74,7 @@ const UserBan = ({
           <ListItemText
             primaryTypographyProps={{ style: text }}
             primary={
-              <Link href="/article " passHref>
+              <Link href="/articles" passHref>
                 <Typography
                   sx={{ display: "inline", marginTop: 1 }}
                   component="span"

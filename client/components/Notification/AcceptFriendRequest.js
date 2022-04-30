@@ -4,6 +4,7 @@ import {
   Box,
   Typography,
   Avatar,
+  Badge,
   IconButton,
   Paper,
   ListItemButton,
@@ -18,10 +19,12 @@ import {
   CircularProgress,
   Button,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { formatDistance } from "date-fns";
 import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import Link from "next/link";
+import CustomAvatar from "../Common/CustomAvatar";
 
 const FriendRequest = ({
   metadata,
@@ -40,6 +43,11 @@ const FriendRequest = ({
   const text = {
     fontWeight: "bold",
   };
+  const SmallAvatar = styled(Avatar)(({ theme }) => ({
+    width: 22,
+    height: 22,
+    border: `2px solid ${theme.palette.background.paper}`,
+  }));
 
   const handleWoopPopperClick = (event) => {
     event.preventDefault();
@@ -71,10 +79,22 @@ const FriendRequest = ({
         <ListItem alignItems="flex-start">
           <Link href={`/profile/${userInfo.userId}`} passHref>
             <ListItemAvatar sx={{ marginRight: "5px" }}>
-              <Avatar alt="Remy Sharp" />
+              <Badge
+                overlap="circular"
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                badgeContent={
+                  <SmallAvatar alt="Travis Howard" src="/friends/friend.svg" />
+                }
+              >
+                <CustomAvatar
+                  displayName={userInfo.displayName}
+                  image={userInfo.image}
+                />
+              </Badge>
             </ListItemAvatar>
           </Link>
           <ListItemText
+            sx={{ marginTop: 2 }}
             primaryTypographyProps={{ style: text }}
             primary={
               <Typography
