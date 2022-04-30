@@ -1,5 +1,5 @@
 import { getSession } from "next-auth/react";
-import prisma from "../../../lib/prisma";
+import prisma from "../../../../../lib/prisma";
 
 export default async function articleHandler(req, res) {
   if (req.method !== "GET") {
@@ -8,7 +8,7 @@ export default async function articleHandler(req, res) {
   try {
     const articleInfo = await prisma.article.findUnique({
       where: {
-        articleId: req.query.articleId,
+        articleId: Number(req.query.articleId),
       },
     });
 

@@ -13,5 +13,7 @@ export default async function getVisitedUserProfileName(req, res) {
       displayName: true,
     },
   });
+
+  await prisma.$disconnect();
   return res.status(200).json(pName);
 }

@@ -1,20 +1,19 @@
 import { getSession } from "next-auth/react";
 import prisma from "../../../lib/prisma";
 
-export default async function articleHandler(req, res) {
+export default async function badgeHandler(req, res) {
   if (req.method !== "GET") {
     return res.status(401).send();
   }
   try {
-    const articleInfo = await prisma.article.findUnique({
+    const badgeInfo = await prisma.badge.findUnique({
       where: {
-        articleId: req.query.articleId,
+        badgeId: Number(req.query.badgeId),
       },
     });
 
-    return res.status(200).json(articleInfo);
+    return res.status(200).json(badgeInfo);
   } catch (e) {
-    console.log(e);
     return res.status(400).send({ message: "something went wrong" });
   }
 }

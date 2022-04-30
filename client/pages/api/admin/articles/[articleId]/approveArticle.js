@@ -19,6 +19,22 @@ export default async function approveArticle(req, res) {
       },
     });
 
+    const approvedData = {
+      userId: approvedArticle.userId,
+      message: "Submitted article approved!",
+      type: "APPROVED_ARTICLE",
+      metadata: JSON.stringify({ articleId: approvedArticle.articleId }),
+    };
+
+    console.log(approvedArticle.userId);
+
+    if (approvedArticle) {
+      const approvedNotification = prisma.notification.create({
+        data: approvedData,
+      });
+      transactions.push(approvedNotification);
+    }
+
     const { updateUserCurrency, insertUserBadgeData, insertNotificationData } =
       await maybeAwardUserForArticle(approvedArticle.userId);
 
@@ -32,14 +48,19 @@ export default async function approveArticle(req, res) {
       const insertUserBadgeOperation = prisma.userBadge.create({
         data: insertUserBadgeData,
       });
+
       const insertNotificationOperation = prisma.notification.create({
         data: insertNotificationData,
       });
+
       transactions.push(insertUserBadgeOperation);
       transactions.push(insertNotificationOperation);
+
+      // transactions.push(notifyApproved);
     }
 
     await prisma.$transaction(transactions);
+    console.log("ALL GOOD IN THE HOOD");
     return res.status(200).json(approvedArticle);
   } catch (error) {
     console.log(error);

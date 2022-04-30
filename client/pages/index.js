@@ -26,6 +26,7 @@ import AppLayout from "../components/Layouts/AppLayout";
 import CreatePost from "../components/Quest/Post/CreatePost";
 import PostsList from "../components/Quest/Post/PostsList";
 import Reminders from "../components/Common/Reminders";
+import PeopleYouMayKnow from "../components/Common/PeopleYouMayKnow";
 import DocumentTitle from "../components/Common/DocumentTitle";
 
 function CreatePostModal({ open, setOpen }) {
@@ -115,10 +116,11 @@ export default function Home() {
         </Box>
         <CreatePostModal open={open} setOpen={setOpen} />
       </Grid>
-      <Grid item xs={12} lg={4} sx={{}}>
+      <Grid item xs={12} lg={4} display={{ md: "block", xs: "none" }}>
         <Box sx={{}}>
           <Stack spacing={2}>
             <Reminders />
+            <PeopleYouMayKnow />
           </Stack>
         </Box>
       </Grid>

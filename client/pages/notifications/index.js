@@ -9,8 +9,10 @@ import {
   ListItemAvatar,
   ListItemText,
   Divider,
+  Skeleton,
   ListItem,
   List,
+  CircularProgress,
 } from "@mui/material";
 import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
 import useSWR, { mutate } from "swr";
@@ -19,34 +21,17 @@ import axios from "axios";
 import { getSession } from "next-auth/react";
 import AppLayout from "../../components/Layouts/AppLayout";
 import BadgeModal from "../../components/Common/BadgeModal";
+import ReceivedBadge from "../../components/Notification/ReceivedBadge";
+import FriendRequest from "../../components/Notification/FriendRequest";
+import AcceptFriendRequest from "../../components/Notification/AcceptFriendRequest";
+import UserBan from "../../components/Notification/UserBan";
+import ApprovedArticle from "../../components/Notification/ApprovedArticle";
 
 export default function Index() {
-  const [badgeModalState, setBadgeModalState] = useState({
-    open: false,
-    notificationMessage: "",
-    badgeDetails: {
-      title: "",
-      description: "",
-      image: "",
-    },
-  });
-
-  const updateNotificationReadSeen = async (notif) => {
+  const updateNotificationReadSeen = async (notifid) => {
     try {
-      if (notif.type === "RECEIVED_BADGE") {
-        setBadgeModalState({
-          open: true,
-          notificationMessage: notif.message,
-          badgeDetails: {
-            image: notif.image,
-            description: notif.description,
-            title: `Gained ${notif.name} badge`,
-          },
-        });
-      }
-      /* eslint-disable */
       const res = await axios.put(`/api/notifications`, {
-        notificationId: notif.notificationId,
+        notificationId: notifid,
       });
       mutate("/notifications");
       mutate("/notifications/notif_count");
@@ -54,14 +39,23 @@ export default function Index() {
       console.log("failed");
     }
   };
+  const deleteNotification = async (notifid) => {
+    try {
+      const res = await axios.put(`/api/notifications/deleteNotif`, {
+        notificationId: notifid,
+      });
+      mutate("/notifications");
+      mutate("/notifications/notif_count");
+    } catch (error) {
+      console.log("failed delete");
+    }
+  };
 
   const text = {
     fontWeight: "bold",
   };
   /* eslint-disable */
-  const { data, error } = useSWR("/notifications", {
-    refreshInterval: 0,
-  });
+  const { data, error } = useSWR("/notifications");
 
   // let finalData = { ...notif, ...person };
 
@@ -90,95 +84,78 @@ export default function Index() {
           border: "1px solid rgba(0, 0, 0, 0.12)",
         }}
       >
-        {data?.map((notif) => (
-          <List
-            key={notif.notificationId}
-            sx={{
-              "&.MuiList-root": {
-                padding: 0,
-                margin: 0,
-              },
-              width: "100%",
-              bgcolor: "primary",
-              marginBottom: 1,
-              marginLeft: 1,
-            }}
-          >
-            <ListItemButton
-              onClick={() =>
-                updateNotificationReadSeen(notif, notif.notificationId)
-              }
-              sx={{
-                "&.MuiListItemButton-root": {
-                  padding: 0,
-                  margin: 0,
-                },
-                bgcolor: "#ffffff",
-                borderRadius: 1,
-              }}
-            >
-              <Box
-                sx={{ marginRight: 2, position: "absolute", marginLeft: 0.5 }}
-              />
-              <ListItem alignItems="flex-start">
-                <ListItemAvatar sx={{ marginRight: "5px" }}>
-                  <Avatar alt="Remy Sharp" src={`/badges/${notif.image}`} />
-                </ListItemAvatar>
-
-                <ListItemText
-                  primaryTypographyProps={{ style: text }}
-                  primary={notif.name}
-                  secondary={
-                    <Typography
-                      sx={{ display: "inline", marginTop: 1 }}
-                      component="span"
-                      variant="body2"
-                      color="text.primary"
-                    >
-                      {notif.message}
-                    </Typography>
+        <List>
+          {data?.map((notif) => {
+            const parse = JSON.parse(notif.metadata);
+            if (notif.type === "RECEIVED_BADGE") {
+              return (
+                <ReceivedBadge
+                  metadata={parse}
+                  onClick={() =>
+                    updateNotificationReadSeen(notif.notificationId)
                   }
+                  message={notif.message}
+                  view_status={notif.view_status}
+                  createdAt={notif.createdAt}
                 />
-
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "flex-end",
-                  }}
-                >
-                  <Typography variant="caption" sx={{ marginBottom: 1 }}>
-                    {formatDistance(new Date(notif.createdAt), new Date(), {
-                      addSuffix: true,
-                    })}
-                  </Typography>
-                  {notif.view_status === "SEEN" ? (
-                    <IconButton
-                      disableRipple
-                      sx={{
-                        "&.MuiIconButton-root": { p: 0, m: 0 },
-                      }}
-                    >
-                      <CircleRoundedIcon
-                        sx={{ fontSize: "10px", color: "#755cde" }}
-                      />
-                    </IconButton>
-                  ) : (
-                    []
-                  )}
-                </Box>
-              </ListItem>
-            </ListItemButton>
-
-            <Divider />
-          </List>
-        ))}
+              );
+            } else if (notif.type === "FRIEND_REQUEST") {
+              return (
+                <FriendRequest
+                  metadata={parse}
+                  onClick={(e) =>
+                    updateNotificationReadSeen(notif.notificationId)
+                  }
+                  onRemove={(e) => deleteNotification(notif.notificationId)}
+                  message={notif.message}
+                  view_status={notif.view_status}
+                  createdAt={notif.createdAt}
+                />
+              );
+            } else if (notif.type === "ACCEPT_FRIEND_REQUEST") {
+              return (
+                <AcceptFriendRequest
+                  metadata={parse}
+                  onClick={(e) =>
+                    updateNotificationReadSeen(notif.notificationId)
+                  }
+                  onRemove={(e) => deleteNotification(notif.notificationId)}
+                  message={notif.message}
+                  view_status={notif.view_status}
+                  createdAt={notif.createdAt}
+                />
+              );
+            } else if (notif.type === "USER_BAN") {
+              return (
+                <UserBan
+                  metadata={parse}
+                  onClick={(e) =>
+                    updateNotificationReadSeen(notif.notificationId)
+                  }
+                  onRemove={(e) => deleteNotification(notif.notificationId)}
+                  message={notif.message}
+                  view_status={notif.view_status}
+                  createdAt={notif.createdAt}
+                />
+              );
+            } else if (notif.type === "APPROVED_ARTICLE") {
+              return (
+                <ApprovedArticle
+                  metadata={parse}
+                  onClick={(e) =>
+                    updateNotificationReadSeen(notif.notificationId)
+                  }
+                  onRemove={(e) => deleteNotification(notif.notificationId)}
+                  message={notif.message}
+                  view_status={notif.view_status}
+                  createdAt={notif.createdAt}
+                />
+              );
+            }
+            return null;
+          })}
+        </List>
       </Box>
-
-      <BadgeModal
-        badgeModalState={badgeModalState}
-        setOpen={() => setBadgeModalState((prev) => ({ ...prev, open: false }))}
-      />
     </AppLayout>
   );
 }
