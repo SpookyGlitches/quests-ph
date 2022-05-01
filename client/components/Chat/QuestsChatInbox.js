@@ -11,15 +11,29 @@ export default function InboxComponent(data) {
     const currentUser = data.userData;
 
     Talk.ready.then(() => {
-      const me = new Talk.User({
-        id: currentUser.userId,
-        name: currentUser.displayName,
-        fullname: currentUser.fullName,
-        role: currentUser.role,
-      });
-      console.log(me);
+      if (currentUser.image) {
+        // eslint-disable-next-line
+        const me = new Talk.User({
+          id: currentUser.userId,
+          name: currentUser.displayName,
+          fullname: currentUser.fullName,
+          role: currentUser.role,
+          photoUrl: `${process.env.NEXT_PUBLIC_FILES_BASE_LINK}/${currentUser.image}`,
+        });
+      } else {
+        // eslint-disable-next-line
+        me = new Talk.User({
+          id: currentUser.userId,
+          name: currentUser.displayName,
+          fullname: currentUser.fullName,
+          role: currentUser.role,
+          photoUrl: `https://ui-avatars.com/api/?uppercase=true&background=755CDE&color=fff&name=${currentUser.displayName}`,
+        });
+      }
+
       const session = new Talk.Session({
         appId: "tvcbUw3n",
+        // eslint-disable-next-line
         me,
       });
 
@@ -27,7 +41,7 @@ export default function InboxComponent(data) {
         // eslint-disable-next-line
         `${data.questId}QuestChat`,
       );
-
+      // eslint-disable-next-line
       conversation.setParticipant(me);
       conversation.setAttributes({
         // eslint-disable-next-line
