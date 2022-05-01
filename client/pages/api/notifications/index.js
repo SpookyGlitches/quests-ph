@@ -5,7 +5,7 @@ async function /* eslint-disable */ getNotificataion(req, res) {
   const { user } = await getSession({ req });
 
   try {
-    const notif = await prisma.notification.findMany({
+    const notif = await prisma.Notification.findMany({
       where: { userId: user.userId, deletedAt: null },
       orderBy: { createdAt: "desc" },
     });
@@ -52,7 +52,7 @@ async function updateSeenRead(req, res) {
   const { notificationId } = req.body;
 
   try {
-    const update = await prisma.notification.update({
+    const update = await prisma.Notification.update({
       where: {
         notificationId: Number(notificationId),
       },

@@ -1,22 +1,19 @@
 import * as React from "react";
-import {
-  List,
-  Box,
-  ListItem,
-  ListItemText,
-  Typography,
-  CircularProgress,
-} from "@mui/material";
+import { List, Box, ListItem, ListItemText, Typography } from "@mui/material";
+import { alpha } from "@mui/material/styles";
+
 import Link from "next/link";
 import { format } from "date-fns";
 import { useRouter } from "next/router";
 import useSWR from "swr";
+import CustomSpinner from "../../Common/CustomSpinner";
 
 export default function CheckboxListSecondary() {
   const router = useRouter();
-  const { data, error } = useSWR(`/quests/${router.query.questId}/tasks`);
-  if (error) return <div>failed to load</div>;
-  if (!data) return <CircularProgress />;
+
+  const { data } = useSWR(`/quests/${router.query.questId}/tasks`);
+
+  if (!data) return <CustomSpinner />;
   return (
     <Box
       sx={{
@@ -28,12 +25,18 @@ export default function CheckboxListSecondary() {
     >
       <Box
         sx={{
-          bgcolor: "#755CDE",
+          backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.8),
           borderRadius: 0.3,
-          marginBottom: 2,
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
         }}
       >
-        <Typography variant="h6" color="white" sx={{ p: 2 }}>
+        <Typography
+          variant="body2"
+          color="white"
+          sx={{ p: 2, fontWeight: "bold" }}
+        >
           To Do Lists
         </Typography>
       </Box>
@@ -52,8 +55,8 @@ export default function CheckboxListSecondary() {
                 display: "flex",
                 flexDirection: "column",
                 "& .MuiListItem-root": {
-                  paddingTop: "2px",
-                  paddingBottom: "2px",
+                  paddingTop: "0.5px",
+                  paddingBottom: "0.5px",
                 },
               }}
             >
@@ -79,7 +82,7 @@ export default function CheckboxListSecondary() {
           </List>
         ))
       ) : (
-        <Box sx={{ textAlign: "center", marginBottom: 2 }}>
+        <Box sx={{ textAlign: "center", margin: 1 }}>
           <Typography>Your to do list is empty!</Typography>
         </Box>
       )}

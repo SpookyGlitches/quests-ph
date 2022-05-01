@@ -17,6 +17,8 @@ import {
 import { styled } from "@mui/material/styles";
 import { formatDistance } from "date-fns";
 import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
+import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
+import CancelPresentationRoundedIcon from "@mui/icons-material/CancelPresentationRounded";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import Link from "next/link";
 import CustomAvatar from "../Common/CustomAvatar";
@@ -157,9 +159,11 @@ const FriendRequest = ({
         transition
       >
         <MenuItem dense onClick={onClick} color="primary">
+          <CheckRoundedIcon sx={{ marginRight: 1 }} />
           Mark as read
         </MenuItem>
         <MenuItem dense onClick={() => onRemove()} color="primary">
+          <CancelPresentationRoundedIcon sx={{ marginRight: 1 }} />
           Remove this notification
         </MenuItem>
       </Menu>

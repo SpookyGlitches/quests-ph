@@ -20,7 +20,7 @@ export default async function (req, res) {
 
     const checkRequest =
       await prisma.$queryRaw`select f.friendRequestId, f.requesterId, f.status, f.completedAt, f.deletedAt, u.userId, u.displayName, u.image
-      FROM friendRequest AS f
+      FROM FriendRequest AS f
       INNER JOIN User AS u ON f.requesterId = u.userId
       WHERE f.friendRequestId = ${req.query.friendRequestId}`;
 

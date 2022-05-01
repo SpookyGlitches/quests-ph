@@ -11,7 +11,7 @@ export default async function (req, res) {
       },
     });
     /* eslint-disable */
-    const insertFriendReq = await prisma.notification.create({
+    const insertFriendReq = await prisma.Notification.create({
       data: {
         userId: req.body.userId,
         message: "sent you a friend request",

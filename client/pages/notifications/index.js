@@ -9,6 +9,7 @@ import FriendRequest from "../../components/Notification/FriendRequest";
 import AcceptFriendRequest from "../../components/Notification/AcceptFriendRequest";
 import UserBan from "../../components/Notification/UserBan";
 import ApprovedArticle from "../../components/Notification/ApprovedArticle";
+import CustomCircularProgress from "../../components/Common/CustomSpinner";
 
 export default function Index() {
   const updateNotificationReadSeen = async (notifid) => {
@@ -39,6 +40,7 @@ export default function Index() {
   /* eslint-disable */
   const { data, error } = useSWR("/notifications");
 
+  if (!data) return <CustomCircularProgress />;
   // let finalData = { ...notif, ...person };
 
   return (

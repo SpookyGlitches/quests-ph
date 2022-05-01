@@ -5,9 +5,15 @@ export default async function userHandler(req, res) {
     return res.status(401).send();
   }
   try {
-    const userInfo = await prisma.user.findUnique({
+    const userInfo = await prisma.User.findUnique({
       where: {
         userId: req.query.userId,
+      },
+      select: {
+        userId: true,
+        displayName: true,
+        fullName: true,
+        image: true,
       },
     });
 

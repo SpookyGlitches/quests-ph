@@ -43,6 +43,7 @@ const TasksLists = () => {
   const { data } = useSWR(`/quests/${router.query.questId}/tasks`, false);
   // const latestData = [...data, { ...data, ...{ id: data.task.questTaskid } }];
   mutate(`/quests/${router.query.questId}/tasks`);
+  mutate(`quests/${router.query.questId}/tasks/pointsLog`);
 
   if (!data && !count && !doneCount) return <CustomCircularProgress />;
 

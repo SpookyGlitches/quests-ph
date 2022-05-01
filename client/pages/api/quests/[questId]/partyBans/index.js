@@ -141,7 +141,7 @@ async function banPartyMember(req, res) {
         userId,
       },
     });
-    const insertNotifBan = prisma.notification.create({
+    const insertNotifBan = prisma.Notification.create({
       data: {
         userId,
         message: "You have been ban by the Party Leader",

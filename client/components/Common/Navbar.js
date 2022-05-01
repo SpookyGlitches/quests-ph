@@ -224,7 +224,7 @@ const Navbar = ({ drawerWidth, handleDrawerToggle }) => {
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <Link href="/notifications" passHref>
-              <Tooltip title="Notifications" sx={{ p: 0.5 }}>
+              <Tooltip title="Notifications" sx={{ p: 0.5 }} arrow>
                 <IconButton size="large" aria-label="" color="inherit">
                   <Badge badgeContent={data || 0} color="error">
                     <NotificationsRoundedIcon />

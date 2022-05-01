@@ -25,6 +25,7 @@ import { useSession, getSession } from "next-auth/react";
 import AppLayout from "../components/Layouts/AppLayout";
 import CreatePost from "../components/Quest/Post/CreatePost";
 import PostsList from "../components/Quest/Post/PostsList";
+import Footer from "../components/Common/FooterHome";
 import Reminders from "../components/Common/Reminders";
 import PeopleYouMayKnow from "../components/Common/PeopleYouMayKnow";
 import DocumentTitle from "../components/Common/DocumentTitle";
@@ -121,6 +122,7 @@ export default function Home() {
           <Stack spacing={2}>
             <Reminders />
             <PeopleYouMayKnow />
+            <Footer />
           </Stack>
         </Box>
       </Grid>

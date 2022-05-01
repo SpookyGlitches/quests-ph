@@ -10,22 +10,18 @@ export default async function checkFriendReqs(req, res) {
   try {
     const { user } = await getSession({ req });
 
-    console.log(user.userId);
     const getAllUserId =
-      await prisma.$queryRaw`select * from user WHERE userId <> ${user.userId} AND role <> "admin"`;
+      await prisma.$queryRaw`select * from User WHERE userId <> ${user.userId} AND role <> "admin"`;
 
     const parseIDs = getAllUserId.map((x) => x.userId);
-
-    console.log(parseIDs);
 
     const results = [];
     const userNotFriend = [];
 
     if (parseIDs) {
-      // console.log(parseIDs.length);
       for (let x = 0; x < parseIDs.length; x++) {
         /* eslint-disable */
-        const checkFriendship = await prisma.friendship.findFirst({
+        const checkFriendship = await prisma.Friendship.findFirst({
           where: {
             OR: [
               {
@@ -47,30 +43,28 @@ export default async function checkFriendReqs(req, res) {
         } else {
           userNotFriend.push(parseIDs[x]);
         }
-        prisma.$disconnect();
       }
     } else {
       console.log("no user ids found");
     }
 
-    // console.log("NOT YET FRIENDS\n");
-    // console.log(userNotFriend);
-
-    const returnUser = [];
-
-    for (let x = 0; x < userNotFriend.length; x++) {
-      /* eslint-disable */
-      const returnAllUser = await prisma.user.findFirst({
-        take: 2,
-        where: {
-          userId: userNotFriend[x],
+    const returnAllUser = await prisma.User.findMany({
+      take: 5,
+      where: {
+        userId: {
+          in: userNotFriend,
         },
-      });
-      returnUser.push(returnAllUser);
-      prisma.$disconnect();
-    }
+      },
+      select: {
+        userId: true,
+        displayName: true,
+        fullName: true,
+      },
+    });
 
-    return res.status(200).json(returnUser);
+    await prisma.$disconnect();
+
+    return res.status(200).json(returnAllUser);
   } catch (error) {
     console.log(error);
     return res.status(400).json({ message: "Something went wrong" });

@@ -9,7 +9,7 @@ export default async function deleteNotification(req, res) {
   const { user } = await getSession({ req });
   const { notificationId } = req.body;
   try {
-    const delNotif = await prisma.notification.update({
+    const delNotif = await prisma.Notification.update({
       where: {
         notificationId: Number(notificationId),
       },

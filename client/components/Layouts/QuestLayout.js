@@ -3,6 +3,7 @@ import useSWR from "swr";
 import { Box, Grid, Stack } from "@mui/material";
 import QuestHeader from "../Quest/QuestHeader";
 import Todo from "../Quest/Tasks/ToDo";
+import PointsHistory from "../Quest/Tasks/PointsHistory";
 import EndQuest from "../Quest/EndQuest";
 import { QuestContext } from "../../context/QuestContext";
 import { PartyMemberContext } from "../../context/PartyMemberContext";
@@ -67,6 +68,7 @@ export default function QuestLayout({ children }) {
             <Box sx={{}}>
               <Stack spacing={3}>
                 <Todo />
+                <PointsHistory />
                 {partyMember.role === "PARTY_LEADER" && <VideoCallRoom />}
                 {renderEndQuest()}
                 <MentorMessage />

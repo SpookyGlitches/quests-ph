@@ -26,10 +26,8 @@ export default async function approveArticle(req, res) {
       metadata: JSON.stringify({ articleId: approvedArticle.articleId }),
     };
 
-    console.log(approvedArticle.userId);
-
     if (approvedArticle) {
-      const approvedNotification = prisma.notification.create({
+      const approvedNotification = prisma.Notification.create({
         data: approvedData,
       });
       transactions.push(approvedNotification);
@@ -55,12 +53,9 @@ export default async function approveArticle(req, res) {
 
       transactions.push(insertUserBadgeOperation);
       transactions.push(insertNotificationOperation);
-
-      // transactions.push(notifyApproved);
     }
 
     await prisma.$transaction(transactions);
-    console.log("ALL GOOD IN THE HOOD");
     return res.status(200).json(approvedArticle);
   } catch (error) {
     console.log(error);

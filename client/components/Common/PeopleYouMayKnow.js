@@ -1,10 +1,8 @@
-import { useState } from "react";
 import {
   Box,
   Typography,
   List,
   ListItem,
-  Avatar,
   Button,
   ListItemAvatar,
   ListItemButton,
@@ -15,10 +13,10 @@ import { useSnackbar } from "notistack";
 import { getSession } from "next-auth/react";
 import useSWR, { mutate } from "swr";
 import Link from "next/link";
+import CustomAvatar from "./CustomAvatar";
 
 export default function Reminders() {
   const { enqueueSnackbar } = useSnackbar();
-  const [flag, setFlag] = useState(false);
   const { data: suggestions } = useSWR("/profile/suggestions");
 
   const handleAdd = (userId) => {
@@ -31,7 +29,6 @@ export default function Reminders() {
     })
       .then((response) => {
         if (response.data.length !== 1) {
-          setFlag(false);
           axios({
             method: "POST",
             url: `/api/profile/${userId}/addafriend`,
@@ -47,7 +44,6 @@ export default function Reminders() {
               console.log(error);
             });
         } else {
-          setFlag(true);
           enqueueSnackbar(
             "There is an existing request for this user. Please check your incoming/outgoing requests.",
           );
@@ -58,7 +54,7 @@ export default function Reminders() {
       });
   };
 
-  console.log(suggestions);
+  // if (!suggestions) return <CustomCircularProgress />;
 
   return (
     <Box
@@ -90,7 +86,7 @@ export default function Reminders() {
                 size="small"
                 onClick={() => handleAdd(item.userId)}
               >
-                {flag ? "Pending" : "Add Friend"}
+                Add Friend
               </Button>
             }
             disablePadding
@@ -98,7 +94,10 @@ export default function Reminders() {
             <Link href={`/profile/${item.userId}`} passHref>
               <ListItemButton>
                 <ListItemAvatar>
-                  <Avatar src={`/static/images/avatar/${2 + 1}.jpg`} />
+                  <CustomAvatar
+                    displayName={item.displayName}
+                    image={item.image}
+                  />
                 </ListItemAvatar>
                 <ListItemText>{item.displayName}</ListItemText>
               </ListItemButton>
