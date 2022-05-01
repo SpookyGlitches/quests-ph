@@ -7,12 +7,18 @@ import QuestLayout from "../../../../../components/Layouts/QuestLayout";
 import PostForm from "../../../../../components/Quest/Post/PostForm";
 import FilesForm from "../../../../../components/Quest/Post/Files/FilesForm";
 import AppLayout from "../../../../../components/Layouts/AppLayout";
+import PopConfirm from "../../../../../components/Common/PopConfirm";
 
 export default function EditPostPage() {
   const router = useRouter();
   const { questId, postId } = router.query;
 
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [confirmModalState, setConfirmModalState] = useState({
+    handleOk: () => {},
+    open: false,
+  });
+
   const { data: post } = useSWR(
     questId && postId ? `/quests/${questId}/posts/${postId}` : null,
   );
@@ -53,6 +59,16 @@ export default function EditPostPage() {
       console.error(err);
     }
   };
+  const openDeleteModal = () => {
+    setConfirmModalState({
+      open: true,
+      handleOk: deletePost,
+    });
+  };
+
+  const closeModal = () => {
+    setConfirmModalState((prev) => ({ ...prev, open: false }));
+  };
 
   if (!post) {
     return <div>Loading</div>;
@@ -64,13 +80,20 @@ export default function EditPostPage() {
         post={post}
         onSubmit={onSubmit}
         isUpdating
-        deletePost={deletePost}
+        deletePost={() => openDeleteModal()}
       >
         <FilesForm
           uploadedFiles={uploadedFiles}
           setUploadedFiles={setUploadedFiles}
         />
       </PostForm>
+      <PopConfirm
+        open={confirmModalState.open}
+        title="Are you sure you want to delete this post?"
+        subtitle="This action is irreversible. Proceed?"
+        handleOk={confirmModalState.handleOk}
+        handleCancel={closeModal}
+      />
     </Paper>
   );
 }
