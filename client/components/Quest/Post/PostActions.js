@@ -103,7 +103,7 @@ export default function PostActions(props) {
           );
           return optimisticReacts;
         } catch {
-          return postReactId;
+          return optimisticReacts;
         }
       },
       { optimisticData: optimisticReacts },

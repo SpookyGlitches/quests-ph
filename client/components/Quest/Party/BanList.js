@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   Typography,
   Table,
@@ -19,6 +19,7 @@ import axios from "axios";
 import { QuestContext } from "../../../context/QuestContext";
 import CustomCircularProgress from "../../Common/CustomSpinner";
 import CustomAvatar from "../../Common/CustomAvatar";
+import PopConfirm from "../../Common/PopConfirm";
 
 export default function BanList() {
   const { questId, completedAt } = useContext(QuestContext);
@@ -27,6 +28,16 @@ export default function BanList() {
   );
 
   const completed = Boolean(completedAt);
+
+  const [confirmModalState, setConfirmModalState] = useState({
+    handleOk: () => {},
+    open: false,
+  });
+
+  const closeModal = () => {
+    setConfirmModalState((prev) => ({ ...prev, open: false }));
+  };
+
   const revokeBan = async (partyBanId) => {
     try {
       await axios.delete(`/api/quests/${questId}/partyBans/${partyBanId}`);
@@ -37,6 +48,13 @@ export default function BanList() {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const openModalForRevoke = (partyBanId) => {
+    setConfirmModalState({
+      open: true,
+      handleOk: () => revokeBan(partyBanId),
+    });
   };
 
   if (!partyBans) {
@@ -62,7 +80,7 @@ export default function BanList() {
       <TableCell align="right">
         <Tooltip title="Revoke">
           <IconButton
-            onClick={() => revokeBan(partyBan.questPartyBanId)}
+            onClick={() => openModalForRevoke(partyBan.questPartyBanId)}
             disabled={completed}
           >
             <RemoveCircleOutlineRoundedIcon />
@@ -108,6 +126,13 @@ export default function BanList() {
           </Table>
         </TableContainer>
       </Stack>
+      <PopConfirm
+        open={confirmModalState.open}
+        subtitle="The user will be able to join again when revoked. Proceed?"
+        title="Are you sure you want to revoke ban?"
+        handleOk={confirmModalState.handleOk}
+        handleCancel={closeModal}
+      />
     </Paper>
   );
 }

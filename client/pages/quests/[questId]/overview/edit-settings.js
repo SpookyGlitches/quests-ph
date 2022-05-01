@@ -41,7 +41,7 @@ const DialogItem = ({ handleOk, handleCancel, open, loading }) => {
       maxWidth="xs"
       open={open}
     >
-      <DialogTitle>Delete Quest</DialogTitle>
+      <DialogTitle color="primary">Delete Quest</DialogTitle>
       <DialogContent>
         <Typography variant="body1">
           Are you sure you want to delete this Quest? All associated data will
@@ -50,10 +50,10 @@ const DialogItem = ({ handleOk, handleCancel, open, loading }) => {
       </DialogContent>
       <DialogActions>
         <Button autoFocus onClick={handleCancel} disabled={loading}>
-          No
+          Cancel
         </Button>
         <Button onClick={handleOk} disabled={loading}>
-          Yes
+          Proceed
         </Button>
       </DialogActions>
     </Dialog>
@@ -157,7 +157,7 @@ export default function Edit() {
                 visibility: true,
                 wish: completed,
                 category: completed,
-                difficulty: completed,
+                difficulty: true,
                 startDate: completed,
                 endDate: completed,
               }}
@@ -166,7 +166,8 @@ export default function Edit() {
           <Box
             sx={{
               display: "flex",
-              justifyContent: "space-between",
+              justifyContent: "flex-end",
+              gap: 3,
               marginTop: 4,
             }}
           >
