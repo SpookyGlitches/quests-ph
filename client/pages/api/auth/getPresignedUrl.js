@@ -15,7 +15,7 @@ export default async function handler(req, res) {
       Key:
         req.query.role === "mentor" && user.role === "admin"
           ? realKey
-          : req.query.key, //feel free to change this part earl, depending sa key sa imong file :D
+          : req.query.key,
       Body: "",
     };
 
