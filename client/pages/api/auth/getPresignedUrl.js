@@ -1,16 +1,24 @@
+import { getSession } from "next-auth/react";
 import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { s3Client } from "../../../lib/s3";
 
 export default async function handler(req, res) {
   try {
+    const { user } = await getSession({ req });
     const realKey = `${req.query.key}.${req.query.type}`;
-
     const bucketParams = {
-      Bucket: process.env.AWS_BUCKET_NAME_MENTOR,
-      Key: realKey,
+      Bucket:
+        req.query.role === "mentor" && user.role === "admin"
+          ? process.env.AWS_BUCKET_NAME_MENTOR
+          : process.env.AWS_S3_BUCKET_NAME,
+      Key:
+        req.query.role === "mentor" && user.role === "admin"
+          ? realKey
+          : req.query.key, //feel free to change this part earl, depending sa key sa imong file :D
       Body: "",
     };
+
     const command = new GetObjectCommand(bucketParams);
     const signedUrl = await getSignedUrl(s3Client, command, {
       expiresIn: 3600, // 60s
