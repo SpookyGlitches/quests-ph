@@ -7,16 +7,16 @@ export default async function editMemberAccount(req, res) {
     const dateObj = new Date(rawDate);
     userDetails.dateOfBirth = dateObj.toISOString();
 
-    const checkEmail = await prisma.user.findMany({
-      where: {
-        email: userDetails.email,
-        NOT: {
-          userId: {
-            equals: userDetails.userId,
-          },
-        },
-      },
-    });
+    // const checkEmail = await prisma.user.findMany({
+    //   where: {
+    //     email: userDetails.email,
+    //     NOT: {
+    //       userId: {
+    //         equals: userDetails.userId,
+    //       },
+    //     },
+    //   },
+    // });
 
     const checkDisplayName = await prisma.user.findMany({
       where: {
@@ -29,7 +29,7 @@ export default async function editMemberAccount(req, res) {
       },
     });
 
-    if (checkEmail.length === 0 && checkDisplayName.length === 0) {
+    if (checkDisplayName.length === 0) {
       const success = await prisma.user.update({
         where: { userId: userDetails.userId },
         data: userDetails,
@@ -42,21 +42,10 @@ export default async function editMemberAccount(req, res) {
         });
         res.status(200).send({ message: "Success!" });
       }
-    } else if (
-      Number(checkDisplayName.length) !== 0 &&
-      Number(checkEmail.length) !== 0
-    ) {
-      res
-        .status(422)
-        .send({ message: "Both email and display name are already used." });
     } else if (Number(checkDisplayName.length) !== 0) {
       res
         .status(422)
         .send({ message: "Display Name is already used by different user" });
-    } else if (Number(checkEmail.length) !== 0) {
-      res
-        .status(422)
-        .send({ message: "Email is already used by different user" });
     }
 
     await prisma.$disconnect();

@@ -2,9 +2,10 @@ import { Box, CircularProgress, Stack } from "@mui/material";
 import useSWR, { useSWRConfig } from "swr";
 import { useSession } from "next-auth/react";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import CommentItem from "./CommentItem";
+import PopConfirm from "../../../Common/PopConfirm";
 
 export default function CommmentsList({
   questId,
@@ -19,6 +20,11 @@ export default function CommmentsList({
   const { mutate } = useSWRConfig();
   const session = useSession();
   const userId = session.data?.user?.userId;
+
+  const [confirmModalState, setConfirmModalState] = useState({
+    handleOk: () => {},
+    open: false,
+  });
 
   const deleteComment = async (commentId) => {
     try {
@@ -48,6 +54,17 @@ export default function CommmentsList({
         commentId,
         content,
       },
+    });
+  };
+
+  const closeModal = () => {
+    setConfirmModalState((prev) => ({ ...prev, open: false }));
+  };
+
+  const openModalForDelete = (commentId) => {
+    setConfirmModalState({
+      open: true,
+      handleOk: () => deleteComment(commentId),
     });
   };
 
@@ -83,11 +100,17 @@ export default function CommmentsList({
             disabled
             postId={postId}
             editComment={editComment}
-            deleteComment={deleteComment}
+            deleteComment={(commentId) => openModalForDelete(commentId)}
           />
         );
       })}
       <Box sx={{ display: "" }} ref={commentFormRef} />
+      <PopConfirm
+        open={confirmModalState.open}
+        handleCancel={closeModal}
+        handleOk={confirmModalState.handleOk}
+        title="Are you sure you want to delete this comment?"
+      />
     </Stack>
   );
 }

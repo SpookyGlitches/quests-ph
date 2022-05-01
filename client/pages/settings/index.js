@@ -325,7 +325,7 @@ export default function Index() {
                 )}
               />
 
-              <Controller
+              {/* <Controller
                 control={control}
                 name="email"
                 defaultValue={userCredentials ? userCredentials.email : ""}
@@ -351,7 +351,7 @@ export default function Index() {
                     error={invalid}
                   />
                 )}
-              />
+              /> */}
 
               <Controller
                 name="dateOfBirth"

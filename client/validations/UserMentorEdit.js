@@ -23,5 +23,5 @@ export const EditMentorValidations = object({
     })
     .required("Please enter your age"),
 
-  email: string().required(requiredMsg).email("Email is invalid"),
+  // email: string().required(requiredMsg).email("Email is invalid"),
 });

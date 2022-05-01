@@ -13,11 +13,12 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
 import { PartyMemberContext } from "../../../context/PartyMemberContext";
 import { QuestContext } from "../../../context/QuestContext";
 import CustomCircularProgress from "../../Common/CustomSpinner";
+import PopConfirm from "../../Common/PopConfirm";
 import PartyListItem from "./PartyListItem";
 
 export default function PartyList() {
@@ -26,6 +27,13 @@ export default function PartyList() {
   const quest = useContext(QuestContext);
   const partyMember = useContext(PartyMemberContext);
   const { mutate } = useSWRConfig();
+
+  const [confirmModalState, setConfirmModalState] = useState({
+    handleOk: () => {},
+    title: "",
+    subtitle: "",
+    open: false,
+  });
 
   const isPartyLeader = partyMember.role === "PARTY_LEADER";
 
@@ -65,6 +73,10 @@ export default function PartyList() {
     }
   };
 
+  const handleCancel = () => {
+    setConfirmModalState((prev) => ({ ...prev, open: false }));
+  };
+
   const banPartyMember = async (toBanUserId) => {
     const filteredMembers = partyMembers.filter(
       (item) => item.userId !== toBanUserId,
@@ -93,6 +105,32 @@ export default function PartyList() {
     }
   };
 
+  const openModalForKick = (partyMemberId) => {
+    setConfirmModalState({
+      open: true,
+      title: "Are you sure you want to kick this user?",
+      handleOk: () => removePartyMember(partyMemberId),
+    });
+  };
+
+  const openModalForLeave = () => {
+    setConfirmModalState({
+      open: true,
+      title: "Are you sure you want to leave?",
+      subtitle:
+        "You will lose everything associated in this Quest and all your task points. This action is irreversible. Proceed?",
+      handleOk: leaveParty,
+    });
+  };
+
+  const openModalForBan = (userId) => {
+    setConfirmModalState({
+      open: true,
+      handleOk: () => banPartyMember(userId),
+      title: "Are you sure you want to ban this user?",
+    });
+  };
+
   if (!partyMembers) {
     return <CustomCircularProgress rootStyles={{ minHeight: 100 }} />;
   }
@@ -101,6 +139,7 @@ export default function PartyList() {
   const mentors = [];
 
   let x = 0;
+
   partyMembers.forEach((member) => {
     if (member.user.role === "mentor") {
       mentors.push(
@@ -109,8 +148,8 @@ export default function PartyList() {
           rank="_"
           isPartyLeader={isPartyLeader}
           key={member.partyMemberId}
-          removePartyMember={removePartyMember}
-          banPartyMember={banPartyMember}
+          removePartyMember={(partyMemberId) => openModalForKick(partyMemberId)}
+          banPartyMember={(userId) => openModalForBan(userId)}
           completed={completed}
         />,
       );
@@ -122,8 +161,8 @@ export default function PartyList() {
           isPartyLeader={isPartyLeader}
           key={member.partyMemberId}
           mentor
-          removePartyMember={removePartyMember}
-          banPartyMember={banPartyMember}
+          removePartyMember={(partyMemberId) => openModalForKick(partyMemberId)}
+          banPartyMember={(userId) => openModalForBan(userId)}
           completed={completed}
         />,
       );
@@ -132,57 +171,72 @@ export default function PartyList() {
   });
 
   return (
-    <Paper sx={{ padding: 3 }}>
-      <Stack spacing={2}>
-        <Typography variant="h5" sx={{ color: "primary.main" }}>
-          Party
-        </Typography>
-        <TableContainer>
-          <Table aria-label="simple table" size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell>Rank</TableCell>
-                <TableCell>User</TableCell>
-                <TableCell align="center">Points</TableCell>
-                {isPartyLeader && <TableCell align="center">Actions</TableCell>}
-              </TableRow>
-            </TableHead>
+    <>
+      <Paper sx={{ padding: 3 }}>
+        <Stack spacing={2}>
+          <Typography variant="h5" sx={{ color: "primary.main" }}>
+            Party
+          </Typography>
+          <TableContainer>
+            <Table aria-label="simple table" size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Rank</TableCell>
+                  <TableCell>User</TableCell>
+                  <TableCell align="center">Points</TableCell>
+                  {isPartyLeader && (
+                    <TableCell align="center">Actions</TableCell>
+                  )}
+                </TableRow>
+              </TableHead>
 
-            <TableBody>
-              {mentees}
-              {mentors}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              <TableBody>
+                {mentees}
+                {mentors}
+              </TableBody>
+            </Table>
+          </TableContainer>
 
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center",
-          }}
-        >
-          {isPartyLeader && (
-            <Button
-              variant="contained"
-              color="primary"
-              disabled={
-                Boolean(completedAt) ||
-                partyMembers.filter((member) => member.role !== "MENTOR")
-                  .length >= 4
-              }
-              onClick={generateInviteLink}
-            >
-              Invite
-            </Button>
-          )}
-          {!isPartyLeader && (
-            <Button variant="outlined" color="primary" onClick={leaveParty}>
-              Leave
-            </Button>
-          )}
-        </Box>
-      </Stack>
-    </Paper>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+            }}
+          >
+            {isPartyLeader && (
+              <Button
+                variant="contained"
+                color="primary"
+                disabled={
+                  Boolean(completedAt) ||
+                  partyMembers.filter((member) => member.role !== "MENTOR")
+                    .length >= 4
+                }
+                onClick={generateInviteLink}
+              >
+                Invite
+              </Button>
+            )}
+            {!isPartyLeader && (
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={openModalForLeave}
+              >
+                Leave
+              </Button>
+            )}
+          </Box>
+        </Stack>
+      </Paper>
+      <PopConfirm
+        open={confirmModalState.open}
+        subtitle={confirmModalState.subtitle}
+        title={confirmModalState.title}
+        handleOk={confirmModalState.handleOk}
+        handleCancel={handleCancel}
+      />
+    </>
   );
 }

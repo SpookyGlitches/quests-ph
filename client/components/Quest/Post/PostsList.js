@@ -8,18 +8,25 @@ import CustomCircularProgress from "../../Common/CustomSpinner";
 function PostPage(props) {
   const { url, skip, setHasMore, setLoading, searchParams } = props;
   const queryString = new URLSearchParams({ ...searchParams, skip }).toString();
-  const { data: posts } = useSWR(url ? `${url}?${queryString}` : null);
+  const { data: posts, isValidating } = useSWR(
+    url ? `${url}?${queryString}` : null,
+  );
+
+  useEffect(() => {
+    setLoading(isValidating);
+
+    if (!posts) {
+      return;
+    }
+
+    const hasMore = posts.length >= searchParams.take;
+    setHasMore(hasMore);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [posts, isValidating]);
 
   if (!posts) {
-    setLoading(true);
     return <CustomCircularProgress />;
   }
-
-  if (posts.length < searchParams.take) {
-    setHasMore(false);
-  }
-
-  setLoading(false);
 
   return posts.map(({ postId, partyMember }) => {
     return <Post key={postId} postId={postId} questId={partyMember.questId} />;
@@ -28,8 +35,8 @@ function PostPage(props) {
 
 const PostsList = ({ url, searchParams }) => {
   const [count, setCount] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [loading, setLoading] = useState(true);
+  const [hasMore, setHasMore] = useState(false);
+  const [loading, setLoading] = useState(false);
   const postPages = [];
 
   for (let i = 0; i < count; i++) {
@@ -48,11 +55,6 @@ const PostsList = ({ url, searchParams }) => {
   const loadMore = () => {
     setCount((prev) => prev + 1);
   };
-
-  useEffect(() => {
-    setHasMore(true);
-    setCount(1);
-  }, [searchParams]);
 
   return (
     <>

@@ -20,6 +20,7 @@ export default async function getUserCredential(req, res) {
         email: true,
         userId: true,
         role: true,
+        image: true,
       },
     });
     return res.status(200).json(foundUser);
