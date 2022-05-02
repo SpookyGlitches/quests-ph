@@ -23,10 +23,15 @@ import {
   Stack,
   FormHelperText,
   Typography,
+  LinearProgress,
+  Grid,
 } from "@mui/material";
 import useSWR, { useSWRConfig } from "swr";
 import { useSnackbar } from "notistack";
+import { v4 as uuidv4 } from "uuid";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { UserReport } from "../../../validations/userReport";
+import FileDropzone from "../../Common/FileDropzone";
 
 export default function FriendsOptionsBar({
   userId,
@@ -41,7 +46,10 @@ export default function FriendsOptionsBar({
   const [questMentored, setQuestMentored] = React.useState("");
   const { mutate } = useSWRConfig();
   const { enqueueSnackbar } = useSnackbar();
-
+  const [loading, setLoading] = React.useState(false);
+  const [uploadedFile, setUploadedFile] = React.useState([]);
+  const [reportUpload, setReportUpload] = React.useState("");
+  const [isDisabled, setIsDisabled] = React.useState(false);
   const currentValidationSchema = UserReport[0];
   const methods = useForm({
     resolver: yupResolver(currentValidationSchema),
@@ -111,6 +119,7 @@ export default function FriendsOptionsBar({
             data: {
               userId,
               values,
+              reportUpload,
             },
           })
             .then(() => {
@@ -126,6 +135,8 @@ export default function FriendsOptionsBar({
       });
     reset();
     setOpenReport(false);
+    setUploadedFile([]);
+    setReportUpload("");
   };
 
   const handleClickOpen = () => {
@@ -230,6 +241,70 @@ export default function FriendsOptionsBar({
       />
     );
   }
+  function getFileExtension(filename) {
+    const a = filename.split(".");
+    if (a.length === 1 || (a[0] === "" && a.length === 2)) {
+      return "";
+    }
+    return a.pop();
+  }
+  const callAPIs = async (file) => {
+    const { name, type } = file;
+    const id = uuidv4();
+    const extension = getFileExtension(name);
+    const key = `reports/${userId}/${id}.${extension}`; // uuidv4()
+    const signedURL = `/api/reports/${userId}/userReport?type=${encodeURIComponent(
+      type,
+    )}&key=${key}`;
+    // eslint-disable-next-line
+    setReportUpload(key);
+    const { data: awsURL } = await axios.get(signedURL);
+
+    await axios.put(awsURL, file, {
+      headers: {
+        "content-type": type,
+      },
+    });
+  };
+
+  const uploadImage = async (acceptedFile) => {
+    setLoading(true);
+    setIsDisabled(true);
+    const fileUploadStatus = [];
+    setUploadedFile([acceptedFile[0]]);
+    fileUploadStatus.push(callAPIs(acceptedFile[0]));
+    try {
+      await Promise.all(fileUploadStatus);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+      setIsDisabled(false);
+    }
+  };
+  const dropzoneConfig = {
+    multiple: false,
+    maxSize: 52428800,
+    accept: "image/jpeg, image/png",
+    onDropAccepted: uploadImage,
+    onDropRejected: () => {
+      enqueueSnackbar("File type not accepted");
+    },
+    disabled: loading,
+  };
+  const removeImage = async () => {
+    const deleteVal = reportUpload;
+    const deleteURL = `/api/reports/${userId}/deleteReport?key=${deleteVal}`;
+    try {
+      await axios.get(deleteURL);
+    } catch (err) {
+      if (err.response.status === 500) {
+        enqueueSnackbar("Error in deletion!");
+      }
+    }
+    setUploadedFile([]);
+    setReportUpload("");
+  };
   return (
     <Box
       sx={{
@@ -347,12 +422,42 @@ export default function FriendsOptionsBar({
                     />
                   )}
                 />
+                <Typography style={{ fontSize: "12px" }} sx={{ mt: 1, mb: 1 }}>
+                  You may also upload supporting evidence here
+                </Typography>
+                <FileDropzone
+                  dropzoneTitle="Drag and drop the image here, or click to add."
+                  useDropzoneProps={dropzoneConfig}
+                />
+                {loading && <LinearProgress sx={{ mt: 2 }} />}
+                {uploadedFile.map((elem) => (
+                  <Grid
+                    item
+                    xs={2}
+                    key={uploadedFile.indexOf(elem)}
+                    style={{ display: "flex", alignItems: "center" }}
+                  >
+                    <Typography style={{ fontSize: "12px" }}>
+                      {elem.name}
+                    </Typography>
+                    <Button
+                      size="small"
+                      onClick={() => {
+                        removeImage(uploadedFile.indexOf(elem));
+                      }}
+                    >
+                      <CloseRoundedIcon />
+                    </Button>
+                  </Grid>
+                ))}
               </FormControl>
             </DialogContent>
           </Stack>
           <DialogActions>
             <Button onClick={handleCloseReport}>Cancel</Button>
-            <Button type="submit">Report</Button>
+            <Button type="submit" disabled={isDisabled}>
+              Report
+            </Button>
           </DialogActions>
         </form>
       </Dialog>

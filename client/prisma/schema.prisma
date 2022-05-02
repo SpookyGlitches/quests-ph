@@ -113,6 +113,7 @@ model UserReport {
   recipientId   String
   category      String
   description   String
+  screenshot    String?
   status        BanStatus @default(INACTIVE)
   createdAt     DateTime  @default(now())
   banStart      DateTime?
