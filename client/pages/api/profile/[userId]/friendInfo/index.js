@@ -8,6 +8,22 @@ export default async function getFriendInfo(req, res) {
           userId: req.query.userId,
           deletedAt: null,
         },
+        select: {
+          userId: true,
+          fullName: true,
+          displayName: true,
+          dateOfBirth: true,
+          email: true,
+          role: true,
+          image: true,
+          isActive: true,
+          token: true,
+          verificationStatus: true,
+          createdAt: true,
+          updatedAt: true,
+          deletedAt: true,
+          isBanned: true,
+        },
       });
 
       return res.status(200).json(getUserInfo);
