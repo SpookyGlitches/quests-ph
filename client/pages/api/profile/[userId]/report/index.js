@@ -10,6 +10,7 @@ async function createReport(req, res) {
         recipientId: req.query.userId,
         category: req.body.values.category,
         description: req.body.values.reportDetails,
+        screenshot: req.body.reportUpload,
       },
     });
 

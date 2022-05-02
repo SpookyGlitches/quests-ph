@@ -16,6 +16,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useForm, Controller } from "react-hook-form";
+import Image from "next/image";
 
 export default function AdminDataGrid({ tableData, page, path }) {
   const router = useRouter();
@@ -25,6 +26,7 @@ export default function AdminDataGrid({ tableData, page, path }) {
   const [reportId, setReportId] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [recipient, setRecipient] = React.useState("");
+  const [screenshot, setScreenshot] = React.useState("");
   const methods = useForm({
     mode: "onChange",
     defaultValues: {
@@ -34,13 +36,16 @@ export default function AdminDataGrid({ tableData, page, path }) {
   const { control, handleSubmit } = methods;
 
   // eslint-disable-next-line
-  const handleClick = (event, cellValues) => {
+  const handleClick = async (event, cellValues) => {
     setOpen(true);
     setRecipient(cellValues.row.recipientId);
     setReportId(cellValues.row.userReportId);
     setDisplayName(cellValues.row.recipientDisplayName);
     setCategory(cellValues.row.category);
     setDescription(cellValues.row.description);
+    const signedURL = `/api/auth/getPresignedUrl?key=${cellValues.row.screenshot}&role=mentee`;
+    const { data: awsURL } = await axios.get(signedURL);
+    setScreenshot(awsURL);
   };
   const handleClose = () => {
     setOpen(false);
@@ -332,6 +337,19 @@ export default function AdminDataGrid({ tableData, page, path }) {
               <Typography>Display Name: {displayName}</Typography>
               <Typography>Category: {category}</Typography>
               <Typography>Description: {description}</Typography>
+              <Typography>Evidence: </Typography>
+              {screenshot ? (
+                <Image
+                  src={`${screenshot}`}
+                  alt="report"
+                  width="100%"
+                  height="100%"
+                  layout="responsive"
+                  objectFit="contain"
+                />
+              ) : (
+                <Typography>N/A</Typography>
+              )}
               {path === "ongoing" ? null : (
                 <FormControl fullWidth variant="outlined">
                   <Controller
