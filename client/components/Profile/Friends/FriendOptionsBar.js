@@ -82,6 +82,9 @@ export default function FriendsOptionsBar({
 
   const handleCloseReport = () => {
     setOpenReport(false);
+    reset();
+    setUploadedFile([]);
+    setReportUpload("");
   };
 
   const onSubmit = (values) => {
