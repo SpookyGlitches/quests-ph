@@ -43,9 +43,13 @@ export default function AdminDataGrid({ tableData, page, path }) {
     setDisplayName(cellValues.row.recipientDisplayName);
     setCategory(cellValues.row.category);
     setDescription(cellValues.row.description);
-    const signedURL = `/api/auth/getPresignedUrl?key=${cellValues.row.screenshot}&role=mentee`;
-    const { data: awsURL } = await axios.get(signedURL);
-    setScreenshot(awsURL);
+    if (cellValues.row.screenshot) {
+      const signedURL = `/api/auth/getPresignedUrl?key=${cellValues.row.screenshot}&role=mentee`;
+      const { data: awsURL } = await axios.get(signedURL);
+      setScreenshot(awsURL);
+    } else {
+      setScreenshot("");
+    }
   };
   const handleClose = () => {
     setOpen(false);
