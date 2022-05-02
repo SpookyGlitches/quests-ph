@@ -35,6 +35,7 @@ export default function MentorNotFriendOptionsBar({
   const [openReport, setOpenReport] = React.useState(false);
   const [openRequest, setOpenRequest] = React.useState(false);
   const [questMentored, setQuestMentored] = React.useState("");
+  const [isAdded, setIsAdded] = React.useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const { mutate } = useSWRConfig();
   const currentValidationSchema = UserReport[0];
@@ -113,6 +114,7 @@ export default function MentorNotFriendOptionsBar({
   };
 
   const handleAdd = () => {
+    setIsAdded(true);
     axios({
       method: "get",
       url: `/api/profile/${userId}/checkrequest`,
@@ -132,6 +134,7 @@ export default function MentorNotFriendOptionsBar({
             .then(() => {
               enqueueSnackbar("You have successfully sent a friend request!");
               mutate(`/api/profile/${userId}/checkrequest`);
+              setIsAdded(false);
             })
             .catch((error) => {
               console.log(error);
@@ -140,6 +143,7 @@ export default function MentorNotFriendOptionsBar({
           enqueueSnackbar(
             "There is an existing request for this user. Please check your incoming/outgoing requests.",
           );
+          setIsAdded(false);
         }
       })
       .catch((error) => {
@@ -259,6 +263,7 @@ export default function MentorNotFriendOptionsBar({
         }}
         sx={{ mr: 2 }}
         onClick={handleAdd}
+        disabled={isAdded}
       >
         {" "}
         <PersonAddAlt1RoundedIcon sx={{ mr: 1 }} />
