@@ -35,15 +35,20 @@ const TasksLists = () => {
     }
   };
 
+  const { data: count } = useSWR(`/quests/${questId}/tasks/taskCount`);
+  const { data: doneCount } = useSWR(
+    `/quests/${questId}/tasks/taskFinishCount`,
+  );
+
   const { data } = useSWR(`/quests/${router.query.questId}/tasks`, false);
   // const latestData = [...data, { ...data, ...{ id: data.task.questTaskid } }];
   mutate(`/quests/${router.query.questId}/tasks`);
+  mutate(`quests/${router.query.questId}/tasks/pointsLog`);
 
-  if (!data) return <CustomCircularProgress />;
+  if (!data && !count && !doneCount) return <CustomCircularProgress />;
 
-  const memberId = data.member[0].partyMemberId;
+  const memberId = data?.member[0].partyMemberId;
 
-  console.log(memberId);
   return (
     <Box
       sx={{
@@ -75,7 +80,9 @@ const TasksLists = () => {
             </Button>
           </Link>
         ) : (
-          []
+          <Typography variant="subtitle2" color="primary">
+            Task Completed: {doneCount} | {count}
+          </Typography>
         )}
       </Box>
 
@@ -85,8 +92,8 @@ const TasksLists = () => {
           m: 1,
         }}
       >
-        {data.tasks.length > 0 ? (
-          data.tasks.map((task) => (
+        {data?.tasks.length > 0 ? (
+          data?.tasks.map((task) => (
             <StyledPaper
               key={task.questTaskid}
               sx={{ width: "100%", height: "auto", overflow: "hidden", mb: 2 }}

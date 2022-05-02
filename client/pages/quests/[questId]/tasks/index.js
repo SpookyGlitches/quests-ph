@@ -6,12 +6,7 @@ import AppLayout from "../../../../components/Layouts/AppLayout";
 
 const index = () => {
   return (
-    <Grid
-      container
-      sx={{ paddingTop: "1.2rem" }}
-      columnSpacing={8}
-      rowSpacing={4}
-    >
+    <Grid container columnSpacing={8} rowSpacing={4}>
       <Grid item xs={12} lg={12}>
         <Box
           sx={{

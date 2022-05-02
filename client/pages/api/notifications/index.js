@@ -5,34 +5,43 @@ async function /* eslint-disable */ getNotificataion(req, res) {
   const { user } = await getSession({ req });
 
   try {
-    const notif = await prisma.notification.findMany({
-      where: { userId: user.userId },
+    const notif = await prisma.Notification.findMany({
+      where: { userId: user.userId, deletedAt: null },
       orderBy: { createdAt: "desc" },
     });
 
-    const parse = notif.map((x) => JSON.parse(x.metadata));
+    // console.log(notif);
 
-    const badgeIds = parse.map((x) => x.badgeId);
+    // const notif_type = notif.map((x) => x.type);
 
-    const results = [];
+    // const parse = notif.map((x) => JSON.parse(x.metadata));
 
-    if (badgeIds) {
-      for (let x = 0; x < badgeIds.length; x++) {
-        const notification =
-          /* eslint-disable */
-          await prisma.$queryRaw`select n.notificationId, n.userId, n.message, n.type, n.metadata, n.view_status,
-          n.createdAt, b.badgeId, b.name, b.description, b.image FROM Notification AS n
-          INNER JOIN Badge AS b ON b.badgeId = ${badgeIds[x]} WHERE n.userId = ${user.userId} ORDER BY n.createdAt DESC`;
+    // const badgeIds = parse.map((x) => x.badgeId);
 
-        results.push(notification[x]);
-      }
-    } else {
-      console.log("cannot find the notification type");
-    }
+    // const userIds = parse.map((x) => x.userId);
 
-    console.log(results);
+    // // const filterUserID = userId.filter((x) => x !== "undefined");
 
-    return res.status(200).json(results);
+    // console.log(badgeIds);
+    // console.log(userId);
+
+    // const results = [];
+
+    // if (notif.type === "RECEIVED_BADGE" && badgeIds) {
+    //   for (let x = 0; x < badgeIds.length; x++) {
+    //     const notification =
+    //       /* eslint-disable */
+    //       await prisma.$queryRaw`select n.notificationId, n.userId, n.message, n.type, n.metadata, n.view_status,
+    //       n.createdAt, b.badgeId, b.name, b.description, b.image FROM Notification AS n
+    //       INNER JOIN Badge AS b ON b.badgeId = ${badgeIds[x]} WHERE n.userId = ${user.userId} ORDER BY n.createdAt DESC`;
+
+    //     results.push(notification[x]);
+    //   }
+    // } else if(notif.type === "FRIEND_REQUEST" && userIds){
+    //   console.log("cannot find the notification type");
+    // }
+
+    return res.status(200).json(notif);
   } catch (err) {
     console.log(err);
     return res.status(400).send();
@@ -43,7 +52,7 @@ async function updateSeenRead(req, res) {
   const { notificationId } = req.body;
 
   try {
-    const update = await prisma.notification.update({
+    const update = await prisma.Notification.update({
       where: {
         notificationId: Number(notificationId),
       },

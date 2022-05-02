@@ -36,6 +36,8 @@ export default function FinishTask({
 
       setOpen(false);
       mutate(`/quests/${questId}/tasks`);
+      mutate(`/quests/${questId}/tasks/taskCount`);
+      mutate(`/quests/${questId}/tasks/taskFinishCount`);
     } catch (err) {
       console.error(err);
     }

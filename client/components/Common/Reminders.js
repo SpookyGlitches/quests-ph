@@ -63,9 +63,10 @@ export default function Reminders() {
             Activity Reminders
           </Typography>
           <FormControl fullWidth sx={{ marginBottom: 2 }}>
-            <InputLabel id="demo-simple-select-label">Quest</InputLabel>
+            <InputLabel>Filter Quest</InputLabel>
 
             <Select
+              label="Filter Quest"
               key={selectedValue}
               value={selectedValue}
               onChange={(e) => setSelectedValue(e.target.value)}

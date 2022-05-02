@@ -7,7 +7,7 @@ export default async function getAllSeenNotification(req, res) {
   }
   const { user } = await getSession({ req });
 
-  const notifCount = await prisma.notification.count({
+  const notifCount = await prisma.Notification.count({
     where: {
       view_status: "SEEN",
       userId: user.userId,

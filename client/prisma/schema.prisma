@@ -202,7 +202,7 @@ model QuestMentorshipRequest {
   questId                  Int
   status                   MentorshipStatus @default(ACTIVE)
   createdAt                DateTime         @default(now())
-  updatedAt                DateTime?         
+  updatedAt                DateTime?
   deletedAt                DateTime?
   partyLeader              User             @relation(name: "partyLeader", fields: [partyLeaderId], references: [userId])
   mentor                   User             @relation(name: "mentor", fields: [mentorId], references: [userId])
@@ -468,6 +468,11 @@ enum PointsLogAction {
 
 enum NotificationType {
   RECEIVED_BADGE
+  FRIEND_REQUEST
+  ACCEPT_FRIEND_REQUEST
+  APPROVED_ARTICLE
+  USER_BAN
+  COMPLETED_QUEST
 }
 
 model UserCurrency {

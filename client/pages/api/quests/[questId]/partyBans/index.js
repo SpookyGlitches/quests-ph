@@ -141,11 +141,20 @@ async function banPartyMember(req, res) {
         userId,
       },
     });
+    const insertNotifBan = prisma.Notification.create({
+      data: {
+        userId,
+        message: "You have been ban by the Party Leader",
+        type: "USER_BAN",
+        metadata: JSON.stringify({ questId: parsedQuestId }),
+      },
+    });
     await prisma.$transaction([
       removePostFilesOperation,
       removePostsOperation,
       removeMemberOperation,
       banMemberOperation,
+      insertNotifBan,
     ]);
 
     return res.status(200).send();
