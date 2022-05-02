@@ -69,6 +69,9 @@ export default function MentorNotFriendOptionsBar({
 
   const handleCloseReport = () => {
     setOpenReport(false);
+    reset();
+    setUploadedFile([]);
+    setReportUpload("");
   };
   const onSubmit = (values) => {
     axios({
