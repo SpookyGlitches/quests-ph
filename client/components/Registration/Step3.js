@@ -25,6 +25,7 @@ export default function Step3({
   setUploadedFiles,
   keyArr,
   setKeyArr,
+  setIsFinished,
 }) {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState("");
@@ -65,6 +66,7 @@ export default function Step3({
 
   const uploadFiles = async (acceptedFiles) => {
     setLoading(true);
+    setIsFinished(true);
     const fileUploadStatus = [];
     for (let x = 0; x < acceptedFiles.length; x++) {
       const acceptedArray = uploadedFiles;
@@ -79,6 +81,7 @@ export default function Step3({
       console.error(err);
     } finally {
       setLoading(false);
+      setIsFinished(false);
     }
   };
 

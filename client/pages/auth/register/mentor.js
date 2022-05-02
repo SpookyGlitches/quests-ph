@@ -27,6 +27,7 @@ const MentorRegistrationForm = () => {
   const [show, setShow] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [keyArr, setKeyArr] = useState([]);
+  const [isFinished, setIsFinished] = useState(false);
   // eslint-disable-next-line no-undef
   const currentValidationSchema = MentorRegistration[activeStep];
 
@@ -161,6 +162,7 @@ const MentorRegistrationForm = () => {
                 setUploadedFiles={setUploadedFiles}
                 keyArr={keyArr}
                 setKeyArr={setKeyArr}
+                setIsFinished={setIsFinished}
               />
             ) : null}
           </Stack>
@@ -176,6 +178,7 @@ const MentorRegistrationForm = () => {
             onClick={handleNext}
             sx={{ mt: "-2em" }}
             fullWidth
+            disabled={isFinished}
           >
             {activeStep === steps.length - 1 ? "Finish" : "Next"}
           </Button>
