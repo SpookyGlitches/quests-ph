@@ -32,10 +32,12 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 600,
+  height: 600,
   bgcolor: "background.paper",
+  overflow: "scroll",
   border: "2px solid #755cde",
   boxShadow: 24,
-  p: 4,
+  p: 2,
 };
 const text = {
   fontWeight: "bold",
@@ -231,7 +233,7 @@ const Footer = () => {
               <ListItemText
                 primary={
                   <Typography sx={{ fontSize: "15px", fontWeight: "medium" }}>
-                    Completes A Public Quest - (Mentors - Mediuma)
+                    Completes A Public Quest - (Mentors - Medium)
                   </Typography>
                 }
               />

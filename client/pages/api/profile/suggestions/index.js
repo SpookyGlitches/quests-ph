@@ -54,11 +54,13 @@ export default async function checkFriendReqs(req, res) {
         userId: {
           in: userNotFriend,
         },
+        deletedAt: null,
       },
       select: {
         userId: true,
         displayName: true,
         fullName: true,
+        deletedAt: true,
       },
     });
 
