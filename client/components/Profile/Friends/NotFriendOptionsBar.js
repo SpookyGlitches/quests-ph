@@ -110,8 +110,6 @@ export default function MentorNotFriendOptionsBar({
           })
             .then(() => {
               enqueueSnackbar("You have reported this user!");
-              setUploadedFile([]);
-              setReportUpload("");
             })
             .catch((error) => {
               console.log(error);
@@ -123,6 +121,8 @@ export default function MentorNotFriendOptionsBar({
       });
     reset();
     setOpenReport(false);
+    setUploadedFile([]);
+    setReportUpload("");
   };
 
   const handleAdd = () => {
