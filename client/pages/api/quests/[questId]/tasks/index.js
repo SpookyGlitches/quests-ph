@@ -35,9 +35,17 @@ async function getAllTasks(req, res) {
 async function taskFinisher(req, res) {
   const { user } = await getSession({ req });
   try {
-    const { points, questTaskid, memberId } = req.body;
+    const { points, questTaskid, memberId, dueAt } = req.body;
 
+    console.log(req.body);
     // batch queriers insert into two tables
+
+    //get all the points from Quest Task
+
+    //deduct poitns
+    // function deductPoints(date){
+    //   if(date > )
+    // }
 
     const [finisher, pointsLog] = await prisma.$transaction([
       prisma.questTaskFinisher.create({

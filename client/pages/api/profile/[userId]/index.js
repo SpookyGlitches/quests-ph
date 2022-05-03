@@ -1,7 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "../../../../lib/prisma";
 
 export default async function getVisitedUserProfileName(req, res) {
-  const prisma = new PrismaClient();
   if (req.method !== "GET") {
     return res.status(400).send();
   }

@@ -1,9 +1,8 @@
 // import { prisma } from "../../../../../lib/prisma";
 import { getSession } from "next-auth/react";
-import { PrismaClient } from "@prisma/client";
+import prisma from "../../../../../lib/prisma";
 
 export default async function pointsLogHandler(req, res) {
-  const prisma = new PrismaClient();
   if (req.method !== "GET") {
     return res.status(400).send("Method not allowed");
   }

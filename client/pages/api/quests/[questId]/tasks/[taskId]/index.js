@@ -33,6 +33,7 @@ async function updateTask(req, res) {
         dueAt: dueDate,
       },
     });
+
     res.status(200).json(task);
   } catch (err) {
     switch (err.constructor) {

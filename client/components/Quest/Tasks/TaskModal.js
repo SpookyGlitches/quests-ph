@@ -11,6 +11,7 @@ export default function FinishTask({
   points,
   description,
   title,
+  dueAt,
   questTaskid,
   memberId,
 }) {
@@ -27,6 +28,7 @@ export default function FinishTask({
           points,
           questTaskid,
           memberId,
+          dueAt,
         })
         .then((response) => {
           enqueueSnackbar(
@@ -60,6 +62,7 @@ export default function FinishTask({
         points={points}
         description={description}
         title={title}
+        dueAt={dueAt}
         memberId={memberId}
         questTaskid={questTaskid}
         open={open}

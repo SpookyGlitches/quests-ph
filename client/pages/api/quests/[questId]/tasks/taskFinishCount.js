@@ -1,8 +1,6 @@
 import { getSession } from "next-auth/react";
 
-const { PrismaClient } = require("@prisma/client");
-
-const prisma = new PrismaClient();
+import prisma from "../../../../../lib/prisma";
 
 export default async function getTaskCount(req, res) {
   if (req.method !== "GET") {
