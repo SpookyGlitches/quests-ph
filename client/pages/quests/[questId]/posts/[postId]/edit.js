@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import useSWR from "swr";
 import { Paper } from "@mui/material";
+import { useSnackbar } from "notistack";
 import QuestLayout from "../../../../../components/Layouts/QuestLayout";
 import PostForm from "../../../../../components/Quest/Post/PostForm";
 import FilesForm from "../../../../../components/Quest/Post/Files/FilesForm";
@@ -19,6 +20,7 @@ export default function EditPostPage() {
     open: false,
   });
 
+  const { enqueueSnackbar } = useSnackbar();
   const { data: post } = useSWR(
     questId && postId ? `/quests/${questId}/posts/${postId}` : null,
   );
@@ -45,7 +47,7 @@ export default function EditPostPage() {
         ...values,
       });
       router.back();
-      // router.push(`/quests/${questId}/posts/${postId}`);
+      enqueueSnackbar("Successfully updated.");
     } catch (err) {
       console.error(err);
     }
