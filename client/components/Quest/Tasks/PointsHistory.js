@@ -13,7 +13,7 @@ import AddReactionRoundedIcon from "@mui/icons-material/AddReactionRounded";
 
 import { alpha } from "@mui/material/styles";
 
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 import { useRouter } from "next/router";
 import CustomSpinner from "../../Common/CustomSpinner";
 
@@ -23,8 +23,6 @@ const PointsHistory = () => {
   const { data: pointsLog } = useSWR(
     `quests/${router.query.questId}/tasks/pointsLog`,
   );
-
-  mutate(`quests/${router.query.questId}/tasks/pointsLog`);
 
   if (!pointsLog) return <CustomSpinner />;
 
