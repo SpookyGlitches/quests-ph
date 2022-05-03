@@ -1,14 +1,12 @@
 import React from "react";
 import { Button } from "@mui/material";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 import CustomSpinner from "./CustomSpinner";
 
 const SuggestionFriendshipButton = ({ onClick, userId }) => {
   const { data: friendRequests } = useSWR(
     userId ? `/profile/${userId}/checkrequest` : null,
   );
-  mutate(`/profile/${userId}/checkrequest`);
-  mutate("/profile/suggestions");
 
   if (!friendRequests) return <CustomSpinner />;
 
