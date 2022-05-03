@@ -1,4 +1,5 @@
 import { getSession } from "next-auth/react";
+import { formatDistanceToNow } from "date-fns";
 import prisma from "../../../../../lib/prisma";
 
 async function getAllTasks(req, res) {
@@ -35,17 +36,20 @@ async function getAllTasks(req, res) {
 async function taskFinisher(req, res) {
   const { user } = await getSession({ req });
   try {
-    const { points, questTaskid, memberId } = req.body;
+    const { points, questTaskid, memberId, dueAt } = req.body;
 
-    console.log(req.body);
-    // batch queriers insert into two tables
+    const difference = formatDistanceToNow(new Date(dueAt));
 
-    // get all the points from Quest Task
+    let deductedPoints;
 
-    // deduct poitns
-    // function deductPoints(date){
-    //   if(date > )
-    // }
+    if (difference.split(" ")[0] > 3) {
+      deductedPoints = points * 0.2;
+    } else if (difference.split(" ")[0] > 7) {
+      deductedPoints = points * 0.5;
+    } else {
+      deductedPoints = points;
+    }
+    console.log(deductedPoints);
 
     const [finisher, pointsLog] = await prisma.$transaction([
       prisma.questTaskFinisher.create({
@@ -53,13 +57,13 @@ async function taskFinisher(req, res) {
           questId: Number(req.query.questId),
           questTaskid,
           userId: user.userId,
-          gainedPoints: points,
+          gainedPoints: deductedPoints,
         },
       }),
       prisma.pointsLog.create({
         data: {
           partyMemberId: memberId,
-          gainedPoints: points,
+          gainedPoints: deductedPoints,
           action: "COMPLETED_TASK",
         },
       }),
