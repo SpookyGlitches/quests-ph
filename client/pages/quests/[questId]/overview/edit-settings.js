@@ -78,7 +78,7 @@ export default function Edit() {
   const wishItem = <WishInput disabled={completed} />;
   const { enqueueSnackbar } = useSnackbar();
 
-  const { mutate: mutateQuest } = useSWRConfig();
+  const { mutate } = useSWRConfig();
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const methods = useForm({
@@ -109,9 +109,9 @@ export default function Edit() {
 
   const submitForm = async (values) => {
     try {
-      mutateQuest({ ...quest, ...values });
       enqueueSnackbar("Updated successfully.");
       await axios.put(`/api/quests/${questId}`, values);
+      mutate(`/quests/${questId}`, { ...quest, ...values });
     } catch (err) {
       console.error(err);
     }
