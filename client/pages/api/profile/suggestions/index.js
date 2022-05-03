@@ -7,6 +7,10 @@ export default async function checkFriendReqs(req, res) {
     return res.status(404).json({ message: "Method not allowed " });
   }
 
+  const { take } = req.query;
+
+  const parsedTake = Number(take) || undefined;
+
   try {
     const { user } = await getSession({ req });
 
@@ -49,7 +53,7 @@ export default async function checkFriendReqs(req, res) {
     }
 
     const returnAllUser = await prisma.User.findMany({
-      take: 5,
+      take: parsedTake,
       where: {
         userId: {
           in: userNotFriend,
@@ -61,6 +65,7 @@ export default async function checkFriendReqs(req, res) {
         displayName: true,
         fullName: true,
         deletedAt: true,
+        role: true,
       },
     });
 

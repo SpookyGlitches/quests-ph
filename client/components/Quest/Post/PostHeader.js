@@ -2,14 +2,17 @@ import {
   Box,
   Typography,
   IconButton,
+  Grid,
   Menu,
   Tooltip,
   MenuItem,
 } from "@mui/material";
 import { format, formatDistance } from "date-fns";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
+
 import { useState } from "react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import CustomAvatar from "../../Common/CustomAvatar";
 
 export default function PostHeader(props) {
@@ -17,6 +20,8 @@ export default function PostHeader(props) {
     isAuthor,
     image,
     displayName,
+    fullName,
+    userId,
     postId,
     questId,
     createdAt,
@@ -46,9 +51,57 @@ export default function PostHeader(props) {
       <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
         <CustomAvatar displayName={displayName} image={image} />
         <Box sx={{ flexGrow: 1, alignItems: "flex-start" }}>
-          <Typography variant="body2" sx={{ m: 0, p: 0 }} fontWeight="medium">
-            {displayName}
-          </Typography>
+          <Tooltip
+            placement="left"
+            title={
+              <Link href={`/profile/${userId}`} passHref>
+                <Box
+                  sx={{
+                    bgcolor: "white",
+                    color: "black",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-evenly",
+                    m: 1,
+                    p: 1,
+                  }}
+                >
+                  <Grid>
+                    <Grid
+                      item
+                      xs={12}
+                      sx={{ marginLeft: "10px", marginRight: "15px" }}
+                    >
+                      <CustomAvatar displayName={displayName} image={image} />
+                    </Grid>
+                  </Grid>
+                  <Box sx={{ marginRight: "15px" }}>
+                    <Typography variant="body1">{fullName}</Typography>
+                    <Typography variant="body2">@{displayName}</Typography>
+                  </Box>
+                </Box>
+              </Link>
+            }
+            componentsProps={{
+              tooltip: {
+                sx: {
+                  bgcolor: "common.white",
+                  "& .MuiTooltip-arrow": {
+                    color: "common.white",
+                  },
+                  // border: "1px solid #755CDE",
+                  boxShadow: 3,
+                  cursor: "pointer",
+                },
+              },
+            }}
+            describeChild
+          >
+            <Typography variant="body2" sx={{ m: 0, p: 0 }} fontWeight="medium">
+              {displayName}
+            </Typography>
+          </Tooltip>
+
           <Tooltip
             title={
               <div>
