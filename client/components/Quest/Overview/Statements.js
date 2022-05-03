@@ -8,6 +8,7 @@ import {
   Paper,
 } from "@mui/material";
 import useSWR, { useSWRConfig } from "swr";
+import { useSnackbar } from "notistack";
 import axios from "axios";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import { useContext, useEffect, useState } from "react";
@@ -34,6 +35,7 @@ export default function Statements() {
   const { data: partyMembers, mutate: mutatePartyMembers } = useSWR(
     questId ? `/quests/${questId}/partyMembers?excludeMentor=true` : null,
   );
+  const { enqueueSnackbar } = useSnackbar();
 
   const [woopModalDetails, setWoopModalDetails] = useState({
     loading: false,
@@ -89,10 +91,16 @@ export default function Statements() {
     });
   };
 
+  const closeWoopPopper = () => {
+    setOpenWoopPopper(false);
+  };
+
   const submitForm = async (values) => {
     try {
       await updateUserStatement(values);
+      enqueueSnackbar("Successfully updated.");
       setWoopModalDetails((prev) => ({ ...prev, open: false, loading: false }));
+      closeWoopPopper();
     } catch (error) {
       setWoopModalDetails((prev) => ({ ...prev, loading: false }));
       console.error(error);
@@ -104,10 +112,6 @@ export default function Statements() {
       ...prev,
       open: !prev.open,
     }));
-  };
-
-  const closeWoopPopper = () => {
-    setOpenWoopPopper(false);
   };
 
   if (!partyMembers) {
