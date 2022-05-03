@@ -37,6 +37,8 @@ const Post = ({ postId, questId, children, onSpecificPost }) => {
         <PostHeader
           createdAt={post.createdAt}
           isAuthor={isAuthor}
+          userId={post.partyMember.userId}
+          fullName={post.partyMember.user.fullName}
           displayName={post.partyMember.user.displayName}
           image={post.partyMember.user.image}
           postId={postId}

@@ -3,21 +3,25 @@ import {
   Typography,
   List,
   ListItem,
-  Button,
   ListItemAvatar,
   ListItemButton,
   ListItemText,
+  Divider,
 } from "@mui/material";
+import VerifiedUserRoundedIcon from "@mui/icons-material/VerifiedUserRounded";
 import axios from "axios";
+/* eslint-disable */
 import { useSnackbar } from "notistack";
 import { getSession } from "next-auth/react";
+/* eslint-disable */
 import useSWR, { mutate } from "swr";
 import Link from "next/link";
 import CustomAvatar from "./CustomAvatar";
+import SuggestionFriendshipButton from "./SuggestionFriendship";
 
 export default function Reminders() {
   const { enqueueSnackbar } = useSnackbar();
-  const { data: suggestions } = useSWR("/profile/suggestions");
+  const { data: suggestions } = useSWR("/profile/suggestions?take=5");
 
   const handleAdd = (userId) => {
     axios({
@@ -63,6 +67,7 @@ export default function Reminders() {
         border: "1px solid rgba(0, 0, 0, 0.12)",
         borderRadius: 1,
         paddingY: "1rem",
+        "&.MuiBox-root": { pb: 0 },
       }}
     >
       <Typography
@@ -81,13 +86,10 @@ export default function Reminders() {
           <ListItem
             button
             secondaryAction={
-              <Button
-                variant="outlined"
-                size="small"
+              <SuggestionFriendshipButton
                 onClick={() => handleAdd(item.userId)}
-              >
-                Add Friend
-              </Button>
+                userId={item.userId}
+              />
             }
             disablePadding
           >
@@ -99,12 +101,25 @@ export default function Reminders() {
                     image={item.image}
                   />
                 </ListItemAvatar>
-                <ListItemText>{item.displayName}</ListItemText>
+                <ListItemText>
+                  {item.displayName}
+                  {item.role === "mentor" && (
+                    <VerifiedUserRoundedIcon color="primary" />
+                  )}
+                </ListItemText>
               </ListItemButton>
             </Link>
           </ListItem>
         </List>
       ))}
+      <Divider />
+      <Box>
+        <Link href="/suggestions" passHref>
+          <ListItem button sx={{ color: "#755cde", fontWeight: "medium" }}>
+            Show More
+          </ListItem>
+        </Link>
+      </Box>
     </Box>
   );
 }
