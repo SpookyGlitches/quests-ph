@@ -49,6 +49,8 @@ const TasksLists = () => {
 
   const memberId = data?.member[0].partyMemberId;
 
+  console.log(data);
+
   return (
     <Box
       sx={{
@@ -156,6 +158,7 @@ const TasksLists = () => {
                       </Typography>
                       <Typography variant="body2">
                         {format(new Date(task.dueAt), "MMMM dd")}
+                        {/* {task.dueAt} */}
                       </Typography>
 
                       <Typography variant="body2">{"   "}</Typography>
@@ -170,6 +173,7 @@ const TasksLists = () => {
                       ) : (
                         <TaskModal
                           title={task.title}
+                          dueAt={task.dueAt}
                           description={task.description}
                           points={task.points}
                           questTaskid={task.questTaskid}

@@ -16,6 +16,7 @@ const TaskDetails = ({
   handleCancel,
   open,
   points,
+  dueAt,
   description,
   questTaskid,
   memberId,
@@ -58,6 +59,7 @@ const TaskDetails = ({
           <input type="hidden" value={questTaskid} />
           <input type="hidden" value={points} />
           <input type="hidden" value={memberId} />
+          <input type="hidden" value={dueAt} />
         </DialogContent>
         <Divider />
         <DialogActions sx={{ justifyContent: "center" }}>
