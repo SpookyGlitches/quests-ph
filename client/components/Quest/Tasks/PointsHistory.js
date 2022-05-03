@@ -23,8 +23,8 @@ const PointsHistory = () => {
   const { data: pointsLog } = useSWR(
     `quests/${router.query.questId}/tasks/pointsLog`,
   );
-  // mutate(`/quests/${router.query.questId}/tasks`);
-  // mutate(`quests/${router.query.questId}/tasks/pointsLog`);
+
+  mutate(`quests/${router.query.questId}/tasks/pointsLog`);
 
   if (!pointsLog) return <CustomSpinner />;
 

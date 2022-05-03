@@ -157,8 +157,8 @@ const TasksLists = () => {
                         {" points"}
                       </Typography>
                       <Typography variant="body2">
-                        {/* {format(new Date(task.dueAt), "MMMM dd")} */}
-                        {task.dueAt}
+                        {format(new Date(task.dueAt), "MMMM dd")}
+                        {/* {task.dueAt} */}
                       </Typography>
 
                       <Typography variant="body2">{"   "}</Typography>

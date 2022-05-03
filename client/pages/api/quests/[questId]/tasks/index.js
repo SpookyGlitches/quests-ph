@@ -35,14 +35,14 @@ async function getAllTasks(req, res) {
 async function taskFinisher(req, res) {
   const { user } = await getSession({ req });
   try {
-    const { points, questTaskid, memberId, dueAt } = req.body;
+    const { points, questTaskid, memberId } = req.body;
 
     console.log(req.body);
     // batch queriers insert into two tables
 
-    //get all the points from Quest Task
+    // get all the points from Quest Task
 
-    //deduct poitns
+    // deduct poitns
     // function deductPoints(date){
     //   if(date > )
     // }
