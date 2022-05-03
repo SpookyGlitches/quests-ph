@@ -1,8 +1,7 @@
 import { getSession } from "next-auth/react";
-import { PrismaClient } from "@prisma/client";
+import prisma from "../../../../lib/prisma";
 
 export default async function checkFriendReqs(req, res) {
-  const prisma = new PrismaClient();
   if (req.method !== "GET") {
     return res.status(404).json({ message: "Method not allowed " });
   }
