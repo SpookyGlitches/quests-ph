@@ -34,6 +34,7 @@ export default async function handler(req, res) {
       where: {
         userId,
         quest: {
+          visibility: "PUBLIC",
           NOT: [
             {
               completedAt: null,
