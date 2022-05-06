@@ -1,5 +1,5 @@
 import { getSession } from "next-auth/react";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Grid } from "@mui/material";
 import Link from "next/link";
 import useSWR from "swr";
 import * as React from "react";
@@ -29,7 +29,7 @@ export default function Index() {
           display: "flex",
           flexDirection: "column",
           borderRadius: 1,
-          width: "50%",
+          width: "100%",
           mb: 5,
         }}
       >
@@ -39,16 +39,34 @@ export default function Index() {
         <h2 style={{ color: "white" }}>
           You have {questsData?.length} new Quests!
         </h2>
-        <Typography sx={{ mt: 2, color: "white", fontSize: "18px" }}>
-          <Link href="/admin/quests" passHref>
-            <a href="replace">
-              <strong>New</strong>
-            </a>
-          </Link>{" "}
-          <Link href="/admin/quests/completed" passHref>
-            <a href="replace">Completed</a>
-          </Link>
-        </Typography>
+        <Grid
+          container
+          direction="row"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Grid item>
+            <Typography sx={{ mt: 2, color: "white", fontSize: "18px" }}>
+              <Link href="/admin/quests" passHref>
+                <a href="replace">
+                  <strong>New</strong>
+                </a>
+              </Link>
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography sx={{ mt: 2, color: "white", fontSize: "18px" }}>
+              &nbsp; | &nbsp;
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography sx={{ mt: 2, color: "white", fontSize: "18px" }}>
+              <Link href="/admin/quests/completed" passHref>
+                <a href="replace">Completed</a>
+              </Link>
+            </Typography>
+          </Grid>
+        </Grid>
       </Box>
       <Box
         sx={{

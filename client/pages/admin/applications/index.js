@@ -53,7 +53,6 @@ export default function Index() {
                 mt: 2,
                 color: "white",
                 fontSize: "18px",
-                fontWeight: "bold",
               }}
             >
               <Link href="/admin/applications" passHref>
@@ -75,7 +74,6 @@ export default function Index() {
                 mt: 2,
                 color: "white",
                 fontSize: "18px",
-                fontWeight: "regular",
               }}
             >
               <Link href="/admin/applications/approved" passHref>
