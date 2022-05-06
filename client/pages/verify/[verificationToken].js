@@ -19,15 +19,15 @@ const EmailVerificationPage = ({ data }) => {
 };
 export async function getServerSideProps({ res, params }) {
   const token = params.verificationToken;
-  const findEmail = await prisma.user.findFirst({
+  const findToken = await prisma.verificationToken.findFirst({
     where: {
       token,
     },
   });
-  if (findEmail) {
+  if (findToken) {
     await prisma.user.update({
       where: {
-        userId: findEmail.userId,
+        userId: findToken.userId,
       },
       data: {
         verificationStatus: true,
@@ -36,7 +36,7 @@ export async function getServerSideProps({ res, params }) {
     res.statusCode = 302;
     res.setHeader("Location", `/auth/login`); // Replace <link> with your url link
   }
-  const data = JSON.parse(JSON.stringify(findEmail));
+  const data = JSON.parse(JSON.stringify(findToken));
   return { props: { data } };
 }
 
