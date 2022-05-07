@@ -154,7 +154,6 @@ const TaskForm = () => {
               label="Due Date"
               value={value}
               minDate={add(new Date(), { days: 1 })}
-              disablePast
               // eslint-disable-next-line
               onChange={(value) => onChange(moment(value).format("YYYY-MM-DD"))}
               renderInput={(params) => (

@@ -1,9 +1,21 @@
-import { Box, Typography, IconButton, Grid, Button } from "@mui/material";
+import { useState } from "react";
+import {
+  Box,
+  Typography,
+  IconButton,
+  Grid,
+  Modal,
+  Button,
+  Divider,
+  Chip,
+  Tooltip,
+} from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import { format } from "date-fns";
+import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
+import { format, formatDistanceToNow } from "date-fns";
 import { useRouter } from "next/router";
 import useSWR, { mutate } from "swr";
 import axios from "axios";
@@ -14,6 +26,9 @@ import TaskDone from "../../../public/images/tasks-all-done.svg";
 import CustomCircularProgress from "../../Common/CustomSpinner";
 
 const TasksLists = () => {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const router = useRouter();
   const { data: session } = useSession();
 
@@ -52,6 +67,20 @@ const TasksLists = () => {
 
   console.log(data);
 
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 500,
+
+    height: 500,
+    bgcolor: "background.paper",
+    borderRadius: 2,
+    boxShadow: 24,
+    p: 2,
+  };
+
   return (
     <Box
       sx={{
@@ -83,9 +112,31 @@ const TasksLists = () => {
             </Button>
           </Link>
         ) : (
-          <Typography variant="subtitle2" color="primary">
-            Task Completed: {doneCount} | {count}
-          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              "&.MuiBox-root": {
+                m: 0,
+              },
+            }}
+          >
+            <Typography
+              variant="subtitle2"
+              color="primary"
+              sx={{ marginRight: "10px" }}
+            >
+              Task Completed: {doneCount} | {count}
+            </Typography>
+
+            <Tooltip title="Task Point Rules" arrow>
+              <InfoRoundedIcon
+                onClick={handleOpen}
+                sx={{ cursor: "pointer" }}
+                color="primary"
+              />
+            </Tooltip>
+          </Box>
         )}
       </Box>
 
@@ -157,12 +208,19 @@ const TasksLists = () => {
                         {task.points}
                         {" points"}
                       </Typography>
-                      <Typography variant="body2">
-                        {format(new Date(task.dueAt), "MMMM dd")}
-                        {/* {task.dueAt} */}
-                      </Typography>
-
-                      <Typography variant="body2">{"   "}</Typography>
+                      {formatDistanceToNow(new Date(task.dueAt)).split(" ")[0] >
+                      3 ? (
+                        <Typography variant="body2" color="red">
+                          <Tooltip title="This task is over the due date. Deduction is applied.">
+                            <Chip label="Late" color="error" />
+                            {/* {format(new Date(task.dueAt), "MMMM dd")} */}
+                          </Tooltip>
+                        </Typography>
+                      ) : (
+                        <Typography variant="body2" color="green">
+                          {format(new Date(task.dueAt), "MMMM dd ")}
+                        </Typography>
+                      )}
 
                       {session.user.role === "mentor" ? (
                         <IconButton
@@ -197,6 +255,120 @@ const TasksLists = () => {
           </Box>
         )}
       </Box>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          {/* <Image src={"/images/points.svg"} width={100} height={100} /> */}
+
+          <Typography
+            color="primary"
+            align="center"
+            sx={{ letterSpacing: 2, marginBottom: 2, fontWeight: "bold" }}
+          >
+            Task Points Rule
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-evenly",
+              "&.MuiBox-root": {
+                marginBottom: 3,
+              },
+            }}
+          >
+            <Divider />
+            <Typography align="center" variant="body2" sx={{ margin: 2 }}>
+              Task points system varies from every quest and mentors. Every
+              mentee or members of the quest should perform the task with
+              outmoust commitment and honesty to achieve the accuracy of the
+              progress results and effectiveness of acheiving goals.
+            </Typography>
+            <Divider />
+            <Box sx={{ margin: 2 }}>
+              <Typography
+                color="primary"
+                align="center"
+                sx={{ letterSpacing: 2, fontWeight: "bold" }}
+              >
+                Full Points
+              </Typography>
+              <Typography variant="body2" sx={{ textAlign: "left" }}>
+                Full Points will be given to all members who completed task
+                before the due date.
+              </Typography>
+            </Box>
+            <Divider />
+            <Box
+              sx={{
+                margin: 2,
+              }}
+            >
+              <Typography
+                color="primary"
+                align="center"
+                sx={{ letterSpacing: 2, fontWeight: "bold" }}
+              >
+                Points Deduction
+              </Typography>
+              <Box sx={{ display: "flex", flexDirecton: "row" }}>
+                <Chip
+                  label="50%"
+                  variant="contained"
+                  color="error"
+                  size="small"
+                  sx={{
+                    width: "20%",
+                    marginBottom: 1,
+                    marginTop: 1,
+                  }}
+                />
+                <Typography
+                  variant="body2"
+                  sx={{ marginLeft: "15px", marginTop: 1.2 }}
+                >
+                  Applies when task is past due 7 days ago.
+                </Typography>
+              </Box>
+              <Box sx={{ display: "flex", flexDirecton: "row" }}>
+                <Chip
+                  label="20%"
+                  variant="contained"
+                  color="warning"
+                  size="small"
+                  sx={{ width: "20%", marginBottom: 1, marginTop: 1 }}
+                />
+                <Typography
+                  variant="body2"
+                  sx={{ marginLeft: "15px", marginTop: 1.2 }}
+                >
+                  Applies when task is past due 3 days ago.
+                </Typography>
+              </Box>
+            </Box>
+            <Divider />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-end",
+            }}
+          >
+            <Button
+              variant="outlined"
+              sx={{ width: "100%" }}
+              onClick={() => setOpen(false)}
+            >
+              Close
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
     </Box>
   );
 };

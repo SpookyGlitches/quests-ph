@@ -40,6 +40,7 @@ export default function FinishTask({
       mutate(`/quests/${questId}/tasks`);
       mutate(`/quests/${questId}/tasks/taskCount`);
       mutate(`/quests/${questId}/tasks/taskFinishCount`);
+      mutate(`quests/${questId}/tasks/pointsLog`);
     } catch (err) {
       console.error(err);
     }
