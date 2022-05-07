@@ -7,6 +7,7 @@ import {
   List,
   ListItem,
   Select,
+  Chip,
   Divider,
   ListItemText,
   Stack,
@@ -17,7 +18,7 @@ import { getSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import useSWR from "swr";
 
-import { formatRelative, subDays } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 
 export default function Reminders() {
@@ -89,42 +90,75 @@ export default function Reminders() {
             }}
             disablePadding
           >
-            <Link href={`/quests/${task.questId}/tasks`} passHref>
-              <ListItem
-                button
-                alignItems="flex-start"
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  "& .MuiListItem-root": {
-                    paddingTop: "0px",
-                    paddingBottom: "0px",
-                  },
-                }}
-                onClick={() => console.log("clicked")}
-              >
-                <ListItemText
-                  sx={{ color: "#755cde" }}
-                  primary={task.title}
-                  secondary={
-                    <Typography
-                      sx={{ display: "inline" }}
-                      component="span"
-                      variant="body2"
-                      color="text.primary"
-                    >
-                      {task.points}
-                      {" points"}
-                      {" | "}
-                      {formatRelative(
-                        subDays(new Date(task.dueAt), 3),
-                        new Date(),
-                      )}
-                    </Typography>
-                  }
-                />
-              </ListItem>
-            </Link>
+            {formatDistanceToNow(new Date(task.dueAt)).split(" ")[0] > 3 ? (
+              <Link href={`/quests/${task.questId}/tasks`} passHref>
+                <ListItem
+                  button
+                  alignItems="flex-start"
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    "& .MuiListItem-root": {
+                      paddingTop: "0px",
+                      paddingBottom: "0px",
+                      marginTop: "0px",
+                      marginBottom: "0px",
+                    },
+                  }}
+                  onClick={() => console.log("clicked")}
+                >
+                  <ListItemText
+                    sx={{ color: "red" }}
+                    primary={task.title}
+                    secondary={
+                      <Typography
+                        sx={{ display: "inline" }}
+                        component="span"
+                        variant="body2"
+                        color="red"
+                      >
+                        {task.points}
+                        {" points"}
+                      </Typography>
+                    }
+                  />
+
+                  <Chip label="Late" color="error" size="small" />
+                </ListItem>
+              </Link>
+            ) : (
+              <Link href={`/quests/${task.questId}/tasks`} passHref>
+                <ListItem
+                  button
+                  alignItems="flex-start"
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    "& .MuiListItem-root": {
+                      paddingTop: "0px",
+                      paddingBottom: "0px",
+                    },
+                  }}
+                  onClick={() => console.log("clicked")}
+                >
+                  <ListItemText
+                    sx={{ color: "#755cde" }}
+                    primary={task.title}
+                    secondary={
+                      <Typography
+                        sx={{ display: "inline" }}
+                        component="span"
+                        variant="body2"
+                        color="text.primary"
+                      >
+                        {task.points}
+                        {" points"}
+                      </Typography>
+                    }
+                  />
+                </ListItem>
+              </Link>
+            )}
             <Divider />
           </List>
         ))
