@@ -1,5 +1,5 @@
 import { getSession } from "next-auth/react";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Grid } from "@mui/material";
 import * as React from "react";
 import useSWR from "swr";
 import Link from "next/link";
@@ -31,7 +31,7 @@ export default function Index() {
           display: "flex",
           flexDirection: "column",
           borderRadius: 1,
-          width: "50%",
+          width: "100%",
           mb: 5,
         }}
       >
@@ -41,19 +41,46 @@ export default function Index() {
         <h2 style={{ color: "white" }}>
           You have {reportsData?.length} completed reports!
         </h2>
-        <Typography sx={{ mt: 2, color: "white", fontSize: "18px" }}>
-          <Link href="/admin/reports" passHref>
-            <a href="replace">New</a>
-          </Link>{" "}
-          <Link href="/admin/reports/ongoing" passHref>
-            <a href="replace">Ongoing</a>
-          </Link>{" "}
-          <Link href="/admin/reports/completed" passHref>
-            <a href="replace">
-              <strong>Completed</strong>
-            </a>
-          </Link>
-        </Typography>
+        <Grid
+          container
+          direction="row"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Grid item>
+            <Typography sx={{ mt: 2, color: "white", fontSize: "18px" }}>
+              <Link href="/admin/reports" passHref>
+                <a href="replace">New</a>
+              </Link>
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography sx={{ mt: 2, color: "white", fontSize: "18px" }}>
+              &nbsp; | &nbsp;
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography sx={{ mt: 2, color: "white", fontSize: "18px" }}>
+              <Link href="/admin/reports/ongoing" passHref>
+                <a href="replace">Ongoing</a>
+              </Link>
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography sx={{ mt: 2, color: "white", fontSize: "18px" }}>
+              &nbsp; | &nbsp;
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography sx={{ mt: 2, color: "white", fontSize: "18px" }}>
+              <Link href="/admin/reports/completed" passHref>
+                <a href="replace">
+                  <strong>Completed</strong>
+                </a>
+              </Link>
+            </Typography>
+          </Grid>
+        </Grid>
       </Box>
       <Box
         sx={{

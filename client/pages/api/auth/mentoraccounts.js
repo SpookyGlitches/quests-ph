@@ -19,7 +19,6 @@ export default async function (req, res) {
       fullName: userInfo.fullName,
       password: bcrypt.hashSync(userInfo.password, salt),
       role: "mentor",
-      token: tok,
       experience: userInfo.experience,
       detailedExperience: userInfo.detailedExperience,
       fileUpload: req.body.uploadedFiles,
@@ -41,7 +40,7 @@ export default async function (req, res) {
       html: `<div>
         This is an automated reply from Quests App University of San Carlos. Please do not reply.
         You are receiving this email because your email was just registered to an account on Quests.
-        Verify your account through this <a href="${process.env.NEXTAUTH_URL}/verify/${userDetails.token}">link</a>.
+        Verify your account through this <a href="${process.env.NEXTAUTH_URL}/verify/${tok}">link</a>.
      <div>`,
     };
     const checkEmail = await prisma.user.findFirst({
@@ -74,8 +73,12 @@ export default async function (req, res) {
           fullName: userDetails.fullName,
           password: userDetails.password,
           role: userDetails.role,
-          token: userDetails.token,
           ...awardOperations,
+          verificationToken: {
+            create: {
+              token: tok,
+            },
+          },
           userCurrency: {
             create: {
               acceptedArticles: 0,
