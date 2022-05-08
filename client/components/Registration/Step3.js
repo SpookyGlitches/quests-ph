@@ -40,6 +40,7 @@ export default function Step3() {
               <MenuItem value="2">2</MenuItem>
               <MenuItem value="3">3</MenuItem>
               <MenuItem value="4">4</MenuItem>
+              <MenuItem value="5">5</MenuItem>
             </Select>
             <FormHelperText>
               {errors.yearLevel && errors.yearLevel.message}
