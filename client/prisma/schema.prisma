@@ -49,7 +49,6 @@ model User {
   updatedAt          DateTime?
   deletedAt          DateTime?
   isActive           String                   @default("0") @db.Char(1)
-  token              String
   isBanned           Boolean                  @default(false)
   mentorApplication  MentorApplication[]
   mentorFile         MentorFile[]
@@ -74,9 +73,19 @@ model User {
   userTwo            Friendship[]             @relation("userTwo")
   requester          FriendRequest[]          @relation("requester")
   requestee          FriendRequest[]          @relation("requestee")
+  verificationToken  VerificationToken[]
   forgotPassword     ForgotPassword[]
 
   @@fulltext([displayName, fullName])
+}
+
+model VerificationToken {
+  verificationTokenId Int @id @default(autoincrement())
+  userId              String
+  token               String
+  createdAt           DateTime @default(now())
+  deletedAt           DateTime?
+  user                User     @relation(fields: [userId], references: [userId])
 }
 
 model ForgotPassword {

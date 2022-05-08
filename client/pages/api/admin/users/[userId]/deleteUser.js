@@ -265,6 +265,16 @@ export default async function deleteUsers(req, res) {
     });
     transactions.push(deleteUserBadge);
 
+    // delete verification token
+    const deleteUserToken = prisma.verificationToken.updateMany({
+      where: {
+        userId: req.query.userId,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+    transactions.push(deleteUserToken);
     // delete user
     const deleteUser = prisma.user.update({
       where: {

@@ -21,7 +21,6 @@ export default async function (req, res) {
       fullName: userInfo.fullName,
       password: bcrypt.hashSync(userInfo.password, salt),
       role: "member",
-      token: tok,
     };
 
     const transporter = nodemailer.createTransport({
@@ -40,7 +39,7 @@ export default async function (req, res) {
       html: `<div>
         This is an automated reply from Quests App University of San Carlos. Please do not reply.
         You are receiving this email because your email was just registered to an account on Quests.
-        Verify your account through this <a href="${process.env.NEXTAUTH_URL}/verify/${userDetails.token}">link</a>.
+        Verify your account through this <a href="${process.env.NEXTAUTH_URL}/verify/${tok}">link</a>.
 
     <div>`,
     };
@@ -72,6 +71,11 @@ export default async function (req, res) {
         data: {
           ...userDetails,
           ...awardOperations,
+          verificationToken: {
+            create: {
+              token: tok,
+            },
+          },
           userCurrency: {
             create: {
               acceptedArticles: 0,

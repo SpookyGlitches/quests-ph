@@ -17,7 +17,6 @@ export default async function getFriendInfo(req, res) {
           role: true,
           image: true,
           isActive: true,
-          token: true,
           verificationStatus: true,
           createdAt: true,
           updatedAt: true,

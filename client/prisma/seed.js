@@ -165,7 +165,6 @@ async function main() {
       dateOfBirth: new Date(),
       role: "admin",
       verificationStatus: true,
-      token: "admintoken",
     },
   });
   await prisma.user.upsert({
@@ -182,7 +181,6 @@ async function main() {
       dateOfBirth: new Date(),
       role: "admin",
       verificationStatus: true,
-      token: "admintoken",
     },
   });
   await prisma.user.upsert({
@@ -199,7 +197,6 @@ async function main() {
       dateOfBirth: new Date(),
       role: "admin",
       verificationStatus: true,
-      token: "admintoken",
     },
   });
   await prisma.user.upsert({
@@ -216,7 +213,6 @@ async function main() {
       dateOfBirth: new Date(),
       role: "admin",
       verificationStatus: true,
-      token: "admintoken",
     },
   });
   await prisma.user.upsert({
@@ -233,7 +229,6 @@ async function main() {
       dateOfBirth: new Date(),
       role: "admin",
       verificationStatus: true,
-      token: "admintoken",
     },
   });
 }

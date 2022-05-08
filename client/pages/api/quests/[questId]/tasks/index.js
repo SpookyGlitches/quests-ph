@@ -40,12 +40,13 @@ async function taskFinisher(req, res) {
 
     const difference = formatDistanceToNow(new Date(dueAt));
 
+    console.log(difference);
     let deductedPoints;
 
-    if (difference.split(" ")[0] > 3) {
-      deductedPoints = points * 0.2;
+    if (difference.split(" ")[0] > 3 && difference.split(" ")[0] < 7) {
+      deductedPoints = points - points * 0.2;
     } else if (difference.split(" ")[0] > 7) {
-      deductedPoints = points * 0.5;
+      deductedPoints = points - points * 0.5;
     } else {
       deductedPoints = points;
     }
