@@ -14,12 +14,13 @@ import AuthLayout from "../../../components/Layouts/AuthLayout";
 import Step1 from "../../../components/Registration/Step1";
 import Step2 from "../../../components/Registration/Step2";
 import Step3 from "../../../components/Registration/Step3";
+import Step4 from "../../../components/Registration/Step4";
 import { MentorRegistration } from "../../../validations/MentorRegistration";
 import SignUpDisclaimer from "../../../components/Registration/SignUpDisclaimer";
 import HaveAnAccount from "../../../components/Registration/HaveAnAccount";
 import DocumentTitle from "../../../components/Common/DocumentTitle";
 
-const steps = ["", "", ""];
+const steps = ["", "", "", ""];
 
 const MentorRegistrationForm = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -43,6 +44,9 @@ const MentorRegistrationForm = () => {
       confirmPassword: "",
       experience: " ",
       detailedExperience: "",
+      grade: "",
+      yearlevel: "",
+      course: "",
     },
   });
 
@@ -155,8 +159,9 @@ const MentorRegistrationForm = () => {
               <Step1 control={control} memberType="mentor" />
             ) : null}
             {activeStep === 1 ? <Step2 control={control} /> : null}
-            {activeStep === 2 ? (
-              <Step3
+            {activeStep === 2 ? <Step3 control={control} /> : null}
+            {activeStep === 3 ? (
+              <Step4
                 control={control}
                 uploadedFiles={uploadedFiles}
                 setUploadedFiles={setUploadedFiles}
