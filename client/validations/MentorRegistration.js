@@ -42,7 +42,7 @@ export const stepTwoMentorValidations = object({
 export const stepThreeMentorValidations = object({
   course: string().required(requiredMsg).max(20),
   yearLevel: mixed()
-    .oneOf(["1", "2", "3", "4", "5", "College Graduate", "None"])
+    .oneOf(["1", "2", "3", "4", "5", "College Graduate"])
     .required(requiredMsg),
   gwa: number()
     .required(requiredMsg)
