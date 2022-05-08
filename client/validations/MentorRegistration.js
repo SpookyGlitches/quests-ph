@@ -1,4 +1,4 @@
-import { object, string, ref, mixed } from "yup";
+import { object, string, ref, mixed, number } from "yup";
 import moment from "moment";
 
 const requiredMsg = "This field is required";
@@ -40,6 +40,21 @@ export const stepTwoMentorValidations = object({
 });
 
 export const stepThreeMentorValidations = object({
+  course: string().required(requiredMsg).max(20),
+  yearLevel: mixed()
+    .oneOf(["1", "2", "3", "4", "5", "College Graduate"])
+    .required(requiredMsg),
+  gwa: number()
+    .required(requiredMsg)
+    .typeError("Please input the proper format")
+    .test(
+      "Is positive?",
+      "The number must be greater than 0!",
+      (value) => value > 0,
+    ),
+});
+
+export const stepFourMentorValidations = object({
   experience: mixed().oneOf(["yes", "no"]).required(requiredMsg),
 });
 
@@ -47,4 +62,5 @@ export const MentorRegistration = [
   stepOneMentorValidations,
   stepTwoMentorValidations,
   stepThreeMentorValidations,
+  stepFourMentorValidations,
 ];

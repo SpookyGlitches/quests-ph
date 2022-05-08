@@ -19,11 +19,15 @@ export default async function (req, res) {
       fullName: userInfo.fullName,
       password: bcrypt.hashSync(userInfo.password, salt),
       role: "mentor",
+      gwa: userInfo.gwa,
+      yearLevel: userInfo.yearLevel,
+      course: userInfo.course,
       experience: userInfo.experience,
       detailedExperience: userInfo.detailedExperience,
       fileUpload: req.body.uploadedFiles,
       fileKeys: req.body.keyArr,
     };
+
     const transporter = nodemailer.createTransport({
       port: process.env.MAIL_PORT,
       host: process.env.MAIL_HOST,
@@ -64,7 +68,6 @@ export default async function (req, res) {
     } else if (!checkDisplayName && !checkEmail) {
       const early = isUserEarly(new Date());
       const awardOperations = early ? awardEarlyUser() : undefined;
-
       const userCreation = await prisma.user.create({
         data: {
           email: userDetails.email,
@@ -93,10 +96,12 @@ export default async function (req, res) {
       });
       // can assume user already exists here since it would throw an error if theyre not yet created at this point
       const transactions = [];
-
       const mentorCreation = prisma.mentorApplication.create({
         data: {
           mentorId: userCreation.userId,
+          gwa: userDetails.gwa,
+          yearLevel: userDetails.yearLevel,
+          course: userDetails.course,
           experience: userDetails.experience,
           detailedExperience: userDetails.detailedExperience,
         },
