@@ -99,6 +99,7 @@ export default async function deleteUsers(req, res) {
         }),
       );
     }
+
     // Delete usercurrency
     const deleteUserCurrency = prisma.userCurrency.update({
       where: {
@@ -211,17 +212,6 @@ export default async function deleteUsers(req, res) {
     });
     transactions.push(deleteMentorReq);
 
-    // Delete mentorship application
-    const deleteMentorApplication = prisma.questMentorshipRequest.updateMany({
-      where: {
-        mentorId: req.query.userId,
-      },
-      data: {
-        deletedAt: new Date(),
-      },
-    });
-    transactions.push(deleteMentorApplication);
-
     // Delete quest task
     const deleteQuestTask = prisma.questTask.updateMany({
       where: {
@@ -275,6 +265,28 @@ export default async function deleteUsers(req, res) {
       },
     });
     transactions.push(deleteUserToken);
+
+    // Delete mentorship application
+    const deleteMentorApplication = prisma.mentorApplication.updateMany({
+      where: {
+        mentorId: req.query.userId,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+    transactions.push(deleteMentorApplication);
+
+    // Delete mentor file
+    const deleteMentorfile = prisma.mentorFile.updateMany({
+      where: {
+        mentorUploadId: req.query.userId,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+    transactions.push(deleteMentorfile);
     // delete user
     const deleteUser = prisma.user.update({
       where: {
