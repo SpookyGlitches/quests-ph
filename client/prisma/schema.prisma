@@ -80,12 +80,12 @@ model User {
 }
 
 model VerificationToken {
-  verificationTokenId Int @id @default(autoincrement())
+  verificationTokenId Int       @id @default(autoincrement())
   userId              String
   token               String
-  createdAt           DateTime @default(now())
+  createdAt           DateTime  @default(now())
   deletedAt           DateTime?
-  user                User     @relation(fields: [userId], references: [userId])
+  user                User      @relation(fields: [userId], references: [userId])
 }
 
 model ForgotPassword {
@@ -153,12 +153,12 @@ model Article {
 model Quest {
   questId                Int                      @id @default(autoincrement())
   userId                 String
-  wish                   String
+  wish                   String                   @db.VarChar(64)
   difficulty             QuestDifficulty          @default(EASY)
   visibility             QuestVisibility          @default(PRIVATE)
   category               QuestCategory            @default(SOCIAL)
   wiki                   String?                  @db.LongText
-  mentorMessage          String?
+  mentorMessage          String?                  @db.VarChar(100)
   estimatedStartDate     DateTime                 @db.Date
   estimatedEndDate       DateTime                 @db.Date
   createdAt              DateTime                 @default(now())
@@ -309,9 +309,9 @@ model PartyMember {
   userId        String
   questId       Int
   role          PartyMemberRole @default(MENTEE)
-  outcome       String
-  obstacle      String
-  plan          String
+  outcome       String          @db.VarChar(64)
+  obstacle      String          @db.VarChar(128)
+  plan          String          @db.VarChar(128)
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
   deletedAt     DateTime?
@@ -375,8 +375,8 @@ enum PartyMemberRole {
 model Post {
   postId        Int         @id @default(autoincrement())
   partyMemberId Int
-  title         String
-  body          String
+  title         String      @db.VarChar(100)
+  body          String      @db.VarChar(200)
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
   deletedAt     DateTime?
@@ -392,7 +392,7 @@ model Comment {
   commentId     Int            @id @default(autoincrement())
   postId        Int
   partyMemberId Int
-  content       String
+  content       String         @db.VarChar(200)
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   deletedAt     DateTime?
