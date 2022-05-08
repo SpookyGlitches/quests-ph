@@ -41,7 +41,9 @@ export const stepTwoMentorValidations = object({
 
 export const stepThreeMentorValidations = object({
   course: string().required(requiredMsg).max(20),
-  yearLevel: mixed().oneOf(["1", "2", "3", "4", "5"]).required(requiredMsg),
+  yearLevel: mixed()
+    .oneOf(["1", "2", "3", "4", "5", "College Graduate", "None"])
+    .required(requiredMsg),
   gwa: number()
     .required(requiredMsg)
     .typeError("Please input the proper format")

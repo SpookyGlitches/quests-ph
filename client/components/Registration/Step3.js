@@ -41,6 +41,8 @@ export default function Step3() {
               <MenuItem value="3">3</MenuItem>
               <MenuItem value="4">4</MenuItem>
               <MenuItem value="5">5</MenuItem>
+              <MenuItem value="College Graduate">College Graduate</MenuItem>
+              <MenuItem value="None">None of the Above</MenuItem>
             </Select>
             <FormHelperText>
               {errors.yearLevel && errors.yearLevel.message}

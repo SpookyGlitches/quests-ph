@@ -292,6 +292,15 @@ export default function AdminDataGrid({ tableData, page, path }) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
+            <Typography>
+              GWA: {expArr[0]?.gwa ? expArr[0]?.gwa : "N/A"}
+            </Typography>
+            <Typography>
+              Year Level: {expArr[0]?.yearLevel ? expArr[0]?.yearLevel : "N/A"}
+            </Typography>
+            <Typography>
+              Course: {expArr[0]?.course ? expArr[0]?.course : "N/A"}
+            </Typography>
             <Typography>Experience: {expArr[0]?.experience}</Typography>
             <Typography>
               Detailed Experience: {expArr[0]?.detailedExperience}
