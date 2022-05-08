@@ -80,12 +80,12 @@ model User {
 }
 
 model VerificationToken {
-  verificationTokenId Int @id @default(autoincrement())
+  verificationTokenId Int       @id @default(autoincrement())
   userId              String
   token               String
-  createdAt           DateTime @default(now())
+  createdAt           DateTime  @default(now())
   deletedAt           DateTime?
-  user                User     @relation(fields: [userId], references: [userId])
+  user                User      @relation(fields: [userId], references: [userId])
 }
 
 model ForgotPassword {
@@ -152,7 +152,7 @@ model Article {
 
 model Quest {
   questId                Int                      @id @default(autoincrement())
-  userId                 String                   
+  userId                 String
   wish                   String                   @db.VarChar(64)
   difficulty             QuestDifficulty          @default(EASY)
   visibility             QuestVisibility          @default(PRIVATE)
