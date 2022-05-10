@@ -26,6 +26,8 @@ export default function AdminDataGrid({ tableData, page, path }) {
   const [reportId, setReportId] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [recipient, setRecipient] = React.useState("");
+  const [banStart, setBanStart] = React.useState("");
+  const [banEnd, setBanEnd] = React.useState("");
   const [screenshot, setScreenshot] = React.useState("");
   const methods = useForm({
     mode: "onChange",
@@ -42,6 +44,8 @@ export default function AdminDataGrid({ tableData, page, path }) {
     setReportId(cellValues.row.userReportId);
     setDisplayName(cellValues.row.recipientDisplayName);
     setCategory(cellValues.row.category);
+    setBanStart(cellValues.row.banStart);
+    setBanEnd(cellValues.row.banEnd);
     setDescription(cellValues.row.description);
     if (cellValues.row.screenshot) {
       const signedURL = `/api/auth/getPresignedUrl?key=${cellValues.row.screenshot}&role=mentee`;
@@ -120,25 +124,25 @@ export default function AdminDataGrid({ tableData, page, path }) {
         {
           field: "recipientDisplayName",
           headerName: "Reported User",
-          width: 160,
+          width: 125,
           headerAlign: "center",
         },
         {
           field: "reporterDisplayName",
           headerName: "Reporter",
-          width: 160,
+          width: 125,
           headerAlign: "center",
         },
         {
           field: "status",
           headerName: "Status",
-          width: 160,
+          width: 125,
           headerAlign: "center",
         },
         {
           field: "Report",
           headerAlign: "center",
-          width: 200,
+          width: 125,
           renderCell: (cellValues) => {
             return (
               <Button
@@ -157,7 +161,7 @@ export default function AdminDataGrid({ tableData, page, path }) {
         {
           field: "Action",
           headerAlign: "center",
-          width: 200,
+          width: 120,
           renderCell: (cellValues) => {
             return (
               <Button
@@ -196,37 +200,31 @@ export default function AdminDataGrid({ tableData, page, path }) {
         {
           field: "recipientDisplayName",
           headerName: "Reported User",
-          width: 160,
+          width: 100,
           headerAlign: "center",
         },
         {
           field: "reporterDisplayName",
           headerName: "Reporter",
-          width: 160,
-          headerAlign: "center",
-        },
-        {
-          field: "status",
-          headerName: "Status",
-          width: 140,
+          width: 100,
           headerAlign: "center",
         },
         {
           field: "banStart",
           headerName: "Start Date",
-          width: 140,
+          width: 100,
           headerAlign: "center",
         },
         {
           field: "banEnd",
           headerName: "End Date",
-          width: 140,
+          width: 100,
           headerAlign: "center",
         },
         {
           field: "Report",
           headerAlign: "center",
-          width: 160,
+          width: 100,
           renderCell: (cellValues) => {
             return (
               <Button
@@ -245,7 +243,7 @@ export default function AdminDataGrid({ tableData, page, path }) {
         {
           field: "Action",
           headerAlign: "center",
-          width: 160,
+          width: 125,
           renderCell: (cellValues) => {
             return (
               <Button
@@ -284,25 +282,19 @@ export default function AdminDataGrid({ tableData, page, path }) {
         {
           field: "recipientDisplayName",
           headerName: "Reported User",
-          width: 160,
+          width: 120,
           headerAlign: "center",
         },
         {
           field: "reporterDisplayName",
           headerName: "Reporter",
-          width: 160,
-          headerAlign: "center",
-        },
-        {
-          field: "status",
-          headerName: "Status",
-          width: 150,
+          width: 120,
           headerAlign: "center",
         },
         {
           field: "banStart",
           headerName: "Start Date",
-          width: 150,
+          width: 125,
           headerAlign: "center",
         },
         {
@@ -310,6 +302,25 @@ export default function AdminDataGrid({ tableData, page, path }) {
           headerName: "End Date",
           width: 150,
           headerAlign: "center",
+        },
+        {
+          field: "Report",
+          headerAlign: "center",
+          width: 100,
+          renderCell: (cellValues) => {
+            return (
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ margin: "0 auto", display: "flex" }}
+                onClick={(event) => {
+                  handleClick(event, cellValues);
+                }}
+              >
+                View
+              </Button>
+            );
+          },
         },
       ];
       dataGrid = (
@@ -341,6 +352,12 @@ export default function AdminDataGrid({ tableData, page, path }) {
               <Typography>Display Name: {displayName}</Typography>
               <Typography>Category: {category}</Typography>
               <Typography>Description: {description}</Typography>
+              {banStart ? (
+                <Typography>Ban Start Date: {banStart}</Typography>
+              ) : (
+                ""
+              )}
+              {banEnd ? <Typography>Ban End Date: {banEnd}</Typography> : ""}
               <Typography>Evidence: </Typography>
               {screenshot ? (
                 <Image
@@ -354,7 +371,7 @@ export default function AdminDataGrid({ tableData, page, path }) {
               ) : (
                 <Typography>N/A</Typography>
               )}
-              {path === "ongoing" ? null : (
+              {path === "ongoing" || path === "completed" ? null : (
                 <FormControl fullWidth variant="outlined">
                   <Controller
                     control={control}
@@ -377,7 +394,7 @@ export default function AdminDataGrid({ tableData, page, path }) {
           </Stack>
           <DialogActions>
             <Button onClick={handleClose}>Close</Button>
-            {path === "ongoing" ? null : (
+            {path === "ongoing" || path === "completed" ? null : (
               <Button type="submit">Approve Report</Button>
             )}
           </DialogActions>
