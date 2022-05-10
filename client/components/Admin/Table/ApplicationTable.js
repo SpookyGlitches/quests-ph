@@ -147,19 +147,19 @@ export default function AdminDataGrid({ tableData, page, path }) {
         {
           field: "mentorApplicationid",
           headerName: "Application ID",
-          width: 250,
+          width: 125,
           headerAlign: "center",
         },
         {
           field: "displayName",
-          headerName: "Applicant Display Name",
-          width: 250,
+          headerName: "Applicant Name",
+          width: 175,
           headerAlign: "center",
         },
         {
           field: "Document",
           headerAlign: "center",
-          width: 250,
+          width: 200,
           renderCell: (cellValues) => {
             return (
               <Button
@@ -178,7 +178,7 @@ export default function AdminDataGrid({ tableData, page, path }) {
         {
           field: "Action",
           headerAlign: "center",
-          width: 250,
+          width: 225,
           renderCell: (cellValues) => {
             return (
               <>
@@ -224,14 +224,14 @@ export default function AdminDataGrid({ tableData, page, path }) {
         {
           field: "mentorApplicationid",
           headerName: "Application ID",
-          width: 250,
+          width: 125,
           headerAlign: "center",
         },
 
         {
           field: "fullName",
           headerName: "Applicant Full Name",
-          width: 250,
+          width: 175,
           headerAlign: "center",
         },
         {
@@ -243,7 +243,7 @@ export default function AdminDataGrid({ tableData, page, path }) {
         {
           field: "Document",
           headerAlign: "center",
-          width: 250,
+          width: 150,
           renderCell: (cellValues) => {
             return (
               <Button

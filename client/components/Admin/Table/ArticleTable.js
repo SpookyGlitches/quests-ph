@@ -34,7 +34,6 @@ export default function AdminDataGrid({ tableData, page, path }) {
     } catch (error) {
       console.log(error);
     }
-    console.log("updated");
   };
 
   // Reject Article
@@ -77,26 +76,26 @@ export default function AdminDataGrid({ tableData, page, path }) {
       columns = [
         {
           field: "articleId",
-          headerName: "ID",
-          width: 200,
+          headerName: "Article ID",
+          width: 100,
           headerAlign: "center",
         },
         {
           field: "displayName",
           headerName: "Display Name",
-          width: 160,
+          width: 150,
           headerAlign: "center",
         },
         {
           field: "category",
           headerName: "Category",
-          width: 150,
+          width: 100,
           headerAlign: "center",
         },
         {
           field: "View Link",
           headerAlign: "center",
-          width: 160,
+          width: 100,
           renderCell: (cellValues) => {
             return (
               <Button
@@ -115,7 +114,7 @@ export default function AdminDataGrid({ tableData, page, path }) {
         {
           field: "Action",
           headerAlign: "center",
-          width: 200,
+          width: 275,
           renderCell: (cellValues) => {
             return (
               <>
@@ -161,25 +160,31 @@ export default function AdminDataGrid({ tableData, page, path }) {
         {
           field: "articleId",
           headerName: "ID",
-          width: 200,
+          width: 100,
           headerAlign: "center",
         },
         {
           field: "displayName",
           headerName: "Display Name",
-          width: 160,
+          width: 150,
           headerAlign: "center",
         },
         {
           field: "category",
           headerName: "Category",
-          width: 150,
+          width: 100,
+          headerAlign: "center",
+        },
+        {
+          field: "approvedAt",
+          headerName: "Approval Date",
+          width: 125,
           headerAlign: "center",
         },
         {
           field: "View Link",
           headerAlign: "center",
-          width: 160,
+          width: 100,
           renderCell: (cellValues) => {
             return (
               <Button
@@ -198,7 +203,7 @@ export default function AdminDataGrid({ tableData, page, path }) {
         {
           field: "Action",
           headerAlign: "center",
-          width: 200,
+          width: 125,
           renderCell: (cellValues) => {
             return (
               <Button
