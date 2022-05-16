@@ -52,7 +52,7 @@ async function removePartyMember(req, res) {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer sk_test_NPBhbi9sSMV8aA6DnWhSkmKzxQpivO6p",
+          Authorization: `${process.env.TALKJS_KEY}`,
         },
       },
     );
@@ -74,7 +74,7 @@ async function removePartyMember(req, res) {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer sk_test_NPBhbi9sSMV8aA6DnWhSkmKzxQpivO6p",
+            Authorization: `${process.env.TALKJS_KEY}`,
           },
         },
       );
