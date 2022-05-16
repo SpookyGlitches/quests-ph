@@ -69,7 +69,7 @@ async function banPartyMember(req, res) {
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer sk_test_NPBhbi9sSMV8aA6DnWhSkmKzxQpivO6p",
+          Authorization: `${process.env.TALKJS_KEY}`,
         },
       },
     );
@@ -82,7 +82,7 @@ async function banPartyMember(req, res) {
         flag = 1;
       }
     }
-    console.log(flag);
+
     /* If the flag is up, meaning the user is part of the quest's chat, he is removed
     from participating. */
     if (flag === 1) {
@@ -91,7 +91,7 @@ async function banPartyMember(req, res) {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer sk_test_NPBhbi9sSMV8aA6DnWhSkmKzxQpivO6p",
+            Authorization: `${process.env.TALKJS_KEY}`,
           },
         },
       );
